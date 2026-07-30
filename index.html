@@ -3,2046 +3,556 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="dark">
-<title>GrimGrace</title>
-<meta name="description" content="Grim Grace — текстовая ролевая о вампирах в викторианском Лондоне. 1852 год. What's hidden behind the masks...">
-<meta property="og:title" content="GrimGrace">
-<meta property="og:description" content="Текстовая ролевая о вампирах в викторианском Лондоне. 1852 год.">
-<meta property="og:image" content="https://lulllz4.github.io/GrimGrace/bannerPLOT1_GrimGrace.jpg">
-<meta property="og:type" content="website">
-<link rel="icon" type="image/png" href="https://lulllz4.github.io/GrimGrace/favicon-16x16.png">
+<title>Досье · Частное дело</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Cormorant+SC:wght@300;400;500;600&family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
-<script>document.documentElement.classList.add('js');</script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-  @font-face {
-    font-family: 'newcyrillicgoth';
-    src: url('newcyrillicgoth.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-  }
+/* ============ TOKENS ============ */
+:root{
+  --ink-black:#070d16;
+  --ink-deep:#0f1e3f;
+  --ink-mid:#213a56;
+  --ink-mist:#3a5476;
+  --gold-pale:#cdaa80;
+  --gold-dark:#997953;
+  --gold-bright:#e3c79a;
+  --parchment:#e9dfc7;
+  --parchment-dim:#a99f8c;
+  --crack:rgba(5,9,16,.55);
+  --line:rgba(205,170,128,.22);
+  --shadow-deep: 0 30px 70px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--ink-black);
+  color:var(--parchment);
+  font-family:'EB Garamond', serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--gold-dark); color:var(--ink-black);}
 
-  :root {
-    --ink:        #070508;
-    --panel:      #110b0e;
-    --crimson:    #6e0f1f;
-    --crimson-hi: #a11b31;
-    --crimson-lo: #3a0812;
-    --bone:       #c9bfb4;
-    --bone-dim:   #7d746c;
-    --hairline:   rgba(161, 27, 49, 0.28);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html {
-    scroll-behavior: smooth;
-    scrollbar-width: thin;
-    scrollbar-color: var(--crimson-lo) var(--ink);
-  }
-  ::-webkit-scrollbar { width: 10px; background: var(--ink); }
-  ::-webkit-scrollbar-thumb { background: var(--crimson-lo); border-radius: 5px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--crimson); }
-
-  body {
-    background: var(--ink);
-    color: var(--bone);
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 400;
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  ::selection { background: var(--crimson); color: var(--bone); }
-
-  button:focus-visible,
-  summary:focus-visible,
-  a:focus-visible,
-  [role="slider"]:focus-visible,
-  input:focus-visible {
-    outline: 1px solid var(--crimson-hi);
-    outline-offset: 3px;
-  }
-
-  /* ================= АТМОСФЕРА ================= */
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 90;
-    pointer-events: none;
-    opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 89;
-    pointer-events: none;
-    background: radial-gradient(ellipse 75% 65% at 50% 42%, transparent 40%, rgba(4,2,4,0.55) 78%, rgba(2,1,2,0.92) 100%);
-  }
-
-  .aura {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: radial-gradient(ellipse 55% 40% at 50% 18%, rgba(110,15,31,0.12), transparent 65%);
-    animation: auraBreath 14s ease-in-out infinite;
-  }
-  @keyframes auraBreath {
-    0%, 100% { opacity: 0.55; transform: scale(1); }
-    50%      { opacity: 1;    transform: scale(1.06); }
-  }
-
-  /* ================= ПРОГРЕСС ЧТЕНИЯ ================= */
-
-  .read-progress {
-    position: fixed;
-    top: 0; left: 0;
-    height: 2px;
-    width: 0%;
-    background: var(--crimson-hi);
-    z-index: 96;
-    pointer-events: none;
-  }
-
-  /* ================= ШАПКА ================= */
-
-  header {
-    position: relative;
-    z-index: 5;
-    text-align: center;
-    padding: clamp(70px, 12vh, 130px) 24px 0;
-  }
-
-  .epigraph {
-    font-family: 'Cormorant SC', serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.55em;
-    text-indent: 0.55em;
-    color: var(--bone-dim);
-    text-transform: uppercase;
-    opacity: 0;
-    animation: fadeDown 1.6s 0.3s ease forwards;
-  }
-
-  h1 {
-    margin-top: 26px;
-    font-family: 'Cormorant SC', serif;
-    font-weight: 500;
-    font-size: clamp(2.6rem, 6.5vw, 5rem);
-    letter-spacing: 0.28em;
-    text-indent: 0.28em;
-    color: var(--bone);
-    opacity: 0;
-    animation: titleSettle 2.4s 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
-  @keyframes titleSettle {
-    0%   { opacity: 0; letter-spacing: 0.65em; text-indent: 0.65em; filter: blur(8px); }
-    100% { opacity: 1; letter-spacing: 0.28em; text-indent: 0.28em; filter: blur(0); }
-  }
-  @keyframes fadeDown {
-    0%   { opacity: 0; transform: translateY(-14px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeUp {
-    0%   { opacity: 0; transform: translateY(14px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-
-  .script-line {
-    font-family: 'Monsieur La Doulaise', cursive;
-    font-size: clamp(1.7rem, 3.4vw, 2.6rem);
-    color: var(--crimson-hi);
-    margin-top: 14px;
-    opacity: 0;
-    animation: fadeUp 1.8s 1.4s ease forwards;
-  }
-
-  /* ================= ОРНАМЕНТ ================= */
-
-  .flourish {
-    display: block;
-    width: min(460px, 82vw);
-    margin: 30px auto 0;
-    overflow: visible;
-  }
-  .flourish path {
-    fill: none;
-    stroke: var(--crimson);
-    stroke-width: 1.1;
-    stroke-linecap: round;
-  }
-  .flourish .gem {
-    fill: var(--crimson-hi);
-    stroke: none;
-  }
-
-  header .flourish .draw {
-    stroke-dasharray: 600;
-    stroke-dashoffset: 600;
-    animation: drawStroke 3s 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-  header .flourish .gem {
-    opacity: 0;
-    animation: gemAppear 1.2s 3.6s ease forwards;
-  }
-  @keyframes drawStroke { to { stroke-dashoffset: 0; } }
-  @keyframes gemAppear  { to { opacity: 1; } }
-
-  /* ================= НАВИГАЦИЯ ================= */
-
-  nav.main-nav {
-    position: relative;
-    z-index: 5;
-    margin: clamp(46px, 8vh, 80px) auto 0;
-    max-width: 1060px;
-    padding: 0 24px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    column-gap: clamp(18px, 4vw, 52px);
-    row-gap: 10px;
-    border-top: 1px solid var(--hairline);
-    border-bottom: 1px solid var(--hairline);
-    opacity: 0;
-    animation: fadeUp 1.6s 2.4s ease forwards;
-  }
-
-  .tab-btn {
-    appearance: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 20px 2px;
-    font-family: 'Cormorant SC', serif;
-    font-size: 0.92rem;
-    letter-spacing: 0.32em;
-    text-indent: 0.32em;
-    color: var(--bone-dim);
-    position: relative;
-    transition: color 0.6s ease;
-  }
-  .tab-btn .num {
-    display: block;
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    color: var(--crimson);
-    margin-bottom: 5px;
-    transition: color 0.6s ease;
-  }
-  .tab-btn::after {
-    content: '';
-    position: absolute;
-    left: 50%; bottom: -1px;
-    width: 0; height: 1px;
-    background: var(--crimson-hi);
-    transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1), left 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .tab-btn:hover,
-  .tab-btn.active { color: var(--bone); }
-  .tab-btn.active .num { color: var(--crimson-hi); }
-  .tab-btn.active::after, .tab-btn:hover::after { width: 100%; left: 0; }
-
-  /* ================= КОНТЕНТ ================= */
-
-  main {
-    position: relative;
-    z-index: 5;
-    max-width: 780px;
-    margin: 0 auto;
-    padding: clamp(50px, 9vh, 90px) 20px 60px;
-  }
-
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  .chapter {
-    background: rgba(17, 11, 14, 0.45);
-    border: 1px solid rgba(161, 27, 49, 0.10);
-    border-radius: 6px;
-    padding: clamp(28px, 6vw, 52px) clamp(16px, 4vw, 44px);
-  }
-
-  /* без JS глава просто видна; скрытие/появление — только при .js */
-  .js .chapter {
-    opacity: 0;
-    transform: translateY(18px);
-    filter: blur(5px);
-    transition: opacity 1.1s ease, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), filter 1.1s ease;
-  }
-  .js .chapter.revealed {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-
-  .chapter-label {
-    text-align: center;
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.95rem;
-    letter-spacing: 0.3em;
-    text-indent: 0.3em;
-    color: var(--crimson-hi);
-  }
-
-  h2 {
-    text-align: center;
-    font-family: 'Cormorant SC', serif;
-    font-weight: 500;
-    font-size: clamp(1.9rem, 4vw, 2.7rem);
-    letter-spacing: 0.22em;
-    text-indent: 0.22em;
-    color: var(--bone);
-    margin-top: 10px;
-  }
-
-  .chapter .flourish {
-    width: min(340px, 70vw);
-    margin: 22px auto 40px;
-  }
-  .js .chapter .flourish .draw {
-    stroke-dasharray: 600;
-    stroke-dashoffset: 600;
-  }
-  .js .chapter .flourish .gem { opacity: 0; }
-  .js .chapter.revealed .flourish .draw {
-    animation: drawStroke 2.4s 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-  .js .chapter.revealed .flourish .gem {
-    animation: gemAppear 1s 1.9s ease forwards;
-  }
-
-  /* ================= ОГЛАВЛЕНИЕ СТАТЬИ ================= */
-
-  .toc {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    column-gap: 14px;
-    row-gap: 6px;
-    margin: -8px 0 44px;
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.98rem;
-  }
-  .toc a {
-    color: var(--bone-dim);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: color 0.4s ease, border-color 0.4s ease;
-  }
-  .toc a:hover {
-    color: var(--crimson-hi);
-    border-bottom-color: var(--hairline);
-  }
-  .toc .toc-sep {
-    color: var(--crimson-lo);
-    user-select: none;
-  }
-
-  /* ================= ПРОЗА ================= */
-
-  .prose p {
-    font-size: 1.18rem;
-    font-weight: 400;
-    line-height: 1.95;
-    text-align: left;
-    color: var(--bone);
-    margin-bottom: 1.5em;
-  }
-
-  .prose p.lead::first-letter {
-    font-family: 'newcyrillicgoth', serif;
-    font-size: 4.6em;
-    float: left;
-    line-height: 0.75;
-    margin: 0.08em 0.12em 0 0;
-    color: var(--crimson-hi);
-  }
-
-  .end-mark {
-    text-align: center;
-    color: var(--crimson);
-    font-size: 1.1rem;
-    letter-spacing: 0.6em;
-    text-indent: 0.6em;
-    margin-top: 46px;
-    user-select: none;
-  }
-
-  .banner-img {
-    width: 100%;
-    height: clamp(80px, 14vw, 160px);
-    margin: 8px 0 36px;
-    overflow: hidden;
-    position: relative;
-    border-top: 1px solid var(--hairline);
-    border-bottom: 1px solid var(--hairline);
-    background: var(--panel);
-  }
-  .banner-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 35%;
-    filter: grayscale(35%) sepia(15%) contrast(1.08) brightness(0.82);
-  }
-  .banner-img::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(7,5,8,0.05), rgba(7,5,8,0.25));
-    pointer-events: none;
-  }
-
-  .prose h3.section-title {
-    font-family: 'Cormorant SC', serif;
-    font-weight: 500;
-    font-size: 1.35rem;
-    letter-spacing: 0.14em;
-    text-indent: 0.14em;
-    color: var(--crimson-hi);
-    text-align: left;
-    margin: 44px 0 20px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    scroll-margin-top: 24px;
-  }
-  .prose h3.section-title::before {
-    content: '✦';
-    font-size: 0.7rem;
-    color: var(--crimson);
-    flex-shrink: 0;
-  }
-  .prose h3.section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, var(--hairline), transparent);
-  }
-
-  .prose h4.micro-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 1.05rem;
-    letter-spacing: 0.22em;
-    text-indent: 0.22em;
-    color: var(--bone-dim);
-    text-align: center;
-    margin: 30px 0 16px;
-  }
-  .prose h4.micro-title::before,
-  .prose h4.micro-title::after {
-    content: '·';
-    color: var(--crimson-lo);
-    margin: 0 10px;
-    font-style: normal;
-  }
-
-  /* примечание для игроков */
-  .note {
-    border-left: 2px solid var(--crimson-lo);
-    padding: 4px 0 4px 18px;
-    margin: 0 0 1.6em;
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1.05rem;
-    line-height: 1.9;
-    color: var(--bone-dim);
-  }
-  .note-warning {
-    border-left-color: var(--crimson-hi);
-    color: var(--crimson-hi);
-  }
-
-  .prose ul.dash-list {
-    list-style: none;
-    margin: 0 0 1.6em;
-    padding: 0;
-  }
-  .prose ul.dash-list li {
-    font-size: 1.12rem;
-    line-height: 1.9;
-    color: var(--bone);
-    opacity: 0.92;
-    text-align: left;
-    padding-left: 28px;
-    margin-bottom: 0.5em;
-    position: relative;
-  }
-  .prose ul.dash-list li::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: var(--crimson);
-  }
-
-  /* ============ СЕМЬ ДОГМАТОВ ============ */
-
-  .prose ol.dogma-list {
-    list-style: none;
-    counter-reset: dogma;
-    margin: 0 0 1.6em;
-    padding: 0;
-  }
-  .prose ol.dogma-list li {
-    counter-increment: dogma;
-    position: relative;
-    padding-left: clamp(46px, 9vw, 60px);
-    margin-bottom: 26px;
-  }
-  .prose ol.dogma-list li::before {
-    content: counter(dogma, upper-roman);
-    position: absolute;
-    left: 0;
-    top: 0.15em;
-    width: clamp(32px, 7vw, 42px);
-    text-align: left;
-    font-family: 'Cormorant SC', serif;
-    font-size: 1.15rem;
-    color: var(--crimson-hi);
-    letter-spacing: 0.05em;
-  }
-  .dogma-name {
-    display: block;
-    font-family: 'Cormorant SC', serif;
-    font-weight: 500;
-    font-size: 1.15rem;
-    letter-spacing: 0.08em;
-    color: var(--bone);
-    margin-bottom: 4px;
-  }
-  .dogma-name em {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 0.95rem;
-    letter-spacing: 0.04em;
-    color: var(--bone-dim);
-  }
-  .prose ol.dogma-list li p {
-    margin: 0;
-    font-size: 1.08rem;
-    line-height: 1.9;
-    opacity: 0.92;
-  }
-
-  /* ============ ИЕРАРХИЯ ============ */
-
-  .prose ul.hierarchy {
-    list-style: none;
-    margin: 0 0 1.6em;
-    padding: 0;
-  }
-  .prose ul.hierarchy li {
-    position: relative;
-    margin-bottom: 26px;
-  }
-  .prose ul.hierarchy li:last-child { margin-bottom: 0; }
-
-  .prose ul.hierarchy .tier-name {
-    display: block;
-    font-family: 'Cormorant SC', serif;
-    font-style: normal;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    margin-bottom: 4px;
-    color: var(--bone);
-  }
-  .prose ul.hierarchy li p {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1.08rem;
-    line-height: 1.9;
-    color: var(--bone);
-    opacity: 0.88;
-    text-align: left;
-    margin: 0;
-  }
-
-  .prose ul.hierarchy .tier-1 { padding-left: clamp(22px, 5vw, 32px); }
-  .prose ul.hierarchy .tier-1 .tier-name { font-size: clamp(1.2rem, 4vw, 1.4rem); }
-  .prose ul.hierarchy .tier-1 .tier-name::before {
-    content: '✦';
-    position: absolute;
-    left: 0;
-    color: var(--crimson-hi);
-  }
-
-  .prose ul.hierarchy .tier-2 { padding-left: clamp(30px, 7vw, 44px); }
-  .prose ul.hierarchy .tier-2 .tier-name { font-size: clamp(1.1rem, 3.6vw, 1.25rem); }
-  .prose ul.hierarchy .tier-2 .tier-name::before {
-    content: '—';
-    position: absolute;
-    left: clamp(12px, 2.5vw, 16px);
-    color: var(--crimson);
-  }
-
-  .prose ul.hierarchy .tier-3 { padding-left: clamp(38px, 9vw, 56px); }
-  .prose ul.hierarchy .tier-3 .tier-name { font-size: clamp(1rem, 3.2vw, 1.12rem); }
-  .prose ul.hierarchy .tier-3 .tier-name::before {
-    content: '·';
-    position: absolute;
-    left: clamp(22px, 5vw, 34px);
-    color: var(--bone-dim);
-  }
-
-  .prose ul.hierarchy .tier-4 { padding-left: clamp(46px, 11vw, 70px); }
-  .prose ul.hierarchy .tier-4 .tier-name { font-size: clamp(0.95rem, 3vw, 1.05rem); }
-  .prose ul.hierarchy .tier-4 .tier-name::before {
-    content: '∙';
-    position: absolute;
-    left: clamp(30px, 7vw, 46px);
-    color: var(--bone-dim);
-  }
-  .prose ul.hierarchy .tier-4 p { opacity: 0.85; }
-
-  .prose ul.hierarchy .tier-outcast { padding-left: clamp(22px, 5vw, 32px); }
-  .prose ul.hierarchy .tier-outcast .tier-name {
-    font-size: clamp(1rem, 3.2vw, 1.12rem);
-    color: var(--crimson);
-    font-style: italic;
-    font-weight: 400;
-  }
-  .prose ul.hierarchy .tier-outcast .tier-name::before {
-    content: '†';
-    position: absolute;
-    left: 0;
-    color: var(--crimson-lo);
-  }
-  .prose ul.hierarchy .tier-outcast p { opacity: 0.94; }
-
-  /* ============ АККОРДЕОНЫ ============ */
-
-  .story-arcs { border-bottom: 1px solid var(--hairline); }
-  .story-arc { border-top: 1px solid var(--hairline); }
-
-  .story-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    padding: 22px 4px;
-    font-family: 'Cormorant SC', serif;
-    font-weight: 500;
-    font-size: clamp(1.15rem, 4vw, 1.5rem);
-    letter-spacing: 0.16em;
-    text-indent: 0.16em;
-    color: var(--bone);
-    transition: color 0.4s ease;
-    list-style: none;
-  }
-  .story-toggle::-webkit-details-marker { display: none; }
-  details > .story-toggle:hover { color: var(--crimson-hi); }
-
-  .story-toggle-arrow {
-    font-family: sans-serif;
-    font-size: 1.1rem;
-    color: var(--crimson-hi);
-    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    flex-shrink: 0;
-    margin-left: 16px;
-  }
-  details[open] > .story-toggle .story-toggle-arrow { transform: rotate(180deg); }
-
-  .story-body-inner { padding: 6px 0 34px; }
-  details[open] .story-body-inner { animation: subReveal 0.6s ease both; }
-
-  /* заблокированная глава */
-  .story-arc-locked .story-toggle {
-    cursor: default;
-    color: var(--bone-dim);
-  }
-  .lock-label {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.85rem;
-    letter-spacing: 0.2em;
-    text-indent: 0;
-    color: var(--bone-dim);
-    opacity: 0.7;
-    flex-shrink: 0;
-    margin-left: 16px;
-  }
-
-  .story-close {
-    display: none; /* без JS кнопка бесполезна */
-    margin: 30px auto 0;
-    background: none;
-    border: 1px solid var(--hairline);
-    cursor: pointer;
-    padding: 10px 26px;
-    font-family: 'Cormorant SC', serif;
-    font-size: 0.82rem;
-    letter-spacing: 0.28em;
-    text-indent: 0.28em;
-    color: var(--bone-dim);
-    transition: color 0.4s ease, border-color 0.4s ease;
-  }
-  .js .story-close { display: block; }
-  .story-close:hover {
-    color: var(--crimson-hi);
-    border-color: var(--crimson);
-  }
-
-  /* ================= КУРСОР-ЛАПКА ================= */
-
-/* обычная лапка — цвета кости */
-body {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cellipse cx='7' cy='9' rx='3.1' ry='4' fill='%23c9bfb4' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='14' cy='7' rx='3.2' ry='4.2' fill='%23c9bfb4' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='21' cy='9' rx='3.1' ry='4' fill='%23c9bfb4' stroke='%23070508' stroke-width='1'/%3E%3Cpath d='M14 13 C18.8 13 22 16 22 19.5 C22 23 18.5 25.5 14 25.5 C9.5 25.5 6 23 6 19.5 C6 16 9.2 13 14 13 Z' fill='%23c9bfb4' stroke='%23070508' stroke-width='1'/%3E%3C/svg%3E") 14 14, auto;
+h1,h2,h3{font-family:'Cormorant Garamond', serif; font-weight:600; margin:0;}
+.eyebrow{
+  font-family:'Cinzel', serif;
+  font-size:.68rem;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:var(--gold-pale);
+  opacity:.82;
 }
 
-/* над кликабельным — багровая лапка */
-a, button, summary, label,
-input[type="range"],
-.player-progress-track {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cellipse cx='7' cy='9' rx='3.1' ry='4' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='14' cy='7' rx='3.2' ry='4.2' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='21' cy='9' rx='3.1' ry='4' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cpath d='M14 13 C18.8 13 22 16 22 19.5 C22 23 18.5 25.5 14 25.5 C9.5 25.5 6 23 6 19.5 C6 16 9.2 13 14 13 Z' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3C/svg%3E") 14 14, pointer;
+/* ============ AMBIENT TEXTURE ============ */
+.grain{
+  position:fixed; inset:0; pointer-events:none; z-index:500; opacity:.05; mix-blend-mode:overlay;
+  background-image:radial-gradient(circle at 20% 30%, #fff 0, transparent 1px),
+                    radial-gradient(circle at 70% 80%, #fff 0, transparent 1px),
+                    radial-gradient(circle at 40% 60%, #fff 0, transparent 1px);
+  background-size:3px 3px, 4px 4px, 5px 5px;
+}
+.vignette{
+  position:fixed; inset:0; pointer-events:none; z-index:499;
+  background:radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(0,0,0,.55) 100%);
 }
 
-/* в момент нажатия — коготки наружу */
-a:active, button:active, summary:active,
-input[type="range"]:active,
-.player-progress-track:active {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M6.2 1.5 L7.8 5.5 L5.2 5.8 Z' fill='%23c9bfb4' stroke='%23070508' stroke-width='0.6'/%3E%3Cpath d='M13.6 0.5 L15 4.5 L12.4 4.6 Z' fill='%23c9bfb4' stroke='%23070508' stroke-width='0.6'/%3E%3Cpath d='M21.4 1.5 L22.6 5.8 L20 5.5 Z' fill='%23c9bfb4' stroke='%23070508' stroke-width='0.6'/%3E%3Cellipse cx='7' cy='9' rx='3.1' ry='4' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='14' cy='7' rx='3.2' ry='4.2' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='21' cy='9' rx='3.1' ry='4' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cpath d='M14 13 C18.8 13 22 16 22 19.5 C22 23 18.5 25.5 14 25.5 C9.5 25.5 6 23 6 19.5 C6 16 9.2 13 14 13 Z' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3C/svg%3E") 14 14, pointer;
+/* ============ SIDE NAV ============ */
+.wayfinder{
+  position:fixed; right:26px; top:50%; transform:translateY(-50%);
+  z-index:600; display:flex; flex-direction:column; gap:18px;
+}
+.wayfinder button{
+  all:unset; cursor:pointer; position:relative;
+  width:9px; height:9px; border-radius:50%;
+  border:1px solid var(--gold-pale); opacity:.45;
+  transition:opacity .4s, transform .4s, background .4s;
+}
+.wayfinder button.active{ opacity:1; background:var(--gold-pale); transform:scale(1.3); }
+.wayfinder button::after{
+  content:attr(data-label);
+  position:absolute; right:22px; top:50%; transform:translateY(-50%);
+  font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.2em;
+  white-space:nowrap; color:var(--gold-pale);
+  opacity:0; transition:opacity .3s; pointer-events:none;
+  text-transform:uppercase;
+}
+.wayfinder button:hover::after{ opacity:.85; }
+@media (max-width:760px){ .wayfinder{ display:none; } }
+
+/* ============ REVEAL ============ */
+.reveal{ opacity:0; transform:translateY(28px); transition:opacity 1.1s ease, transform 1.1s ease; }
+.reveal.in-view{ opacity:1; transform:translateY(0); }
+
+/* ============ PAISLEY DIVIDER ============ */
+.divider{
+  position:relative; height:34px; margin:0 auto; max-width:520px;
+  opacity:.75;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+          mask-image:linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+}
+.divider svg{ width:100%; height:100%; }
+
+/* ============ LAYOUT SHELL ============ */
+section{
+  position:relative;
+  padding:min(14vw,140px) 8vw 120px;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg, transparent 0%, rgba(0,0,0,.15) 100%);
+}
+.section-inner{ max-width:900px; margin:0 auto; position:relative; z-index:2; }
+.sec-head{ margin-bottom:56px; text-align:left; }
+.sec-head h2{ font-size:clamp(1.8rem,3.4vw,2.6rem); font-style:italic; color:var(--parchment); margin-top:10px;}
+.sec-head .rule{ width:64px; height:2px; margin-top:16px; background:linear-gradient(90deg,var(--gold-dark),transparent); }
+
+/* =====================================================
+   HERO — cover page + index, not a centered template hero
+   ===================================================== */
+.hero{
+  min-height:100svh; display:flex; align-items:center;
+  padding:12vh 6vw; position:relative; overflow:hidden;
+  background:linear-gradient(160deg, var(--ink-deep) 0%, var(--ink-black) 68%);
+  border-bottom:1px solid var(--line);
+}
+.hero::before{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(205,170,128,.03) 0 2px, transparent 2px 34px),
+    repeating-linear-gradient(-45deg, rgba(205,170,128,.03) 0 2px, transparent 2px 34px);
+}
+#motesCanvas{ position:absolute; inset:0; width:100%; height:100%; z-index:1; opacity:.65; pointer-events:none; }
+
+.cover-grid{
+  position:relative; z-index:2;
+  display:grid; grid-template-columns:260px 1fr; gap:min(9vw,90px);
+  max-width:1120px; margin:0 auto; align-items:center;
+  animation:coverIn 1.3s cubic-bezier(.2,.8,.25,1) both;
+}
+@keyframes coverIn{ from{ opacity:0; transform:translateY(26px);} to{ opacity:1; transform:translateY(0);} }
+
+/* --- photograph relic --- */
+.cover-photo{ position:relative; }
+.case-vert{
+  position:absolute; left:-30px; top:50%; transform-origin:left center;
+  transform:translateY(-50%) rotate(-90deg);
+  font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.4em;
+  color:var(--parchment-dim); white-space:nowrap;
+}
+.photo-frame{
+  position:relative; width:100%; aspect-ratio:3/4; padding:12px;
+  border:1px solid var(--gold-dark);
+  background:linear-gradient(165deg, rgba(33,58,86,.55), rgba(7,13,22,.95));
+  box-shadow:var(--shadow-deep);
+}
+.photo-frame::before{
+  content:''; position:absolute; inset:7px; border:1px solid rgba(205,170,128,.3);
+  pointer-events:none;
+}
+.photo-inner{
+  position:relative; width:100%; height:100%; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(ellipse at 50% 30%, rgba(58,84,118,.5), rgba(7,13,22,.9) 75%);
+}
+.photo-inner svg{ width:52%; opacity:.42; }
+/* torn / charred missing corner, in place of a decorative emblem */
+.burn-corner{
+  position:absolute; top:0; right:0; width:44%; height:44%;
+  clip-path:polygon(100% 0, 100% 100%, 6% 0);
+  background:linear-gradient(135deg, transparent 40%, rgba(20,11,4,.55) 55%, rgba(20,11,4,.92) 100%);
+}
+.burn-corner::after{
+  content:''; position:absolute; inset:0;
+  clip-path:polygon(100% 0, 100% 78%, 26% 0);
+  background:var(--ink-black);
+}
+.photo-cap{
+  margin-top:14px; text-align:center; font-family:'Cinzel',serif; font-size:.58rem;
+  letter-spacing:.24em; text-transform:uppercase; color:var(--parchment-dim);
+}
+.pin-seal{ position:absolute; top:-15px; left:16px; width:34px; height:34px; transform:rotate(-8deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,.5)); }
+
+/* --- text / index side --- */
+.cover-text{ min-width:0; }
+.cover-title{
+  font-size:clamp(2.6rem, 6.2vw, 4.6rem); font-style:italic; font-weight:500;
+  color:var(--parchment); line-height:.98; margin:14px 0 8px; letter-spacing:.005em;
+}
+.cover-sub{
+  font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--gold-pale); margin:0 0 44px; opacity:.85;
+}
+.toc{ list-style:none; margin:0; padding:0; }
+.toc li{ border-bottom:1px solid var(--line); }
+.toc li:first-child{ border-top:1px solid var(--line); }
+.toc button{
+  all:unset; cursor:pointer; display:flex; align-items:baseline; gap:14px;
+  width:100%; padding:15px 2px; box-sizing:border-box;
+}
+.toc-label{
+  font-style:italic; font-size:clamp(1.05rem,2vw,1.4rem); color:var(--parchment);
+  white-space:nowrap; transition:color .35s, transform .35s; display:inline-block;
+}
+.leader{ flex:1; border-bottom:1px dotted var(--parchment-dim); opacity:.35; margin-bottom:6px; transition:opacity .35s;}
+.toc-mark{
+  font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.06em; color:var(--gold-dark);
+  transition:color .35s;
+}
+.toc li:hover .toc-label{ color:var(--gold-bright); transform:translateX(4px); }
+.toc li:hover .leader{ opacity:.7; }
+.toc li:hover .toc-mark{ color:var(--gold-bright); }
+
+@media (max-width:760px){
+  .cover-grid{ grid-template-columns:1fr; }
+  .cover-photo{ max-width:220px; margin:0 auto 12px; }
+  .case-vert{ display:none; }
 }
 
-  /* ============ ПЛЕЕР ============ */
+.scroll-cue{
+  position:absolute; bottom:30px; left:50%; transform:translateX(-50%); z-index:2;
+  width:1px; height:48px; background:linear-gradient(var(--gold-pale), transparent); overflow:hidden;
+}
+.scroll-cue::after{
+  content:''; position:absolute; left:-1.5px; top:-20px; width:4px; height:20px; border-radius:2px;
+  background:var(--gold-bright); animation:drip 2.6s ease-in-out infinite;
+}
+@keyframes drip{ 0%{ top:-20px; opacity:0;} 20%{opacity:1;} 100%{ top:52px; opacity:0;} }
 
-  .header-player {
-    width: min(360px, 88vw);
-    margin: 34px auto 0;
-    opacity: 0;
-    animation: fadeUp 1.8s 2s ease forwards;
-  }
+/* ============ VITALS LEDGER (Имя / Возраст / Раса) ============ */
+.ledger{ border-top:1px solid var(--line); }
+.ledger-row{
+  display:grid; grid-template-columns:200px 1fr; gap:24px; padding:24px 0;
+  border-bottom:1px solid var(--line); position:relative;
+}
+.ledger-row:hover{ background:linear-gradient(90deg, rgba(205,170,128,.05), transparent); }
+.ledger-row .k{
+  font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--gold-pale); padding-top:2px;
+}
+.ledger-row .v{ font-size:1.28rem; font-style:italic; color:var(--parchment); opacity:.92; }
+@media (max-width:620px){ .ledger-row{ grid-template-columns:1fr; gap:6px; } }
 
-  .player-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    border-top: 1px solid var(--hairline);
-    border-bottom: 1px solid var(--hairline);
-    padding: 16px 4px;
-  }
+.name-row .v{ display:flex; align-items:center; flex-wrap:wrap; gap:16px; }
+.strike{ position:relative; opacity:.55; }
+.strike::after{
+  content:''; position:absolute; left:-4%; right:-4%; top:54%; height:1.5px;
+  background:var(--gold-dark); transform:rotate(-1.6deg);
+}
+.stamp{
+  font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--gold-bright); border:1px solid var(--gold-dark); padding:5px 12px;
+  transform:rotate(-5deg); opacity:.8; display:inline-block;
+}
 
-  .player-cover {
-    width: 54px;
-    height: 54px;
-    flex-shrink: 0;
-    border-radius: 2px;
-    overflow: hidden;
-    border: 1px solid var(--hairline);
-    background: var(--panel);
-  }
-  .player-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(30%) contrast(1.05) brightness(0.85);
-  }
+/* ============ APPEARANCE / prose panel ============ */
+.prose-panel{
+  border-left:2px solid var(--gold-dark); padding:6px 0 6px 30px;
+  font-size:1.35rem; line-height:1.85; font-style:italic; color:var(--parchment); opacity:.92;
+}
+.prose-panel .drop{
+  float:left; font-family:'Cormorant Garamond',serif; font-size:4.4rem; line-height:.78;
+  color:var(--gold-pale); padding:6px 10px 0 0; font-style:normal;
+}
 
-  .player-meta {
-    flex: 1;
-    min-width: 0;
-    text-align: left;
-  }
-  .player-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1.08rem;
-    color: var(--bone);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .player-author {
-    font-family: 'Cormorant SC', serif;
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
-    text-indent: 0.16em;
-    color: var(--crimson-hi);
-    text-transform: uppercase;
-    margin-top: 3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+/* ============ TRAITS (character) ============ */
+.traits{ display:flex; flex-wrap:wrap; gap:14px; margin-top:8px; }
+.trait{
+  font-family:'Cinzel',serif; font-size:.78rem; letter-spacing:.08em;
+  padding:12px 22px; border:1px solid var(--gold-dark); border-radius:2px;
+  position:relative; color:var(--gold-pale); background:rgba(153,121,83,.06);
+  transition:transform .35s, box-shadow .35s, border-color .35s;
+}
+.trait::before{
+  content:''; position:absolute; left:-1px; top:20%; width:1px; height:60%;
+  background:var(--crack); transform:rotate(4deg);
+}
+.trait:nth-child(3n)::before{ display:none; }
+.trait:hover{ transform:translateY(-4px) rotate(-.6deg); border-color:var(--gold-bright); box-shadow:0 10px 26px rgba(0,0,0,.4); }
 
-  .player-controls {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    flex-shrink: 0;
-  }
+/* ============ BIOGRAPHY (torn frame + embers) ============ */
+.biography{
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(153,121,83,.10), transparent 70%),
+    linear-gradient(180deg, var(--ink-black), #050a12 60%, var(--ink-black));
+  border-bottom:none;
+}
+.bio-frame{
+  position:relative; padding:56px 6vw; border:1px solid var(--gold-dark);
+  clip-path:polygon(0 0,97% 0,100% 4%,100% 96%,96% 100%,3% 100%,0 97%,2% 3%);
+}
+.bio-frame::before{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(115deg, transparent 40%, rgba(0,0,0,.5) 41%, transparent 43%),
+    linear-gradient(60deg, transparent 70%, rgba(0,0,0,.4) 71%, transparent 73%);
+}
+.bio-frame canvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.bio-frame .prose-panel{ border-color:var(--gold-dark); opacity:.9; }
+.bio-frame .prose-panel + .prose-panel{ margin-top:30px; }
+.bio-quote{
+  margin-top:38px; padding-top:26px; border-top:1px solid var(--line);
+  font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.5rem; color:var(--gold-pale); opacity:.75;
+}
 
-  .player-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--bone-dim);
-    font-size: 1.05rem;
-    transition: color 0.3s ease;
-    line-height: 1;
-  }
-  .player-btn:hover { color: var(--crimson-hi); }
-  .player-btn.main {
-    color: var(--crimson-hi);
-    font-size: 1.5rem;
-  }
+/* ============ FOOTER ============ */
+footer{ padding:70px 8vw 60px; text-align:center; background:var(--ink-black); }
+.seal-mini{ width:56px; height:56px; margin:0 auto 18px; opacity:.65; }
+footer .arch{ font-family:'Cinzel',serif; font-size:.64rem; letter-spacing:.24em; color:var(--parchment-dim); text-transform:uppercase; }
+footer .stamp2{ margin-top:8px; font-style:italic; color:var(--gold-pale); opacity:.75; }
 
-  .player-progress-track {
-    width: 100%;
-    height: 2px;
-    background: var(--hairline);
-    border-radius: 2px;
-    margin-top: 12px;
-    position: relative;
-    cursor: pointer;
-  }
-  .player-progress-fill {
-    position: absolute;
-    left: 0; top: 0;
-    height: 100%;
-    width: 0%;
-    background: var(--crimson-hi);
-    border-radius: 2px;
-  }
-
-  .player-volume {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .player-volume-icon {
-    color: var(--bone-dim);
-    font-size: 0.95rem;
-    flex-shrink: 0;
-  }
-  .player-volume-icon:hover { color: var(--crimson-hi); }
-
-  .player-volume input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 54px;
-    height: 3px;
-    background: var(--hairline);
-    border-radius: 3px;
-    outline: none;
-    cursor: pointer;
-  }
-  .player-volume input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 11px;
-    height: 11px;
-    border-radius: 50%;
-    background: var(--crimson-hi);
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-  .player-volume input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-  .player-volume input[type="range"]::-moz-range-thumb {
-    width: 11px;
-    height: 11px;
-    border: none;
-    border-radius: 50%;
-    background: var(--crimson-hi);
-    cursor: pointer;
-  }
-
-  /* ============ МИНИ-ПЛЕЕР И КНОПКА «НАВЕРХ» ============ */
-
-  .mini-player {
-    position: fixed;
-    left: 18px;
-    bottom: 18px;
-    z-index: 95;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(13, 9, 12, 0.94);
-    border: 1px solid var(--hairline);
-    border-radius: 4px;
-    padding: 8px 12px;
-    max-width: min(280px, calc(100vw - 100px));
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(12px);
-    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
-  }
-  .mini-player.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-  }
-  .mini-player img {
-    width: 34px;
-    height: 34px;
-    object-fit: cover;
-    border-radius: 2px;
-    border: 1px solid var(--hairline);
-    flex-shrink: 0;
-    filter: grayscale(30%) brightness(0.85);
-  }
-  .mini-player .mini-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.92rem;
-    color: var(--bone);
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .to-top {
-    position: fixed;
-    right: 18px;
-    bottom: 18px;
-    z-index: 95;
-    width: 44px;
-    height: 44px;
-    border: 1px solid var(--hairline);
-    border-radius: 4px;
-    background: rgba(13, 9, 12, 0.94);
-    color: var(--bone-dim);
-    font-size: 1.1rem;
-    line-height: 1;
-    cursor: pointer;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(12px);
-    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s, color 0.3s ease, border-color 0.3s ease;
-  }
-  .to-top.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-  }
-  .to-top:hover {
-    color: var(--crimson-hi);
-    border-color: var(--crimson);
-  }
-
-  /* ================= ВЛОЖЕННЫЕ РАЗДЕЛЫ ================= */
-
-  .sub-nav {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    column-gap: 8px;
-    row-gap: 12px;
-    margin: 0 0 52px;
-  }
-  .sub-btn {
-    appearance: none;
-    background: none;
-    border: none;
-    border-bottom: 1px solid transparent;
-    cursor: pointer;
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1.05rem;
-    letter-spacing: 0.12em;
-    color: var(--bone-dim);
-    padding: 4px 10px;
-    position: relative;
-    transition: color 0.5s ease, border-color 0.5s ease;
-  }
-  .sub-btn:hover { color: var(--bone); }
-  .sub-btn.active {
-    color: var(--crimson-hi);
-    border-bottom-color: var(--hairline);
-  }
-  .sub-btn.active::after {
-    content: '';
-    position: absolute;
-    left: 50%; bottom: -4px;
-    width: 4px; height: 4px;
-    background: var(--crimson-hi);
-    transform: translateX(-50%) rotate(45deg);
-  }
-  .sub-sep {
-    color: var(--crimson-lo);
-    align-self: center;
-    font-size: 0.8rem;
-    user-select: none;
-  }
-
-  .sub-content { display: none; }
-  .sub-content.active {
-    display: block;
-    animation: subReveal 0.9s ease both;
-  }
-  @keyframes subReveal {
-    0%   { opacity: 0; transform: translateY(12px); filter: blur(4px); }
-    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
-  }
-
-  .sub-title {
-    text-align: center;
-    font-family: 'newcyrillicgoth', serif;
-    font-size: 2.1rem;
-    color: var(--crimson-hi);
-    margin-bottom: 30px;
-  }
-
-  /* ================= ПОДВАЛ ================= */
-
-  footer {
-    position: relative;
-    z-index: 5;
-    text-align: center;
-    padding: 50px 24px 70px;
-  }
-  footer .rule {
-    width: min(200px, 50vw);
-    height: 1px;
-    margin: 0 auto 26px;
-    background: linear-gradient(to right, transparent, var(--hairline), transparent);
-  }
-  footer p {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.95rem;
-    letter-spacing: 0.18em;
-    color: var(--bone-dim);
-  }
-  footer a {
-    color: var(--crimson-hi);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.4s ease;
-  }
-  footer a:hover { border-bottom-color: var(--crimson); }
-
-  /* ================= МЕДИАЗАПРОСЫ ================= */
-
-  @media (min-width: 1024px) {
-    .prose p { font-size: 1.3rem; }
-    .prose ul.dash-list li { font-size: 1.22rem; }
-    main { max-width: 820px; }
-  }
-
-  @media (max-width: 640px) {
-    nav.main-nav { column-gap: 16px; }
-    .tab-btn { padding: 14px 2px; font-size: 0.78rem; letter-spacing: 0.2em; }
-    .prose p { font-size: 1.08rem; }
-
-    .sub-nav {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 10px;
-      margin: 0 0 40px;
-      padding: 0;
-    }
-    .sub-sep { display: none; }
-    .sub-btn {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 0.88rem;
-      letter-spacing: 0.04em;
-      padding: 11px 10px;
-      text-align: center;
-      border: 1px solid var(--hairline);
-      border-radius: 4px;
-      color: var(--bone-dim);
-      transition: color 0.4s ease, border-color 0.4s ease, background 0.4s ease;
-    }
-    .sub-btn.active {
-      color: var(--crimson-hi);
-      background: rgba(161, 27, 49, 0.08);
-      border-color: var(--crimson-lo);
-    }
-    .sub-btn.active::after { display: none; }
-  }
-
-  @media (max-width: 480px) {
-    .player-cover { width: 46px; height: 46px; }
-    .player-title { font-size: 0.98rem; }
-    .player-controls { gap: 10px; }
-    .player-volume input[type="range"] { width: 40px; }
-    .mini-player { max-width: calc(100vw - 90px); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-delay: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-      transition-delay: 0.01ms !important;
-    }
-  }
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+}
+:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:3px; }
 </style>
 </head>
 <body>
 
-<div class="aura"></div>
-<div class="read-progress" id="readProgress"></div>
+<div class="grain"></div>
+<div class="vignette"></div>
 
-<header>
-  <p class="epigraph" lang="en">The United Kingdom of Great Britain and Northern Ireland · 1852</p>
-  <h1>Grim Grace | RP</h1>
-  <p class="script-line" lang="en">What's hidden behind the masks...</p>
-
-  <svg class="flourish" viewBox="0 0 400 40" aria-hidden="true" focusable="false">
-    <path class="draw" d="M20,20 C70,20 90,6 120,14 C150,22 160,20 200,20 C240,20 250,22 280,14 C310,6 330,20 380,20"/>
-    <path class="draw" d="M120,14 C108,26 92,30 78,24 C64,18 66,6 78,8 C88,10 84,22 72,20"/>
-    <path class="draw" d="M280,14 C292,26 308,30 322,24 C336,18 334,6 322,8 C312,10 316,22 328,20"/>
-    <path class="draw" d="M20,20 C14,14 6,16 8,22 C10,28 18,26 20,20"/>
-    <path class="draw" d="M380,20 C386,14 394,16 392,22 C390,28 382,26 380,20"/>
-    <rect class="gem" x="196" y="16" width="8" height="8" transform="rotate(45 200 20)"/>
-  </svg>
-
-  <div class="header-player">
-    <div class="player-row">
-      <div class="player-cover">
-        <img id="playerCover" alt="">
-      </div>
-      <div class="player-meta">
-        <p class="player-title" id="playerTitle">—</p>
-        <p class="player-author" id="playerAuthor">—</p>
-      </div>
-      <div class="player-controls">
-        <button class="player-btn" id="playerPrev" aria-label="Предыдущий трек">❮</button>
-        <button class="player-btn main" id="playerPlay" aria-label="Воспроизвести">▶</button>
-        <button class="player-btn" id="playerNext" aria-label="Следующий трек">❯</button>
-      </div>
-      <div class="player-volume">
-        <button class="player-btn player-volume-icon" id="playerMute" aria-label="Выключить звук" aria-pressed="false">♪</button>
-        <input type="range" id="playerVolume" min="0" max="1" step="0.01" value="0.6" aria-label="Громкость">
-      </div>
-    </div>
-    <div class="player-progress-track" id="playerProgressTrack"
-         role="slider" tabindex="0"
-         aria-label="Позиция воспроизведения"
-         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-      <div class="player-progress-fill" id="playerProgressFill"></div>
-    </div>
-  </div>
-</header>
-
-<audio id="playerAudio" preload="none"></audio>
-
-<nav class="main-nav" role="tablist" aria-label="Разделы">
-  <button class="tab-btn active" id="tab-plot" role="tab" aria-selected="true" aria-controls="plot" data-tab="plot"><span class="num">I</span>Сюжет</button>
-  <button class="tab-btn" id="tab-vampires" role="tab" aria-selected="false" aria-controls="vampires" data-tab="vampires" tabindex="-1"><span class="num">II</span>Вампиры</button>
-  <button class="tab-btn" id="tab-humans" role="tab" aria-selected="false" aria-controls="humans" data-tab="humans" tabindex="-1"><span class="num">III</span>Люди</button>
-  <button class="tab-btn" id="tab-halfbloods" role="tab" aria-selected="false" aria-controls="halfbloods" data-tab="halfbloods" tabindex="-1"><span class="num">IV</span>Полукровки</button>
-  <button class="tab-btn" id="tab-extra" role="tab" aria-selected="false" aria-controls="extra" data-tab="extra" tabindex="-1"><span class="num">V</span>Приложения</button>
+<nav class="wayfinder" aria-label="Навигация по разделам">
+  <button data-target="hero" data-label="Обложка" class="active"></button>
+  <button data-target="vitals" data-label="Данные"></button>
+  <button data-target="appearance" data-label="Облик"></button>
+  <button data-target="character" data-label="Нрав"></button>
+  <button data-target="biography" data-label="Биография"></button>
 </nav>
 
-<main>
+<!-- ============ HERO — cover page / index ============ -->
+<header class="hero" id="hero">
+  <canvas id="motesCanvas"></canvas>
 
-<section class="tab-content active" id="plot" role="tabpanel" aria-labelledby="tab-plot">
-  <article class="chapter">
-    <h2>Сюжет</h2>
-    <svg class="flourish" viewBox="0 0 400 40" aria-hidden="true" focusable="false">
-      <path class="draw" d="M20,20 C70,20 90,6 120,14 C150,22 160,20 200,20 C240,20 250,22 280,14 C310,6 330,20 380,20"/>
-      <path class="draw" d="M120,14 C108,26 92,30 78,24 C64,18 66,6 78,8 C88,10 84,22 72,20"/>
-      <path class="draw" d="M280,14 C292,26 308,30 322,24 C336,18 334,6 322,8 C312,10 316,22 328,20"/>
-      <path class="draw" d="M20,20 C14,14 6,16 8,22 C10,28 18,26 20,20"/>
-      <path class="draw" d="M380,20 C386,14 394,16 392,22 C390,28 382,26 380,20"/>
-      <rect class="gem" x="196" y="16" width="8" height="8" transform="rotate(45 200 20)"/>
-    </svg>
-
-    <div class="story-arcs">
-      <details class="story-arc" id="arc-prolog">
-        <summary class="story-toggle">
-          <span>Пролог</span>
-          <span class="story-toggle-arrow" aria-hidden="true">⌄</span>
-        </summary>
-        <div class="story-body-inner">
-          <div class="prose">
-            <div class="banner-img">
-              <img src="https://lulllz4.github.io/GrimGrace/bannerPLOT1_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-            </div>
-            <p class="lead">Лондон середины XIX века — это задыхающийся гигант. Столица Империи бурлит от грохота ткацких станков, черного фабричного дыма и стука копыт по грязной мостовой. Но в октябре 1852 года этот железный ритм обрывается. Из Букингемского дворца приходит оглушительная весть: молодая королева Виктория скоропостижно скончалась 11 октября. Официальный диагноз — «гнилая лихорадка», но город полнится слухами о заговоре чартистов или французских шпионов.</p>
-            <p>Британия погружается в глубокий, панический траур. Темные воды Темзы несут грязь и копоть, а над городом плывет непрерывный похоронный звон. Парламент расколот: наследнику престола, принцу Альберту Эдуарду, всего одиннадцать лет, и за право стать регентом и получить контроль над Империей начинается закулисная война. Полиция переведена на казарменное положение, ведь в рабочих кварталах Ист-Энда уже вспыхивают первые бунты. Старый порядок трещит по швам. И в этом хаосе обнажаются клыки тех, кто веками кормился за счет короны.</p>
-
-            <div class="banner-img">
-              <img src="https://lulllz4.github.io/GrimGrace/bannerPLOT2_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-            </div>
-            <p>Для закрытого аристократического клуба «Альбион» — тайного культа чистокровных вампиров — смерть молодой королевы стала ударом в самое сердце. На протяжении последних пятнадцати лет Магистры культа аккуратно оплетали связями юную корону, обеспечивая себе монополию на колониальные поставки опиума, золота и, главное, «живого товара» из колоний для своих нужд.</p>
-            <p>В ночь, когда Виктория умирала, из королевского кабинета исчез секретный реестр — «Чёрная книга Тауэра». В ней содержались зашифрованные протоколы тайной полиции, расписки и земельные хартии, доказывающие, что верхушка Палаты лордов (являющаяся ядром вампирского клуба) неизменна со времен Великой чумы 1665 года. Документы неопровержимо доказывают существование нечеловеческого вида среди высшей знати Лондона.</p>
-            <p>Если книга попадет к радикалам из Парламента или будет опубликована в прессе — камуфляж вида будет сорван. Объявлено военное положение: вампиры должны вернуть книгу любой ценой, пока новый регентский совет не провел аудит дворцовых архивов.</p>
-
-            <div class="banner-img">
-              <img src="https://lulllz4.github.io/GrimGrace/bannerPLOT3_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-            </div>
-            <p>Пока за закрытыми дверями Мэйфэр вампиры в панике ищут виновника, человеческий Лондон приходит в движение, неосознанно затягивая петлю вокруг тайного культа. Для Скотленд-Ярда кража из покоев умирающей Виктории становится объявлением войны, но детективы слишком слепы к мистике. Находя вырванные с мясом стальные замки, они упрямо списывают это на гидравлические механизмы налетчиков, а обескровленные трупы свидетелей в трущобах Ист-Энда — на появление очередного прибрежного маньяка. Сыщики вслепую прочесывают дно города, пытаясь защитить одиннадцатилетнего наследника, пока настоящие хищники ведут игру на опережение.</p>
-            <p>Впрочем, там, где полиция бессильно ищет улики, в подземельях под собором Святого Павла созревает куда более страшная угроза — секретный Орден Животворящего Креста. Это боевое крыло Церкви Англии действует в абсолютной тайне от парламента и закона. Для его фанатиков смерть королевы стала долгожданным знамением, а «Чёрная книга» — готовым расстрельным списком «нестареющих лордов» из клуба «Альбион». Вооружившись, Орден готов развязать подпольную инквизицию и очистить столицу огнем, не щадя ни монстров, ни вставших на пути хранителей порядка.</p>
-            <p>Самым же надежным щитом для культа становится неосведомленная человеческая аристократия, для которой смерть Виктории — лишь повод для циничной наживы. Графы и банкиры города слетаются к пустеющему трону, как стервятники, заискивая перед Магистрами «Альбиона» ради чеков и министерских портфелей. Смертные лорды даже не подозревают, что в этой подкулисной грызне их просто используют. Наводя полицию на ложные следы и убирая свидетелей чужими руками, вампиры шаг за шагом подчиняют себе малолетнего принца, заставляя саму человеческую элиту душить собственную Империю.</p>
-          </div>
-          <button class="story-close" data-target="arc-prolog">Свернуть ✦ Пролог</button>
+  <div class="cover-grid">
+    <div class="cover-photo">
+      <div class="case-vert">Британская Индия · 1852</div>
+      <svg class="pin-seal" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="17" fill="#0f1e3f" stroke="#997953" stroke-width="1.4"/>
+        <path d="M8 22 C14 14 26 14 32 22" stroke="#cdaa80" stroke-width="1" fill="none" opacity=".8"/>
+        <path d="M20 6 L20 34 M6 20 L34 20" stroke="#cdaa80" stroke-width="1" opacity=".4"/>
+        <path d="M12 12 L28 28 M28 12 L12 28" stroke="#070d16" stroke-width="1" opacity=".55"/>
+      </svg>
+      <div class="photo-frame">
+        <div class="photo-inner">
+          <svg viewBox="0 0 100 130" fill="none" stroke="#cdaa80" stroke-width="1.4" aria-hidden="true">
+            <ellipse cx="50" cy="40" rx="18" ry="22"/>
+            <path d="M20 122 C20 88 34 68 50 68 C66 68 80 88 80 122" />
+          </svg>
         </div>
-      </details>
-
-      <div class="story-arc story-arc-locked">
-        <div class="story-toggle" aria-disabled="true">
-          <span>Глава I</span>
-          <span class="lock-label">скоро откроется</span>
-        </div>
+        <div class="burn-corner" aria-hidden="true"></div>
       </div>
+      <div class="photo-cap">портрет утрачен</div>
     </div>
 
-    <p class="end-mark">✦ ✦ ✦</p>
-  </article>
+    <div class="cover-text">
+      <div class="eyebrow">Личное дело · открыто к прочтению</div>
+      <h1 class="cover-title">Досье</h1>
+      <p class="cover-sub">Опись сведений о владелице рода</p>
+
+      <ul class="toc">
+        <li><button data-target="vitals"><span class="toc-label">Имя</span><span class="leader"></span><span class="toc-mark">I</span></button></li>
+        <li><button data-target="vitals"><span class="toc-label">Возраст</span><span class="leader"></span><span class="toc-mark">II</span></button></li>
+        <li><button data-target="vitals"><span class="toc-label">Раса</span><span class="leader"></span><span class="toc-mark">III</span></button></li>
+        <li><button data-target="appearance"><span class="toc-label">Внешность</span><span class="leader"></span><span class="toc-mark">IV</span></button></li>
+        <li><button data-target="character"><span class="toc-label">Характер</span><span class="leader"></span><span class="toc-mark">V</span></button></li>
+        <li><button data-target="biography"><span class="toc-label">Биография</span><span class="leader"></span><span class="toc-mark">VI</span></button></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="scroll-cue" aria-hidden="true"></div>
+</header>
+
+<!-- divider template used between sections -->
+<template id="divider-tpl">
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 520 34" preserveAspectRatio="none">
+      <path d="M0 17 H180" stroke="#997953" stroke-width="1"/>
+      <path d="M340 17 H520" stroke="#997953" stroke-width="1"/>
+      <g fill="none" stroke="#cdaa80" stroke-width="1.6">
+        <path d="M260 4 C230 4 230 30 260 30 C290 30 290 4 260 4 Z"/>
+        <path d="M260 10 C246 10 246 24 260 24 C274 24 274 10 260 10 Z"/>
+        <circle cx="260" cy="17" r="2.4" fill="#cdaa80"/>
+        <path d="M200 17 C210 8 220 8 230 17" />
+        <path d="M290 17 C300 8 310 8 320 17" />
+      </g>
+    </svg>
+  </div>
+</template>
+
+<!-- ============ VITALS: Имя / Возраст / Раса ============ -->
+<section id="vitals">
+  <div class="section-inner">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Раздел I</div>
+      <h2>Личные данные</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="ledger reveal">
+      <div class="ledger-row name-row">
+        <div class="k">Имя</div>
+        <div class="v"><span class="strike">заглушка1</span><span class="stamp">изъято из дела</span></div>
+      </div>
+      <div class="ledger-row">
+        <div class="k">Возраст</div>
+        <div class="v">заглушка2</div>
+      </div>
+      <div class="ledger-row">
+        <div class="k">Раса</div>
+        <div class="v">заглушка3</div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="tab-content" id="vampires" role="tabpanel" aria-labelledby="tab-vampires">
-  <article class="chapter">
-    <p class="chapter-label">Основная статья</p>
-    <h2>Вампиры</h2>
-    <svg class="flourish" viewBox="0 0 400 40" aria-hidden="true" focusable="false">
-      <path class="draw" d="M20,20 C70,20 90,6 120,14 C150,22 160,20 200,20 C240,20 250,22 280,14 C310,6 330,20 380,20"/>
-      <path class="draw" d="M120,14 C108,26 92,30 78,24 C64,18 66,6 78,8 C88,10 84,22 72,20"/>
-      <path class="draw" d="M280,14 C292,26 308,30 322,24 C336,18 334,6 322,8 C312,10 316,22 328,20"/>
-      <path class="draw" d="M20,20 C14,14 6,16 8,22 C10,28 18,26 20,20"/>
-      <path class="draw" d="M380,20 C386,14 394,16 392,22 C390,28 382,26 380,20"/>
-      <rect class="gem" x="196" y="16" width="8" height="8" transform="rotate(45 200 20)"/>
-    </svg>
-
-    <nav class="toc" aria-label="Содержание статьи">
-      <a href="#v-who">Кто такие вампиры?</a><span class="toc-sep" aria-hidden="true">·</span>
-      <a href="#v-body">О телах</a><span class="toc-sep" aria-hidden="true">·</span>
-      <a href="#v-club">Клуб «Альбион»</a><span class="toc-sep" aria-hidden="true">·</span>
-      <a href="#v-core">Внутреннее устройство</a>
-    </nav>
-
-    <div class="prose">
-      <h3 class="section-title" id="v-who">Кто такие вампиры?</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerVAMPIRE1_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <p class="lead">Вампиры — не порождение магии или дьявольского контракта. Их долгожительство заложено в самой крови и передается исключительно по наследству, из поколения в поколение, как неизлечимая мутация. Они — обособленная ветвь человечества, что когда-то совершила невероятный эволюционный скачок.</p>
-      <p>Сами вампиры считают себя Богами и теми, кто должен занять людское место.</p>
-
-      <h3 class="section-title" id="v-body">О телах вампиров</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerVAMPIRE2_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-
-      <h4 class="micro-title">Долгожительство</h4>
-      <p>Вся суть вампирской анатомии кроется в глобальном замедлении жизни. Оболочки клеток превратились в плотную, почти непроницаемую преграду. Чтобы выжить, тело развило агрессивные внутренние насосы, силой проталкивающие питательные элементы сквозь эту глухую защиту.</p>
-      <p>Расплатой за прочность стало угасание тепла: температура тела вампиров ниже человеческой на несколько градусов, а обмен веществ замедлен в 3–5 раз. Этот вечный анабиоз защищает ткани от износа, продлевая жизнь клеток на столетия — именно поэтому срок жизни вампира составляет около 350–400 лет. В состоянии покоя вампир похож на статую: его массивное сердце бьется редко (всего 20–30 ударов в минуту), легкие едва двигаются, а кора мозга дремлет, экономя силы.</p>
-
-      <h4 class="micro-title">Физические возможности</h4>
-      <p>Вампир не способен на долгую и монотонную физическую работу, но он идеален для молниеносного убийства. Клеточные оболочки его мышц работают как природные аккумуляторы, способные копить химическую энергию. Приказом нервной системы этот заряд высвобождается мгновенно, позволяя совершать чудовищные по силе и скорости рывки.</p>
-      <p>Эту вспышку ярости обеспечивает уникальный организм-компрессор:</p>
-      <ul class="dash-list">
-        <li>Одним глубоким вдохом вампир намертво запирает воздух в колоссальных легких, а мощный толчок гипертрофированного сердца мгновенно насыщает ткани кислородом под огромным давлением.</li>
-        <li>В печени вампира хранится колоссальный, недоступный человеку запас углеводов. В момент рывка этот «энергетический банк» мгновенно вбрасывает в мышцы все топливо без остатка.</li>
-        <li>Пока высшее сознание спит, за долю секунды включаются древние инстинкты, идеальная координация и агрессия лимбической системы.</li>
-      </ul>
-
-      <h4 class="micro-title">Цена величия</h4>
-      <p>За секунды сверхчеловеческого триумфа приходится платить часами беспомощности. После боя наступает фаза глубокого восстановления. Из-за плотных клеточных оболочек вампир не может быстро восполнить ресурсы. Он способен часами размеренно уходить от погони, но повторный рывок сделать не сможет.</p>
-      <p>Если вампир попытается совершить резкое движение, когда его внутренний банк пуст, вместо силы он получит слабый судорожный всплеск, за которым последует глубокое, болезненное истощение организма, способное затянуться на несколько суток. Полноценно насытиться и вернуть тонус помогает укороченный, но невероятно агрессивный кишечник с повышенной кислотностью желудка, способный моментально выжимать из украденной человеческой крови максимум питательных веществ.</p>
-
-      <h4 class="micro-title">Размножение</h4>
-      <p>Из-за медленного метаболизма продолжение рода для вампиров — это редчайший дар. Их репродуктивная система напрямую привязана к сытости и уровню стресса: если вампир голоден или напуган, организм отключает детородную функцию первой, спасая жизнь хозяину.</p>
-      <ul class="dash-list">
-        <li>Мужская система: созревание семени идет не неделями, а долгими месяцами. Каждая клетка «донастраивается» организмом, обретая плотную мембрану и запас энергии. Внутри тела они хранятся в режиме консервации и не портятся. Однако организм не рассчитан на частые выбросы: после одной ночи любви вампиру требуются недели, а то и месяцы, чтобы восстановить этот драгоценный запас.</li>
-        <li>Женская система: организм вампирши делает ставку не на количество, а на абсолютное качество, поэтому овуляция происходит всего раз в год. Фолликул созревает почти двенадцать месяцев, медленно накапливая ресурсы и усиливая защиту будущей яйцеклетки. Сама овуляция длится всего 12–24 часа. Чтобы зачатие произошло, совпадение должно быть идеальным, а сама женщина должна быть сыта, спокойна и находиться в полной безопасности.</li>
-      </ul>
-
-      <h4 class="micro-title">Слабости</h4>
-      <ul class="dash-list">
-        <li>Вампиры крайне чувствительны к серебру. Оно работает для них как сильнейший яд, который мгновенно отравляет кровь и разрушает клетки изнутри. Любое касание серебряного клинка или пули вызывает острую реакцию: тело просто не может справиться с этим металлом, и вампир погибает в мучениях от быстрого заражения.</li>
-        <li>Сердце вампира — это огромная, мощная мышца, которая работает на износ, чтобы обеспечивать их невероятную скорость и силу. Из-за своих размеров оно занимает много места в груди и становится идеальной мишенью. Осиновый кол — это лучший способ остановить вампира: он разрывает орган так глубоко и масштабно, что даже их способность к заживлению не успевает сработать. Смерть наступает почти мгновенно.</li>
-      </ul>
-
-      <h3 class="section-title" id="v-club">Клуб «Альбион»</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerVAMPIRE3_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <p>Альбион — это сердце лондонской тьмы, надежно спрятанное за фасадом из красного дерева, дорогих сигар и безупречных манер. Учредители клуба — вампиры, чья линия крови тянется от великого Прародителя. Для общества это просто респектабельное джентльменское собрание в Вест-Энде, но на деле — это идеальная, выверенная веками экосистема, где хищники элегантно управляют своей добычей.</p>
-      <p>Клуб строго разделен на две реальности: человеческую иллюзию и вампирскую истину. Дистанция между «богами и скотом» поддерживается безукоризненно.</p>
-
-      <h4 class="micro-title">Внешний фасад</h4>
-      <p>Большинство членов клуба — обычные люди: аристократы, владельцы газет, министры и высшие чины Скотленд-Ярда. Они приходят сюда плести политические интриги и вести философские беседы, не подозревая, что их просто используют «втемную». Им аккуратно внушают, что «Альбион» — это тайный масонский орден, который негласно правит Британской империей.</p>
-
-      <h4 class="micro-title">Фильтрация кандидатов</h4>
-      <p>Членство в «Альбионе» нельзя купить. Магистры месяцами наблюдают за потенциальными кандидатами, отбирая только тех, кем легко манипулировать: людей, ослепленных тщеславием, жаждой власти или наивным увлечением оккультизмом.</p>
-
-      <h4 class="micro-title">Симбиоз</h4>
-      <p>Человеку незаметно расчищают путь наверх. Его конкуренты внезапно разоряются или погибают, а карьера идет в гору. Взамен благодарные смертные отрабатывают долг: переписывают законы, закрывают глаза на исчезновения людей в трущобах и хоронят неудобные расследования Ярда. Они уверены, что участвуют в политическом заговоре, пока на самом деле просто обеспечивают вампирам безопасность.</p>
-
-      <h4 class="micro-title">Каста «Питомцев»</h4>
-      <p>Отдельная категория гостей — пресыщенная знать, скучающие лорды и богатые вдовы, ищущие декадентских, запретных ощущений. Они не лезут в политику, их приглашают на особые ночные приемы, пропитанные вином, опиумом и лауданумом.</p>
-      <p>Эти люди — элитный, добровольный источник крови. Под действием наркотиков и вампирского гипноза они воспринимают укус не как хищное нападение, а как невероятный экстаз и мистическое откровение. Питомцы попадают в тяжелую психологическую зависимость от своих хозяев. Они добровольно отдают свою кровь, состояние и преданность, искренне считая себя избранными, которых допустили к божественному таинству. Для вампиров же они — просто красивая, ухоженная скотина в золотой клетке.</p>
-
-      <h4 class="micro-title">За кулисами</h4>
-      <p>Это скрытая, подземная часть клуба, вход куда смертным закрыт навсегда. Здесь заканчивается игра в лондонских джентльменов и сбрасываются все человеческие маски.</p>
-      <p>В Капитуле висят истинные догматы вампиров. Здесь проводятся древние ритуалы крови, приносятся клятвы верности заветам Прародителя и вершится настоящий суд. Именно в этих звуконепроницаемых залах магистры делят Лондон на охотничьи угодья, обсуждают угрозу со стороны Ордена и решают, какую пешку на шахматной доске Британской империи пришло время пожертвовать.</p>
-
-      <h3 class="section-title" id="v-core">Внутреннее устройство «Альбиона»</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerVAMPIRE4_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-
-      <h4 class="micro-title">Внутреннее ядро</h4>
-      <p>Истинный «Альбион» подчинен жесточайшей геронтократии. Власть здесь измеряется двумя вещами: прожитыми веками и абсолютной чистотой генома. Любое проявление человеческой физиологии или слабости считается генетическим мусором и вырождением.</p>
-
-      <h4 class="micro-title">Прародитель</h4>
-      <p>Эмерик, рожденный в 10-ом веке и давно обратившийся в прах, — это недосягаемый абсолют для клуба «Альбион». Он не просто основал вампирский род, он был существом такого масштаба, к которому современные правители Лондона не могут даже приблизиться.</p>
-      <p>Дошедшие до нынешних дней закрытые хроники описывают Эмерика как фигуру пугающего, сокрушительного могущества. Его физическая мощь и скорость были абсолютны. На его фоне даже старейшие из ныне живущих Патриархов кажутся лишь бледными, увядающими копиями идеального хищника.</p>
-      <p>В Капитуле свято чтут догматы о божественной исключительности вампирского рода, но в фундаменте религии заложен грандиозный, постыдный секрет. Эмерик был уникален. Второго такого существа просто не существовало. А значит, чтобы дать начало роду и основать династию, Прародитель был вынужден разделить ложе со смертным человеком, как и его дети.</p>
-      <p>Этот факт — строжайшее табу, за одно упоминание которого в клубе предают мучительной смерти. Все нынешние надменные магистры ведут свой род от связи божества со «скотом».</p>
-
-      <h4 class="micro-title">Власть и кастовая иерархия</h4>
-      <ul class="hierarchy">
-        <li class="tier-1">
-          <span class="tier-name">Высший круг (Патриархи)</span>
-          <p>Совет из семи старейших вампиров Лондона (возраст от 300 лет и старше). Абсолютная власть культа. Именно они выносят смертные приговоры, толкуют волю Прародителя и решают, как кровососы будут паразитировать на Британской империи в новую эпоху.</p>
-        </li>
-        <li class="tier-2">
-          <span class="tier-name">Исполнительный совет (Магистры)</span>
-          <p>Чистокровные элитарии (150–250 лет). Серый кардиналат Лондона. Они контролируют банки, суды и медицину. В светском обществе они играют роли эксцентричных лордов и вдов, ведя дела через смертных марионеток и обеспечивая культу бесперебойный поток денег и безопасности.</p>
-        </li>
-        <li class="tier-3">
-          <span class="tier-name">Младший круг (Неофиты)</span>
-          <p>Вампиры до 100 лет. Не имеют политического голоса. Это силовое крыло клуба. Их главная задача на первый век жизни — научиться подавлять инстинкты, контролировать жажду и безупречно имитировать человеческое дыхание и пульс на публике. Часто имеют наставника в лице одного из Магистров.</p>
-        </li>
-        <li class="tier-outcast">
-          <span class="tier-name">Каста полукровок (Бастарды)</span>
-          <p>Живой грех и позор культа. Официально вампиры презирают связи со «скотом», но на деле регулярно посещают бордели. Бастарды — результат таких пороков. Они лишены прав, их презирают и не пускают в Капитул. Нередко они подвергаются казням, но есть и редкие исключения, которые обитают в стенах «Альбиона». Только вот, жизнь их скорее похожа на ад.</p>
-        </li>
-      </ul>
-
-      <h4 class="micro-title">Семь Догматов Эмерика (учение Прародителя)</h4>
-      <ol class="dogma-list">
-        <li>
-          <span class="dogma-name">Гордыня <em>· венец творения</em></span>
-          <p>Центральный столп культа. Вампир — это сошедшее на землю божество, а человек — лишь питательная среда. Гордыня обязывает вампира ежеминутно осознавать свое превосходство. Испытывать к людям жалость, привязанность или считать их равными — тягчайшее преступление против собственной природы.</p>
-        </li>
-        <li>
-          <span class="dogma-name">Чревоугодие <em>· праздник насыщения</em></span>
-          <p>Кровь — это не просто еда, а священный нектар, дарующий долгую жизнь. Поглощение крови возведено в ранг культа. Чревоугодие трактуется как божественное право хищника забирать жизненную силу низших существ без остатка и с максимальным эстетическим наслаждением.</p>
-        </li>
-        <li>
-          <span class="dogma-name">Гнев <em>· божественная кара</em></span>
-          <p>Гнев для вампира — это не человеческая истерика или потеря контроля. Это проявление чистой, карающей воли. Божество имеет право мгновенно, безжалостно и показательно уничтожить любого, кто посмел встать на его пути или проявить неуважение.</p>
-        </li>
-        <li>
-          <span class="dogma-name">Уныние <em>· священный покой</em></span>
-          <p>Состояние отшельничества, когда вампир уходит в тень. Богам негоже суетиться подобно смертным. Уныние — это благородная, ледяная отрешенность от мира. Время, когда бессмертный замирает, подобно мраморной статуе, чтобы созерцать вечность и копить силы.</p>
-        </li>
-        <li>
-          <span class="dogma-name">Похоть <em>· священное таинство</em></span>
-          <p>Поскольку продолжение вампирского рода дается крайне тяжело, акт зачатия новой жизни — это сотворение нового бога. В догматах похоть очищена от человеческой грязи (что не мешает вампирам лицемерить в реальности). Это священная обязанность передать свой уникальный геном в вечность, чтобы правящий род никогда не прервался.</p>
-        </li>
-        <li>
-          <span class="dogma-name">Алчность <em>· владычество над миром</em></span>
-          <p>«Всё, что создано на земле, принадлежит богам». Божество не может быть нищим. Алчность — это обязанность сосредотачивать в своих руках золото, земли, технологии и власть. Накопление ресурсов веками — это исполнение завета Прародителя о том, что материальный мир должен полностью принадлежать высшей расе.</p>
-        </li>
-        <li>
-          <span class="dogma-name">Зависть <em>· двигатель воли</em></span>
-          <p>Зависть здесь — это не мелкая злоба из-за чужого богатства, а нетерпимость к чужому триумфу. Если смертный создал шедевр или обрел власть, вампир «завидует» этому, потому что низшее существо посмело коснуться величия. Это чувство заставляет бессмертных не гнить в праздности, а агрессивно забирать себе всё лучшее, поддерживая свое абсолютное и единоличное господство в мире.</p>
-        </li>
-      </ol>
+<!-- ============ ВНЕШНОСТЬ ============ -->
+<section id="appearance">
+  <div class="section-inner">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Раздел II</div>
+      <h2>Внешность</h2>
+      <div class="rule"></div>
     </div>
-    <p class="end-mark">✦ ✦ ✦</p>
-  </article>
+    <div class="prose-panel reveal">
+      <span class="drop">«</span>заглушка4 — здесь приводится описание внешнего облика: черты лица, осанка, манера держаться, приметы, замеченные при составлении дела.
+    </div>
+  </div>
 </section>
 
-<section class="tab-content" id="humans" role="tabpanel" aria-labelledby="tab-humans">
-  <article class="chapter">
-    <p class="chapter-label">Основная статья</p>
-    <h2>Люди</h2>
-    <svg class="flourish" viewBox="0 0 400 40" aria-hidden="true" focusable="false">
-      <path class="draw" d="M20,20 C70,20 90,6 120,14 C150,22 160,20 200,20 C240,20 250,22 280,14 C310,6 330,20 380,20"/>
-      <path class="draw" d="M120,14 C108,26 92,30 78,24 C64,18 66,6 78,8 C88,10 84,22 72,20"/>
-      <path class="draw" d="M280,14 C292,26 308,30 322,24 C336,18 334,6 322,8 C312,10 316,22 328,20"/>
-      <path class="draw" d="M20,20 C14,14 6,16 8,22 C10,28 18,26 20,20"/>
-      <path class="draw" d="M380,20 C386,14 394,16 392,22 C390,28 382,26 380,20"/>
-      <rect class="gem" x="196" y="16" width="8" height="8" transform="rotate(45 200 20)"/>
-    </svg>
-
-    <nav class="toc" aria-label="Содержание статьи">
-      <a href="#h-who">Кто такие люди?</a><span class="toc-sep" aria-hidden="true">·</span>
-      <a href="#h-faith">Верование</a><span class="toc-sep" aria-hidden="true">·</span>
-      <a href="#h-attitude">Отношение к вампирам</a><span class="toc-sep" aria-hidden="true">·</span>
-      <a href="#h-whitehall">Уайтхолл</a><span class="toc-sep" aria-hidden="true">·</span>
-      <a href="#h-order">Орден</a>
-    </nav>
-
-    <div class="prose">
-      <h3 class="section-title" id="h-who">Кто такие люди?</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerHUMAN1_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <p class="lead">Люди — бесчисленный океан планеты, чья сила кроется в стремительной смене поколений. Век человека короток, но этот непрерывный живой поток движет неудержимый прогресс. Хрупкость тел они компенсируют силой разума, технологиями и способностью мгновенно адаптироваться, подчиняя себе меняющийся мир.</p>
-
-      <h3 class="section-title" id="h-faith">Верование</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerHUMAN2_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <p>В 1852 году англиканство — это не просто вера, а фундамент Британской империи. Церковь Англии пронизывает все слои общества: епископы заседают в Парламенте, а покойная королева Виктория являлась её Верховным правителем. Религия викторианского Лондона строга, пуританственна и глубоко расколота изнутри, отражая социальный кризис столицы.</p>
-      <p>Внутри государственной веры сосуществуют ключевые лагеря, определяющие мировоззрение людей той эпохи:</p>
-      <ul class="dash-list">
-        <li>Низкая церковь (евангелисты): голос рабочего класса, честных констеблей и мелких клерков. Они требуют строгой морали, личного благочестия и активной помощи беднякам. Они прагматичны, презирают роскошь, суеверия и мистику, упрямо списывая любые ужасы Лондона на бандитизм, пороки или болезни.</li>
-        <li>Высокая церковь (ортодоксы): оплот потомственной аристократии и министров. Здесь ценят пышные ритуалы, традиции и считают власть церкви священной и непререкаемой. Именно в этих кругах, уставших от сухого индустриального века, возрождается средневековый мистицизм и зреет фанатизм Ордена Животворящего Креста.</li>
-      </ul>
-
-      <h3 class="section-title" id="h-attitude">Отношение к вампирам</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerHUMAN3_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <h4 class="micro-title">Орден Животворящего Креста</h4>
-      <p>Для культа вампиры — это легион живых мертвецов, купивших вечную юность через худший грех. В хрониках Ордена четко зафиксировано: бессмертие вампиров не берется из ниоткуда, оно скреплено полноценным контрактом с дьяволом, где платой служат человеческие души.</p>
-      <ul class="dash-list">
-        <li>Догматики: твердо верят, что каждый вампир расписался кровью в адской книге. Для старейшин вампиры — это материальные демоны, у которых вместо сердца бьется чужая, украденная жизнь. Любые их способности — это колдовская скверна.</li>
-        <li>Молодежь: меньше трепещет перед религиозным ужасом, но признает суть контракта. Они видят в вампирах должников преисподней, которые вынуждены бесконечно платить по счетам, собирая кровавую жатву с Лондона.</li>
-      </ul>
-      <h4 class="micro-title">Простые люди</h4>
-      <p>Обычные граждане не верят в чертей с рогами, но викторианский Лондон помешан на спиритизме, тайных ложах и оккультизме. О существовании вампиров они могут только догадываться, но основная масса оправдывает всё любыми логичными доводами.</p>
-      <ul class="dash-list">
-        <li>Греховный шик: закрытые ночные оргии в Мэйфэр, слухи о жертвоприношениях, черных мессах и ритуалах с кровью, которые устраивают лорды, воспринимаются толпой как пик развращенности пресыщенной знати. Для среднего класса это повод для сплетен в духе «богачи совсем сошли с ума от скуки и продали душу дьяволу».</li>
-        <li>Городские легенды: если кто-то клянется, что видел, как бледный граф прыгнул на десять метров вперед, Скотленд-Ярд и психиатры списывают это на галлюцинации от дешевого опиума или алкогольный бред.</li>
-      </ul>
-
-      <h3 class="section-title" id="h-whitehall">Тайная канцелярия Уайтхолла</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerHUMAN4_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <p>Спецслужбы Британской империи, для которых не существует мистики — только холодный государственный расчет. Их главная задача заключается в защите шаткого регентского совета и 11-летнего принца Альберта от любых угроз. Агенты не знают ни о вампирах, ни о тайной войне Ордена. Обескровленные трупы в доках они списывают на лондонские банды или маньяков, а фанатиков — на радикальные религиозные секты. Однако Уайтхолл не слеп. Анализируя финансовые потоки, шантаж чиновников и странные самоубийства в Парламенте, шпионы вычислили, что за фасадом клуба «Альбион» скрывается опаснейший теневой «картель», пытающийся взять монархию под контроль. Агенты готовы на всё ради Империи: они следят за лордами, перекупают их смертных шестерок и организуют «несчастные случаи» зарвавшимся аристократам. Уайтхолл ведет смертельную игру с «Альбионом», искренне веря, что противостоит просто очень богатым, извращенным и амбициозным политикам, даже не подозревая, что их враги нелюди.</p>
-
-      <h3 class="section-title" id="h-order">Орден Животворящего Креста</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerHUMAN5_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <p>Официально — это закрытое, пуритански строгое братство англиканских священников, основанное в Лондоне. Для внешнего мира они — самоотверженные проповедники, открывающие бесплатные столовые и приюты для нищеты в зачумленном Ист-Энде. На деле же под собором Святого Павла скрывается глубоко законспирированное, военизированное крыло Церкви Англии, действующее в абсолютной тайне от Парламента и Скотленд-Ярда.</p>
-      <p>Цель Ордена — тотальное истребление нечисти. Смерть королевы Виктории фанатики сочли долгожданным знаком Господним, а исчезнувшая «Чёрная книга Тауэра» для них — готовый расстрельный список «нестареющих лордов» из клуба «Альбион». Если книга попадет в руки Ордена, они начнут беспощадную подпольную инквизицию.</p>
-      <h4 class="micro-title">Расширение и появление новых людей</h4>
-      <p>Орден не ищет добровольцев среди мирян — он кует свое оружие из чистых, не оскверненных миром душ.</p>
-      <ul class="dash-list">
-        <li>Отбор: единственный источник новой крови — закрытые церковные приюты и школы-интернаты на туманных окраинах Лондона. Монахи отбирают сирот в раннем детстве, отдавая предпочтение детям, пережившим страшные потрясения, чья психика уже надломлена.</li>
-        <li>Воспитание: мальчиков и девочек навсегда увозят в подземные обители. С ранних лет их жизнь превращается в ад из суровых постов, изнурительной боевой муштры, заучивания псалмов на латыни и слепого повиновения. К 18–20 годам, после прохождения выпускных испытаний, они приносят обеты, становясь живым святым оружием. Перед лицом долга все равны — в Ордене нет гендерного разделения на мужские и женские роли.</li>
-      </ul>
-      <h4 class="micro-title">Иерархия и структура</h4>
-      <ul class="hierarchy">
-        <li class="tier-1">
-          <span class="tier-name">Высший Совет (Магистериум)</span>
-          <p>Тайный синод из старейших епископов и слепых старцев-провидцев. Они заседают в катакомбах, толкуют знамения, координируют поиски «Чёрной книги» и выносят смертные приговоры вампирам, чьи истинные имена находят в древних церковных хрониках.</p>
-        </li>
-        <li class="tier-2">
-          <span class="tier-name">Ищейки</span>
-          <p>Идейное и следственное ядро. Они опираются на еретические манускрипты, допросы и поиск «греховного застоя плоти» среди знати.</p>
-        </li>
-        <li class="tier-3">
-          <span class="tier-name">Каратели</span>
-          <p>Штурмовая сила культа, чья воля полностью подчинена Слову Божьему.</p>
-        </li>
-        <li class="tier-4">
-          <span class="tier-name">Послушники</span>
-          <p>Старшие воспитанники приютов. Они выполняют грязную работу: шпионят на улицах за Скотленд-Ярдом, убирают следы операций и готовят оружие.</p>
-        </li>
-      </ul>
-      <h4 class="micro-title">Две стороны</h4>
-      <p>Смерть королевы Виктории повлекла за собой деление Ордена на две части, скрытно враждующие между собой:</p>
-      <ul class="dash-list">
-        <li>Фракция «старой веры» (догматики): старейшины Магистериума. Требуют выжигать весь «Альбион» дотла, даже если ради этого придется спалить весь Лондон и вырезать Скотленд-Ярд. Для них компромиссов не существует.</li>
-        <li>Фракция «Нового Завета» (молодежь): молодые каратели и инквизиторы, выросшие в индустриальную эпоху. Они понимают, что вампиры — это не черти из Библии, а древняя, овеществленная форма власти. Молодежь задается циничным вопросом: зачем уничтожать колоссальные богатства, монополии на опиум и золото колоний, если можно перехватить «Чёрную книгу», убрать старейшин, подчинить себе принца-наследника и установить над Британией тайную теократию Церкви?</li>
-      </ul>
+<!-- ============ ХАРАКТЕР ============ -->
+<section id="character">
+  <div class="section-inner">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Раздел III</div>
+      <h2>Характер</h2>
+      <div class="rule"></div>
     </div>
-    <p class="end-mark">✦ ✦ ✦</p>
-  </article>
+    <div class="traits reveal">
+      <span class="trait">заглушка5</span>
+      <span class="trait">заглушка6</span>
+      <span class="trait">заглушка7</span>
+      <span class="trait">заглушка8</span>
+      <span class="trait">заглушка9</span>
+    </div>
+  </div>
 </section>
 
-<section class="tab-content" id="halfbloods" role="tabpanel" aria-labelledby="tab-halfbloods">
-  <article class="chapter">
-    <p class="chapter-label">Основная статья</p>
-    <h2>Полукровки</h2>
-    <svg class="flourish" viewBox="0 0 400 40" aria-hidden="true" focusable="false">
-      <path class="draw" d="M20,20 C70,20 90,6 120,14 C150,22 160,20 200,20 C240,20 250,22 280,14 C310,6 330,20 380,20"/>
-      <path class="draw" d="M120,14 C108,26 92,30 78,24 C64,18 66,6 78,8 C88,10 84,22 72,20"/>
-      <path class="draw" d="M280,14 C292,26 308,30 322,24 C336,18 334,6 322,8 C312,10 316,22 328,20"/>
-      <path class="draw" d="M20,20 C14,14 6,16 8,22 C10,28 18,26 20,20"/>
-      <path class="draw" d="M380,20 C386,14 394,16 392,22 C390,28 382,26 380,20"/>
-      <rect class="gem" x="196" y="16" width="8" height="8" transform="rotate(45 200 20)"/>
-    </svg>
-
-    <nav class="toc" aria-label="Содержание статьи">
-      <a href="#hb-who">Кто такие полукровки?</a><span class="toc-sep" aria-hidden="true">·</span>
-      <a href="#hb-body">О телах</a><span class="toc-sep" aria-hidden="true">·</span>
-      <a href="#hb-society">Общество и полукровки</a>
-    </nav>
-
-    <div class="prose">
-      <h3 class="section-title" id="hb-who">Кто такие полукровки?</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerHALFBLOOD1_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <p class="lead">Полукровки — не самостоятельный вид. Это дети, рожденные от связи между истинным вампиром и смертным человеком. Их смешанная кровь — это шаг назад на ступенях эволюции, навсегда застрявший между высшим хищником и хрупкой жертвой. Для чистокровного общества само их существование — это ходячее святотатство и грязный, греховный порок, живое доказательство того, что идеальный вид опустился до слабости перед собственным кормом.</p>
-
-      <h3 class="section-title" id="hb-body">О телах полукровок</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerHALFBLOOD2_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <h4 class="micro-title">Долгожительство</h4>
-      <p>Тело полукровки — это компромисс между человеческой хрупкостью и вампирской силой. Их клетки защищены лучше человеческих, но не превратились в непробиваемую броню. Из-за этого организму не нужно работать на износ. Расплатой за эту «золотую середину» становится срок жизни: полукровка живет около 200–280 лет.</p>
-      <p>В состоянии покоя он выглядит как невероятно выносливый, абсолютно спокойный человек. Его пульс бьется чуть реже обычного, давление слегка повышено, а инстинкты и реакция обострены, но без постоянной «животной» тревоги, свойственной истинным хищникам.</p>
-      <h4 class="micro-title">Физические возможности</h4>
-      <p>Полукровка не обладает чудовищной, сокрушительной мощью чистокровного, но намного превосходит человека в силе. Их тело не способно копить огромные запасы энергии, поэтому рывки получаются менее разрушительными и длятся всего несколько секунд. Чтобы поддерживать эти короткие вспышки силы, организм использует свои скрытые резервы: увеличенное сердце разом перекачивает больше крови, объемные легкие позволяют надолго задерживать дыхание, а печень выбрасывает в кровь весь запас «топлива». В бою полукровки не могут долго держать безумный темп, поэтому вынуждены использовать тактику быстрых атак с передышками.</p>
-      <h4 class="micro-title">Цена величия</h4>
-      <p>За короткие моменты превосходства приходится расплачиваться сильным истощением. Однако, в отличие от истинных вампиров полукровка восстанавливается гораздо быстрее — ему достаточно пары часов покоя. За это время сердце, легкие и внутренние органы активно восполняют потраченные силы. Но до полного восстановления повторить рывок невозможно: истощив свои резервы, полукровка временно становится не сильнее обычного человека.</p>
-      <h4 class="micro-title">Размножение</h4>
-      <p>Продолжение рода дается полукровкам намного легче, чем чистокровным. Здесь работает главное правило крови: если полукровка свяжет жизнь со смертным, каждый следующий ребенок будет всё больше похож на человека и всё дальше от вампира.</p>
-      <ul class="dash-list">
-        <li>Мужчины: семя созревает быстрее, чем у чистокровных, но медленнее, чем у людей. При этом каждый наследник получает от отца лишь «ослабленную» версию вампирских сил.</li>
-        <li>Женщины: организм находит баланс между качеством и скоростью. Возможность зачать ребенка появляется от двух до четырех раз в год, а подготовка тела занимает недели, а не долгие месяцы.</li>
-      </ul>
-      <h4 class="micro-title">Слабости</h4>
-      <ul class="dash-list">
-        <li>Серебро: полукровки слабее реагируют на этот металл. Он не вызывает у них мгновенного отравления и разрушения тела. Вместо мучительной смерти прикосновение серебряного клинка или пуля оставят тяжелые ожоги, воспаление и жар, но у организма будет реальный шанс с этим справиться.</li>
-        <li>Осиновый кол: сердце полукровки крупнее обычного, что делает его более удобной мишенью в груди. Однако оно не разрослось до огромных вампирских масштабов, поэтому тяжелое ранение осиновым колом оставляет крошечный шанс на выживание, если вовремя остановить кровь.</li>
-        <li>Питание: их желудок сильно ослаблен. Полукровки могут питаться только самой нежной и легкой едой: прозрачными бульонами, пюре, жидкими кашами на воде или мягкими овощами. Попытка съесть тяжелую, жирную или жареную человеческую пищу обернется мучительными болями, брожением в животе и сильным отравлением.</li>
-      </ul>
-
-      <h3 class="section-title" id="hb-society">Общество и полукровки</h3>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerHALFBLOOD3_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <h4 class="micro-title">Вампиры</h4>
-      <p>Для чистокровных полукровка — это ходячее оскорбление их генома, грязное пятно на репутации вида. Зачастую от таких бастардов избавляются сразу, но тем, кому не повезло выжить, уготована участь изгоев. Их казнят за малейшую провинность, ради забавы травят и используют как расходный материал. Лишь единицы удостаиваются унизительной чести стать «цепными псами» при клубе «Альбион». Выполняя самую черную работу для магистров, они получают сомнительную койку в подвале, объедки вместо полноценной крови и бесконечные презрительные взгляды. Это рабское, жалкое существование — их единственный шанс выжить в тени истинных Богов.</p>
-      <h4 class="micro-title">Люди</h4>
-      <p>Смертные даже не подозревают о существовании полукровок. В задымленных декорациях Лондона они легко сливаются с толпой. Для обывателей это просто люди со странностями: чересчур тихие, бледные, обладающие болезненным желудком или пугающей выносливостью.</p>
-      <h4 class="micro-title">Орден Животворящего Креста</h4>
-      <p>Инквизиторы не пытаются отделять полукровок от вампиров. В их фанатичной картине мира полукровки — это буквальные отродья тьмы, камбионы, рожденные от греховной связи человека с демоном. Орден считает их живой скверной, порченым семенем, не заслуживающим ни милосердия, ни спасения. Если агенты Креста вычисляют полукровку, его ждет такой же жестокий и быстрый суд, как и чистокровного вампира: допрос с пристрастием, очищающий огонь и серебро.</p>
+<!-- ============ БИОГРАФИЯ ============ -->
+<section id="biography" class="biography">
+  <div class="section-inner">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Раздел IV · заключительный</div>
+      <h2>Биография</h2>
+      <div class="rule"></div>
     </div>
-    <p class="end-mark">✦ ✦ ✦</p>
-  </article>
+    <div class="bio-frame reveal">
+      <canvas id="ashCanvas"></canvas>
+      <div class="prose-panel">
+        заглушка10 — сюда вносятся сведения о происхождении и ранних годах: род, дом, обстоятельства рождения и воспитания.
+      </div>
+      <div class="prose-panel">
+        заглушка11 — здесь описывается дальнейшая судьба: перемены, утраты и то, во что обратилось некогда богатое состояние дома к нынешнему дню.
+      </div>
+      <div class="bio-quote">«заглушка12»</div>
+    </div>
+  </div>
 </section>
-
-<section class="tab-content" id="extra" role="tabpanel" aria-labelledby="tab-extra">
-  <article class="chapter">
-    <p class="chapter-label">Необязательно</p>
-    <h2>Приложения</h2>
-    <svg class="flourish" viewBox="0 0 400 40" aria-hidden="true" focusable="false">
-      <path class="draw" d="M20,20 C70,20 90,6 120,14 C150,22 160,20 200,20 C240,20 250,22 280,14 C310,6 330,20 380,20"/>
-      <path class="draw" d="M120,14 C108,26 92,30 78,24 C64,18 66,6 78,8 C88,10 84,22 72,20"/>
-      <path class="draw" d="M280,14 C292,26 308,30 322,24 C336,18 334,6 322,8 C312,10 316,22 328,20"/>
-      <path class="draw" d="M20,20 C14,14 6,16 8,22 C10,28 18,26 20,20"/>
-      <path class="draw" d="M380,20 C386,14 394,16 392,22 C390,28 382,26 380,20"/>
-      <rect class="gem" x="196" y="16" width="8" height="8" transform="rotate(45 200 20)"/>
-    </svg>
-
-    <div class="sub-nav" role="tablist" aria-label="Приложения">
-      <button class="sub-btn active" id="subtab-article1" role="tab" aria-selected="true" aria-controls="article1" data-sub="article1">1852</button>
-      <span class="sub-sep" aria-hidden="true">◆</span>
-      <button class="sub-btn" id="subtab-article2" role="tab" aria-selected="false" aria-controls="article2" data-sub="article2" tabindex="-1">Локации</button>
-      <span class="sub-sep" aria-hidden="true">◆</span>
-      <button class="sub-btn" id="subtab-article3" role="tab" aria-selected="false" aria-controls="article3" data-sub="article3" tabindex="-1">Больше о вампирах</button>
-      <span class="sub-sep" aria-hidden="true">◆</span>
-      <button class="sub-btn" id="subtab-article4" role="tab" aria-selected="false" aria-controls="article4" data-sub="article4" tabindex="-1">Вне Англии</button>
-    </div>
-
-    <div class="sub-content active" id="article1" role="tabpanel" aria-labelledby="subtab-article1">
-      <p class="sub-title">1852</p>
-      <div class="prose">
-        <h3 class="section-title">Особенности времени</h3>
-        <div class="banner-img">
-          <img src="https://lulllz4.github.io/GrimGrace/banner1852_1_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-        </div>
-        <p class="lead">Девятнадцатый век — это эпоха индустриализма. Британская империя диктует волю всему миру, но её столица балансирует на грани хаоса, задыхаясь от дыма, прогресса и скрытых угроз.</p>
-        <p>Город опутан сетью телеграфных проводов, застроен фабриками и дымящими трубами. Пока в Вест-Энде аристократы пьют шампанское в особняках с газовым освещением, трущобы Ист-Энда утопают в смоге, нечистотах и холере. Человеческая жизнь на лондонском дне не стоит ни пенни.</p>
-        <p>Несмотря на триумф науки, общество помешано на мистике. Салонные спиритические сеансы, закрытые оккультные ложи и культ траура — это писк моды. Для «Альбиона» это идеальная дымовая завеса: настоящие монстры прячутся там, где люди сами играют в мистику.</p>
-        <p>Империя переживает кризис власти. Старый порядок шатается, в Парламенте идет грызня между древними родами и фабрикантами, а на улицах зреют рабочие бунты.</p>
-
-        <h3 class="section-title">Устройство аристократии</h3>
-        <div class="banner-img">
-          <img src="https://lulllz4.github.io/GrimGrace/banner1852_2_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-        </div>
-        <p>Общество строго стратифицировано. Титул — это пропуск во власть, Палату Лордов и закрытые клубы. Именно аристократия — главная питательная среда и инструмент для вампиров.</p>
-        <p>Пэры королевства (высшая знать): элита империи. Большинство старейших марионеток культа (или сами магистры) носят именно эти титулы.</p>
-        <ul class="dash-list">
-          <li>Герцоги: высшая ступень после монарха. Владельцы колоссальных земель и состояний. Почти неприкасаемые фигуры.</li>
-          <li>Маркизы и графы: основной костяк высшей политики, генералитета и министерств. Вершители имперских законов.</li>
-          <li>Виконты и бароны: низшие ступени пэрства. Часто выполняют роль связующего звена между верхушкой и более приземленными политическими делами.</li>
-        </ul>
-        <p>Джентри (нетитулованная знать): баронеты, рыцари и сквайры (землевладельцы). У них нет мест в Палате Лордов, но есть многовековая родословная. Они горды, богаты и часто становятся объектами охоты тех, кто ищет влияния на местах.</p>
-        <p>Нувориши (новые богачи): амбициозные владельцы фабрик, железных дорог и угольных шахт. У них нет голубой крови, зато есть миллионы. Они отчаянно покупают влияние, выдают дочерей за разорившихся лордов и готовы на любые (в том числе незаконные) сделки, чтобы войти в высший свет.</p>
-
-        <h3 class="section-title">Принц Альберт Эдуард</h3>
-        <div class="banner-img">
-          <img src="https://lulllz4.github.io/GrimGrace/banner1852_3_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-        </div>
-        <p>Живой символ уязвимости человеческой империи и главная фигура на политической шахматной доске.</p>
-        <p>Одиннадцатилетний наследник престола, запертый в золотой клетке Букингемского дворца в условиях шаткого регентства. Альберт не по годам серьезен, молчалив и параноидально осторожен — он с пеленок чувствует напряжение вокруг себя. Его воспитывают в строжайшей, почти армейской дисциплине, ограничивая контакты с внешним миром.</p>
-        <p>Мальчик — не правитель, а ценный ресурс. Регентский совет, шпионы Уайтхолла и иностранные дипломаты плетут интриги, чтобы стать его «наставниками». Для «Альбиона» принц представляет особый интерес: патриархи культа планируют аккуратно сломать волю ребенка и сформировать его разум под себя, чтобы через несколько лет посадить на трон Британской империи абсолютно покорного смертного короля.</p>
-        <div class="note note-warning">Ролевики не могут вступать с ним в контакт или писать что-то от лица Альберта. Это важный сюжетный персонаж. Его упоминание возможно и приветствуется в контексте ролевой, но прямое взаимодействие строго запрещено.</div>
-      </div>
-    </div>
-
-    <div class="sub-content" id="article2" role="tabpanel" aria-labelledby="subtab-article2">
-      <p class="sub-title">Локации</p>
-      <div class="prose">
-        <div class="note">Это лишь список того, что может пригодиться вам по ходу ролевой. Игроки имеют право придумывать свои локации, если они подходят общей тематике и не нарушают установленный сеттинг.</div>
-
-        <h3 class="section-title">Букингемский дворец</h3>
-        <div class="banner-img">
-          <img src="https://lulllz4.github.io/GrimGrace/bannerLOCATIONS1_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-        </div>
-        <p class="lead">Резиденция британских монархов, которая сейчас больше напоминает роскошную, но строго охраняемую тюрьму. Дворец окружен чугунными решетками, а в его длинных коридорах с газовым освещением всегда неестественно тихо. Это место политической паранойи. Именно здесь, под пристальным надзором гувернеров, регентов и тайной канцелярии, живет 11-летний принц Альберт Эдуард. Вампиры «Альбиона» не могут входить сюда открыто из-за обилия стражи и агентов Уайтхолла, но их смертные марионетки — частые гости в приемных покоях.</p>
-
-        <h3 class="section-title">Клуб «Альбион»</h3>
-        <div class="banner-img">
-          <img src="https://lulllz4.github.io/GrimGrace/bannerLOCATIONS2_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-        </div>
-        <h4 class="micro-title">Улица Пэлл-Мэлл, район Сент-Джеймс</h4>
-        <p>Историческое сердце джентльменских клубов Лондона. Внешне это безупречное четырехэтажное здание из темного камня с тяжелыми дубовыми дверями.</p>
-        <ul class="dash-list">
-          <li>Верхние этажи (фасад): залы для курения, библиотеки и карточные столы, где аристократы, министры и магнаты делят сферы влияния. Пахнет дорогим табаком, коньяком и кожей.</li>
-          <li>Капитул (подземелья): скрытая система залов, уходящая глубоко под землю. Звуконепроницаемые помещения из холодного мрамора, где нет газовых рожков — только свечи.</li>
-        </ul>
-
-        <h3 class="section-title">Элитный бордель «Асфодель»</h3>
-        <div class="banner-img">
-          <img src="https://lulllz4.github.io/GrimGrace/bannerLOCATIONS3_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-        </div>
-        <h4 class="micro-title">Ковент-Гарден</h4>
-        <p>Самое дорогое и порочное заведение столицы, скрытое за неприметной вывеской частного отеля. Обычные люди с улицы сюда не попадут — вход только по личным рекомендациям. Внутри — тяжелый бархат, восточные ковры, запах опиума, духов и лауданума. Именно здесь неофиты «Альбиона» сбрасывают напряжение, а магистры утоляют свою извращенную похоть. Это место, где зарождается каста презираемых полукровок-бастардов. Хозяйка заведения — одна из собачек «Альбиона»: следит за тем, чтобы девушки не задавали вопросов о том, почему некоторые лорды ведут себя странно, и тихо избавляется от тех, кто не пережил «экстаза» от очередной ночи.</p>
-
-        <h3 class="section-title">Театр Её Величества</h3>
-        <div class="banner-img">
-          <img src="https://lulllz4.github.io/GrimGrace/bannerLOCATIONS4_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-        </div>
-        <h4 class="micro-title">«Her Majesty's Theatre» | Район Хеймаркет</h4>
-        <p>Культурный центр высшего общества и идеальная площадка для тщеславия. Огромный зал, сияющий тысячами свечей и хрусталем, куда приходят не ради оперы, а чтобы показать себя. Для вампиров это любимое место отдыха: из затененных частных лож они с холодным презрением и насмешкой наблюдают не за сценой, а за человеческим «скотом» в партере. Театр также служит идеальным местом для тайных встреч, передачи записок марионеткам и выбора новых «питомцев» из числа скучающих светских дам.</p>
-
-        <h3 class="section-title">Улицы Риджент-стрит и Пикадилли</h3>
-        <div class="banner-img">
-          <img src="https://lulllz4.github.io/GrimGrace/bannerLOCATIONS5_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-        </div>
-        <p>Фасад индустриального Лондона, где сталкиваются богатство и нищета. Днем это широкие, шумные улицы, заполненные каретами, омнибусами, клерками, торговцами и карманниками. Витрины дорогих магазинов сияют в свете новых газовых фонарей. Но как только опускается знаменитый лондонский туман, улицы пустеют. В темноте переулков, отходящих от парадных фасадов, начинается другая жизнь: здесь бродят те, кто ищет легкую наживу, и те полукровки и неофиты, что вышли на бесконтрольную ночную охоту.</p>
-
-        <h3 class="section-title">Крипта Церкви Святого Варфоломея Великого</h3>
-        <div class="banner-img">
-          <img src="https://lulllz4.github.io/GrimGrace/bannerLOCATIONS6_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-        </div>
-        <p>Одна из старейших церквей Лондона, пережившая Великий пожар. На поверхности это обычный, полупустой приход с норманнскими арками и мрачной историей. Но под каменным полом, в древних катакомбах, о которых не знают даже местные священники, собирается Орден Животворящего Креста. Там пахнет сыростью, жженой серой и оружейным маслом. В крипте расположены арсеналы, где обучаются юные послушники, и архивы, где на стенах висят карты Вест-Энда с нитями, тянущимися к учредителям «Альбиона». Это единственное место в городе, где инквизиторы могут открыто говорить о грядущей войне.</p>
-      </div>
-    </div>
-
-    <div class="sub-content" id="article3" role="tabpanel" aria-labelledby="subtab-article3">
-      <p class="sub-title">Больше о вампирах</p>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerEXTRAVAMP1_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <div class="prose">
-        <h4 class="micro-title">Поколения</h4>
-        <p class="lead">Весь род восходит к одному существу. Эмерик не был первым из вампиров — он был единственным: рождённый в десятом веке идеал, чья природа не имела ни предшественников, ни подобия. Продолжить себя он мог только со смертными женщинами, других не существовало. Его кровь подавляла человеческую — дети рождались вампирами, — но каждое смешение давало не копию отца, а разбавленную версию. Так род пошёл вниз по лестнице, каждая ступень которой слабее предыдущей.</p>
-        <ul class="hierarchy">
-          <li class="tier-1">
-            <span class="tier-name">Первое поколение — Эмерик</span>
-            <p>Абсолют. Мощь и скорость, к которым никто из потомков не приближался. Написанное о нём в закрытых хрониках молодые вампиры принимают за благочестивое преувеличение.</p>
-          </li>
-          <li class="tier-2">
-            <span class="tier-name">Второе поколение — дети Эмерика</span>
-            <p>Разбавлены наполовину: сильнее всех, кто будет после, но отцу не равны — «бледные копии идеального хищника», как зовут их между слов. Вампирши рожали слишком редко и потому они тоже продолжали род со смертными.</p>
-          </li>
-          <li class="tier-3">
-            <span class="tier-name">Третье поколение — внуки Эмерика</span>
-            <p>Ещё ступень вниз — и последняя твёрдая. Это и есть вампиры, известные миру сегодня. Всё, что нынешний Капитул зовёт божественной природой — дважды разбавленная кровь Эмерика.</p>
-          </li>
-          <li class="tier-outcast">
-            <span class="tier-name">Всё, что ниже (в связи с человеком) — полукровки</span>
-            <p>Ребёнок вампира и смертного падает под третью ступень деградации. Его дети от смертных ещё слабее — и так до полного растворения в человечестве.</p>
-          </li>
-        </ul>
-        <h4 class="micro-title">Запрет на размножение со «скотом»</h4>
-        <p>Внуки посчитали простую арифметику и пришли в ужас. Дед мог брать смертных женщин. Отцы могли. Они — уже нет: ещё одно смешение, и род не продолжится, а вытечет в людей без остатка. Тогда и установилось правило, ставшее священным: чистокровные размножаются только между собой.</p>
-        <p>Не из презрения — из страха. Спесь пришла позже: через века необходимость превратилась в закон, закон — в догмат, и происхождение меры забылось. Нынешние Патриархи чтут закон, установленный их прадедами, с дотошностью и уверены, что это воля Прародителя.</p>
-        <h4 class="micro-title">Неудобная арифметика</h4>
-        <p>В лестнице заложено то, о чём в Капитуле не говорят. Нынешние линии — не венец рода, а его слабейшая устойчивая форма: последняя ступень перед обрывом. Отсюда и ярость, с которой чистокровные истребляют бастардов. Полукровка — не просто пятно на репутации вида, а напоминание, куда род падает, стоит ослабить хватку. За презрением стоит страх: каждого чистокровного от следующей ступени вниз отделяет одна ночь слабости.</p>
-        <p>Вторая деталь бьёт по основаниям культа. Догмат Гордыни объявляет вампира божеством, а человека — питательной средой. Но все нынешние линии обязаны существованием смертным женщинам — и это факт, за произнесение которого отрубают языки.</p>
-      </div>
-    </div>
-
-    <div class="sub-content" id="article4" role="tabpanel" aria-labelledby="subtab-article4">
-      <p class="sub-title">Вне Англии</p>
-      <div class="banner-img">
-        <img src="https://lulllz4.github.io/GrimGrace/bannerWORLD1_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-      </div>
-      <div class="prose">
-        <h4 class="micro-title">Мир вне</h4>
-        <p class="lead">Лондон — сердце вампирского мира, и тому есть простая причина: Эмерик родился на английской земле. Здесь Прародитель прожил свои столетия, здесь основал род, здесь обратился в прах, и потому его потомки никогда по-настоящему не покидали остров. Основная масса вампиров мира живёт там, где жил первый из них — на землях Соединённого Королевства. Лишь немногие дети и внуки Эмерика веками медленно разбредались по свету: кто за новыми угодьями, кто из простого нежелания делить охоту с роднёй. Так вампиры появились везде — от Парижа до Вены, от Мадрида до Санкт-Петербурга, а с колониальными потоками их кровь просочилась и за океаны. Но их ужасающе мало: в некоторых странах род можно пересчитать по пальцам двух рук, а есть земли, где веками живёт одна-единственная семья.</p>
-        <h4 class="micro-title">Вера и Догматы</h4>
-        <p>Эмерик один для всех. Это не оспаривается нигде: он был первым, единственным в своём роде, и всякая вампирская линия на земле восходит к нему. Семь Догматов тоже едины повсюду: гордыня, чревоугодие, гнев, уныние, похоть, алчность, зависть. Ни один культ не посмел тронуть само учение. Но образ учителя каждая земля вылепила под себя.</p>
-        <p>Здесь работает тот же закон, что и с человеческими религиями: Бог один, а лики его в каждом храме свои. Лондонский «Альбион» чтит Эмерика как первого аристократа и великого правителя. В Париже его помнят иначе: эстетом и чувственным чудовищем, для которого охота была искусством, а Догматы — поэмой. Испанские линии превратили его в мрачную, почти инквизиторскую фигуру — карающего отца, чья тень требует чистоты крови с жестокостью, которой позавидовал бы Торквемада. В германских землях он — воин и стратег, первый хищник. Восточноевропейские общины хранят самый архаичный образ: не бога и не лорда, а существо — могущественное, страшное и одинокое.</p>
-        <p>Каждый культ уверен, что именно его Эмерик близок к позабытой реальности. Споры об этом — единственная форма богословия, которую вампиры себе позволяют, и ведутся они веками, неторопливо, как всё у этого вида. Британские линии в этих спорах даже не участвуют: тем, кто сидит на земле Прародителя, доказывать нечего.</p>
-
-        <h4 class="micro-title">Устройство</h4>
-        <p>Единой вампирской империи не существует. Нет трона, перед которым склонялись бы все линии, нет вселенского Капитула. Каждая земля управляется собственными Патриархами — старейшими из местных, — и власть их кончается там, где кончаются их охотничьи угодья.</p>
-        <p>Европейские культы при этом не чужие друг другу. Между Лондоном, Парижем, Веной и прочими домами веками тянутся связи: переписка, династические браки (редчайшие и оттого почти священные), обмен беглецами и должниками, общие финансовые интересы. Устройство континентальных культов почти не отличается от лондонского — та же геронтократия, те же касты. Вампир из Вены, попав в «Альбион», узнал бы всё: и ритуалы, и иерархию, и презрение в глазах старейшин.</p>
-        <p>Но связь — не подчинение. Патриархи каждой земли ревниво стерегут самостоятельность, и попытка чужого дома вмешаться в местные дела расценивается как вторжение на угодья. История рода знает несколько тихих войн между Капитулами — о них не пишут даже в закрытых хрониках.</p>
-
-        <h4 class="micro-title">Роль Лондона</h4>
-        <p>Формально «Альбион» никем не правит за пределами Британии. Фактически — к нему прислушиваются. Причин достаточно: лондонская община — самая многочисленная и древняя, её линии крови чистейшие, её сундуки глубочайшие, а главное — она стоит на родине Эмерика, и этого старшинства не оспорить никакими богатствами.</p>
-        <p>Континентальные дома относятся к британским собратьям со смесью почтения, зависти и злорадного ожидания. Смерть Виктории и исчезновение «Чёрной книги Тауэра» не остались тайной для Парижа и Вены — у всех домов есть уши в чужих городах. И пока «Альбион» в панике ищет её, за проливом наблюдают. Если лондонский дом падёт, если камуфляж вида будет сорван на острове — континентальные Патриархи не придут на помощь. Они отгородятся, отрекутся и переждут.</p>
-
-        <h4 class="micro-title">За пределами старого мира</h4>
-        <p>В колониях вампиров почти нет. Долгие морские переходы опасны для существ, которым в замкнутом трюме месяцами негде взять кровь незаметно; новые земли не имеют ни вековых укрытий, ни вросших в общество масок. Те немногие, кто всё же осел в Новом Свете — одиночки, отшельники и изгнанники. Старые дома считают их отрезанными ломтями. Впрочем, самые дальновидные из молодых Магистров уже поглядывают за океан: империи смертных растут быстро, и будущее, возможно, строится не на Темзе.</p>
-
-        <div class="note">Дальнейшая часть статьи содержит описание отдельных стран, где есть существенные изменения в тех или иных частях культа. Может дополняться по просьбам участников!</div>
-
-        <h3 class="section-title">Китай</h3>
-        <div class="banner-img">
-          <img src="https://lulllz4.github.io/GrimGrace/bannerWORLD2_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-        </div>
-        <p>Образ Эмерика за века изменился под стать земле. Китайские линии чтут его не как аристократа и не как воина, а как первого из приблизившихся к бессмертию — фигуру, стоящую в одном ряду с даосскими святыми, обретшими вечность через совершенство тела. Семь Догматов нетронуты, но читаются мягче: как ступени внутреннего пути, а не только как божеское право. В Лондоне такое толкование сочли бы вольным; в Пекине лондонское сочли бы шумным. Ни те, ни другие не считают это поводом для раздора — так, предметом для переписки.</p>
-        <p>К середине семнадцатого века именно китайские дома первыми потянулись навстречу. Причина проста: мир смертных сжался. Английские корабли стоят в Кантоне, опиум течёт по рекам, империя, на которой сидит «Альбион», ломится в китайские двери — и старейшины восточных линий рассудили, что в эпоху, когда смертные научились доплывать друг до друга за месяцы, роду негоже узнавать новости с опозданием в поколение. В Лондон снова идут письма — уже не ритуальные, а настоящие: вопросы, осторожные предложения, приглашения. Кое-кто из молодых восточных вампиров даже проделал невозможный прежде путь и ступил на землю Прародителя — событие, которого не случалось столетиями.</p>
-        <p>Приняли их учтиво и холодно. Для «Альбиона» восточные родичи — своя кровь, этого никто не оспаривает, но кровь незнакомая: чужие манеры, чужое толкование святынь, чужой, едкий взгляд. Гости из Поднебесной на приёмах Капитула — диковина, к которой присматриваются с любопытством и лёгкой настороженностью, как к дальнему кузену. Родство признают. Своими не считают.</p>
-
-        <h3 class="section-title">Япония</h3>
-        <div class="banner-img">
-          <img src="https://lulllz4.github.io/GrimGrace/bannerWORLD3_GrimGrace.jpg" alt="" loading="lazy" decoding="async">
-        </div>
-        <p>Полное отсутствие вампиров на территории.</p>
-      </div>
-    </div>
-
-    <p class="end-mark">✦ ✦ ✦</p>
-  </article>
-</section>
-
-</main>
-
-<div class="mini-player" id="miniPlayer" aria-label="Мини-плеер">
-  <img id="miniCover" alt="">
-  <span class="mini-title" id="miniTitle">—</span>
-  <button class="player-btn main" id="miniPlay" aria-label="Воспроизвести">▶</button>
-  <button class="player-btn" id="miniNext" aria-label="Следующий трек">❯</button>
-</div>
-
-<button class="to-top" id="toTop" aria-label="Наверх">↑</button>
 
 <footer>
-  <div class="rule"></div>
-  <p>Сайт принадлежит ролевой <a href="https://t.me/Grim_Grace" target="_blank" rel="noopener">@Grim_Grace</a></p>
+  <svg class="seal-mini" viewBox="0 0 64 64" aria-hidden="true">
+    <circle cx="32" cy="32" r="28" fill="none" stroke="#997953" stroke-width="1.5" stroke-dasharray="2 3"/>
+    <circle cx="32" cy="32" r="18" fill="none" stroke="#cdaa80" stroke-width="1.2"/>
+    <path d="M32 14 L32 50 M14 32 L50 32" stroke="#cdaa80" stroke-width="1" opacity=".5"/>
+  </svg>
+  <div class="arch">Дело сдано в архив</div>
+  <div class="stamp2">заглушка13 · заглушка14</div>
 </footer>
 
-<audio id="playerAudio" preload="none" hidden></audio>
-
 <script>
-(function () {
-  'use strict';
-
-  /* ================= ВКЛАДКИ ================= */
-
-  var tabButtons  = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
-  var tabContents = Array.prototype.slice.call(document.querySelectorAll('.tab-content'));
-  var TAB_IDS = tabButtons.map(function (b) { return b.dataset.tab; });
-
-  function restartFlourish(chapter) {
-    var strokes = chapter.querySelectorAll('.flourish .draw, .flourish .gem');
-    strokes.forEach(function (el) {
-      el.style.animation = 'none';
-      void el.getBoundingClientRect(); /* принудительный reflow */
-      el.style.animation = '';
-    });
-  }
-
-  function revealChapter(section) {
-    var chapter = section.querySelector('.chapter');
-    if (!chapter) return;
-    chapter.classList.remove('revealed');
-    restartFlourish(chapter);
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        chapter.classList.add('revealed');
-      });
-    });
-  }
-
-  function activateTab(id, opts) {
-    opts = opts || {};
-    var btn = tabButtons.filter(function (b) { return b.dataset.tab === id; })[0];
-    var panel = document.getElementById(id);
-    if (!btn || !panel) return;
-
-    tabButtons.forEach(function (b) {
-      var isActive = b === btn;
-      b.classList.toggle('active', isActive);
-      b.setAttribute('aria-selected', isActive ? 'true' : 'false');
-      b.tabIndex = isActive ? 0 : -1;
-    });
-    tabContents.forEach(function (c) { c.classList.remove('active'); });
-    panel.classList.add('active');
-
-    revealChapter(panel);
-    if (opts.updateHash !== false) {
-      history.replaceState(null, '', '#' + id);
-    }
-    if (opts.scroll !== false) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
-
-  tabButtons.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      if (btn.classList.contains('active')) return;
-      activateTab(btn.dataset.tab);
-    });
-    btn.addEventListener('keydown', function (e) {
-      var i = tabButtons.indexOf(btn);
-      var next = null;
-      if (e.key === 'ArrowRight') next = tabButtons[(i + 1) % tabButtons.length];
-      if (e.key === 'ArrowLeft')  next = tabButtons[(i - 1 + tabButtons.length) % tabButtons.length];
-      if (next) {
-        e.preventDefault();
-        next.focus();
-        activateTab(next.dataset.tab, { scroll: false });
-      }
-    });
+// ---------- inject dividers between sections ----------
+(function(){
+  const tpl = document.getElementById('divider-tpl');
+  document.querySelectorAll('section').forEach(sec=>{
+    if(sec.id==='biography') return;
+    const clone = tpl.content.cloneNode(true);
+    sec.parentNode.insertBefore(clone, sec.nextSibling);
   });
-
-  window.addEventListener('hashchange', function () {
-    var id = location.hash.slice(1);
-    if (TAB_IDS.indexOf(id) !== -1) activateTab(id, { updateHash: false });
-  });
-
-  /* ================= АККОРДЕОНЫ ================= */
-
-  document.querySelectorAll('.story-close').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var details = document.getElementById(btn.dataset.target);
-      if (!details) return;
-      details.open = false;
-      details.querySelector('.story-toggle')
-             .scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-
-  /* ================= ВЛОЖЕННЫЕ РАЗДЕЛЫ ================= */
-
-  var subButtons  = Array.prototype.slice.call(document.querySelectorAll('.sub-btn'));
-  var subContents = Array.prototype.slice.call(document.querySelectorAll('.sub-content'));
-
-  subButtons.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      if (btn.classList.contains('active')) return;
-      subButtons.forEach(function (b) {
-        b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
-        b.tabIndex = -1;
-      });
-      subContents.forEach(function (c) { c.classList.remove('active'); });
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
-      btn.tabIndex = 0;
-      document.getElementById(btn.dataset.sub).classList.add('active');
-    });
-  });
-
-  /* ================= ПРОГРЕСС ЧТЕНИЯ / НАВЕРХ / МИНИ-ПЛЕЕР ================= */
-
-  var readProgress = document.getElementById('readProgress');
-  var toTopBtn     = document.getElementById('toTop');
-  var miniPlayer   = document.getElementById('miniPlayer');
-  var headerEl     = document.querySelector('header');
-  var scrollTicking = false;
-
-  function onScrollFrame() {
-    scrollTicking = false;
-    var doc = document.documentElement;
-    var max = doc.scrollHeight - window.innerHeight;
-    readProgress.style.width = (max > 0 ? (window.scrollY / max * 100) : 0) + '%';
-
-    var past = window.scrollY > headerEl.offsetHeight;
-    toTopBtn.classList.toggle('visible', past);
-    miniPlayer.classList.toggle('visible', past);
-  }
-
-  window.addEventListener('scroll', function () {
-    if (!scrollTicking) {
-      scrollTicking = true;
-      requestAnimationFrame(onScrollFrame);
-    }
-  }, { passive: true });
-
-  toTopBtn.addEventListener('click', function () {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-
-  /* ================= ПЕРВОЕ ПОЯВЛЕНИЕ ================= */
-
-  window.addEventListener('load', function () {
-    var hashId = location.hash.slice(1);
-    var hasHashTab = TAB_IDS.indexOf(hashId) !== -1;
-    var delay = 2600;
-    if (hasHashTab && hashId !== 'plot') {
-      activateTab(hashId, { updateHash: false, scroll: false });
-      delay = 300;
-    }
-    setTimeout(function () {
-      revealChapter(document.querySelector('.tab-content.active'));
-    }, delay);
-    onScrollFrame();
-  });
-
-  /* ================= AMBIENT-ПЛЕЕР ================= */
-
-  var BASE = 'https://lulllz4.github.io/GrimGrace/';
-
-  /* file — точное имя файла БЕЗ расширения (ambient1, ambient2...) */
-  var TRACKS = [
-    { file: 'ambient1', title: "D'une Mère à Sa Fille",  author: 'Dark Sanctuary', cover: BASE + 'cover1.jpg' },
-    { file: 'ambient2', title: "L'adieu à l'Enfant (1)", author: 'Dark Sanctuary', cover: BASE + 'cover2.jpg' },
-    { file: 'ambient3', title: "A Quoi Bon?",            author: 'Dark Sanctuary', cover: BASE + 'cover3.jpg' },
-    { file: 'ambient4', title: "L'instant Funèbre",      author: 'Dark Sanctuary', cover: BASE + 'cover4.jpg' },
-    { file: 'ambient5', title: "Perdition",              author: 'Dark Sanctuary', cover: BASE + 'cover5.jpg' },
-    { file: 'ambient6', title: "Les Mémoires Blessées",  author: 'Dark Sanctuary', cover: BASE + 'cover6.jpg' }
-    /* новые треки сюда */
-  ];
-
-  var audio         = document.getElementById('playerAudio');
-  var coverImg      = document.getElementById('playerCover');
-  var titleLabel    = document.getElementById('playerTitle');
-  var authorLabel   = document.getElementById('playerAuthor');
-  var playBtn       = document.getElementById('playerPlay');
-  var prevBtn       = document.getElementById('playerPrev');
-  var nextBtn       = document.getElementById('playerNext');
-  var progressTrack = document.getElementById('playerProgressTrack');
-  var progressFill  = document.getElementById('playerProgressFill');
-  var volumeSlider  = document.getElementById('playerVolume');
-  var muteBtn       = document.getElementById('playerMute');
-
-  var miniCover = document.getElementById('miniCover');
-  var miniTitle = document.getElementById('miniTitle');
-  var miniPlay  = document.getElementById('miniPlay');
-  var miniNext  = document.getElementById('miniNext');
-
-  var current    = 0;
-  var lastVolume = 0.6;
-
-  audio.volume = parseFloat(volumeSlider.value);
-
-  function safePlay() {
-    var p = audio.play();
-    if (p && typeof p.catch === 'function') {
-      p.catch(function () { /* автоплей заблокирован — игнорируем */ });
-    }
-  }
-
-  function updateMuteBtn() {
-    var muted = audio.volume === 0;
-    muteBtn.textContent = muted ? '✕' : '♪';
-    muteBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
-    muteBtn.setAttribute('aria-label', muted ? 'Включить звук' : 'Выключить звук');
-  }
-
-  volumeSlider.addEventListener('input', function () {
-    audio.volume = parseFloat(volumeSlider.value);
-    audio.muted = false;
-    updateMuteBtn();
-  });
-
-  muteBtn.addEventListener('click', function () {
-    if (audio.volume > 0) {
-      lastVolume = audio.volume;
-      audio.volume = 0;
-      volumeSlider.value = 0;
-    } else {
-      audio.volume = lastVolume;
-      volumeSlider.value = lastVolume;
-    }
-    updateMuteBtn();
-  });
-
-  function setProgress(ratio) {
-    var pct = Math.max(0, Math.min(100, ratio * 100));
-    progressFill.style.width = pct + '%';
-    progressTrack.setAttribute('aria-valuenow', Math.round(pct));
-  }
-
-  function loadTrack(index, autoplay) {
-    current = (index + TRACKS.length) % TRACKS.length;
-    var t = TRACKS[current];
-    audio.src = BASE + t.file + '.mp3';
-    titleLabel.textContent = t.title;
-    authorLabel.textContent = t.author;
-    coverImg.src = t.cover;
-    coverImg.alt = 'Обложка: ' + t.title;
-    miniCover.src = t.cover;
-    miniCover.alt = '';
-    miniTitle.textContent = t.title;
-    setProgress(0);
-    if (autoplay) safePlay();
-  }
-
-  function updatePlayIcon() {
-    var paused = audio.paused;
-    var icon = paused ? '▶' : '❚❚';
-    var label = paused ? 'Воспроизвести' : 'Пауза';
-    playBtn.textContent = icon;
-    playBtn.setAttribute('aria-label', label);
-    miniPlay.textContent = icon;
-    miniPlay.setAttribute('aria-label', label);
-  }
-
-  function togglePlay() {
-    if (audio.paused) safePlay();
-    else audio.pause();
-  }
-
-  playBtn.addEventListener('click', togglePlay);
-  miniPlay.addEventListener('click', togglePlay);
-  prevBtn.addEventListener('click', function () { loadTrack(current - 1, true); });
-  nextBtn.addEventListener('click', function () { loadTrack(current + 1, true); });
-  miniNext.addEventListener('click', function () { loadTrack(current + 1, true); });
-
-  audio.addEventListener('play',  updatePlayIcon);
-  audio.addEventListener('pause', updatePlayIcon);
-  audio.addEventListener('ended', function () { loadTrack(current + 1, true); });
-
-  audio.addEventListener('error', function () {
-    authorLabel.textContent = 'трек недоступен';
-    updatePlayIcon();
-  });
-
-  audio.addEventListener('timeupdate', function () {
-    if (!audio.duration) return;
-    setProgress(audio.currentTime / audio.duration);
-  });
-
-  progressTrack.addEventListener('click', function (e) {
-    if (!audio.duration) return;
-    var rect = progressTrack.getBoundingClientRect();
-    var ratio = (e.clientX - rect.left) / rect.width;
-    audio.currentTime = ratio * audio.duration;
-  });
-
-  progressTrack.addEventListener('keydown', function (e) {
-    if (!audio.duration) return;
-    var step = 5;
-    if (e.key === 'ArrowRight') { audio.currentTime = Math.min(audio.duration, audio.currentTime + step); e.preventDefault(); }
-    if (e.key === 'ArrowLeft')  { audio.currentTime = Math.max(0, audio.currentTime - step); e.preventDefault(); }
-    if (e.key === 'Home')       { audio.currentTime = 0; e.preventDefault(); }
-    if (e.key === 'End')        { audio.currentTime = audio.duration - 0.5; e.preventDefault(); }
-  });
-
-  loadTrack(0, false);
-  updateMuteBtn();
-
 })();
+
+// ---------- scroll reveal ----------
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); } });
+}, { threshold:.15 });
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// ---------- scroll-to helpers (side nav + cover index) ----------
+function scrollToId(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth'});
+}
+document.querySelectorAll('.wayfinder button, .toc button').forEach(b=>{
+  b.addEventListener('click', ()=> scrollToId(b.dataset.target));
+});
+
+// ---------- active state for side nav ----------
+const navButtons = document.querySelectorAll('.wayfinder button');
+const targets = Array.from(navButtons).map(b=>document.getElementById(b.dataset.target));
+const navIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id = e.target.id;
+      navButtons.forEach(b=> b.classList.toggle('active', b.dataset.target===id));
+    }
+  });
+}, { threshold:.5 });
+targets.forEach(t=> t && navIO.observe(t));
+
+// ---------- generic drifting-particle canvas (reused for hero motes + biography embers) ----------
+function makeParticleField(canvas, opts){
+  const ctx = canvas.getContext('2d');
+  const host = canvas.parentElement;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let particles = [], w, h;
+
+  function resize(){ w = canvas.width = host.clientWidth; h = canvas.height = host.clientHeight; }
+  function spawn(){
+    return {
+      x: Math.random()*w,
+      y: opts.riseFrom==='bottom' ? h + Math.random()*40 : Math.random()*h,
+      r: Math.random()*opts.maxR + opts.minR,
+      speed: Math.random()*opts.maxSpeed + opts.minSpeed,
+      drift: (Math.random()-.5)*.3,
+      alpha: Math.random()*opts.maxAlpha + opts.minAlpha
+    };
+  }
+  function init(){
+    resize();
+    const count = Math.max(opts.minCount, Math.floor(w/opts.density));
+    particles = Array.from({length:count}, spawn);
+  }
+  function tick(){
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(p=>{
+      p.y -= p.speed; p.x += p.drift;
+      if(p.y < -10){ Object.assign(p, spawn(), {y:h+10}); }
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(227,199,154,${p.alpha})`;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+    });
+    if(!reduceMotion) requestAnimationFrame(tick);
+  }
+  window.addEventListener('resize', resize);
+  init();
+  requestAnimationFrame(tick);
+}
+
+makeParticleField(document.getElementById('motesCanvas'), {
+  riseFrom:'random', minR:.4, maxR:1.2, minSpeed:.03, maxSpeed:.1, minAlpha:.08, maxAlpha:.28, minCount:26, density:70
+});
+makeParticleField(document.getElementById('ashCanvas'), {
+  riseFrom:'bottom', minR:.5, maxR:1.6, minSpeed:.12, maxSpeed:.35, minAlpha:.15, maxAlpha:.5, minCount:16, density:60
+});
 </script>
 
 </body>
