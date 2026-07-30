@@ -699,6 +699,27 @@
     border-color: var(--crimson);
   }
 
+  /* ================= КУРСОР-ЛАПКА ================= */
+
+/* обычная лапка — цвета кости */
+body {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cellipse cx='7' cy='9' rx='3.1' ry='4' fill='%23c9bfb4' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='14' cy='7' rx='3.2' ry='4.2' fill='%23c9bfb4' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='21' cy='9' rx='3.1' ry='4' fill='%23c9bfb4' stroke='%23070508' stroke-width='1'/%3E%3Cpath d='M14 13 C18.8 13 22 16 22 19.5 C22 23 18.5 25.5 14 25.5 C9.5 25.5 6 23 6 19.5 C6 16 9.2 13 14 13 Z' fill='%23c9bfb4' stroke='%23070508' stroke-width='1'/%3E%3C/svg%3E") 14 14, auto;
+}
+
+/* над кликабельным — багровая лапка */
+a, button, summary, label,
+input[type="range"],
+.player-progress-track {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cellipse cx='7' cy='9' rx='3.1' ry='4' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='14' cy='7' rx='3.2' ry='4.2' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='21' cy='9' rx='3.1' ry='4' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cpath d='M14 13 C18.8 13 22 16 22 19.5 C22 23 18.5 25.5 14 25.5 C9.5 25.5 6 23 6 19.5 C6 16 9.2 13 14 13 Z' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3C/svg%3E") 14 14, pointer;
+}
+
+/* в момент нажатия — коготки наружу */
+a:active, button:active, summary:active,
+input[type="range"]:active,
+.player-progress-track:active {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M6.2 1.5 L7.8 5.5 L5.2 5.8 Z' fill='%23c9bfb4' stroke='%23070508' stroke-width='0.6'/%3E%3Cpath d='M13.6 0.5 L15 4.5 L12.4 4.6 Z' fill='%23c9bfb4' stroke='%23070508' stroke-width='0.6'/%3E%3Cpath d='M21.4 1.5 L22.6 5.8 L20 5.5 Z' fill='%23c9bfb4' stroke='%23070508' stroke-width='0.6'/%3E%3Cellipse cx='7' cy='9' rx='3.1' ry='4' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='14' cy='7' rx='3.2' ry='4.2' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cellipse cx='21' cy='9' rx='3.1' ry='4' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3Cpath d='M14 13 C18.8 13 22 16 22 19.5 C22 23 18.5 25.5 14 25.5 C9.5 25.5 6 23 6 19.5 C6 16 9.2 13 14 13 Z' fill='%23a11b31' stroke='%23070508' stroke-width='1'/%3E%3C/svg%3E") 14 14, pointer;
+}
+
   /* ============ ПЛЕЕР ============ */
 
   .header-player {
