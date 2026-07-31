@@ -3,649 +3,1083 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>檔 · ДОСЬЕ</title>
+<title>檔 · АРХИВ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600&family=Spectral:ital,wght@0,200;0,300;0,400;1,300&family=Noto+Serif+SC:wght@400;600;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+SC:wght@300;600;900&family=Oswald:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   00 · ПАЛИТРА
-   ============================================================ */
+/* ═══════════════════════════════════════════════════════════
+   00 · ЯДРО
+   ═══════════════════════════════════════════════════════════ */
 :root{
-  --ink:#080605;
-  --base:#0e0a07;
-  --plate:#13100c;
-  --plate-2:#1a1510;
-  --plate-3:#221a13;
+  --void:#060403;
+  --base:#0b0806;
+  --plate:#100c08;
+  --plate-2:#171108;
+  --plate-3:#20170d;
 
-  --edge:rgba(166,124,61,.16);
-  --edge-2:rgba(166,124,61,.32);
-  --edge-3:rgba(201,164,94,.55);
+  --gold:#a8823c;
+  --gold-l:#d0a75f;
+  --gold-p:#ecd9ab;
+  --gold-d:#5b4319;
 
-  --gold:#a67c3d;
-  --gold-l:#c9a45e;
-  --gold-p:#e0cb9b;
-  --gold-d:#5f4620;
+  --bone:#ddd1b7;
+  --text:#8f8371;
+  --dim:#665c4d;
+  --ghost:rgba(168,130,60,.09);
 
-  --bone:#d6cab3;
-  --text:#948873;
-  --dim:#6d6353;
-  --blood:#7c3122;
-  --blood-l:#a8543c;
+  --rust:#7a3020;
+  --rust-l:#a95c40;
 
-  --ff-h:'Oswald',Impact,sans-serif;
-  --ff-b:'Spectral',Georgia,serif;
-  --ff-c:'Noto Serif SC',serif;
+  --e1:rgba(168,130,60,.13);
+  --e2:rgba(168,130,60,.28);
+  --e3:rgba(208,167,95,.6);
 
-  --e:cubic-bezier(.22,.68,.24,1);
-  --rail:82px;
+  --fd:'Cinzel',serif;
+  --fu:'Oswald',sans-serif;
+  --fb:'Cormorant Garamond',Georgia,serif;
+  --fc:'Noto Serif SC',serif;
+
+  --ez:cubic-bezier(.19,1,.22,1);
+  --ez2:cubic-bezier(.65,0,.35,1);
+  --rail:88px;
+  --rr:52px;
 }
-
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   background:var(--base);color:var(--text);
-  font-family:var(--ff-b);font-weight:300;font-size:17px;line-height:1.8;
+  font-family:var(--fb);font-weight:300;font-size:18px;line-height:1.78;
   overflow-x:hidden;-webkit-font-smoothing:antialiased;
 }
-body.lock{overflow:hidden}
-h1,h2,h3,h4{font-family:var(--ff-h);font-weight:400;color:var(--bone);letter-spacing:.04em}
-em{font-style:normal}
-::selection{background:rgba(166,124,61,.3);color:var(--gold-p)}
+body.lock{overflow:hidden;height:100vh}
+h1,h2,h3,h4{font-weight:400;color:var(--bone)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(168,130,60,.28);color:var(--gold-p)}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#080605}
+::-webkit-scrollbar-thumb{background:var(--gold-d)}
 
-/* ============================================================
-   01 · ПОВЕРХНОСТЬ
-   ============================================================ */
-.bg{position:fixed;inset:0;z-index:-5;
-  background:
-    linear-gradient(180deg,#120d09 0%,#0e0a07 38%,#0a0705 100%),
-    radial-gradient(1200px 760px at 74% -8%, #2b2015 0%, transparent 60%),
-    radial-gradient(900px 620px at 4% 106%, #201810 0%, transparent 58%);
-  background-blend-mode:normal,screen,screen}
-.grain{position:fixed;inset:0;z-index:-4;pointer-events:none;opacity:.055;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>")}
-.grid{position:fixed;inset:0;z-index:-3;pointer-events:none;max-width:1560px;margin:0 auto;
-  background-image:linear-gradient(90deg,rgba(166,124,61,.07) 1px,transparent 1px);
-  background-size:calc(100%/8) 100%}
-.vign{position:fixed;inset:0;z-index:-2;pointer-events:none;
-  background:radial-gradient(circle at 50% 38%,transparent 44%,rgba(4,2,1,.86) 100%)}
+/* ═══════════════════════════════════════════════════════════
+   01 · ФОН
+   ═══════════════════════════════════════════════════════════ */
+#bgc{position:fixed;inset:0;z-index:-4;pointer-events:none}
+.lay{position:fixed;inset:0;pointer-events:none}
+.l-grad{z-index:-5;background:
+  radial-gradient(1300px 820px at 78% -12%,#2a1e10 0%,transparent 62%),
+  radial-gradient(980px 700px at -8% 108%,#1d1509 0%,transparent 58%),
+  linear-gradient(180deg,#0d0906,#0b0806 45%,#070504)}
+.l-grain{z-index:-3;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>")}
+.l-cols{z-index:-2;max-width:1600px;margin:0 auto;
+  background-image:linear-gradient(90deg,rgba(168,130,60,.055) 1px,transparent 1px);
+  background-size:calc(100%/12) 100%}
+.l-vign{z-index:-1;background:radial-gradient(circle at 50% 42%,transparent 40%,rgba(3,2,1,.9) 100%)}
+.l-scan{z-index:-1;opacity:.35;
+  background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 3px,rgba(0,0,0,.18) 3px 4px)}
 
-/* ============================================================
-   02 · ПРЕЛОАДЕР
-   ============================================================ */
-#pre{position:fixed;inset:0;z-index:1000;background:#070504;display:grid;place-items:center;
-  transition:opacity .7s var(--e),visibility .7s}
-#pre.off{opacity:0;visibility:hidden}
-.pre-in{display:grid;justify-items:center;gap:26px}
-.pre-gl{font-family:var(--ff-c);font-weight:900;font-size:44px;color:var(--gold);
-  border:1px solid var(--edge-2);padding:18px 22px;position:relative}
-.pre-gl::before,.pre-gl::after{content:'';position:absolute;width:10px;height:10px;border:1px solid var(--gold)}
-.pre-gl::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
-.pre-gl::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
-.pre-t{font-family:var(--ff-h);font-size:11px;font-weight:300;letter-spacing:.62em;
-  text-transform:uppercase;color:var(--dim);padding-left:.62em}
-.pre-l{width:240px;height:2px;background:rgba(166,124,61,.14);position:relative}
-.pre-l i{position:absolute;inset:0;width:0;background:var(--gold);animation:ld 1.7s var(--e) forwards}
-@keyframes ld{to{width:100%}}
+/* ═══════════════════════════════════════════════════════════
+   02 · КУРСОР
+   ═══════════════════════════════════════════════════════════ */
+#cr,#cd{position:fixed;top:0;left:0;z-index:999;pointer-events:none;mix-blend-mode:screen}
+#cr{width:38px;height:38px;margin:-19px 0 0 -19px;
+  border:1px solid rgba(208,167,95,.55);
+  transition:width .4s var(--ez),height .4s var(--ez),margin .4s var(--ez),
+             border-color .4s var(--ez),transform .4s var(--ez),opacity .3s}
+#cr::before,#cr::after{content:'';position:absolute;background:rgba(208,167,95,.5)}
+#cr::before{left:50%;top:-7px;width:1px;height:5px}
+#cr::after{left:50%;bottom:-7px;width:1px;height:5px}
+#cd{width:3px;height:3px;margin:-1.5px 0 0 -1.5px;background:var(--gold-p)}
+body.hov #cr{width:70px;height:70px;margin:-35px 0 0 -35px;border-color:rgba(208,167,95,.9);transform:rotate(45deg)}
+@media(hover:none),(pointer:coarse){#cr,#cd{display:none}}
 
-/* ============================================================
-   03 · РАМА
-   ============================================================ */
-.edge-t,.edge-b{position:fixed;left:0;right:0;height:1px;background:var(--edge);z-index:70;pointer-events:none}
-.edge-t{top:10px}.edge-b{bottom:10px}
-.cn{position:fixed;width:26px;height:26px;z-index:71;pointer-events:none;border:0}
-.cn::before{content:'';position:absolute;inset:0;border-top:1px solid var(--edge-3);border-left:1px solid var(--edge-3)}
-.cn.tl{top:10px;left:10px}
-.cn.tr{top:10px;right:10px;transform:scaleX(-1)}
-.cn.bl{bottom:10px;left:10px;transform:scaleY(-1)}
-.cn.br{bottom:10px;right:10px;transform:scale(-1)}
+/* ═══════════════════════════════════════════════════════════
+   03 · ПРЕЛОАДЕР
+   ═══════════════════════════════════════════════════════════ */
+#pre{position:fixed;inset:0;z-index:1000;background:#050403;display:grid;place-items:center}
+#pre.out{animation:preout 1.1s var(--ez) forwards}
+@keyframes preout{to{clip-path:inset(0 0 100% 0);opacity:.4;visibility:hidden}}
+.pre-w{display:grid;justify-items:center;gap:30px;width:min(88vw,420px)}
+.pre-oct{position:relative;width:112px;height:112px;display:grid;place-items:center}
+.pre-oct svg{position:absolute;inset:0;width:100%;height:100%}
+.pre-oct .r1{fill:none;stroke:rgba(168,130,60,.5);stroke-width:1;
+  stroke-dasharray:8 6;animation:spin 14s linear infinite}
+.pre-oct .r2{fill:none;stroke:rgba(208,167,95,.85);stroke-width:1.5;
+  animation:spin 26s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pre-oct b{font-family:var(--fc);font-weight:900;font-size:34px;color:var(--gold-l)}
+.pre-t{font-family:var(--fu);font-size:10px;font-weight:300;letter-spacing:.6em;
+  text-transform:uppercase;color:var(--dim);padding-left:.6em;min-height:16px}
+.pre-bar{width:100%;height:1px;background:rgba(168,130,60,.14);position:relative;overflow:hidden}
+.pre-bar i{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,var(--gold-d),var(--gold-p));transition:width .2s linear}
+.pre-n{font-family:var(--fu);font-size:10px;letter-spacing:.3em;color:var(--gold)}
 
-/* ============================================================
-   04 · РЕЙЛЫ
-   ============================================================ */
+/* ═══════════════════════════════════════════════════════════
+   04 · РАМА / РЕЙЛЫ
+   ═══════════════════════════════════════════════════════════ */
+.fr{position:fixed;z-index:60;pointer-events:none;background:var(--e1)}
+.fr.t{top:9px;left:9px;right:9px;height:1px}
+.fr.b{bottom:9px;left:9px;right:9px;height:1px}
+.cnr{position:fixed;width:22px;height:22px;z-index:61;pointer-events:none}
+.cnr::before{content:'';position:absolute;inset:0;border-top:1px solid var(--e3);border-left:1px solid var(--e3)}
+.cnr.a{top:9px;left:9px}.cnr.b2{top:9px;right:9px;transform:scaleX(-1)}
+.cnr.c{bottom:9px;left:9px;transform:scaleY(-1)}.cnr.d{bottom:9px;right:9px;transform:scale(-1)}
+
 .rail{position:fixed;left:0;top:0;bottom:0;width:var(--rail);z-index:80;
-  border-right:1px solid var(--edge);background:rgba(10,7,5,.72);
-  display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:22px 0}
-.rail-sig{width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--edge-2);
-  font-family:var(--ff-c);font-weight:900;font-size:19px;color:var(--gold-l)}
-.rnav{display:grid;width:100%}
-.rnav a{position:relative;display:grid;justify-items:center;gap:5px;padding:15px 0;
-  text-decoration:none;color:var(--dim);border-top:1px solid rgba(166,124,61,.09);
-  transition:color .4s var(--e),background .4s var(--e)}
-.rnav a:last-child{border-bottom:1px solid rgba(166,124,61,.09)}
-.rnav a em{font-family:var(--ff-h);font-size:10px;letter-spacing:.18em}
-.rnav a b{font-family:var(--ff-c);font-weight:600;font-size:16px;color:inherit}
-.rnav a::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);
-  transform:scaleY(0);transition:transform .45s var(--e)}
-.rnav a:hover{color:var(--bone);background:rgba(166,124,61,.05)}
-.rnav a.on{color:var(--gold-l);background:rgba(166,124,61,.07)}
-.rnav a.on::before{transform:scaleY(1)}
-.rnav a span{position:absolute;left:calc(100% + 1px);top:0;height:100%;display:flex;align-items:center;
-  white-space:nowrap;padding:0 18px;background:#150f0a;border:1px solid var(--edge-2);border-left:0;
-  font-family:var(--ff-h);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-l);
-  opacity:0;pointer-events:none;transition:opacity .3s var(--e)}
-.rnav a:hover span{opacity:1}
-.rail-b{writing-mode:vertical-rl;font-family:var(--ff-h);font-size:10px;letter-spacing:.44em;
+  border-right:1px solid var(--e1);background:rgba(8,6,4,.78);backdrop-filter:blur(3px);
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:18px 0}
+.sig{width:44px;height:44px;display:grid;place-items:center;position:relative;
+  font-family:var(--fc);font-weight:900;font-size:19px;color:var(--gold-l)}
+.sig::before{content:'';position:absolute;inset:0;border:1px solid var(--e2);
+  clip-path:polygon(28% 0,72% 0,100% 28%,100% 72%,72% 100%,28% 100%,0 72%,0 28%)}
+.rnav{width:100%;display:grid}
+.rnav a{position:relative;display:grid;justify-items:center;gap:3px;padding:11px 0;
+  border-top:1px solid rgba(168,130,60,.07);color:var(--dim);transition:.45s var(--ez)}
+.rnav a:last-child{border-bottom:1px solid rgba(168,130,60,.07)}
+.rnav a em{font-family:var(--fu);font-size:9px;letter-spacing:.14em;opacity:.7}
+.rnav a b{font-family:var(--fc);font-weight:600;font-size:15px}
+.rnav a::after{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);
+  transform:scaleY(0);transform-origin:50% 100%;transition:transform .5s var(--ez)}
+.rnav a:hover{color:var(--bone);background:rgba(168,130,60,.05)}
+.rnav a.on{color:var(--gold-l);background:rgba(168,130,60,.07)}
+.rnav a.on::after{transform:scaleY(1);transform-origin:50% 0}
+.rnav a i{position:absolute;left:100%;top:0;height:100%;display:flex;align-items:center;
+  white-space:nowrap;padding:0 16px;background:#130e08;border:1px solid var(--e2);border-left:0;
+  font-family:var(--fu);font-style:normal;font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--gold-l);opacity:0;transform:translateX(-6px);pointer-events:none;
+  transition:.35s var(--ez)}
+.rnav a:hover i{opacity:1;transform:none}
+.rail-f{writing-mode:vertical-rl;font-family:var(--fu);font-size:9px;letter-spacing:.4em;
   text-transform:uppercase;color:var(--dim)}
 
-.railr{position:fixed;right:0;top:0;bottom:0;width:46px;z-index:80;border-left:1px solid var(--edge);
-  display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:22px 0}
-.railr .vc{writing-mode:vertical-rl;font-family:var(--ff-c);font-size:12px;letter-spacing:.5em;
-  color:rgba(166,124,61,.34)}
-.pr{flex:1;width:2px;margin:22px 0;background:rgba(166,124,61,.12);position:relative}
-.pr i{position:absolute;top:0;left:0;width:100%;height:0;background:var(--gold)}
-.railr .pct{font-family:var(--ff-h);font-size:11px;letter-spacing:.24em;color:var(--gold);writing-mode:vertical-rl}
+.railr{position:fixed;right:0;top:0;bottom:0;width:var(--rr);z-index:80;
+  border-left:1px solid var(--e1);display:flex;flex-direction:column;align-items:center;
+  justify-content:space-between;padding:18px 0}
+.railr .vt{writing-mode:vertical-rl;font-family:var(--fc);font-size:11px;letter-spacing:.55em;
+  color:rgba(168,130,60,.3)}
+.pr{flex:1;width:1px;margin:18px 0;background:rgba(168,130,60,.13);position:relative}
+.pr i{position:absolute;top:0;left:-1px;width:3px;height:0;background:var(--gold-l)}
+.pr u{position:absolute;left:-5px;width:11px;height:1px;background:var(--gold-p);top:0}
+.railr .vol{font-family:var(--fc);font-size:12px;letter-spacing:.3em;color:var(--gold);writing-mode:vertical-rl}
 
-.mnav{display:none;position:sticky;top:0;z-index:90;background:rgba(12,8,6,.96);
-  border-top:1px solid var(--edge);border-bottom:1px solid var(--edge);overflow-x:auto;scrollbar-width:none}
+.mnav{display:none;position:sticky;top:0;z-index:90;background:rgba(9,6,4,.97);
+  border-bottom:1px solid var(--e1);overflow-x:auto;scrollbar-width:none}
 .mnav::-webkit-scrollbar{display:none}
 .mnav div{display:flex}
-.mnav a{flex:0 0 auto;padding:14px 18px;font-family:var(--ff-h);font-size:11px;letter-spacing:.24em;
-  text-transform:uppercase;color:var(--dim);text-decoration:none;white-space:nowrap;
-  border-right:1px solid rgba(166,124,61,.1)}
-.mnav a b{font-family:var(--ff-c);margin-right:8px;color:var(--gold)}
-.mnav a.on{color:var(--gold-l);background:rgba(166,124,61,.07)}
+.mnav a{flex:0 0 auto;padding:13px 16px;font-family:var(--fu);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--dim);white-space:nowrap;border-right:1px solid rgba(168,130,60,.09)}
+.mnav a b{font-family:var(--fc);margin-right:7px;color:var(--gold)}
+.mnav a.on{color:var(--gold-l);background:rgba(168,130,60,.08)}
 
-/* ============================================================
+/* ═══════════════════════════════════════════════════════════
    05 · КАРКАС
-   ============================================================ */
-.page{margin-left:var(--rail);margin-right:46px;position:relative;z-index:3}
-.wrap{max-width:1220px;margin:0 auto;padding:0 56px}
-.bar{height:1px;background:var(--edge)}
+   ═══════════════════════════════════════════════════════════ */
+.page{margin-left:var(--rail);margin-right:var(--rr);position:relative;z-index:2}
+.wrap{max-width:1280px;margin:0 auto;padding:0 60px}
+section{position:relative;padding:120px 0 40px}
+.hair{height:1px;background:var(--e1)}
 
-/* ============================================================
+/* ═══════════════════════════════════════════════════════════
    06 · ОБЛОЖКА
-   ============================================================ */
-.hero{min-height:100vh;display:grid;grid-template-columns:1.06fr .94fr;align-items:center;gap:56px;
-  padding:120px 0 96px;position:relative}
-.tagline{display:flex;align-items:center;gap:16px;margin-bottom:30px;
-  font-family:var(--ff-h);font-size:11px;font-weight:300;letter-spacing:.44em;
+   ═══════════════════════════════════════════════════════════ */
+.hero{min-height:100vh;display:grid;grid-template-columns:1.08fr .92fr;
+  align-items:center;gap:50px;padding:110px 0 90px}
+.eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:26px;
+  font-family:var(--fu);font-size:10px;font-weight:300;letter-spacing:.46em;
   text-transform:uppercase;color:var(--dim)}
-.tagline i{width:44px;height:1px;background:var(--gold);flex:0 0 auto}
-.tagline b{font-family:var(--ff-c);font-weight:600;letter-spacing:.3em;color:var(--gold)}
+.eyebrow i{width:52px;height:1px;background:var(--gold);transform-origin:0 50%;
+  animation:lgrow 1.6s var(--ez) .3s both}
+@keyframes lgrow{from{transform:scaleX(0)}}
+.eyebrow b{font-family:var(--fc);font-weight:600;letter-spacing:.28em;color:var(--gold)}
 
-h1.name{font-size:clamp(46px,7.6vw,104px);font-weight:500;line-height:.94;letter-spacing:.01em;
-  text-transform:uppercase;color:var(--bone)}
-.name-2{font-size:clamp(26px,3.4vw,42px);font-weight:200;line-height:1.1;letter-spacing:.22em;
-  text-transform:uppercase;color:var(--gold);font-family:var(--ff-h);margin-top:10px}
-.hero-rule{height:2px;width:min(100%,440px);background:var(--gold);margin:30px 0 24px}
-.hero-sub{font-size:clamp(17px,2vw,21px);font-weight:200;font-style:italic;color:var(--text);max-width:500px}
+h1.name{font-family:var(--fd);font-weight:600;font-size:clamp(42px,6.6vw,92px);
+  line-height:1.02;letter-spacing:.02em;text-transform:uppercase;color:var(--bone)}
+.msk{display:block;overflow:hidden}
+.msk>span{display:block;transform:translateY(105%);opacity:0;
+  animation:up 1.35s var(--ez) forwards}
+@keyframes up{to{transform:none;opacity:1}}
+.name-alt{font-family:var(--fu);font-weight:200;font-size:clamp(15px,2vw,24px);
+  letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-top:14px}
+.hrule{height:1px;background:linear-gradient(90deg,var(--gold-p),var(--gold-d) 60%,transparent);
+  margin:28px 0 22px;max-width:520px;transform-origin:0 50%;animation:lgrow 1.8s var(--ez) .7s both}
+.hero-sub{font-size:clamp(17px,1.9vw,21px);font-style:italic;font-weight:300;
+  color:var(--text);max-width:520px}
 
-.plate-row{display:grid;grid-template-columns:repeat(3,1fr);margin-top:52px;
-  border:1px solid var(--edge-2)}
-.pl{padding:20px 22px 22px;position:relative;background:linear-gradient(180deg,var(--plate-2),var(--plate))}
-.pl+.pl{border-left:1px solid var(--edge)}
-.pl em{display:block;font-family:var(--ff-h);font-size:10px;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--dim);margin-bottom:10px}
-.pl span{display:block;font-family:var(--ff-h);font-weight:300;font-size:19px;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--bone)}
-.pl b{position:absolute;right:10px;top:8px;font-family:var(--ff-c);font-weight:900;font-size:15px;
-  color:rgba(166,124,61,.22)}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);margin-top:46px;border:1px solid var(--e2)}
+.tri .cell{position:relative;padding:18px 20px 20px;overflow:hidden;
+  background:linear-gradient(170deg,var(--plate-2),var(--plate))}
+.tri .cell+.cell{border-left:1px solid var(--e1)}
+.tri .cell::after{content:'';position:absolute;left:0;bottom:0;height:1px;width:0;
+  background:var(--gold);transition:width .7s var(--ez)}
+.tri .cell:hover::after{width:100%}
+.tri em{display:block;font-family:var(--fu);font-size:9px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:9px}
+.tri span{display:block;font-family:var(--fu);font-weight:300;font-size:17px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--bone)}
+.tri b{position:absolute;right:9px;top:6px;font-family:var(--fc);font-weight:900;
+  font-size:15px;color:rgba(168,130,60,.2)}
 
-.motto{margin-top:40px;max-width:520px;font-size:18px;font-style:italic;color:var(--dim);
-  padding-left:20px;border-left:2px solid var(--gold-d)}
+.motto{margin-top:38px;max-width:540px;font-size:18px;font-style:italic;color:var(--dim);
+  padding-left:20px;border-left:1px solid var(--gold-d)}
 
 /* эмблема */
-.emb-box{position:relative;display:grid;place-items:center;min-height:520px}
-.emb{width:min(100%,470px);height:auto}
-.emb .l1{fill:none;stroke:rgba(166,124,61,.30);stroke-width:1}
-.emb .l2{fill:none;stroke:rgba(166,124,61,.62);stroke-width:1.4}
-.emb .l3{fill:none;stroke:rgba(201,164,94,.85);stroke-width:2}
-.emb .pf{fill:rgba(166,124,61,.05)}
-.emb .gl{font-family:var(--ff-c);font-weight:900;font-size:150px;fill:rgba(201,164,94,.82)}
-.rot{transform-origin:200px 200px;animation:sp 240s linear infinite}
-.rot-r{transform-origin:200px 200px;animation:sp 160s linear infinite reverse}
-@keyframes sp{to{transform:rotate(360deg)}}
-.emb-cap{position:absolute;bottom:6px;left:0;right:0;text-align:center;
-  font-family:var(--ff-h);font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:var(--dim)}
+.emb-box{position:relative;display:grid;place-items:center;min-height:540px}
+.emb{width:min(100%,500px);height:auto;overflow:visible}
+.emb .a{fill:none;stroke:rgba(168,130,60,.22);stroke-width:1}
+.emb .b{fill:none;stroke:rgba(168,130,60,.5);stroke-width:1.2}
+.emb .c{fill:none;stroke:rgba(208,167,95,.9);stroke-width:1.8}
+.emb .fill{fill:rgba(168,130,60,.035)}
+.emb .gl{font-family:var(--fc);font-weight:900;font-size:132px;fill:rgba(236,217,171,.8)}
+.spin-a{transform-origin:200px 200px;animation:spin 200s linear infinite}
+.spin-b{transform-origin:200px 200px;animation:spin 130s linear infinite reverse}
+.spin-c{transform-origin:200px 200px;animation:spin 340s linear infinite}
+.pulse{animation:pl 7s var(--ez2) infinite}
+@keyframes pl{0%,100%{opacity:.28}50%{opacity:.85}}
+.emb-cap{position:absolute;bottom:-4px;left:0;right:0;text-align:center;
+  font-family:var(--fu);font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--dim)}
 
-.hero-down{position:absolute;left:0;bottom:34px;display:flex;align-items:center;gap:14px;
-  font-family:var(--ff-h);font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--dim)}
-.hero-down i{width:56px;height:1px;background:var(--edge-2)}
+.scroll-hint{position:absolute;left:0;bottom:30px;display:flex;align-items:center;gap:12px;
+  font-family:var(--fu);font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--dim)}
+.scroll-hint i{width:60px;height:1px;background:var(--e2);position:relative;overflow:hidden}
+.scroll-hint i::after{content:'';position:absolute;inset:0;width:22px;background:var(--gold-p);
+  animation:sl 2.6s var(--ez2) infinite}
+@keyframes sl{0%{transform:translateX(-24px)}100%{transform:translateX(62px)}}
 
-/* ============================================================
+/* ═══════════════════════════════════════════════════════════
    07 · ЗАГОЛОВКИ РАЗДЕЛОВ
-   ============================================================ */
-section{padding:104px 0 20px;position:relative}
-.sh{display:grid;grid-template-columns:auto auto 1fr auto;align-items:center;gap:24px}
-.sh-no{font-family:var(--ff-h);font-weight:600;font-size:56px;line-height:.8;letter-spacing:-.02em;
-  color:transparent;-webkit-text-stroke:1px rgba(166,124,61,.55)}
-.sh-gl{width:52px;height:52px;display:grid;place-items:center;border:1px solid var(--edge-2);
-  background:var(--plate);font-family:var(--ff-c);font-weight:900;font-size:22px;color:var(--gold-l)}
-.sh-t{font-size:clamp(24px,3.6vw,42px);font-weight:400;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--bone)}
-.sh-tag{font-family:var(--ff-h);font-size:10px;letter-spacing:.36em;text-transform:uppercase;color:var(--dim);
-  text-align:right;line-height:2}
-.sh-tag b{display:block;font-family:var(--ff-c);font-weight:600;color:rgba(166,124,61,.6);letter-spacing:.2em}
-.hrule{margin:22px 0 44px;height:2px;background:rgba(166,124,61,.12);position:relative}
-.hrule i{position:absolute;left:0;top:0;height:100%;width:0;background:var(--gold);
-  transition:width 1.4s var(--e)}
-.in .hrule i,.hrule.in i{width:180px}
-.lead{max-width:760px;font-size:19px;font-style:italic;font-weight:200;color:var(--dim);margin-bottom:42px}
+   ═══════════════════════════════════════════════════════════ */
+.sh{position:relative;display:grid;grid-template-columns:auto auto 1fr auto;
+  align-items:center;gap:22px;z-index:2}
+.sh-no{font-family:var(--fd);font-weight:700;font-size:50px;line-height:.8;
+  color:transparent;-webkit-text-stroke:1px rgba(168,130,60,.45)}
+.sh-gl{position:relative;width:50px;height:50px;display:grid;place-items:center;
+  font-family:var(--fc);font-weight:900;font-size:21px;color:var(--gold-l)}
+.sh-gl::before{content:'';position:absolute;inset:0;border:1px solid var(--e2);
+  clip-path:polygon(26% 0,74% 0,100% 26%,100% 74%,74% 100%,26% 100%,0 74%,0 26%);
+  transition:transform .8s var(--ez)}
+.sh:hover .sh-gl::before{transform:rotate(90deg)}
+.sh-t{font-family:var(--fd);font-size:clamp(21px,3.1vw,36px);font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--bone)}
+.sh-tag{text-align:right;font-family:var(--fu);font-size:9px;letter-spacing:.34em;
+  text-transform:uppercase;color:var(--dim);line-height:2}
+.sh-tag b{display:block;font-family:var(--fc);font-weight:600;letter-spacing:.2em;
+  color:rgba(168,130,60,.5)}
+.echo{position:absolute;right:0;top:-58px;font-family:var(--fc);font-weight:900;
+  font-size:190px;line-height:1;color:rgba(168,130,60,.032);pointer-events:none;z-index:0;
+  user-select:none;will-change:transform}
+.srule{position:relative;margin:20px 0 46px;height:1px;background:rgba(168,130,60,.1)}
+.srule i{position:absolute;left:0;top:-1px;height:3px;width:0;background:var(--gold);
+  transition:width 1.5s var(--ez)}
+.in .srule i,.srule.in i{width:150px}
+.lead{max-width:780px;font-size:20px;font-style:italic;font-weight:300;color:var(--dim);
+  margin-bottom:44px}
 
-/* ============================================================
-   08 · ВЕДОМОСТЬ
-   ============================================================ */
-.slab{border:1px solid var(--edge-2);background:linear-gradient(180deg,var(--plate-2),var(--plate));
-  position:relative}
-.slab::before,.slab::after{content:'';position:absolute;width:12px;height:12px;border:1px solid var(--gold)}
+/* ═══════════════════════════════════════════════════════════
+   08 · ПЛИТА / ВЕДОМОСТЬ
+   ═══════════════════════════════════════════════════════════ */
+.slab{position:relative;border:1px solid var(--e2);
+  background:linear-gradient(172deg,var(--plate-2),var(--plate))}
+.slab::before,.slab::after{content:'';position:absolute;width:11px;height:11px;
+  border:1px solid var(--gold)}
 .slab::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
 .slab::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
 
 .ledger{display:grid;grid-template-columns:1fr 1fr}
-.lr{display:grid;grid-template-columns:44px 175px 1fr;align-items:baseline;gap:0 14px;
-  padding:16px 22px;border-bottom:1px solid rgba(166,124,61,.09);transition:background .35s var(--e)}
-.ledger>.lr:nth-child(2n){border-left:1px solid rgba(166,124,61,.09)}
-.lr:hover{background:rgba(166,124,61,.055)}
-.lr .i{font-family:var(--ff-h);font-size:10px;letter-spacing:.16em;color:rgba(166,124,61,.45)}
-.lr .k{font-family:var(--ff-h);font-size:10.5px;font-weight:300;letter-spacing:.28em;
+.lr{position:relative;display:grid;grid-template-columns:38px 168px 1fr;
+  align-items:baseline;gap:0 14px;padding:14px 22px;
+  border-bottom:1px solid rgba(168,130,60,.07);overflow:hidden}
+.ledger>.lr:nth-child(2n){border-left:1px solid rgba(168,130,60,.07)}
+.lr::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;
+  background:rgba(168,130,60,.055);transition:width .55s var(--ez)}
+.lr:hover::before{width:100%}
+.lr>*{position:relative}
+.lr .i{font-family:var(--fu);font-size:9px;letter-spacing:.12em;color:rgba(168,130,60,.42)}
+.lr .k{font-family:var(--fu);font-size:10px;font-weight:300;letter-spacing:.26em;
   text-transform:uppercase;color:var(--dim)}
-.lr .k em{font-family:var(--ff-c);font-weight:600;letter-spacing:0;color:rgba(166,124,61,.5);margin-right:9px}
-.lr .v{font-size:17.5px;color:var(--bone)}
+.lr .k em{font-family:var(--fc);font-weight:600;font-style:normal;letter-spacing:0;
+  color:rgba(168,130,60,.5);margin-right:9px}
+.lr .v{font-size:18px;color:var(--bone)}
+.lr .v s{text-decoration:none;color:var(--rust-l)}
 
-.marks{display:flex;flex-wrap:wrap;margin-top:30px;border:1px solid var(--edge)}
-.mk{padding:11px 22px;font-family:var(--ff-h);font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--gold-l);border-right:1px solid var(--edge);transition:background .35s var(--e)}
+.marks{display:flex;flex-wrap:wrap;margin-top:26px;border:1px solid var(--e1)}
+.mk{position:relative;padding:11px 22px;font-family:var(--fu);font-size:10px;
+  letter-spacing:.26em;text-transform:uppercase;color:var(--gold-l);
+  border-right:1px solid var(--e1);overflow:hidden}
 .mk:last-child{border-right:0}
-.mk:hover{background:rgba(166,124,61,.08)}
-.mk.neg{color:var(--blood-l)}
+.mk::before{content:'';position:absolute;inset:0;background:var(--gold);
+  transform:translateY(101%);transition:transform .5s var(--ez);z-index:0}
+.mk:hover::before{transform:none}
+.mk span{position:relative;z-index:1;transition:color .4s var(--ez)}
+.mk:hover span{color:#100c08}
+.mk.neg{color:var(--rust-l)}
+.mk.neg::before{background:var(--rust)}
+.mk.neg:hover span{color:var(--bone)}
 
-/* ============================================================
+/* ═══════════════════════════════════════════════════════════
    09 · ОБЛИК
-   ============================================================ */
-.look{display:grid;grid-template-columns:336px 1fr;gap:34px;align-items:start}
-.pf{position:relative;aspect-ratio:3/4;border:1px solid var(--edge-2);display:grid;place-items:center;
-  background:linear-gradient(170deg,#241a12,#0e0a07)}
-.pf .in-b{position:absolute;inset:12px;border:1px solid rgba(166,124,61,.13)}
-.pf .oct{position:absolute;width:180px;height:180px;border:1px solid rgba(166,124,61,.3);
-  clip-path:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%)}
-.pf b{position:relative;font-family:var(--ff-c);font-weight:900;font-size:88px;color:rgba(166,124,61,.32)}
-.pf small{position:absolute;left:14px;right:14px;bottom:14px;display:flex;justify-content:space-between;
-  font-family:var(--ff-h);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
-
-.spec .sp{display:grid;grid-template-columns:44px 165px 1fr;align-items:baseline;gap:0 14px;
-  padding:15px 22px;border-bottom:1px solid rgba(166,124,61,.09);transition:background .35s var(--e)}
+   ═══════════════════════════════════════════════════════════ */
+.look{display:grid;grid-template-columns:340px 1fr;gap:34px;align-items:start}
+.pf{position:relative;aspect-ratio:3/4;border:1px solid var(--e2);display:grid;place-items:center;
+  background:linear-gradient(168deg,#241a10,#0a0705);overflow:hidden}
+.pf .ib{position:absolute;inset:11px;border:1px solid rgba(168,130,60,.11)}
+.pf .oct{position:absolute;width:190px;height:190px;border:1px solid rgba(168,130,60,.26);
+  clip-path:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%);
+  animation:brth 11s var(--ez2) infinite}
+@keyframes brth{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.07) rotate(45deg)}}
+.pf b{position:relative;font-family:var(--fc);font-weight:900;font-size:82px;
+  color:rgba(168,130,60,.3)}
+.pf .sw{position:absolute;inset:0;background:linear-gradient(115deg,transparent 42%,rgba(236,217,171,.07) 50%,transparent 58%);
+  transform:translateX(-100%);transition:transform 1.1s var(--ez)}
+.pf:hover .sw{transform:translateX(100%)}
+.pf small{position:absolute;left:14px;right:14px;bottom:13px;display:flex;justify-content:space-between;
+  font-family:var(--fu);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.spec .sp{position:relative;display:grid;grid-template-columns:38px 160px 1fr;
+  align-items:baseline;gap:0 14px;padding:13px 22px;border-bottom:1px solid rgba(168,130,60,.07)}
 .spec .sp:last-child{border-bottom:0}
-.spec .sp:hover{background:rgba(166,124,61,.055)}
-.sp .i{font-family:var(--ff-h);font-size:10px;letter-spacing:.16em;color:rgba(166,124,61,.45)}
-.sp .k{font-family:var(--ff-h);font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
-.sp .k em{font-family:var(--ff-c);font-weight:600;letter-spacing:0;color:rgba(166,124,61,.5);margin-right:9px}
-.sp .v{font-size:17.5px;color:var(--bone)}
-.look-txt{margin-top:26px;columns:2;column-gap:34px;column-rule:1px solid rgba(166,124,61,.1)}
-.look-txt p{margin-bottom:16px;break-inside:avoid}
+.spec .sp:hover{background:rgba(168,130,60,.05)}
+.sp .i{font-family:var(--fu);font-size:9px;color:rgba(168,130,60,.42)}
+.sp .k{font-family:var(--fu);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim)}
+.sp .k em{font-family:var(--fc);font-weight:600;font-style:normal;letter-spacing:0;
+  color:rgba(168,130,60,.5);margin-right:9px}
+.sp .v{font-size:18px;color:var(--bone)}
+.look-txt{margin-top:26px;columns:2;column-gap:34px;column-rule:1px solid rgba(168,130,60,.09)}
+.look-txt p{margin-bottom:15px;break-inside:avoid}
 
-/* ============================================================
-   10 · УКЛАД
-   ============================================================ */
-.rules{border:1px solid var(--edge-2)}
-.ri{display:grid;grid-template-columns:74px 1fr 168px;align-items:center;gap:26px;
-  padding:26px 28px;border-bottom:1px solid rgba(166,124,61,.09);position:relative;
-  transition:background .45s var(--e)}
+/* ═══════════════════════════════════════════════════════════
+   10 · ПОВТОРЕНИЕ — ГОРИЗОНТАЛЬНЫЙ ТРЕК
+   ═══════════════════════════════════════════════════════════ */
+.hz{height:360vh;position:relative}
+.hz-st{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;
+  justify-content:center}
+.hz-head{padding:0 60px;max-width:1280px;margin:0 auto;width:100%}
+.hz-track{display:flex;gap:0;padding:0 60px;margin-top:34px;will-change:transform}
+.rep{position:relative;flex:0 0 clamp(280px,30vw,400px);min-height:340px;padding:30px 28px 34px;
+  border:1px solid var(--e1);border-right:0;
+  background:linear-gradient(175deg,var(--plate-2),var(--plate));
+  transition:background .6s var(--ez)}
+.rep:last-child{border-right:1px solid var(--e1)}
+.rep:hover{background:linear-gradient(175deg,#241a0f,#120d08)}
+.rep .num{font-family:var(--fc);font-weight:600;font-size:15px;color:var(--gold);
+  display:block;margin-bottom:16px}
+.rep .tag{display:inline-block;font-family:var(--fu);font-size:9px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--dim);border:1px solid var(--e1);padding:4px 11px;margin-bottom:20px}
+.rep h4{font-family:var(--fd);font-size:20px;font-weight:500;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:12px}
+.rep p{font-size:17px;color:var(--dim)}
+.rep .bgn{position:absolute;right:14px;bottom:-16px;font-family:var(--fc);font-weight:900;
+  font-size:90px;line-height:1;color:rgba(168,130,60,.045)}
+.rep .ln{position:absolute;left:0;top:0;height:2px;width:0;background:var(--gold);
+  transition:width .8s var(--ez)}
+.rep:hover .ln{width:100%}
+.hz-bar{margin:30px auto 0;max-width:1280px;width:100%;padding:0 60px;display:flex;
+  align-items:center;gap:16px}
+.hz-bar .t{flex:1;height:1px;background:rgba(168,130,60,.13);position:relative}
+.hz-bar .t i{position:absolute;left:0;top:-1px;height:3px;width:0;background:var(--gold-l)}
+.hz-bar span{font-family:var(--fu);font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:var(--dim)}
+
+/* ═══════════════════════════════════════════════════════════
+   11 · ПЕРЕВОД — ГАРМОШКА
+   ═══════════════════════════════════════════════════════════ */
+.acc{display:flex;border:1px solid var(--e2);min-height:430px;overflow:hidden}
+.acci{position:relative;flex:1;border-right:1px solid var(--e1);cursor:pointer;
+  background:linear-gradient(180deg,var(--plate),var(--plate-2));
+  transition:flex 1s var(--ez),background .7s var(--ez);overflow:hidden;min-width:0}
+.acci:last-child{border-right:0}
+.acci.on{flex:4.2;background:linear-gradient(180deg,#231a0f,#120d08)}
+.acci .vlab{position:absolute;left:0;top:0;width:74px;height:100%;display:flex;
+  flex-direction:column;align-items:center;justify-content:space-between;padding:22px 0;
+  border-right:1px solid rgba(168,130,60,.08)}
+.acci .vlab b{font-family:var(--fc);font-weight:600;font-size:19px;color:var(--gold);
+  transition:color .5s var(--ez)}
+.acci .vlab u{writing-mode:vertical-rl;text-decoration:none;font-family:var(--fu);font-size:10px;
+  letter-spacing:.34em;text-transform:uppercase;color:var(--dim);transition:color .5s var(--ez)}
+.acci.on .vlab u{color:var(--gold-l)}
+.acci .vlab s{font-family:var(--fu);font-size:9px;text-decoration:none;letter-spacing:.2em;
+  color:rgba(168,130,60,.4)}
+.acci .body{margin-left:74px;padding:34px 32px;opacity:0;transform:translateX(-14px);
+  transition:opacity .6s var(--ez) .18s,transform .7s var(--ez) .18s;
+  width:calc(100% - 74px);min-width:330px}
+.acci.on .body{opacity:1;transform:none}
+.acci .body h4{font-family:var(--fd);font-size:22px;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:6px}
+.acci .body .src{font-family:var(--fu);font-size:9px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:22px;display:block}
+.acci .body .q{font-size:19px;font-style:italic;color:var(--bone);padding-left:18px;
+  border-left:1px solid var(--gold-d);margin-bottom:24px}
+.acci .body .res{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:baseline;
+  padding-top:18px;border-top:1px solid rgba(168,130,60,.1)}
+.acci .body .res em{font-family:var(--fu);font-size:9px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--rust-l);font-style:normal}
+.acci .body .res p{font-size:17px;color:var(--dim)}
+.acc-note{margin-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  font-family:var(--fu);font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:var(--dim)}
+
+/* ═══════════════════════════════════════════════════════════
+   12 · УКЛАД
+   ═══════════════════════════════════════════════════════════ */
+.rules{border:1px solid var(--e2)}
+.ri{position:relative;display:grid;grid-template-columns:66px 1fr 156px;align-items:center;gap:24px;
+  padding:24px 26px;border-bottom:1px solid rgba(168,130,60,.07);overflow:hidden}
 .ri:last-child{border-bottom:0}
 .ri::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);
-  transform:scaleY(0);transition:transform .45s var(--e)}
-.ri:hover{background:rgba(166,124,61,.05)}
+  transform:scaleY(0);transition:transform .5s var(--ez)}
+.ri::after{content:'';position:absolute;inset:0;background:rgba(168,130,60,.045);
+  transform:translateX(-100%);transition:transform .7s var(--ez)}
 .ri:hover::before{transform:scaleY(1)}
-.ri-n{width:50px;height:50px;display:grid;place-items:center;border:1px solid var(--edge-2);
-  font-family:var(--ff-c);font-weight:600;font-size:19px;color:var(--gold-l);background:var(--plate)}
-.ri h4{font-size:21px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
-.ri p{font-size:16.5px;color:var(--dim);max-width:620px}
-.ri-s{text-align:right;font-family:var(--ff-h);font-size:10px;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--gold)}
-.ri-s i{display:inline-block;width:8px;height:8px;margin-left:10px;background:var(--gold);
-  transform:translateY(0)}
-.ri-s.neg{color:var(--blood-l)}
-.ri-s.neg i{background:none;border:1px solid var(--blood-l)}
+.ri:hover::after{transform:none}
+.ri>*{position:relative;z-index:1}
+.ri-n{width:46px;height:46px;display:grid;place-items:center;position:relative;
+  font-family:var(--fc);font-weight:600;font-size:18px;color:var(--gold-l)}
+.ri-n::before{content:'';position:absolute;inset:0;border:1px solid var(--e2);
+  clip-path:polygon(26% 0,74% 0,100% 26%,100% 74%,74% 100%,26% 100%,0 74%,0 26%)}
+.ri h4{font-family:var(--fd);font-size:19px;font-weight:500;letter-spacing:.09em;
+  text-transform:uppercase;margin-bottom:5px}
+.ri p{font-size:17px;color:var(--dim);max-width:640px}
+.ri-s{text-align:right;font-family:var(--fu);font-size:9px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--gold)}
+.ri-s i{display:inline-block;width:7px;height:7px;margin-left:9px;background:var(--gold)}
+.ri-s.neg{color:var(--rust-l)}
+.ri-s.neg i{background:none;border:1px solid var(--rust-l)}
+.ri-s.hollow{color:var(--dim)}
+.ri-s.hollow i{background:none;border:1px solid var(--dim)}
 
-/* ============================================================
-   11 · НАТУРА
-   ============================================================ */
-.nature{display:grid;grid-template-columns:238px 1fr;border:1px solid var(--edge-2)}
-.ntabs{border-right:1px solid var(--edge-2);background:var(--plate)}
-.nt{display:grid;grid-template-columns:34px 1fr;align-items:center;gap:12px;width:100%;text-align:left;
-  border:0;border-bottom:1px solid rgba(166,124,61,.09);background:none;cursor:pointer;
-  padding:20px 20px;color:var(--dim);font-family:var(--ff-h);font-size:11px;font-weight:300;
-  letter-spacing:.26em;text-transform:uppercase;transition:.4s var(--e);position:relative}
-.nt b{font-family:var(--ff-c);font-weight:900;font-size:19px;letter-spacing:0;
-  color:rgba(166,124,61,.42);transition:.4s var(--e)}
-.nt::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);
-  transform:scaleY(0);transition:transform .4s var(--e)}
+/* ═══════════════════════════════════════════════════════════
+   13 · КЛИНКИ
+   ═══════════════════════════════════════════════════════════ */
+.arms{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start}
+.arm{position:relative;display:grid;grid-template-columns:44px 1fr auto;gap:20px;
+  align-items:center;padding:24px 4px;border-bottom:1px solid rgba(168,130,60,.09);
+  cursor:pointer;transition:padding .55s var(--ez)}
+.arm:first-child{border-top:1px solid rgba(168,130,60,.09)}
+.arm .an{font-family:var(--fu);font-size:10px;letter-spacing:.14em;color:rgba(168,130,60,.45)}
+.arm h4{font-family:var(--fd);font-size:clamp(18px,2vw,25px);font-weight:500;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--dim);transition:color .5s var(--ez)}
+.arm .ao{font-family:var(--fu);font-size:9px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--dim);opacity:.6;margin-top:5px;display:block}
+.arm .ast{font-family:var(--fu);font-size:9px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold-d);transition:color .5s var(--ez)}
+.arm::after{content:'';position:absolute;left:0;bottom:-1px;height:1px;width:0;
+  background:var(--gold);transition:width .8s var(--ez)}
+.arm.on{padding-left:18px}
+.arm.on h4{color:var(--gold-p)}
+.arm.on .ast{color:var(--gold-l)}
+.arm.on::after{width:100%}
+.arm-view{position:sticky;top:90px;border:1px solid var(--e2);aspect-ratio:1/1.24;
+  background:linear-gradient(168deg,var(--plate-2),#0a0705);display:grid;place-items:center;
+  overflow:hidden}
+.arm-view .fig{position:absolute;inset:0;display:grid;place-items:center;opacity:0;
+  transform:scale(.94) rotate(-3deg);transition:.85s var(--ez)}
+.arm-view .fig.on{opacity:1;transform:none}
+.arm-view svg{width:74%;height:74%;overflow:visible}
+.arm-view path,.arm-view line{fill:none;stroke:rgba(208,167,95,.75);stroke-width:1.3;
+  stroke-linecap:square}
+.arm-view .fx{stroke:rgba(168,130,60,.3);stroke-width:1;stroke-dasharray:3 5}
+.arm-view .cap{position:absolute;left:16px;right:16px;bottom:14px;display:flex;
+  justify-content:space-between;font-family:var(--fu);font-size:9px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--dim)}
+.arm-view .idx{position:absolute;top:14px;left:16px;font-family:var(--fc);font-weight:900;
+  font-size:15px;color:rgba(168,130,60,.35)}
+.arms-q{margin-top:38px;max-width:760px;font-size:20px;font-style:italic;color:var(--text);
+  padding-left:22px;border-left:1px solid var(--gold-d)}
+
+/* ═══════════════════════════════════════════════════════════
+   14 · НАТУРА
+   ═══════════════════════════════════════════════════════════ */
+.nature{display:grid;grid-template-columns:240px 1fr;border:1px solid var(--e2)}
+.ntabs{position:relative;border-right:1px solid var(--e2);background:var(--plate)}
+.ntabs .ind{position:absolute;left:0;top:0;width:2px;height:25%;background:var(--gold);
+  transition:transform .65s var(--ez);z-index:2}
+.nt{display:grid;grid-template-columns:30px 1fr;align-items:center;gap:12px;width:100%;
+  text-align:left;padding:19px 20px;border-bottom:1px solid rgba(168,130,60,.07);
+  font-family:var(--fu);font-size:10px;font-weight:300;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--dim);transition:.45s var(--ez)}
+.nt b{font-family:var(--fc);font-weight:900;font-size:18px;letter-spacing:0;
+  color:rgba(168,130,60,.4);transition:.45s var(--ez)}
 .nt:hover{color:var(--bone)}
-.nt.on{color:var(--gold-l);background:rgba(166,124,61,.07)}
+.nt.on{color:var(--gold-l);background:rgba(168,130,60,.07)}
 .nt.on b{color:var(--gold-l)}
-.nt.on::before{transform:scaleY(1)}
-.nbody{padding:30px 34px;min-height:340px}
+.nbody{padding:28px 34px;min-height:350px;position:relative}
 .pane{display:none}
-.pane.on{display:block;animation:fu .55s var(--e)}
-@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.tr{display:grid;grid-template-columns:40px 1fr;gap:16px;padding:19px 0;
-  border-bottom:1px solid rgba(166,124,61,.1)}
+.pane.on{display:block}
+.tr{display:grid;grid-template-columns:38px 1fr;gap:16px;padding:18px 0;
+  border-bottom:1px solid rgba(168,130,60,.09);opacity:0;transform:translateY(14px);
+  animation:tin .7s var(--ez) forwards}
+.pane.on .tr:nth-child(1){animation-delay:.05s}
+.pane.on .tr:nth-child(2){animation-delay:.15s}
+.pane.on .tr:nth-child(3){animation-delay:.25s}
+@keyframes tin{to{opacity:1;transform:none}}
 .tr:last-child{border-bottom:0}
-.tr .idx{font-family:var(--ff-h);font-size:11px;letter-spacing:.16em;color:rgba(166,124,61,.5);padding-top:5px}
-.tr h4{font-size:19px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-l);margin-bottom:5px}
-.tr p{font-size:16.5px;color:var(--dim)}
+.tr .idx{font-family:var(--fu);font-size:10px;letter-spacing:.14em;
+  color:rgba(168,130,60,.45);padding-top:6px}
+.tr h4{font-family:var(--fd);font-size:18px;font-weight:500;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--gold-l);margin-bottom:5px}
+.tr p{font-size:17px;color:var(--dim)}
 
-/* ============================================================
-   12 · ИЗЛОМЫ
-   ============================================================ */
-.cracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0;
-  border:1px solid var(--edge-2)}
-.cr{position:relative;padding:32px 28px 34px;border-right:1px solid rgba(166,124,61,.09);
-  border-bottom:1px solid rgba(166,124,61,.09);background:linear-gradient(170deg,var(--plate-2),var(--plate));
-  overflow:hidden;transition:background .5s var(--e)}
-.cr:hover{background:linear-gradient(170deg,#241b12,#151009)}
-.cr .n{display:block;font-family:var(--ff-h);font-size:10px;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--dim);margin-bottom:14px}
-.cr h4{font-size:20px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
-.cr p{font-size:16.5px;color:var(--dim)}
-.cr .gl{position:absolute;right:14px;bottom:-12px;font-family:var(--ff-c);font-weight:900;font-size:76px;
-  color:rgba(166,124,61,.055);line-height:1}
-.cr .fx{position:absolute;top:0;right:0;width:74px;height:74px}
-.cr .fx path{fill:none;stroke:rgba(124,49,34,.7);stroke-width:1.2}
-.cr .fx path.b{stroke:rgba(166,124,61,.3)}
-.cr .seam{position:absolute;left:0;bottom:0;height:2px;width:22%;background:var(--blood);
-  transition:width .8s var(--e)}
+/* ═══════════════════════════════════════════════════════════
+   15 · ИЗЛОМЫ + ШКАЛА
+   ═══════════════════════════════════════════════════════════ */
+.cracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+  border:1px solid var(--e2)}
+.cr{position:relative;padding:30px 26px 34px;overflow:hidden;
+  border-right:1px solid rgba(168,130,60,.07);border-bottom:1px solid rgba(168,130,60,.07);
+  background:linear-gradient(172deg,var(--plate-2),var(--plate));transition:.6s var(--ez)}
+.cr:hover{background:linear-gradient(172deg,#241a10,#130e08)}
+.cr .n{display:block;font-family:var(--fu);font-size:9px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.cr h4{font-family:var(--fd);font-size:19px;font-weight:500;letter-spacing:.09em;
+  text-transform:uppercase;margin-bottom:10px}
+.cr p{font-size:17px;color:var(--dim)}
+.cr .gl{position:absolute;right:12px;bottom:-14px;font-family:var(--fc);font-weight:900;
+  font-size:74px;color:rgba(168,130,60,.05);line-height:1}
+.cr svg.fx{position:absolute;top:0;right:0;width:80px;height:80px}
+.cr svg.fx path{fill:none;stroke:rgba(122,48,32,.75);stroke-width:1.2;
+  stroke-dasharray:120;stroke-dashoffset:120;transition:stroke-dashoffset 1.1s var(--ez)}
+.cr:hover svg.fx path{stroke-dashoffset:0}
+.cr .seam{position:absolute;left:0;bottom:0;height:2px;width:18%;background:var(--rust);
+  transition:width .9s var(--ez)}
 .cr:hover .seam{width:100%}
 
-/* ============================================================
-   13 · ХРОНИКА
-   ============================================================ */
-.chron{position:relative;padding-left:150px}
-.chron::before{content:'';position:absolute;left:112px;top:6px;bottom:34px;width:1px;background:var(--edge-2)}
-.ch{position:relative;padding-bottom:46px}
-.ch::before{content:'';position:absolute;left:-42px;top:9px;width:10px;height:10px;
-  background:var(--base);border:1px solid var(--gold);transition:.4s var(--e)}
-.ch::after{content:'';position:absolute;left:-31px;top:13px;width:24px;height:1px;background:var(--edge-2)}
-.ch:hover::before{background:var(--gold)}
-.ch-tag{position:absolute;left:-150px;top:2px;width:124px;text-align:right;
-  font-family:var(--ff-h);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
-.ch-tag em{display:block;font-family:var(--ff-c);font-weight:600;font-size:12px;
-  color:rgba(166,124,61,.42);letter-spacing:.14em;margin-top:3px}
-.ch h4{font-size:22px;font-weight:400;letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px}
-.ch p{color:var(--dim);max-width:680px}
-.ch:last-child::before{background:var(--gold)}
+.gauge-wrap{margin-top:44px;border:1px solid var(--e2);padding:26px 28px;
+  background:linear-gradient(172deg,var(--plate-2),var(--plate))}
+.gauge-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  font-family:var(--fu);font-size:9px;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:18px}
+.gauge-top b{color:var(--gold-l)}
+.gauge{display:flex;gap:3px;align-items:flex-end;height:52px}
+.gauge span{flex:1;background:rgba(168,130,60,.13);height:36%;transform-origin:50% 100%;
+  transform:scaleY(0);transition:transform .5s var(--ez),background .5s var(--ez)}
+.gauge span.f{background:var(--gold-d)}
+.gauge span.f.hi{background:var(--gold-l);height:100%}
+.gauge span.e{background:rgba(122,48,32,.4);height:70%}
+.gauge.go span{transform:scaleY(1)}
+.gauge-bot{display:flex;justify-content:space-between;margin-top:14px;
+  font-family:var(--fu);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
 
-/* ============================================================
-   14 · ПОДВАЛ
-   ============================================================ */
-footer{margin-top:104px;border-top:1px solid var(--edge-2);padding:48px 0 64px;
-  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px}
-.f-seal{width:62px;height:62px;display:grid;place-items:center;border:1px solid var(--edge-2);
-  background:var(--plate);font-family:var(--ff-c);font-weight:900;font-size:24px;color:var(--gold-l)}
-footer p{font-family:var(--ff-h);font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--dim)}
-footer .fc{font-family:var(--ff-c);font-weight:600;font-size:12px;letter-spacing:.44em;color:rgba(166,124,61,.35)}
+/* ═══════════════════════════════════════════════════════════
+   16 · ХРОНИКА
+   ═══════════════════════════════════════════════════════════ */
+.chron{position:relative;padding-left:158px}
+.chron .spine{position:absolute;left:118px;top:4px;bottom:30px;width:1px;
+  background:rgba(168,130,60,.14)}
+.chron .spine i{position:absolute;left:-1px;top:0;width:3px;height:0;
+  background:linear-gradient(180deg,var(--gold-p),var(--gold-d))}
+.ch{position:relative;padding-bottom:48px}
+.ch .dot{position:absolute;left:-45px;top:8px;width:11px;height:11px;background:var(--base);
+  border:1px solid var(--gold);transform:rotate(45deg);transition:.5s var(--ez)}
+.ch .arm2{position:absolute;left:-32px;top:13px;width:26px;height:1px;background:var(--e2)}
+.ch:hover .dot{background:var(--gold);transform:rotate(45deg) scale(1.3)}
+.ch-tag{position:absolute;left:-158px;top:0;width:130px;text-align:right;
+  font-family:var(--fu);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+.ch-tag em{display:block;font-family:var(--fc);font-weight:600;font-size:13px;font-style:normal;
+  color:rgba(168,130,60,.42);letter-spacing:.14em;margin-top:3px}
+.ch h4{font-family:var(--fd);font-size:21px;font-weight:500;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:8px}
+.ch p{color:var(--dim);max-width:700px}
 
-#top{position:fixed;right:60px;bottom:26px;z-index:85;width:42px;height:42px;cursor:pointer;
-  border:1px solid var(--edge-2);background:rgba(14,10,7,.9);color:var(--gold-l);
-  font-family:var(--ff-c);font-weight:600;font-size:14px;
-  opacity:0;visibility:hidden;transition:.4s var(--e)}
+/* ═══════════════════════════════════════════════════════════
+   17 · ФИНАЛ
+   ═══════════════════════════════════════════════════════════ */
+.last{padding:130px 0 60px;text-align:center;position:relative}
+.last .ring{position:absolute;left:50%;top:52%;width:min(78vw,620px);aspect-ratio:1;
+  transform:translate(-50%,-50%);border:1px solid rgba(168,130,60,.09);
+  clip-path:polygon(28% 0,72% 0,100% 28%,100% 72%,72% 100%,28% 100%,0 72%,0 28%);
+  animation:spin 300s linear infinite;pointer-events:none}
+.last .ring2{position:absolute;left:50%;top:52%;width:min(58vw,440px);aspect-ratio:1;
+  transform:translate(-50%,-50%);border:1px solid rgba(168,130,60,.07);
+  animation:spin 190s linear infinite reverse;pointer-events:none}
+.wl{position:relative;font-family:var(--fd);font-size:clamp(24px,3.6vw,44px);font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--bone);line-height:1.4;
+  max-width:900px;margin:0 auto}
+.wl span{display:inline-block;opacity:0;transform:translateY(16px) rotateX(45deg);
+  transition:opacity .8s var(--ez),transform .8s var(--ez)}
+.wl.in span{opacity:1;transform:none}
+.last p.note{position:relative;margin:36px auto 0;max-width:660px;font-size:19px;
+  font-style:italic;color:var(--dim)}
+.caret{display:inline-block;width:9px;height:20px;background:var(--gold);
+  vertical-align:-3px;margin-left:8px;animation:bl 1.4s steps(1) infinite}
+@keyframes bl{0%,49%{opacity:1}50%,100%{opacity:0}}
+.last .sign{position:relative;margin-top:52px;font-family:var(--fu);font-size:9px;
+  letter-spacing:.5em;text-transform:uppercase;color:var(--dim)}
+
+/* тикер */
+.ticker{margin-top:70px;border-top:1px solid var(--e1);border-bottom:1px solid var(--e1);
+  overflow:hidden;padding:12px 0;position:relative}
+.ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2}
+.ticker::before{left:0;background:linear-gradient(90deg,var(--base),transparent)}
+.ticker::after{right:0;background:linear-gradient(270deg,var(--base),transparent)}
+.tk{display:flex;gap:44px;width:max-content;animation:tkm 46s linear infinite}
+.tk span{font-family:var(--fc);font-size:13px;letter-spacing:.42em;color:rgba(168,130,60,.28);
+  white-space:nowrap}
+@keyframes tkm{to{transform:translateX(-50%)}}
+
+/* ═══════════════════════════════════════════════════════════
+   18 · ПОДВАЛ
+   ═══════════════════════════════════════════════════════════ */
+footer{margin-top:70px;border-top:1px solid var(--e2);padding:44px 0 62px;
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:26px}
+.fseal{position:relative;width:58px;height:58px;display:grid;place-items:center;
+  font-family:var(--fc);font-weight:900;font-size:22px;color:var(--gold-l)}
+.fseal::before{content:'';position:absolute;inset:0;border:1px solid var(--e2);
+  clip-path:polygon(26% 0,74% 0,100% 26%,100% 74%,74% 100%,26% 100%,0 74%,0 26%)}
+footer p{font-family:var(--fu);font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--dim)}
+footer .fc{font-family:var(--fc);font-size:12px;letter-spacing:.42em;color:rgba(168,130,60,.32)}
+
+#top{position:fixed;right:66px;bottom:24px;z-index:85;width:44px;height:44px;
+  display:grid;place-items:center;font-family:var(--fc);font-weight:600;font-size:14px;
+  color:var(--gold-l);opacity:0;visibility:hidden;transition:.45s var(--ez)}
+#top::before{content:'';position:absolute;inset:0;border:1px solid var(--e2);
+  background:rgba(11,8,6,.9);clip-path:polygon(26% 0,74% 0,100% 26%,100% 74%,74% 100%,26% 100%,0 74%,0 26%);
+  transition:.45s var(--ez)}
+#top span{position:relative}
+#top:hover::before{background:var(--gold);border-color:var(--gold)}
+#top:hover span{color:#100c08}
 #top.on{opacity:1;visibility:visible}
-#top:hover{background:var(--gold);color:#120d09}
 
-/* ============================================================
-   15 · REVEAL
-   ============================================================ */
-.rv{opacity:0;transform:translateY(20px);transition:opacity .9s var(--e),transform .9s var(--e)}
+/* ═══════════════════════════════════════════════════════════
+   19 · REVEAL
+   ═══════════════════════════════════════════════════════════ */
+.rv{opacity:0;transform:translateY(24px);
+  transition:opacity 1s var(--ez),transform 1s var(--ez)}
 .rv.in{opacity:1;transform:none}
-.d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}.d4{transition-delay:.28s}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+.scr{white-space:pre-wrap}
 
-::-webkit-scrollbar{width:9px}
-::-webkit-scrollbar-track{background:#0a0705}
-::-webkit-scrollbar-thumb{background:var(--gold-d)}
-::-webkit-scrollbar-thumb:hover{background:var(--gold)}
-
-/* ============================================================
-   16 · АДАПТИВ
-   ============================================================ */
-@media(max-width:1240px){
-  .hero{grid-template-columns:1fr;gap:40px}
+/* ═══════════════════════════════════════════════════════════
+   20 · АДАПТИВ
+   ═══════════════════════════════════════════════════════════ */
+@media(max-width:1280px){
+  .hero{grid-template-columns:1fr;gap:36px}
   .emb-box{min-height:400px;order:-1}
+  .arms{grid-template-columns:1fr 300px}
 }
 @media(max-width:1080px){
-  :root{--rail:0px}
+  :root{--rail:0px;--rr:0px}
   .rail,.railr{display:none}
   .mnav{display:block}
   .page{margin:0}
-  .wrap{padding:0 24px}
-  #top{right:18px}
+  .wrap,.hz-head,.hz-bar{padding-left:22px;padding-right:22px}
+  #top{right:16px}
+  .echo{font-size:120px;top:-34px}
+  .arms{grid-template-columns:1fr}
+  .arm-view{position:relative;top:0;max-width:420px;aspect-ratio:4/3}
+  .acc{flex-direction:column;min-height:0}
+  .acci{border-right:0;border-bottom:1px solid var(--e1);flex:0 0 auto}
+  .acci.on{flex:0 0 auto}
+  .acci .vlab{position:relative;width:100%;height:auto;flex-direction:row;
+    justify-content:space-between;padding:14px 18px;border-right:0;
+    border-bottom:1px solid rgba(168,130,60,.08)}
+  .acci .vlab u{writing-mode:horizontal-tb}
+  .acci .body{margin-left:0;width:100%;min-width:0;max-height:0;padding:0 20px;overflow:hidden;
+    transition:max-height .8s var(--ez),padding .6s var(--ez),opacity .5s var(--ez)}
+  .acci.on .body{max-height:600px;padding:24px 20px}
 }
 @media(max-width:900px){
-  body{font-size:16px}
+  body{font-size:17px}
   .ledger{grid-template-columns:1fr}
   .ledger>.lr:nth-child(2n){border-left:0}
   .look{grid-template-columns:1fr}
   .look-txt{columns:1}
-  .nature{grid-template-columns:1fr}
-  .ntabs{display:grid;grid-template-columns:repeat(2,1fr);border-right:0;border-bottom:1px solid var(--edge-2)}
-  .nt{border-right:1px solid rgba(166,124,61,.09)}
-  .nt::before{width:100%;height:2px;top:auto;bottom:0;transform:scaleX(0)}
-  .nt.on::before{transform:scaleX(1)}
-  .nbody{padding:24px 20px}
-  .ri{grid-template-columns:60px 1fr;gap:18px;padding:22px 20px}
-  .ri-s{grid-column:2;text-align:left}
-  .lr,.spec .sp{grid-template-columns:36px 1fr;row-gap:4px}
+  .lr,.spec .sp{grid-template-columns:34px 1fr;row-gap:3px}
   .lr .v,.sp .v{grid-column:2}
-  .chron{padding-left:26px}
-  .chron::before{left:4px}
-  .ch::before{left:-26px}
-  .ch::after{display:none}
-  .ch-tag{position:static;width:auto;text-align:left;display:block;margin-bottom:8px}
+  .nature{grid-template-columns:1fr}
+  .ntabs{display:grid;grid-template-columns:repeat(2,1fr);border-right:0;
+    border-bottom:1px solid var(--e2)}
+  .ntabs .ind{display:none}
+  .nt{border-right:1px solid rgba(168,130,60,.07)}
+  .nbody{padding:22px 18px}
+  .ri{grid-template-columns:56px 1fr;gap:16px;padding:20px 18px}
+  .ri-s{grid-column:2;text-align:left}
+  .chron{padding-left:24px}
+  .chron .spine{left:3px}
+  .ch .dot{left:-27px}
+  .ch .arm2{display:none}
+  .ch-tag{position:static;width:auto;text-align:left;margin-bottom:8px;display:block}
   .ch-tag em{display:inline;margin-left:12px}
-  .plate-row{grid-template-columns:1fr}
-  .pl+.pl{border-left:0;border-top:1px solid var(--edge)}
-  .sh{grid-template-columns:auto auto 1fr;gap:16px}
+  .tri{grid-template-columns:1fr}
+  .tri .cell+.cell{border-left:0;border-top:1px solid var(--e1)}
+  .sh{grid-template-columns:auto auto 1fr;gap:14px}
   .sh-tag{display:none}
-  footer{grid-template-columns:1fr;text-align:left;gap:16px}
+  footer{grid-template-columns:1fr;gap:14px}
+  /* горизонтальный трек → вертикальный список */
+  .hz{height:auto!important}
+  .hz-st{position:static;height:auto;overflow:visible}
+  .hz-track{flex-direction:column;transform:none!important;padding:0 22px}
+  .rep{flex:0 0 auto;min-height:0;border-right:1px solid var(--e1);border-bottom:0}
+  .rep:last-child{border-bottom:1px solid var(--e1)}
+  .hz-bar{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
 </style>
 </head>
 <body class="lock">
 
-<div class="bg"></div><div class="grain"></div><div class="grid"></div><div class="vign"></div>
+<canvas id="bgc"></canvas>
+<div class="lay l-grad"></div><div class="lay l-grain"></div>
+<div class="lay l-cols"></div><div class="lay l-scan"></div><div class="lay l-vign"></div>
 
-<div class="edge-t"></div><div class="edge-b"></div>
-<div class="cn tl"></div><div class="cn tr"></div><div class="cn bl"></div><div class="cn br"></div>
+<div id="cr"></div><div id="cd"></div>
 
-<!-- ПРЕЛОАДЕР -->
-<div id="pre"><div class="pre-in">
-  <div class="pre-gl">檔</div>
-  <div class="pre-t">Досье</div>
-  <div class="pre-l"><i></i></div>
+<div class="fr t"></div><div class="fr b"></div>
+<div class="cnr a"></div><div class="cnr b2"></div><div class="cnr c"></div><div class="cnr d"></div>
+
+<!-- ── ПРЕЛОАДЕР ─────────────────────────────────────────── -->
+<div id="pre"><div class="pre-w">
+  <div class="pre-oct">
+    <svg viewBox="0 0 100 100">
+      <polygon class="r1" points="50,4 82,18 96,50 82,82 50,96 18,82 4,50 18,18" style="transform-origin:50px 50px"/>
+      <polygon class="r2" points="50,18 72,28 82,50 72,72 50,82 28,72 18,50 28,28" style="transform-origin:50px 50px"/>
+    </svg>
+    <b id="preGl">檔</b>
+  </div>
+  <div class="pre-t" id="preT">Архив</div>
+  <div class="pre-bar"><i id="preI"></i></div>
+  <div class="pre-n" id="preN">000</div>
 </div></div>
 
-<!-- ЛЕВЫЙ РЕЙЛ -->
+<!-- ── ЛЕВЫЙ РЕЙЛ ────────────────────────────────────────── -->
 <aside class="rail">
-  <div class="rail-sig">檔</div>
+  <div class="sig">檔</div>
   <nav class="rnav">
-    <a href="#s1"><em>01</em><b>概</b><span>Личное дело</span></a>
-    <a href="#s2"><em>02</em><b>貌</b><span>Облик</span></a>
-    <a href="#s3"><em>03</em><b>律</b><span>Уклад</span></a>
-    <a href="#s4"><em>04</em><b>心</b><span>Натура</span></a>
-    <a href="#s5"><em>05</em><b>缺</b><span>Изломы</span></a>
-    <a href="#s6"><em>06</em><b>史</b><span>Хроника</span></a>
+    <a href="#s1" data-mag><em>01</em><b>概</b><i>Личное дело</i></a>
+    <a href="#s2" data-mag><em>02</em><b>貌</b><i>Облик</i></a>
+    <a href="#s3" data-mag><em>03</em><b>復</b><i>Повторение</i></a>
+    <a href="#s4" data-mag><em>04</em><b>譯</b><i>Перевод</i></a>
+    <a href="#s5" data-mag><em>05</em><b>律</b><i>Уклад</i></a>
+    <a href="#s6" data-mag><em>06</em><b>刃</b><i>Клинки</i></a>
+    <a href="#s7" data-mag><em>07</em><b>心</b><i>Натура</i></a>
+    <a href="#s8" data-mag><em>08</em><b>缺</b><i>Изломы</i></a>
+    <a href="#s9" data-mag><em>09</em><b>史</b><i>Хроника</i></a>
+    <a href="#s10" data-mag><em>10</em><b>遺</b><i>Что осталось</i></a>
   </nav>
-  <div class="rail-b">Archivum</div>
+  <div class="rail-f">Archivum</div>
 </aside>
 
-<!-- ПРАВЫЙ РЕЙЛ -->
+<!-- ── ПРАВЫЙ РЕЙЛ ───────────────────────────────────────── -->
 <aside class="railr">
-  <div class="vc">金石不改</div>
-  <div class="pr"><i id="prg"></i></div>
-  <div class="pct" id="pct">卷一</div>
+  <div class="vt">金石不改</div>
+  <div class="pr"><i id="prI"></i><u id="prU"></u></div>
+  <div class="vol" id="prVol">卷一</div>
 </aside>
 
 <div class="page">
 
 <div class="mnav"><div>
-  <a href="#s1"><b>概</b>Дело</a><a href="#s2"><b>貌</b>Облик</a><a href="#s3"><b>律</b>Уклад</a>
-  <a href="#s4"><b>心</b>Натура</a><a href="#s5"><b>缺</b>Изломы</a><a href="#s6"><b>史</b>Хроника</a>
+  <a href="#s1"><b>概</b>Дело</a><a href="#s2"><b>貌</b>Облик</a><a href="#s3"><b>復</b>Повторение</a>
+  <a href="#s4"><b>譯</b>Перевод</a><a href="#s5"><b>律</b>Уклад</a><a href="#s6"><b>刃</b>Клинки</a>
+  <a href="#s7"><b>心</b>Натура</a><a href="#s8"><b>缺</b>Изломы</a><a href="#s9"><b>史</b>Хроника</a>
+  <a href="#s10"><b>遺</b>Остаток</a>
 </div></div>
 
-<!-- ============ ОБЛОЖКА ============ -->
+<!-- ══════════ ОБЛОЖКА ══════════ -->
 <header class="hero wrap">
   <div>
-    <div class="tagline rv"><i></i><span>Досье</span><b>檔案</b></div>
-    <h1 class="name rv d1">(заглушка1)</h1>
-    <div class="name-2 rv d1">(заглушка2)</div>
-    <div class="hero-rule rv d2"></div>
+    <div class="eyebrow"><i></i><span>Личный архив</span><b>檔案</b></div>
+    <h1 class="name">
+      <span class="msk"><span style="animation-delay:.35s">(заглушка1)</span></span>
+    </h1>
+    <div class="name-alt msk"><span style="animation-delay:.55s">(заглушка2)</span></div>
+    <div class="hrule"></div>
     <p class="hero-sub rv d2">(заглушка3)</p>
 
-    <div class="plate-row rv d3">
-      <div class="pl"><em>Дом</em><span>(заглушка4)</span><b>族</b></div>
-      <div class="pl"><em>Происхождение</em><span>(заглушка5)</span><b>源</b></div>
-      <div class="pl"><em>Положение</em><span>(заглушка6)</span><b>位</b></div>
+    <div class="tri rv d3">
+      <div class="cell" data-mag><em>Дом</em><span>(заглушка4)</span><b>族</b></div>
+      <div class="cell" data-mag><em>Служба</em><span>(заглушка5)</span><b>職</b></div>
+      <div class="cell" data-mag><em>Место</em><span>(заглушка6)</span><b>位</b></div>
     </div>
 
     <p class="motto rv d4">(заглушка7)</p>
   </div>
 
-  <div class="emb-box rv d2">
-    <svg class="emb" viewBox="0 0 400 400" aria-hidden="true">
-      <g class="rot">
-        <polygon class="l1" points="200,10 334,66 390,200 334,334 200,390 66,334 10,200 66,66"/>
-        <g id="ticks"></g>
+  <div class="emb-box">
+    <svg class="emb" id="emb" viewBox="0 0 400 400">
+      <g class="spin-c"><g id="ticks"></g></g>
+      <g class="spin-a">
+        <polygon class="a" points="200,14 331,68 386,200 331,332 200,386 69,332 14,200 69,68"/>
+        <polygon class="a" points="200,44 310,90 356,200 310,310 200,356 90,310 44,200 90,90"/>
       </g>
-      <polygon class="l2" points="200,42 312,88 358,200 312,312 200,358 88,312 42,200 88,88"/>
-      <polygon class="pf" points="200,42 312,88 358,200 312,312 200,358 88,312 42,200 88,88"/>
-      <g class="rot-r">
-        <rect class="l1" x="112" y="112" width="176" height="176"/>
-        <rect class="l1" x="112" y="112" width="176" height="176" transform="rotate(45 200 200)"/>
+      <g class="spin-b">
+        <rect class="a" x="118" y="118" width="164" height="164"/>
+        <rect class="a" x="118" y="118" width="164" height="164" transform="rotate(45 200 200)"/>
       </g>
-      <polygon class="l3" points="200,96 262,138 262,262 200,304 138,262 138,138"/>
-      <text class="gl" x="200" y="252" text-anchor="middle">(заглушка8)</text>
-      <line class="l2" x1="14" y1="200" x2="52" y2="200"/><line class="l2" x1="348" y1="200" x2="386" y2="200"/>
-      <line class="l2" x1="200" y1="14" x2="200" y2="52"/><line class="l2" x1="200" y1="348" x2="200" y2="386"/>
+      <polygon class="fill" points="200,44 310,90 356,200 310,310 200,356 90,310 44,200 90,90"/>
+      <polygon class="c" points="200,98 259,140 259,260 200,302 141,260 141,140"/>
+      <g class="pulse">
+        <line class="b" x1="200" y1="98" x2="200" y2="44"/>
+        <line class="b" x1="200" y1="302" x2="200" y2="356"/>
+        <line class="b" x1="141" y1="200" x2="44" y2="200"/>
+        <line class="b" x1="259" y1="200" x2="356" y2="200"/>
+      </g>
+      <text class="gl" x="200" y="246" text-anchor="middle">(заглушка8)</text>
     </svg>
     <div class="emb-cap">(заглушка9)</div>
   </div>
 
-  <div class="hero-down"><span>Далее</span><i></i></div>
+  <div class="scroll-hint"><span>Развернуть</span><i></i></div>
 </header>
 
-<div class="wrap"><div class="bar"></div></div>
-
+<div class="wrap"><div class="hair"></div></div>
 <main class="wrap">
 
-<!-- ============ 01 ============ -->
+<!-- ══════════ 01 · ЛИЧНОЕ ДЕЛО ══════════ -->
 <section id="s1">
+  <span class="echo" data-echo>概</span>
   <header class="sh rv">
-    <span class="sh-no">01</span>
-    <span class="sh-gl">概</span>
-    <h2 class="sh-t">Личное дело</h2>
+    <span class="sh-no">01</span><span class="sh-gl">概</span>
+    <h2 class="sh-t scr" data-txt="Личное дело">Личное дело</h2>
     <span class="sh-tag">Свиток первый<b>卷一</b></span>
   </header>
-  <div class="hrule rv"><i></i></div>
+  <div class="srule rv"><i></i></div>
 
   <p class="lead rv d1">(заглушка10)</p>
 
-  <div class="slab rv d2">
-    <div class="ledger">
-      <div class="lr"><span class="i">01</span><span class="k"><em>名</em>Имя</span><span class="v">(заглушка11)</span></div>
-      <div class="lr"><span class="i">02</span><span class="k"><em>號</em>Прозвания</span><span class="v">(заглушка12)</span></div>
-      <div class="lr"><span class="i">03</span><span class="k"><em>族</em>Дом</span><span class="v">(заглушка13)</span></div>
-      <div class="lr"><span class="i">04</span><span class="k"><em>爵</em>Титул</span><span class="v">(заглушка14)</span></div>
-      <div class="lr"><span class="i">05</span><span class="k"><em>轉</em>Обращение</span><span class="v">(заглушка15)</span></div>
-      <div class="lr"><span class="i">06</span><span class="k"><em>師</em>Наставник</span><span class="v">(заглушка16)</span></div>
-      <div class="lr"><span class="i">07</span><span class="k"><em>宅</em>Резиденция</span><span class="v">(заглушка17)</span></div>
-      <div class="lr"><span class="i">08</span><span class="k"><em>業</em>Ремесло</span><span class="v">(заглушка18)</span></div>
-      <div class="lr"><span class="i">09</span><span class="k"><em>位</em>Положение</span><span class="v">(заглушка19)</span></div>
-      <div class="lr"><span class="i">10</span><span class="k"><em>語</em>Языки</span><span class="v">(заглушка20)</span></div>
-      <div class="lr"><span class="i">11</span><span class="k"><em>信</em>Вера</span><span class="v">(заглушка21)</span></div>
-      <div class="lr"><span class="i">12</span><span class="k"><em>誓</em>Обет</span><span class="v">(заглушка22)</span></div>
-    </div>
-  </div>
+  <div class="slab rv d2"><div class="ledger">
+    <div class="lr"><span class="i">01</span><span class="k"><em>名</em>Имя</span><span class="v">(заглушка11)</span></div>
+    <div class="lr"><span class="i">02</span><span class="k"><em>號</em>Прозвания</span><span class="v">(заглушка12)</span></div>
+    <div class="lr"><span class="i">03</span><span class="k"><em>族</em>Дом</span><span class="v">(заглушка13)</span></div>
+    <div class="lr"><span class="i">04</span><span class="k"><em>職</em>Должность</span><span class="v">(заглушка14)</span></div>
+    <div class="lr"><span class="i">05</span><span class="k"><em>轉</em>Обращение</span><span class="v">(заглушка15)</span></div>
+    <div class="lr"><span class="i">06</span><span class="k"><em>師</em>Наставник</span><span class="v">(заглушка16)</span></div>
+    <div class="lr"><span class="i">07</span><span class="k"><em>宅</em>Резиденция</span><span class="v">(заглушка17)</span></div>
+    <div class="lr"><span class="i">08</span><span class="k"><em>港</em>Порт приписки</span><span class="v">(заглушка18)</span></div>
+    <div class="lr"><span class="i">09</span><span class="k"><em>業</em>Ремесло</span><span class="v">(заглушка19)</span></div>
+    <div class="lr"><span class="i">10</span><span class="k"><em>語</em>Языки</span><span class="v">(заглушка20)</span></div>
+    <div class="lr"><span class="i">11</span><span class="k"><em>信</em>Вера</span><span class="v"><s>(заглушка21)</s></span></div>
+    <div class="lr"><span class="i">12</span><span class="k"><em>誓</em>Обет</span><span class="v">(заглушка22)</span></div>
+    <div class="lr"><span class="i">13</span><span class="k"><em>印</em>Печать</span><span class="v">(заглушка23)</span></div>
+    <div class="lr"><span class="i">14</span><span class="k"><em>嗣</em>Преемник</span><span class="v"><s>(заглушка24)</s></span></div>
+  </div></div>
 
   <div class="marks rv d3">
-    <span class="mk">(заглушка23)</span>
-    <span class="mk">(заглушка24)</span>
-    <span class="mk neg">(заглушка25)</span>
-    <span class="mk">(заглушка26)</span>
-    <span class="mk neg">(заглушка27)</span>
+    <span class="mk" data-mag><span>(заглушка25)</span></span>
+    <span class="mk" data-mag><span>(заглушка26)</span></span>
+    <span class="mk neg" data-mag><span>(заглушка27)</span></span>
+    <span class="mk" data-mag><span>(заглушка28)</span></span>
+    <span class="mk neg" data-mag><span>(заглушка29)</span></span>
   </div>
 </section>
 
-<!-- ============ 02 ============ -->
+<!-- ══════════ 02 · ОБЛИК ══════════ -->
 <section id="s2">
+  <span class="echo" data-echo>貌</span>
   <header class="sh rv">
-    <span class="sh-no">02</span>
-    <span class="sh-gl">貌</span>
-    <h2 class="sh-t">Облик</h2>
+    <span class="sh-no">02</span><span class="sh-gl">貌</span>
+    <h2 class="sh-t scr" data-txt="Облик">Облик</h2>
     <span class="sh-tag">Свиток второй<b>卷二</b></span>
   </header>
-  <div class="hrule rv"><i></i></div>
+  <div class="srule rv"><i></i></div>
 
   <div class="look">
-    <div class="pf rv d1">
-      <span class="in-b"></span><span class="oct"></span><b>影</b>
-      <small><span>(заглушка28)</span><span>肖像</span></small>
-    </div>
-
+    <div class="pf rv d1"><span class="ib"></span><span class="oct"></span><span class="sw"></span>
+      <b>影</b><small><span>(заглушка30)</span><span>肖像</span></small></div>
     <div class="rv d2">
       <div class="slab spec">
-        <div class="sp"><span class="i">01</span><span class="k"><em>目</em>Глаза</span><span class="v">(заглушка29)</span></div>
-        <div class="sp"><span class="i">02</span><span class="k"><em>髮</em>Волосы</span><span class="v">(заглушка30)</span></div>
-        <div class="sp"><span class="i">03</span><span class="k"><em>膚</em>Кожа</span><span class="v">(заглушка31)</span></div>
-        <div class="sp"><span class="i">04</span><span class="k"><em>骨</em>Сложение</span><span class="v">(заглушка32)</span></div>
-        <div class="sp"><span class="i">05</span><span class="k"><em>痕</em>Приметы</span><span class="v">(заглушка33)</span></div>
-        <div class="sp"><span class="i">06</span><span class="k"><em>聲</em>Голос</span><span class="v">(заглушка34)</span></div>
-        <div class="sp"><span class="i">07</span><span class="k"><em>衣</em>Одеяние</span><span class="v">(заглушка35)</span></div>
+        <div class="sp"><span class="i">01</span><span class="k"><em>目</em>Глаза</span><span class="v">(заглушка31)</span></div>
+        <div class="sp"><span class="i">02</span><span class="k"><em>髮</em>Волосы</span><span class="v">(заглушка32)</span></div>
+        <div class="sp"><span class="i">03</span><span class="k"><em>膚</em>Кожа</span><span class="v">(заглушка33)</span></div>
+        <div class="sp"><span class="i">04</span><span class="k"><em>骨</em>Сложение</span><span class="v">(заглушка34)</span></div>
+        <div class="sp"><span class="i">05</span><span class="k"><em>手</em>Руки</span><span class="v">(заглушка35)</span></div>
+        <div class="sp"><span class="i">06</span><span class="k"><em>聲</em>Голос</span><span class="v">(заглушка36)</span></div>
+        <div class="sp"><span class="i">07</span><span class="k"><em>痕</em>Приметы</span><span class="v">(заглушка37)</span></div>
+        <div class="sp"><span class="i">08</span><span class="k"><em>衣</em>Одеяние</span><span class="v">(заглушка38)</span></div>
       </div>
-      <div class="look-txt">
-        <p>(заглушка36)</p>
-        <p>(заглушка37)</p>
-      </div>
+      <div class="look-txt"><p>(заглушка39)</p><p>(заглушка40)</p></div>
     </div>
   </div>
 </section>
 
-<!-- ============ 03 ============ -->
-<section id="s3">
-  <header class="sh rv">
-    <span class="sh-no">03</span>
-    <span class="sh-gl">律</span>
-    <h2 class="sh-t">Уклад</h2>
-    <span class="sh-tag">Свиток третий<b>卷三</b></span>
-  </header>
-  <div class="hrule rv"><i></i></div>
+<!-- ══════════ 03 · ПОВТОРЕНИЕ (горизонталь) ══════════ -->
+<section id="s3" class="hz" style="padding:0">
+  <div class="hz-st">
+    <div class="hz-head">
+      <span class="echo" data-echo style="top:-96px">復</span>
+      <header class="sh rv">
+        <span class="sh-no">03</span><span class="sh-gl">復</span>
+        <h2 class="sh-t scr" data-txt="Повторение">Повторение</h2>
+        <span class="sh-tag">Свиток третий<b>卷三</b></span>
+      </header>
+      <div class="srule rv"><i></i></div>
+      <p class="lead rv d1" style="margin-bottom:0">(заглушка41)</p>
+    </div>
 
-  <p class="lead rv d1">(заглушка38)</p>
+    <div class="hz-track" id="hzTrack">
+      <article class="rep"><span class="ln"></span><span class="num">一</span>
+        <span class="tag">Виток</span><h4>(заглушка42)</h4><p>(заглушка43)</p><span class="bgn">循</span></article>
+      <article class="rep"><span class="ln"></span><span class="num">二</span>
+        <span class="tag">Виток</span><h4>(заглушка44)</h4><p>(заглушка45)</p><span class="bgn">循</span></article>
+      <article class="rep"><span class="ln"></span><span class="num">三</span>
+        <span class="tag">Виток</span><h4>(заглушка46)</h4><p>(заглушка47)</p><span class="bgn">循</span></article>
+      <article class="rep"><span class="ln"></span><span class="num">四</span>
+        <span class="tag">Виток</span><h4>(заглушка48)</h4><p>(заглушка49)</p><span class="bgn">循</span></article>
+      <article class="rep"><span class="ln"></span><span class="num">五</span>
+        <span class="tag">Виток</span><h4>(заглушка50)</h4><p>(заглушка51)</p><span class="bgn">循</span></article>
+      <article class="rep"><span class="ln"></span><span class="num">六</span>
+        <span class="tag">Виток</span><h4>(заглушка52)</h4><p>(заглушка53)</p><span class="bgn">循</span></article>
+    </div>
 
-  <div class="rules rv d2">
-    <article class="ri"><div class="ri-n">壹</div>
-      <div><h4>(заглушка39)</h4><p>(заглушка40)</p></div>
-      <div class="ri-s">Соблюдён<i></i></div></article>
-    <article class="ri"><div class="ri-n">貳</div>
-      <div><h4>(заглушка41)</h4><p>(заглушка42)</p></div>
-      <div class="ri-s">Соблюдён<i></i></div></article>
-    <article class="ri"><div class="ri-n">叁</div>
-      <div><h4>(заглушка43)</h4><p>(заглушка44)</p></div>
-      <div class="ri-s neg">Нарушен<i></i></div></article>
-    <article class="ri"><div class="ri-n">肆</div>
-      <div><h4>(заглушка45)</h4><p>(заглушка46)</p></div>
-      <div class="ri-s">Соблюдён<i></i></div></article>
-    <article class="ri"><div class="ri-n">伍</div>
-      <div><h4>(заглушка47)</h4><p>(заглушка48)</p></div>
-      <div class="ri-s neg">Нарушен<i></i></div></article>
-    <article class="ri"><div class="ri-n">陸</div>
-      <div><h4>(заглушка49)</h4><p>(заглушка50)</p></div>
-      <div class="ri-s">Соблюдён<i></i></div></article>
+    <div class="hz-bar"><span>Круг</span><div class="t"><i id="hzI"></i></div><span>Тот же</span></div>
   </div>
 </section>
 
-<!-- ============ 04 ============ -->
+<!-- ══════════ 04 · ПЕРЕВОД ══════════ -->
 <section id="s4">
+  <span class="echo" data-echo>譯</span>
   <header class="sh rv">
-    <span class="sh-no">04</span>
-    <span class="sh-gl">心</span>
-    <h2 class="sh-t">Натура</h2>
+    <span class="sh-no">04</span><span class="sh-gl">譯</span>
+    <h2 class="sh-t scr" data-txt="Перевод">Перевод</h2>
     <span class="sh-tag">Свиток четвёртый<b>卷四</b></span>
   </header>
-  <div class="hrule rv"><i></i></div>
+  <div class="srule rv"><i></i></div>
 
-  <p class="lead rv d1">(заглушка51)</p>
+  <p class="lead rv d1">(заглушка54)</p>
+
+  <div class="acc rv d2" id="acc">
+    <div class="acci on" data-i="0">
+      <div class="vlab"><b>壹</b><u>Список первый</u><s>I</s></div>
+      <div class="body"><h4>(заглушка55)</h4><span class="src">(заглушка56)</span>
+        <p class="q">(заглушка57)</p>
+        <div class="res"><em>Итог</em><p>(заглушка58)</p></div></div>
+    </div>
+    <div class="acci" data-i="1">
+      <div class="vlab"><b>貳</b><u>Список второй</u><s>II</s></div>
+      <div class="body"><h4>(заглушка59)</h4><span class="src">(заглушка60)</span>
+        <p class="q">(заглушка61)</p>
+        <div class="res"><em>Итог</em><p>(заглушка62)</p></div></div>
+    </div>
+    <div class="acci" data-i="2">
+      <div class="vlab"><b>叁</b><u>Список третий</u><s>III</s></div>
+      <div class="body"><h4>(заглушка63)</h4><span class="src">(заглушка64)</span>
+        <p class="q">(заглушка65)</p>
+        <div class="res"><em>Итог</em><p>(заглушка66)</p></div></div>
+    </div>
+    <div class="acci" data-i="3">
+      <div class="vlab"><b>肆</b><u>Список четвёртый</u><s>IV</s></div>
+      <div class="body"><h4>(заглушка67)</h4><span class="src">(заглушка68)</span>
+        <p class="q">(заглушка69)</p>
+        <div class="res"><em>Итог</em><p>(заглушка70)</p></div></div>
+    </div>
+    <div class="acci" data-i="4">
+      <div class="vlab"><b>伍</b><u>Список пятый</u><s>V</s></div>
+      <div class="body"><h4>(заглушка71)</h4><span class="src">(заглушка72)</span>
+        <p class="q">(заглушка73)</p>
+        <div class="res"><em>Итог</em><p>(заглушка74)</p></div></div>
+    </div>
+  </div>
+  <div class="acc-note rv d3"><span>Источник один</span><span>Толкований пять</span><span>Исход общий</span></div>
+</section>
+
+<!-- ══════════ 05 · УКЛАД ══════════ -->
+<section id="s5">
+  <span class="echo" data-echo>律</span>
+  <header class="sh rv">
+    <span class="sh-no">05</span><span class="sh-gl">律</span>
+    <h2 class="sh-t scr" data-txt="Уклад">Уклад</h2>
+    <span class="sh-tag">Свиток пятый<b>卷五</b></span>
+  </header>
+  <div class="srule rv"><i></i></div>
+
+  <p class="lead rv d1">(заглушка75)</p>
+
+  <div class="rules rv d2">
+    <article class="ri"><div class="ri-n">壹</div><div><h4>(заглушка76)</h4><p>(заглушка77)</p></div>
+      <div class="ri-s">Исполняется<i></i></div></article>
+    <article class="ri"><div class="ri-n">貳</div><div><h4>(заглушка78)</h4><p>(заглушка79)</p></div>
+      <div class="ri-s">Исполняется<i></i></div></article>
+    <article class="ri"><div class="ri-n">叁</div><div><h4>(заглушка80)</h4><p>(заглушка81)</p></div>
+      <div class="ri-s hollow">Пусто внутри<i></i></div></article>
+    <article class="ri"><div class="ri-n">肆</div><div><h4>(заглушка82)</h4><p>(заглушка83)</p></div>
+      <div class="ri-s">Исполняется<i></i></div></article>
+    <article class="ri"><div class="ri-n">伍</div><div><h4>(заглушка84)</h4><p>(заглушка85)</p></div>
+      <div class="ri-s neg">Нарушен<i></i></div></article>
+    <article class="ri"><div class="ri-n">陸</div><div><h4>(заглушка86)</h4><p>(заглушка87)</p></div>
+      <div class="ri-s hollow">Пусто внутри<i></i></div></article>
+  </div>
+</section>
+
+<!-- ══════════ 06 · КЛИНКИ ══════════ -->
+<section id="s6">
+  <span class="echo" data-echo>刃</span>
+  <header class="sh rv">
+    <span class="sh-no">06</span><span class="sh-gl">刃</span>
+    <h2 class="sh-t scr" data-txt="Клинки">Клинки</h2>
+    <span class="sh-tag">Свиток шестой<b>卷六</b></span>
+  </header>
+  <div class="srule rv"><i></i></div>
+
+  <p class="lead rv d1">(заглушка88)</p>
+
+  <div class="arms">
+    <div class="arm-list rv d2">
+      <article class="arm on" data-a="0"><span class="an">01</span>
+        <div><h4>(заглушка89)</h4><span class="ao">(заглушка90)</span></div>
+        <span class="ast">(заглушка91)</span></article>
+      <article class="arm" data-a="1"><span class="an">02</span>
+        <div><h4>(заглушка92)</h4><span class="ao">(заглушка93)</span></div>
+        <span class="ast">(заглушка94)</span></article>
+      <article class="arm" data-a="2"><span class="an">03</span>
+        <div><h4>(заглушка95)</h4><span class="ao">(заглушка96)</span></div>
+        <span class="ast">(заглушка97)</span></article>
+      <article class="arm" data-a="3"><span class="an">04</span>
+        <div><h4>(заглушка98)</h4><span class="ao">(заглушка99)</span></div>
+        <span class="ast">(заглушка100)</span></article>
+      <article class="arm" data-a="4"><span class="an">05</span>
+        <div><h4>(заглушка101)</h4><span class="ao">(заглушка102)</span></div>
+        <span class="ast">(заглушка103)</span></article>
+    </div>
+
+    <div class="arm-view rv d3" id="armView">
+      <span class="idx">刃</span>
+      <div class="fig on" data-f="0"><svg viewBox="0 0 200 200">
+        <line x1="26" y1="100" x2="150" y2="100"/><line x1="150" y1="94" x2="176" y2="100"/>
+        <line x1="150" y1="106" x2="176" y2="100"/><line x1="26" y1="88" x2="26" y2="112"/>
+        <line x1="34" y1="94" x2="34" y2="106"/><path d="M14 94 L26 94"/><path d="M14 106 L26 106"/>
+        <line class="fx" x1="26" y1="76" x2="176" y2="76"/><line class="fx" x1="26" y1="124" x2="176" y2="124"/>
+      </svg></div>
+      <div class="fig" data-f="1"><svg viewBox="0 0 200 200">
+        <path d="M30 118 C70 110 120 92 172 62"/><path d="M30 130 C72 124 124 106 172 62"/>
+        <line x1="24" y1="112" x2="24" y2="136"/><path d="M10 118 L24 118"/><path d="M10 130 L24 130"/>
+        <line class="fx" x1="24" y1="150" x2="176" y2="52"/>
+      </svg></div>
+      <div class="fig" data-f="2"><svg viewBox="0 0 200 200">
+        <path d="M44 108 L136 92 L162 100 L136 112 L44 118 Z"/><line x1="36" y1="100" x2="36" y2="126"/>
+        <path d="M20 106 L36 106"/><path d="M20 120 L36 120"/>
+        <line class="fx" x1="36" y1="82" x2="168" y2="82"/>
+      </svg></div>
+      <div class="fig" data-f="3"><svg viewBox="0 0 200 200">
+        <line x1="52" y1="100" x2="178" y2="100"/><circle cx="40" cy="100" r="16" style="fill:none"/>
+        <path d="M40 84 A16 16 0 0 0 40 116"/><line x1="24" y1="92" x2="24" y2="108"/>
+        <line x1="52" y1="88" x2="52" y2="112"/>
+        <line class="fx" x1="24" y1="70" x2="178" y2="70"/>
+      </svg></div>
+      <div class="fig" data-f="4"><svg viewBox="0 0 200 200">
+        <path d="M38 100 L150 100 L174 100"/><path d="M150 86 L174 100 L150 114"/>
+        <rect x="26" y="86" width="14" height="28" style="fill:none"/>
+        <line class="fx" x1="26" y1="60" x2="174" y2="60"/><line class="fx" x1="26" y1="140" x2="174" y2="140"/>
+      </svg></div>
+      <div class="cap"><span id="armCap">(заглушка104)</span><span>圖</span></div>
+    </div>
+  </div>
+
+  <p class="arms-q rv d2">(заглушка105)</p>
+</section>
+
+<!-- ══════════ 07 · НАТУРА ══════════ -->
+<section id="s7">
+  <span class="echo" data-echo>心</span>
+  <header class="sh rv">
+    <span class="sh-no">07</span><span class="sh-gl">心</span>
+    <h2 class="sh-t scr" data-txt="Натура">Натура</h2>
+    <span class="sh-tag">Свиток седьмой<b>卷七</b></span>
+  </header>
+  <div class="srule rv"><i></i></div>
+
+  <p class="lead rv d1">(заглушка106)</p>
 
   <div class="nature rv d2">
     <div class="ntabs">
+      <div class="ind" id="nInd"></div>
       <button class="nt on" data-p="p1"><b>德</b>Достоинства</button>
       <button class="nt" data-p="p2"><b>惡</b>Пороки</button>
       <button class="nt" data-p="p3"><b>習</b>Привычки</button>
@@ -653,151 +1087,431 @@ footer .fc{font-family:var(--ff-c);font-weight:600;font-size:12px;letter-spacing
     </div>
     <div class="nbody">
       <div class="pane on" id="p1">
-        <div class="tr"><span class="idx">01</span><div><h4>(заглушка52)</h4><p>(заглушка53)</p></div></div>
-        <div class="tr"><span class="idx">02</span><div><h4>(заглушка54)</h4><p>(заглушка55)</p></div></div>
-        <div class="tr"><span class="idx">03</span><div><h4>(заглушка56)</h4><p>(заглушка57)</p></div></div>
+        <div class="tr"><span class="idx">01</span><div><h4>(заглушка107)</h4><p>(заглушка108)</p></div></div>
+        <div class="tr"><span class="idx">02</span><div><h4>(заглушка109)</h4><p>(заглушка110)</p></div></div>
+        <div class="tr"><span class="idx">03</span><div><h4>(заглушка111)</h4><p>(заглушка112)</p></div></div>
       </div>
       <div class="pane" id="p2">
-        <div class="tr"><span class="idx">01</span><div><h4>(заглушка58)</h4><p>(заглушка59)</p></div></div>
-        <div class="tr"><span class="idx">02</span><div><h4>(заглушка60)</h4><p>(заглушка61)</p></div></div>
-        <div class="tr"><span class="idx">03</span><div><h4>(заглушка62)</h4><p>(заглушка63)</p></div></div>
+        <div class="tr"><span class="idx">01</span><div><h4>(заглушка113)</h4><p>(заглушка114)</p></div></div>
+        <div class="tr"><span class="idx">02</span><div><h4>(заглушка115)</h4><p>(заглушка116)</p></div></div>
+        <div class="tr"><span class="idx">03</span><div><h4>(заглушка117)</h4><p>(заглушка118)</p></div></div>
       </div>
       <div class="pane" id="p3">
-        <div class="tr"><span class="idx">01</span><div><h4>(заглушка64)</h4><p>(заглушка65)</p></div></div>
-        <div class="tr"><span class="idx">02</span><div><h4>(заглушка66)</h4><p>(заглушка67)</p></div></div>
-        <div class="tr"><span class="idx">03</span><div><h4>(заглушка68)</h4><p>(заглушка69)</p></div></div>
+        <div class="tr"><span class="idx">01</span><div><h4>(заглушка119)</h4><p>(заглушка120)</p></div></div>
+        <div class="tr"><span class="idx">02</span><div><h4>(заглушка121)</h4><p>(заглушка122)</p></div></div>
+        <div class="tr"><span class="idx">03</span><div><h4>(заглушка123)</h4><p>(заглушка124)</p></div></div>
       </div>
       <div class="pane" id="p4">
-        <div class="tr"><span class="idx">01</span><div><h4>(заглушка70)</h4><p>(заглушка71)</p></div></div>
-        <div class="tr"><span class="idx">02</span><div><h4>(заглушка72)</h4><p>(заглушка73)</p></div></div>
-        <div class="tr"><span class="idx">03</span><div><h4>(заглушка74)</h4><p>(заглушка75)</p></div></div>
+        <div class="tr"><span class="idx">01</span><div><h4>(заглушка125)</h4><p>(заглушка126)</p></div></div>
+        <div class="tr"><span class="idx">02</span><div><h4>(заглушка127)</h4><p>(заглушка128)</p></div></div>
+        <div class="tr"><span class="idx">03</span><div><h4>(заглушка129)</h4><p>(заглушка130)</p></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ 05 ============ -->
-<section id="s5">
+<!-- ══════════ 08 · ИЗЛОМЫ ══════════ -->
+<section id="s8">
+  <span class="echo" data-echo>缺</span>
   <header class="sh rv">
-    <span class="sh-no">05</span>
-    <span class="sh-gl">缺</span>
-    <h2 class="sh-t">Изломы</h2>
-    <span class="sh-tag">Свиток пятый<b>卷五</b></span>
+    <span class="sh-no">08</span><span class="sh-gl">缺</span>
+    <h2 class="sh-t scr" data-txt="Изломы">Изломы</h2>
+    <span class="sh-tag">Свиток восьмой<b>卷八</b></span>
   </header>
-  <div class="hrule rv"><i></i></div>
+  <div class="srule rv"><i></i></div>
 
-  <p class="lead rv d1">(заглушка76)</p>
+  <p class="lead rv d1">(заглушка131)</p>
 
   <div class="cracks rv d2">
-    <article class="cr">
-      <svg class="fx" viewBox="0 0 74 74"><path d="M74 0 L46 28 L54 36 L26 64"/><path class="b" d="M74 18 L58 34"/></svg>
+    <article class="cr"><svg class="fx" viewBox="0 0 80 80"><path d="M80 0 L50 30 L58 38 L28 68"/></svg>
       <span class="gl">裂</span><span class="n">Излом 01</span>
-      <h4>(заглушка77)</h4><p>(заглушка78)</p><div class="seam"></div>
-    </article>
-    <article class="cr">
-      <svg class="fx" viewBox="0 0 74 74"><path d="M74 0 L46 28 L54 36 L26 64"/><path class="b" d="M74 18 L58 34"/></svg>
+      <h4>(заглушка132)</h4><p>(заглушка133)</p><div class="seam"></div></article>
+    <article class="cr"><svg class="fx" viewBox="0 0 80 80"><path d="M80 6 L54 26 L64 40 L34 70"/></svg>
       <span class="gl">痕</span><span class="n">Излом 02</span>
-      <h4>(заглушка79)</h4><p>(заглушка80)</p><div class="seam"></div>
-    </article>
-    <article class="cr">
-      <svg class="fx" viewBox="0 0 74 74"><path d="M74 0 L46 28 L54 36 L26 64"/><path class="b" d="M74 18 L58 34"/></svg>
+      <h4>(заглушка134)</h4><p>(заглушка135)</p><div class="seam"></div></article>
+    <article class="cr"><svg class="fx" viewBox="0 0 80 80"><path d="M80 0 L46 24 L60 42 L26 62"/></svg>
       <span class="gl">悔</span><span class="n">Излом 03</span>
-      <h4>(заглушка81)</h4><p>(заглушка82)</p><div class="seam"></div>
-    </article>
-    <article class="cr">
-      <svg class="fx" viewBox="0 0 74 74"><path d="M74 0 L46 28 L54 36 L26 64"/><path class="b" d="M74 18 L58 34"/></svg>
+      <h4>(заглушка136)</h4><p>(заглушка137)</p><div class="seam"></div></article>
+    <article class="cr"><svg class="fx" viewBox="0 0 80 80"><path d="M80 10 L52 32 L62 44 L30 72"/></svg>
       <span class="gl">寂</span><span class="n">Излом 04</span>
-      <h4>(заглушка83)</h4><p>(заглушка84)</p><div class="seam"></div>
-    </article>
+      <h4>(заглушка138)</h4><p>(заглушка139)</p><div class="seam"></div></article>
+  </div>
+
+  <div class="gauge-wrap rv d3">
+    <div class="gauge-top"><span>(заглушка140)</span><b>(заглушка141)</b></div>
+    <div class="gauge" id="gauge"></div>
+    <div class="gauge-bot"><span>(заглушка142)</span><span>(заглушка143)</span></div>
   </div>
 </section>
 
-<!-- ============ 06 ============ -->
-<section id="s6">
+<!-- ══════════ 09 · ХРОНИКА ══════════ -->
+<section id="s9">
+  <span class="echo" data-echo>史</span>
   <header class="sh rv">
-    <span class="sh-no">06</span>
-    <span class="sh-gl">史</span>
-    <h2 class="sh-t">Хроника</h2>
-    <span class="sh-tag">Свиток шестой<b>卷六</b></span>
+    <span class="sh-no">09</span><span class="sh-gl">史</span>
+    <h2 class="sh-t scr" data-txt="Хроника">Хроника</h2>
+    <span class="sh-tag">Свиток девятый<b>卷九</b></span>
   </header>
-  <div class="hrule rv"><i></i></div>
+  <div class="srule rv"><i></i></div>
 
-  <p class="lead rv d1">(заглушка85)</p>
+  <p class="lead rv d1">(заглушка144)</p>
 
-  <div class="chron">
-    <article class="ch rv"><span class="ch-tag">(заглушка86)<em>初</em></span><h4>(заглушка87)</h4><p>(заглушка88)</p></article>
-    <article class="ch rv"><span class="ch-tag">(заглушка89)<em>轉</em></span><h4>(заглушка90)</h4><p>(заглушка91)</p></article>
-    <article class="ch rv"><span class="ch-tag">(заглушка92)<em>盛</em></span><h4>(заглушка93)</h4><p>(заглушка94)</p></article>
-    <article class="ch rv"><span class="ch-tag">(заглушка95)<em>破</em></span><h4>(заглушка96)</h4><p>(заглушка97)</p></article>
-    <article class="ch rv"><span class="ch-tag">(заглушка98)<em>隱</em></span><h4>(заглушка99)</h4><p>(заглушка100)</p></article>
-    <article class="ch rv"><span class="ch-tag">(заглушка101)<em>今</em></span><h4>(заглушка102)</h4><p>(заглушка103)</p></article>
+  <div class="chron" id="chron">
+    <div class="spine"><i id="spineI"></i></div>
+    <article class="ch rv"><span class="dot"></span><span class="arm2"></span>
+      <span class="ch-tag">(заглушка145)<em>初</em></span><h4>(заглушка146)</h4><p>(заглушка147)</p></article>
+    <article class="ch rv"><span class="dot"></span><span class="arm2"></span>
+      <span class="ch-tag">(заглушка148)<em>命</em></span><h4>(заглушка149)</h4><p>(заглушка150)</p></article>
+    <article class="ch rv"><span class="dot"></span><span class="arm2"></span>
+      <span class="ch-tag">(заглушка151)<em>渡</em></span><h4>(заглушка152)</h4><p>(заглушка153)</p></article>
+    <article class="ch rv"><span class="dot"></span><span class="arm2"></span>
+      <span class="ch-tag">(заглушка154)<em>盛</em></span><h4>(заглушка155)</h4><p>(заглушка156)</p></article>
+    <article class="ch rv"><span class="dot"></span><span class="arm2"></span>
+      <span class="ch-tag">(заглушка157)<em>裂</em></span><h4>(заглушка158)</h4><p>(заглушка159)</p></article>
+    <article class="ch rv"><span class="dot"></span><span class="arm2"></span>
+      <span class="ch-tag">(заглушка160)<em>靜</em></span><h4>(заглушка161)</h4><p>(заглушка162)</p></article>
+    <article class="ch rv"><span class="dot"></span><span class="arm2"></span>
+      <span class="ch-tag">(заглушка163)<em>今</em></span><h4>(заглушка164)</h4><p>(заглушка165)</p></article>
   </div>
+</section>
+
+<!-- ══════════ 10 · ЧТО ОСТАЛОСЬ ══════════ -->
+<section id="s10" class="last">
+  <div class="ring"></div><div class="ring2"></div>
+  <header class="sh rv" style="grid-template-columns:1fr;justify-items:center;text-align:center">
+    <span class="sh-gl">遺</span>
+    <h2 class="sh-t scr" data-txt="Что осталось сказать">Что осталось сказать</h2>
+  </header>
+  <div class="srule rv" style="max-width:220px;margin:22px auto 54px"><i></i></div>
+
+  <h3 class="wl" id="wl">(заглушка166)</h3>
+  <p class="note rv d2">(заглушка167)<span class="caret"></span></p>
+  <div class="sign rv d3">(заглушка168)</div>
+
+  <div class="ticker rv d3"><div class="tk" id="tk"></div></div>
 </section>
 
 <footer class="rv">
-  <div class="f-seal">檔</div>
-  <p>(заглушка104)</p>
-  <div class="fc">(заглушка105) · 卷終</div>
+  <div class="fseal">遺</div>
+  <p>(заглушка169)</p>
+  <div class="fc">(заглушка170) · 卷終</div>
 </footer>
 
 </main>
 </div>
 
-<button id="top">上</button>
+<button id="top" data-mag><span>上</span></button>
 
 <script>
-/* ПРЕЛОАДЕР */
-window.addEventListener('load',()=>setTimeout(()=>{
-  document.getElementById('pre').classList.add('off');
-  document.body.classList.remove('lock');
-  document.querySelectorAll('.rv').forEach(el=>{
-    if(el.getBoundingClientRect().top<innerHeight*.95)el.classList.add('in');
-  });
-},1750));
-
-/* ЗАСЕЧКИ ЭМБЛЕМЫ */
 (function(){
-  const g=document.getElementById('ticks');if(!g)return;let s='';
-  for(let i=0;i<48;i++){
-    const a=i*7.5*Math.PI/180,long=i%4===0,r1=180,r2=long?162:172;
+'use strict';
+const $=(s,c)=>(c||document).querySelector(s), $$=(s,c)=>[...(c||document).querySelectorAll(s)];
+const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const touch=matchMedia('(hover:none)').matches;
+
+/* ══ 1 · ПРЕЛОАДЕР ═══════════════════════════════════════ */
+const preGl=$('#preGl'),preI=$('#preI'),preN=$('#preN'),preT=$('#preT');
+const GLY='檔案概貌復譯律刃心缺史遺卷金石不改';
+let pv=0, pgl=setInterval(()=>{preGl.textContent=GLY[(Math.random()*GLY.length)|0];},90);
+const pt=setInterval(()=>{
+  pv=Math.min(100,pv+Math.random()*7+2);
+  preI.style.width=pv+'%';
+  preN.textContent=String(Math.floor(pv)).padStart(3,'0');
+  if(pv>=100){
+    clearInterval(pt);clearInterval(pgl);
+    preGl.textContent='檔';preT.textContent='Открыт';
+    setTimeout(()=>{
+      $('#pre').classList.add('out');
+      document.body.classList.remove('lock');
+      $$('.rv').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight*.95)el.classList.add('in')});
+      boot();
+    },520);
+  }
+},110);
+
+/* ══ 2 · КУРСОР + МАГНИТ ═════════════════════════════════ */
+const cr=$('#cr'),cd=$('#cd');
+let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+if(!touch){
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;
+    cd.style.transform=`translate3d(${mx}px,${my}px,0)`;});
+  $$('a,button,.mk,.acci,.arm,.tri .cell,.lr,.rep,.cr,.nt').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+  });
+  /* магнитные */
+  $$('[data-mag]').forEach(el=>{
+    el.addEventListener('mousemove',e=>{
+      const r=el.getBoundingClientRect();
+      const dx=(e.clientX-(r.left+r.width/2))/r.width;
+      const dy=(e.clientY-(r.top+r.height/2))/r.height;
+      el.style.transform=`translate(${dx*9}px,${dy*7}px)`;
+    });
+    el.addEventListener('mouseleave',()=>{el.style.transform='';});
+  });
+}
+
+/* ══ 3 · ФОН: ПОВТОРЯЮЩИЕСЯ КОЛЬЦА ══════════════════════ */
+const cv=$('#bgc'),cx=cv.getContext('2d');
+let W,H,DPR,rings=[],dust=[];
+function resize(){
+  DPR=Math.min(2,devicePixelRatio||1);
+  W=cv.width=innerWidth*DPR;H=cv.height=innerHeight*DPR;
+  cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';
+}
+resize();addEventListener('resize',()=>{resize();measure();});
+function initField(){
+  rings=[];const N=9;
+  for(let i=0;i<N;i++)rings.push({p:i/N,rot:i*0.34});
+  dust=[];const D=touch?24:52;
+  for(let i=0;i<D;i++)dust.push({
+    x:Math.random(),y:Math.random(),
+    s:(Math.random()*1.5+.4),
+    v:(Math.random()*.00013+.00004),
+    a:Math.random()*.5+.12,ph:Math.random()*6.28});
+}
+initField();
+function octPath(cxp,cyp,r,rot){
+  cx.beginPath();
+  for(let i=0;i<8;i++){
+    const a=rot+i*Math.PI/4;
+    const x=cxp+Math.cos(a)*r,y=cyp+Math.sin(a)*r;
+    i?cx.lineTo(x,y):cx.moveTo(x,y);
+  }
+  cx.closePath();
+}
+let t0=0;
+function drawBg(ts){
+  const dt=Math.min(50,ts-t0);t0=ts;
+  cx.clearRect(0,0,W,H);
+  const ox=W*0.74, oy=H*0.30, max=Math.max(W,H)*0.95;
+  cx.lineWidth=1*DPR;
+  rings.forEach(r=>{
+    r.p+=dt*0.000035; if(r.p>1)r.p-=1;
+    r.rot+=dt*0.000018;
+    const rad=r.p*max;
+    const fade=Math.sin(r.p*Math.PI);
+    cx.strokeStyle='rgba(168,130,60,'+(fade*0.10).toFixed(3)+')';
+    octPath(ox,oy,rad,r.rot);cx.stroke();
+    cx.strokeStyle='rgba(168,130,60,'+(fade*0.045).toFixed(3)+')';
+    octPath(ox,oy,rad*0.62,-r.rot*1.3);cx.stroke();
+  });
+  /* прах */
+  dust.forEach(d=>{
+    d.y-=d.v*dt*14; if(d.y<-0.02){d.y=1.02;d.x=Math.random();}
+    d.ph+=dt*0.0012;
+    const x=(d.x+Math.sin(d.ph)*0.008)*W, y=d.y*H;
+    const a=d.a*(0.55+0.45*Math.sin(d.ph*1.6));
+    cx.fillStyle='rgba(214,178,110,'+a.toFixed(3)+')';
+    cx.fillRect(x,y,d.s*DPR,d.s*DPR);
+  });
+  requestAnimationFrame(drawBg);
+}
+if(!reduce)requestAnimationFrame(drawBg);
+
+/* ══ 4 · ЗАСЕЧКИ ЭМБЛЕМЫ ════════════════════════════════ */
+(function(){
+  const g=$('#ticks');if(!g)return;let s='';
+  for(let i=0;i<72;i++){
+    const a=i*5*Math.PI/180, big=i%6===0, med=i%3===0;
+    const r1=194, r2=big?168:(med?180:187);
     s+=`<line x1="${(200+Math.cos(a)*r1).toFixed(1)}" y1="${(200+Math.sin(a)*r1).toFixed(1)}"
-         x2="${(200+Math.cos(a)*r2).toFixed(1)}" y2="${(200+Math.sin(a)*r2).toFixed(1)}"
-         stroke="${long?'rgba(201,164,94,.7)':'rgba(166,124,61,.28)'}" stroke-width="${long?1.6:1}"/>`;
+      x2="${(200+Math.cos(a)*r2).toFixed(1)}" y2="${(200+Math.sin(a)*r2).toFixed(1)}"
+      stroke="${big?'rgba(208,167,95,.72)':'rgba(168,130,60,.24)'}" stroke-width="${big?1.6:1}"/>`;
   }
   g.innerHTML=s;
 })();
 
-/* REVEAL */
-const io=new IntersectionObserver(es=>es.forEach(e=>{
-  if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
-}),{threshold:.1,rootMargin:'0px 0px -60px 0px'});
-document.querySelectorAll('.rv').forEach(el=>io.observe(el));
-
-/* СКРОЛЛСПАЙ + ПРОГРЕСС */
-const ids=['s1','s2','s3','s4','s5','s6'],
-      secs=ids.map(i=>document.getElementById(i)),
-      links=[...document.querySelectorAll('.rnav a,.mnav a')],
-      prg=document.getElementById('prg'),pct=document.getElementById('pct'),
-      topBtn=document.getElementById('top'),
-      vol=['卷一','卷二','卷三','卷四','卷五','卷六'];
-function onScroll(){
-  const y=scrollY+innerHeight*.34;let cur=0;
-  secs.forEach((s,i)=>{if(s&&s.offsetTop<=y)cur=i;});
-  links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+ids[cur]));
-  const h=document.documentElement.scrollHeight-innerHeight,p=h>0?scrollY/h:0;
-  prg.style.height=(p*100)+'%';
-  pct.textContent=vol[cur];
-  topBtn.classList.toggle('on',scrollY>innerHeight*.9);
+/* ══ 5 · SCRAMBLE ЗАГОЛОВКОВ ════════════════════════════ */
+const SCH='契約譯復缺史刃心貌概遺律序卷檔金石不改邊界translate';
+function scramble(el){
+  const fin=el.dataset.txt||el.textContent;
+  if(el.dataset.done)return;el.dataset.done='1';
+  const L=fin.length;let f=0;
+  const iv=setInterval(()=>{
+    f+=0.55;
+    let out='';
+    for(let i=0;i<L;i++){
+      if(i<f)out+=fin[i];
+      else if(fin[i]===' ')out+=' ';
+      else out+=SCH[(Math.random()*SCH.length)|0];
+    }
+    el.textContent=out;
+    if(f>=L){clearInterval(iv);el.textContent=fin;}
+  },42);
 }
-addEventListener('scroll',onScroll,{passive:true});onScroll();
-topBtn.onclick=()=>scrollTo({top:0,behavior:'smooth'});
 
-/* ВКЛАДКИ */
-document.querySelectorAll('.nt').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('.nt').forEach(x=>x.classList.remove('on'));
-  document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');document.getElementById(b.dataset.p).classList.add('on');
+/* ══ 6 · СПЛИТ ФИНАЛЬНОЙ СТРОКИ ═════════════════════════ */
+(function(){
+  const wl=$('#wl');if(!wl)return;
+  const txt=wl.textContent.trim();wl.textContent='';
+  [...txt].forEach((ch,i)=>{
+    const s=document.createElement('span');
+    s.textContent=ch===' '?'\u00A0':ch;
+    s.style.transitionDelay=(i*0.028)+'s';
+    wl.appendChild(s);
+  });
+})();
+
+/* ══ 7 · ТИКЕР ══════════════════════════════════════════ */
+(function(){
+  const tk=$('#tk');if(!tk)return;
+  const items=['金石不改','往事如塵','言不由己','三渡不返','其言無主','行禮如儀','空名在上','夜長無盡'];
+  const row=items.concat(items).map(t=>`<span>${t}</span>`).join('');
+  tk.innerHTML=row+row;
+})();
+
+/* ══ 8 · ШКАЛА ══════════════════════════════════════════ */
+(function(){
+  const g=$('#gauge');if(!g)return;
+  const N=54, full=44, hi=[7,15,23,31,39];
+  let h='';
+  for(let i=0;i<N;i++){
+    let c=i<full?'f':'e';
+    if(hi.includes(i))c='f hi';
+    h+=`<span class="${c}" style="transition-delay:${(i*0.016).toFixed(3)}s"></span>`;
+  }
+  g.innerHTML=h;
+})();
+
+/* ══ 9 · ГАРМОШКА ═══════════════════════════════════════ */
+$$('#acc .acci').forEach(it=>{
+  const act=()=>{$$('#acc .acci').forEach(x=>x.classList.remove('on'));it.classList.add('on');};
+  it.addEventListener('click',act);
+  if(!touch)it.addEventListener('mouseenter',act);
+});
+
+/* ══ 10 · КЛИНКИ ════════════════════════════════════════ */
+(function(){
+  const arms=$$('.arm'),figs=$$('#armView .fig'),cap=$('#armCap');
+  const caps=$$('.arm .ao').map(e=>e.textContent);
+  arms.forEach(a=>{
+    const go=()=>{
+      const i=+a.dataset.a;
+      arms.forEach(x=>x.classList.remove('on'));a.classList.add('on');
+      figs.forEach(f=>f.classList.toggle('on',+f.dataset.f===i));
+      if(cap)cap.textContent=caps[i]||'';
+    };
+    a.addEventListener('mouseenter',go);
+    a.addEventListener('click',go);
+  });
+})();
+
+/* ══ 11 · ВКЛАДКИ НАТУРЫ ════════════════════════════════ */
+(function(){
+  const tabs=$$('.nt'),ind=$('#nInd');
+  function move(b){
+    if(!ind)return;
+    ind.style.height=b.offsetHeight+'px';
+    ind.style.transform=`translateY(${b.offsetTop}px)`;
+  }
+  tabs.forEach(b=>b.addEventListener('click',()=>{
+    tabs.forEach(x=>x.classList.remove('on'));
+    $$('.pane').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const p=$('#'+b.dataset.p);
+    p.classList.add('on');
+    /* перезапуск stagger */
+    $$('.tr',p).forEach(tr=>{tr.style.animation='none';tr.offsetHeight;tr.style.animation='';});
+    move(b);
+  }));
+  setTimeout(()=>{const on=$('.nt.on');if(on)move(on);},400);
+  addEventListener('resize',()=>{const on=$('.nt.on');if(on)move(on);});
+})();
+
+/* ══ 12 · REVEAL ════════════════════════════════════════ */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const el=e.target;
+  el.classList.add('in');
+  if(el.classList.contains('sh'))$$('.scr',el).forEach(scramble);
+  if(el.classList.contains('gauge-wrap'))$('#gauge').classList.add('go');
+  if(el.id==='wl')el.classList.add('in');
+  io.unobserve(el);
+}),{threshold:.12,rootMargin:'0px 0px -60px 0px'});
+$$('.rv').forEach(el=>io.observe(el));
+io.observe($('#wl'));
+
+/* ══ 13 · ЕДИНЫЙ SCROLL-ЦИКЛ ════════════════════════════ */
+const ids=['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10'];
+const VOL=['卷一','卷二','卷三','卷四','卷五','卷六','卷七','卷八','卷九','卷十'];
+let secs=[],links=[],hz=null,hzTrack=null,hzTop=0,hzH=0,hzDist=0,chron=null,chTop=0,chH=0;
+const prI=$('#prI'),prU=$('#prU'),prVol=$('#prVol'),topBtn=$('#top'),
+      hzI=$('#hzI'),spineI=$('#spineI'),emb=$('#emb');
+function measure(){
+  secs=ids.map(i=>document.getElementById(i));
+  hz=$('.hz');hzTrack=$('#hzTrack');
+  if(hz&&hzTrack){
+    hzTop=hz.offsetTop;hzH=hz.offsetHeight;
+    hzDist=Math.max(0,hzTrack.scrollWidth-innerWidth+40);
+  }
+  chron=$('#chron');
+  if(chron){const r=chron.getBoundingClientRect();chTop=r.top+scrollY;chH=chron.offsetHeight;}
+}
+function boot(){
+  links=$$('.rnav a,.mnav a');
+  measure();setTimeout(measure,600);loop();
+}
+let tEmbX=0,tEmbY=0,cEmbX=0,cEmbY=0,sY=0;
+if(!touch)addEventListener('mousemove',e=>{
+  tEmbX=(e.clientX/innerWidth-.5)*22;
+  tEmbY=(e.clientY/innerHeight-.5)*16;
+});
+function loop(){
+  sY=scrollY;
+  /* курсор-кольцо */
+  if(!touch){rx=lerp(rx,mx,.16);ry=lerp(ry,my,.16);
+    cr.style.transform=cr.style.transform.includes('rotate')?
+      `translate3d(${rx}px,${ry}px,0) rotate(45deg)`:`translate3d(${rx}px,${ry}px,0)`;}
+  /* прогресс */
+  const doc=document.documentElement.scrollHeight-innerHeight;
+  const p=doc>0?cl(sY/doc,0,1):0;
+  if(prI){prI.style.height=(p*100)+'%';prU.style.top=(p*100)+'%';}
+  /* активный раздел */
+  const probe=sY+innerHeight*.34;let cur=0;
+  secs.forEach((s,i)=>{if(s&&s.offsetTop<=probe)cur=i;});
+  links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+ids[cur]));
+  if(prVol)prVol.textContent=VOL[cur];
+  topBtn.classList.toggle('on',sY>innerHeight*.85);
+  /* горизонталь */
+  if(hz&&hzTrack&&innerWidth>900){
+    const total=hzH-innerHeight;
+    const hp=cl((sY-hzTop)/(total||1),0,1);
+    hzTrack.style.transform=`translate3d(${(-hzDist*hp).toFixed(1)}px,0,0)`;
+    if(hzI)hzI.style.width=(hp*100)+'%';
+  }
+  /* хроника: заливка хребта */
+  if(chron&&spineI){
+    const cp=cl((sY+innerHeight*.68-chTop)/(chH||1),0,1);
+    spineI.style.height=(cp*100)+'%';
+  }
+  /* эмблема */
+  if(emb){
+    cEmbX=lerp(cEmbX,tEmbX,.055);cEmbY=lerp(cEmbY,tEmbY,.055);
+    const k=cl(sY/innerHeight,0,1);
+    emb.style.transform=`translate3d(${cEmbX}px,${cEmbY-sY*.06}px,0) scale(${1-k*.1}) rotate(${sY*.012}deg)`;
+    emb.style.opacity=(1-k*.75).toFixed(3);
+  }
+  /* эхо-иероглифы */
+  $$('[data-echo]').forEach(el=>{
+    const r=el.getBoundingClientRect();
+    if(r.bottom<-200||r.top>innerHeight+200)return;
+    const d=(r.top-innerHeight/2)/innerHeight;
+    el.style.transform=`translate3d(0,${(d*70).toFixed(1)}px,0)`;
+  });
+  requestAnimationFrame(loop);
+}
+topBtn.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+
+/* якорные ссылки с учётом sticky-меню */
+$$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+  const t=document.getElementById(a.getAttribute('href').slice(1));
+  if(!t)return;e.preventDefault();
+  scrollTo({top:t.offsetTop-10,behavior:'smooth'});
 }));
+})();
 </script>
 </body>
 </html>
