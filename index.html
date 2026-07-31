@@ -2,558 +2,1126 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Досье · Частное дело</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Досье • заглушка1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Marcellus&display=swap" rel="stylesheet">
 <style>
-/* ============ TOKENS ============ */
+/* ============================================================
+   ПАЛИТРА И БАЗА
+   ============================================================ */
 :root{
-  --ink-black:#070d16;
-  --ink-deep:#0f1e3f;
-  --ink-mid:#213a56;
-  --ink-mist:#3a5476;
-  --gold-pale:#cdaa80;
+  --ink:#070d1c;
+  --deep:#0f1e3f;
+  --deep2:#132a4b;
+  --blue:#213a56;
+  --blue-soft:#2c4a68;
+  --gold:#cdaa80;
   --gold-dark:#997953;
-  --gold-bright:#e3c79a;
-  --parchment:#e9dfc7;
-  --parchment-dim:#a99f8c;
-  --crack:rgba(5,9,16,.55);
-  --line:rgba(205,170,128,.22);
-  --shadow-deep: 0 30px 70px rgba(0,0,0,.55);
+  --gold-light:#e9d5b4;
+  --gold-dead:#6d5943;
+  --rust:#8a5a4a;
+  --paper:#e6dccb;
+
+  --shadow-deep:0 24px 60px -20px rgba(0,0,0,.85);
+  --glow:0 0 24px rgba(205,170,128,.28);
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --nav-w:230px;
 }
-*{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-  margin:0;
-  background:var(--ink-black);
-  color:var(--parchment);
-  font-family:'EB Garamond', serif;
+  background:var(--ink);
+  color:#d8cfc0;
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;
+  line-height:1.75;
   overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
+  cursor:none;
 }
-::selection{background:var(--gold-dark); color:var(--ink-black);}
+@media (hover:none){body{cursor:auto}}
+::selection{background:var(--gold-dark);color:#0b1426}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:none}
 
-h1,h2,h3{font-family:'Cormorant Garamond', serif; font-weight:600; margin:0;}
-.eyebrow{
-  font-family:'Cinzel', serif;
-  font-size:.68rem;
-  letter-spacing:.34em;
-  text-transform:uppercase;
-  color:var(--gold-pale);
-  opacity:.82;
+/* скроллбар */
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:#080f20}
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,var(--gold-dark),#4a3a2a);
+  border:2px solid #080f20;border-radius:20px;
 }
+::-webkit-scrollbar-thumb:hover{background:var(--gold)}
 
-/* ============ AMBIENT TEXTURE ============ */
-.grain{
-  position:fixed; inset:0; pointer-events:none; z-index:500; opacity:.05; mix-blend-mode:overlay;
-  background-image:radial-gradient(circle at 20% 30%, #fff 0, transparent 1px),
-                    radial-gradient(circle at 70% 80%, #fff 0, transparent 1px),
-                    radial-gradient(circle at 40% 60%, #fff 0, transparent 1px);
-  background-size:3px 3px, 4px 4px, 5px 5px;
+/* ============================================================
+   ФОН: слои
+   ============================================================ */
+.bg{position:fixed;inset:0;z-index:-5;overflow:hidden;background:
+  radial-gradient(120% 80% at 50% -10%,#1b3457 0%,var(--deep) 38%,#0a1densité 0%),
+  linear-gradient(180deg,#132747 0%,var(--deep) 40%,#070d1c 100%);}
+.bg::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 120%,rgba(205,170,128,.10),transparent 60%);
 }
-.vignette{
-  position:fixed; inset:0; pointer-events:none; z-index:499;
-  background:radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(0,0,0,.55) 100%);
+.bg-noise{
+  position:fixed;inset:0;z-index:-4;pointer-events:none;opacity:.32;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
 }
-
-/* ============ SIDE NAV ============ */
-.wayfinder{
-  position:fixed; right:26px; top:50%; transform:translateY(-50%);
-  z-index:600; display:flex; flex-direction:column; gap:18px;
-}
-.wayfinder button{
-  all:unset; cursor:pointer; position:relative;
-  width:9px; height:9px; border-radius:50%;
-  border:1px solid var(--gold-pale); opacity:.45;
-  transition:opacity .4s, transform .4s, background .4s;
-}
-.wayfinder button.active{ opacity:1; background:var(--gold-pale); transform:scale(1.3); }
-.wayfinder button::after{
-  content:attr(data-label);
-  position:absolute; right:22px; top:50%; transform:translateY(-50%);
-  font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.2em;
-  white-space:nowrap; color:var(--gold-pale);
-  opacity:0; transition:opacity .3s; pointer-events:none;
-  text-transform:uppercase;
-}
-.wayfinder button:hover::after{ opacity:.85; }
-@media (max-width:760px){ .wayfinder{ display:none; } }
-
-/* ============ REVEAL ============ */
-.reveal{ opacity:0; transform:translateY(28px); transition:opacity 1.1s ease, transform 1.1s ease; }
-.reveal.in-view{ opacity:1; transform:translateY(0); }
-
-/* ============ PAISLEY DIVIDER ============ */
-.divider{
-  position:relative; height:34px; margin:0 auto; max-width:520px;
-  opacity:.75;
-  -webkit-mask-image:linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
-          mask-image:linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
-}
-.divider svg{ width:100%; height:100%; }
-
-/* ============ LAYOUT SHELL ============ */
-section{
-  position:relative;
-  padding:min(14vw,140px) 8vw 120px;
-  border-bottom:1px solid var(--line);
-  background:linear-gradient(180deg, transparent 0%, rgba(0,0,0,.15) 100%);
-}
-.section-inner{ max-width:900px; margin:0 auto; position:relative; z-index:2; }
-.sec-head{ margin-bottom:56px; text-align:left; }
-.sec-head h2{ font-size:clamp(1.8rem,3.4vw,2.6rem); font-style:italic; color:var(--parchment); margin-top:10px;}
-.sec-head .rule{ width:64px; height:2px; margin-top:16px; background:linear-gradient(90deg,var(--gold-dark),transparent); }
-
-/* =====================================================
-   HERO — cover page + index, not a centered template hero
-   ===================================================== */
-.hero{
-  min-height:100svh; display:flex; align-items:center;
-  padding:12vh 6vw; position:relative; overflow:hidden;
-  background:linear-gradient(160deg, var(--ink-deep) 0%, var(--ink-black) 68%);
-  border-bottom:1px solid var(--line);
-}
-.hero::before{
-  content:''; position:absolute; inset:0; pointer-events:none;
+.bg-grid{
+  position:fixed;inset:-40px;z-index:-4;pointer-events:none;opacity:.10;
   background-image:
-    repeating-linear-gradient(45deg, rgba(205,170,128,.03) 0 2px, transparent 2px 34px),
-    repeating-linear-gradient(-45deg, rgba(205,170,128,.03) 0 2px, transparent 2px 34px);
+    repeating-linear-gradient(45deg,transparent 0 28px,rgba(205,170,128,.22) 28px 29px),
+    repeating-linear-gradient(-45deg,transparent 0 28px,rgba(205,170,128,.14) 28px 29px);
+  mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 78%);
 }
-#motesCanvas{ position:absolute; inset:0; width:100%; height:100%; z-index:1; opacity:.65; pointer-events:none; }
+.bg-mandala{
+  position:fixed;top:50%;left:50%;width:min(150vh,150vw);aspect-ratio:1;
+  translate:-50% -50%;z-index:-3;opacity:.14;pointer-events:none;
+  animation:spin 220s linear infinite;
+}
+.bg-mandala.two{width:min(90vh,90vw);opacity:.10;animation:spin 140s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bg-vig{position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 42%,rgba(3,7,16,.75) 88%,#02050c 100%)}
 
-.cover-grid{
-  position:relative; z-index:2;
-  display:grid; grid-template-columns:260px 1fr; gap:min(9vw,90px);
-  max-width:1120px; margin:0 auto; align-items:center;
-  animation:coverIn 1.3s cubic-bezier(.2,.8,.25,1) both;
-}
-@keyframes coverIn{ from{ opacity:0; transform:translateY(26px);} to{ opacity:1; transform:translateY(0);} }
-
-/* --- photograph relic --- */
-.cover-photo{ position:relative; }
-.case-vert{
-  position:absolute; left:-30px; top:50%; transform-origin:left center;
-  transform:translateY(-50%) rotate(-90deg);
-  font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.4em;
-  color:var(--parchment-dim); white-space:nowrap;
-}
-.photo-frame{
-  position:relative; width:100%; aspect-ratio:3/4; padding:12px;
-  border:1px solid var(--gold-dark);
-  background:linear-gradient(165deg, rgba(33,58,86,.55), rgba(7,13,22,.95));
-  box-shadow:var(--shadow-deep);
-}
-.photo-frame::before{
-  content:''; position:absolute; inset:7px; border:1px solid rgba(205,170,128,.3);
-  pointer-events:none;
-}
-.photo-inner{
-  position:relative; width:100%; height:100%; overflow:hidden;
-  display:flex; align-items:center; justify-content:center;
-  background:radial-gradient(ellipse at 50% 30%, rgba(58,84,118,.5), rgba(7,13,22,.9) 75%);
-}
-.photo-inner svg{ width:52%; opacity:.42; }
-/* torn / charred missing corner, in place of a decorative emblem */
-.burn-corner{
-  position:absolute; top:0; right:0; width:44%; height:44%;
-  clip-path:polygon(100% 0, 100% 100%, 6% 0);
-  background:linear-gradient(135deg, transparent 40%, rgba(20,11,4,.55) 55%, rgba(20,11,4,.92) 100%);
-}
-.burn-corner::after{
-  content:''; position:absolute; inset:0;
-  clip-path:polygon(100% 0, 100% 78%, 26% 0);
-  background:var(--ink-black);
-}
-.photo-cap{
-  margin-top:14px; text-align:center; font-family:'Cinzel',serif; font-size:.58rem;
-  letter-spacing:.24em; text-transform:uppercase; color:var(--parchment-dim);
-}
-.pin-seal{ position:absolute; top:-15px; left:16px; width:34px; height:34px; transform:rotate(-8deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,.5)); }
-
-/* --- text / index side --- */
-.cover-text{ min-width:0; }
-.cover-title{
-  font-size:clamp(2.6rem, 6.2vw, 4.6rem); font-style:italic; font-weight:500;
-  color:var(--parchment); line-height:.98; margin:14px 0 8px; letter-spacing:.005em;
-}
-.cover-sub{
-  font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.24em; text-transform:uppercase;
-  color:var(--gold-pale); margin:0 0 44px; opacity:.85;
-}
-.toc{ list-style:none; margin:0; padding:0; }
-.toc li{ border-bottom:1px solid var(--line); }
-.toc li:first-child{ border-top:1px solid var(--line); }
-.toc button{
-  all:unset; cursor:pointer; display:flex; align-items:baseline; gap:14px;
-  width:100%; padding:15px 2px; box-sizing:border-box;
-}
-.toc-label{
-  font-style:italic; font-size:clamp(1.05rem,2vw,1.4rem); color:var(--parchment);
-  white-space:nowrap; transition:color .35s, transform .35s; display:inline-block;
-}
-.leader{ flex:1; border-bottom:1px dotted var(--parchment-dim); opacity:.35; margin-bottom:6px; transition:opacity .35s;}
-.toc-mark{
-  font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.06em; color:var(--gold-dark);
-  transition:color .35s;
-}
-.toc li:hover .toc-label{ color:var(--gold-bright); transform:translateX(4px); }
-.toc li:hover .leader{ opacity:.7; }
-.toc li:hover .toc-mark{ color:var(--gold-bright); }
-
-@media (max-width:760px){
-  .cover-grid{ grid-template-columns:1fr; }
-  .cover-photo{ max-width:220px; margin:0 auto 12px; }
-  .case-vert{ display:none; }
+/* пыль/искры */
+.dust{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.mote{position:absolute;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 8px rgba(205,170,128,.85);opacity:0;animation:rise linear infinite}
+@keyframes rise{
+  0%{transform:translateY(0) translateX(0) scale(.6);opacity:0}
+  12%{opacity:.85}
+  85%{opacity:.5}
+  100%{transform:translateY(-115vh) translateX(var(--drift)) scale(1.15);opacity:0}
 }
 
-.scroll-cue{
-  position:absolute; bottom:30px; left:50%; transform:translateX(-50%); z-index:2;
-  width:1px; height:48px; background:linear-gradient(var(--gold-pale), transparent); overflow:hidden;
-}
-.scroll-cue::after{
-  content:''; position:absolute; left:-1.5px; top:-20px; width:4px; height:20px; border-radius:2px;
-  background:var(--gold-bright); animation:drip 2.6s ease-in-out infinite;
-}
-@keyframes drip{ 0%{ top:-20px; opacity:0;} 20%{opacity:1;} 100%{ top:52px; opacity:0;} }
+/* ============================================================
+   КУРСОР
+   ============================================================ */
+.cursor,.cursor-dot{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:screen}
+.cursor{width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid var(--gold);
+  transform:rotate(45deg);transition:width .3s,height .3s,margin .3s,opacity .3s,background .3s}
+.cursor::before{content:"";position:absolute;inset:5px;border:1px solid rgba(205,170,128,.4)}
+.cursor-dot{width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:var(--gold-light);
+  box-shadow:0 0 10px var(--gold)}
+body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:rgba(205,170,128,.07)}
+@media (hover:none){.cursor,.cursor-dot{display:none}}
 
-/* ============ VITALS LEDGER (Имя / Возраст / Раса) ============ */
-.ledger{ border-top:1px solid var(--line); }
-.ledger-row{
-  display:grid; grid-template-columns:200px 1fr; gap:24px; padding:24px 0;
-  border-bottom:1px solid var(--line); position:relative;
-}
-.ledger-row:hover{ background:linear-gradient(90deg, rgba(205,170,128,.05), transparent); }
-.ledger-row .k{
-  font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
-  color:var(--gold-pale); padding-top:2px;
-}
-.ledger-row .v{ font-size:1.28rem; font-style:italic; color:var(--parchment); opacity:.92; }
-@media (max-width:620px){ .ledger-row{ grid-template-columns:1fr; gap:6px; } }
+/* полоса прогресса */
+.progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:900;
+  background:linear-gradient(90deg,transparent,var(--gold-dark),var(--gold-light),var(--gold-dark));
+  box-shadow:0 0 12px rgba(205,170,128,.6)}
 
-.name-row .v{ display:flex; align-items:center; flex-wrap:wrap; gap:16px; }
-.strike{ position:relative; opacity:.55; }
-.strike::after{
-  content:''; position:absolute; left:-4%; right:-4%; top:54%; height:1.5px;
-  background:var(--gold-dark); transform:rotate(-1.6deg);
+/* ============================================================
+   ПРЕЛОАДЕР
+   ============================================================ */
+#loader{position:fixed;inset:0;z-index:9998;display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 50%,#12233f,#050a16 70%);
+  transition:opacity .9s var(--ease),visibility .9s}
+#loader.done{opacity:0;visibility:hidden}
+.load-wrap{display:grid;place-items:center;gap:26px;text-align:center}
+.load-mandala{width:190px;height:190px;animation:spin 18s linear infinite;filter:drop-shadow(0 0 18px rgba(205,170,128,.35))}
+.load-title{font-family:'Cinzel',serif;letter-spacing:.55em;font-size:13px;color:var(--gold);
+  text-indent:.55em;animation:breathe 2.6s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.35}50%{opacity:1}}
+.load-bar{width:210px;height:1px;background:rgba(205,170,128,.2);position:relative;overflow:hidden}
+.load-bar span{position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  animation:sweep 1.5s ease-in-out infinite}
+@keyframes sweep{0%{left:-40%}100%{left:100%}}
+
+/* ============================================================
+   ОБЩЕЕ ОФОРМЛЕНИЕ
+   ============================================================ */
+.wrap{margin-left:var(--nav-w);padding:0 clamp(16px,4vw,70px) 120px;max-width:1240px}
+@media(max-width:980px){.wrap{margin-left:0;padding-top:70px}}
+
+.gold-text{
+  background:linear-gradient(100deg,#8a6b48 0%,var(--gold-light) 26%,#fff4dd 40%,var(--gold) 55%,#7d6244 80%,var(--gold-light) 100%);
+  background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shimmer 9s linear infinite;
 }
-.stamp{
-  font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase;
-  color:var(--gold-bright); border:1px solid var(--gold-dark); padding:5px 12px;
-  transform:rotate(-5deg); opacity:.8; display:inline-block;
+@keyframes shimmer{to{background-position:250% 0}}
+
+.sec{padding:96px 0 20px;position:relative}
+.sec-head{display:flex;align-items:center;gap:18px;margin-bottom:14px}
+.sec-num{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.35em;color:var(--gold-dark);
+  border:1px solid rgba(205,170,128,.3);padding:6px 10px 5px;transform:rotate(45deg);
+  display:grid;place-items:center;width:40px;height:40px;flex:none}
+.sec-num i{display:block;transform:rotate(-45deg);font-style:normal;text-indent:.35em}
+.sec-title{font-family:'Cinzel',serif;font-size:clamp(22px,3.4vw,34px);letter-spacing:.16em;text-transform:uppercase}
+.sec-sub{font-style:italic;color:#8fa3bd;letter-spacing:.06em;margin:-4px 0 30px 58px;font-size:16px}
+
+/* делитель-камень */
+.divider{display:flex;align-items:center;gap:14px;margin:54px 0;opacity:.9}
+.divider .ln{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--gold-dark),transparent)}
+.divider .gem{width:14px;height:14px;transform:rotate(45deg);border:1px solid var(--gold);
+  background:rgba(205,170,128,.12);animation:pulseGem 4s ease-in-out infinite;flex:none}
+.divider .gem.sm{width:7px;height:7px;animation-delay:.6s}
+@keyframes pulseGem{0%,100%{box-shadow:0 0 0 rgba(205,170,128,0)}50%{box-shadow:0 0 16px rgba(205,170,128,.55)}}
+
+/* торан — гирлянда */
+.toran{display:flex;justify-content:center;gap:20px;height:38px;margin-bottom:-10px;pointer-events:none}
+.toran i{width:2px;background:linear-gradient(180deg,rgba(205,170,128,.55),transparent);position:relative;
+  transform-origin:top center;animation:sway 5s ease-in-out infinite}
+.toran i::after{content:"";position:absolute;left:50%;bottom:0;translate:-50% 0;width:11px;height:16px;
+  background:linear-gradient(180deg,var(--gold),var(--gold-dark));
+  border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  clip-path:polygon(50% 100%,100% 45%,80% 0,20% 0,0 45%);opacity:.75}
+@keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+
+/* карточки */
+.card{
+  position:relative;background:
+    linear-gradient(155deg,rgba(33,58,86,.55),rgba(15,30,63,.75) 60%,rgba(8,15,32,.9));
+  border:1px solid rgba(205,170,128,.22);
+  padding:26px 28px;backdrop-filter:blur(2px);
+  box-shadow:inset 0 1px 0 rgba(205,170,128,.12),var(--shadow-deep);
+  transition:border-color .5s var(--ease),transform .5s var(--ease),box-shadow .5s var(--ease);
+}
+.card::before,.card::after{content:"";position:absolute;width:16px;height:16px;border:1px solid var(--gold);opacity:.55;transition:.5s}
+.card::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.card::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.card:hover{border-color:rgba(205,170,128,.5);transform:translateY(-4px);
+  box-shadow:inset 0 1px 0 rgba(205,170,128,.2),var(--shadow-deep),var(--glow)}
+.card:hover::before,.card:hover::after{width:30px;height:30px;opacity:1}
+
+/* сколотая карточка — «сломанная роскошь» */
+.chipped{clip-path:polygon(0 0,100% 0,100% calc(100% - 34px),calc(100% - 34px) 100%,0 100%)}
+.chipped-l{clip-path:polygon(26px 0,100% 0,100% 100%,0 100%,0 26px)}
+.shard{position:absolute;border:1px solid rgba(205,170,128,.45);background:rgba(205,170,128,.05);
+  pointer-events:none;animation:drift 9s ease-in-out infinite}
+@keyframes drift{0%,100%{transform:translate(0,0) rotate(45deg)}50%{transform:translate(5px,-7px) rotate(52deg)}}
+
+/* трещины поверх */
+.cracks{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:screen}
+.cracks path{stroke:rgba(205,170,128,.35);fill:none;stroke-width:.8;
+  stroke-dasharray:400;stroke-dashoffset:400;transition:stroke-dashoffset 2.4s var(--ease)}
+.reveal.in .cracks path{stroke-dashoffset:0}
+
+/* появление */
+.reveal{opacity:0;transform:translateY(38px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+.reveal.d4{transition-delay:.4s}.reveal.d5{transition-delay:.5s}
+
+/* ============================================================
+   НАВИГАЦИЯ
+   ============================================================ */
+.nav{position:fixed;top:0;left:0;width:var(--nav-w);height:100vh;z-index:500;
+  background:linear-gradient(180deg,rgba(9,17,34,.96),rgba(7,13,28,.99));
+  border-right:1px solid rgba(205,170,128,.18);
+  display:flex;flex-direction:column;padding:26px 0;overflow:hidden}
+.nav::after{content:"";position:absolute;top:0;right:0;width:1px;height:100%;
+  background:linear-gradient(180deg,transparent,var(--gold),transparent);opacity:.5;
+  animation:navline 7s ease-in-out infinite}
+@keyframes navline{0%,100%{transform:translateY(-40%)}50%{transform:translateY(40%)}}
+.nav-crest{text-align:center;padding:0 20px 18px;border-bottom:1px solid rgba(205,170,128,.14)}
+.nav-crest svg{width:64px;height:64px;margin:0 auto;animation:spin 44s linear infinite;opacity:.85}
+.nav-crest b{display:block;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.42em;
+  color:var(--gold);margin-top:10px;text-indent:.42em}
+.nav-crest small{display:block;font-size:11px;letter-spacing:.28em;color:#5d7characters}
+.nav-crest span{display:block;font-size:10px;letter-spacing:.3em;color:#5d7b9e;margin-top:4px;text-indent:.3em}
+.nav ul{list-style:none;padding:16px 0;overflow-y:auto;flex:1}
+.nav li a{display:flex;align-items:center;gap:12px;padding:9px 18px 9px 22px;
+  font-family:'Marcellus',serif;font-size:13px;letter-spacing:.17em;text-transform:uppercase;
+  color:#7f93ad;transition:.4s var(--ease);position:relative}
+.nav li a .dm{width:8px;height:8px;flex:none;transform:rotate(45deg);
+  border:1px solid rgba(205,170,128,.45);transition:.4s var(--ease)}
+.nav li a:hover{color:var(--gold-light);padding-left:30px;background:linear-gradient(90deg,rgba(205,170,128,.10),transparent)}
+.nav li a.act{color:var(--gold-light);background:linear-gradient(90deg,rgba(205,170,128,.16),transparent)}
+.nav li a.act .dm{background:var(--gold);box-shadow:0 0 12px var(--gold);border-color:var(--gold)}
+.nav li a.act::after{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold)}
+.nav-foot{padding:14px 22px 0;border-top:1px solid rgba(205,170,128,.14);
+  font-size:11px;letter-spacing:.2em;color:#4f6federal;color:#4f6b8c}
+.nav-foot em{color:var(--gold-dark);font-style:normal}
+
+.burger{position:fixed;top:14px;left:14px;z-index:600;width:46px;height:46px;display:none;
+  border:1px solid rgba(205,170,128,.4);background:rgba(9,17,34,.9)}
+.burger i{display:block;width:20px;height:1px;background:var(--gold);margin:4px auto;transition:.35s}
+.burger.on i:nth-child(1){transform:translateY(5px) rotate(45deg)}
+.burger.on i:nth-child(2){opacity:0}
+.burger.on i:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
+@media(max-width:980px){
+  .burger{display:block}
+  .nav{transform:translateX(-100%);transition:transform .55s var(--ease);width:270px}
+  .nav.open{transform:none}
 }
 
-/* ============ APPEARANCE / prose panel ============ */
-.prose-panel{
-  border-left:2px solid var(--gold-dark); padding:6px 0 6px 30px;
-  font-size:1.35rem; line-height:1.85; font-style:italic; color:var(--parchment); opacity:.92;
-}
-.prose-panel .drop{
-  float:left; font-family:'Cormorant Garamond',serif; font-size:4.4rem; line-height:.78;
-  color:var(--gold-pale); padding:6px 10px 0 0; font-style:normal;
-}
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{min-height:100vh;display:grid;place-items:center;text-align:center;position:relative;padding:110px 0 60px}
+.hero-mandala{position:absolute;top:46%;left:50%;translate:-50% -50%;width:min(74vh,88vw);aspect-ratio:1;
+  opacity:.22;animation:spin 90s linear infinite;pointer-events:none}
+.hero-inner{position:relative;z-index:2;max-width:820px}
+.hero-eyebrow{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.62em;color:var(--gold-dark);
+  text-indent:.62em;margin-bottom:22px}
+.hero h1{font-family:'Cinzel',serif;font-weight:600;line-height:1;letter-spacing:.1em;
+  font-size:clamp(38px,8.4vw,92px);text-transform:uppercase;position:relative}
+.hero h1 .brk{display:inline-block;animation:fall 7s ease-in-out infinite;transform-origin:bottom left;color:var(--gold-dead)}
+@keyframes fall{0%,100%{transform:rotate(9deg) translateY(6px)}50%{transform:rotate(13deg) translateY(10px)}}
+.hero-line{width:min(560px,86vw);height:1px;margin:26px auto;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);position:relative}
+.hero-line::after{content:"";position:absolute;left:50%;top:50%;translate:-50% -50%;width:10px;height:10px;
+  transform:rotate(45deg);background:var(--deep);border:1px solid var(--gold)}
+.hero-sub{font-size:clamp(15px,2.1vw,20px);font-style:italic;color:#a8bcd4;letter-spacing:.05em}
+.hero-tags{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:34px}
+.tag{font-family:'Marcellus',serif;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+  padding:7px 15px;border:1px solid rgba(205,170,128,.3);color:var(--gold);
+  background:rgba(205,170,128,.05);transition:.4s var(--ease)}
+.tag:hover{background:rgba(205,170,128,.16);letter-spacing:.3em;color:var(--gold-light)}
+.tag.dead{color:var(--gold-dead);border-color:rgba(205,170,128,.14);text-decoration:line-through;opacity:.7}
+.scroll-hint{position:absolute;bottom:28px;left:50%;translate:-50% 0;font-size:10px;letter-spacing:.4em;
+  color:var(--gold-dark);text-indent:.4em;display:grid;gap:8px;justify-items:center}
+.scroll-hint span{display:block;width:1px;height:44px;background:linear-gradient(180deg,var(--gold),transparent);
+  animation:drop 2.2s ease-in-out infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}
+  51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
-/* ============ TRAITS (character) ============ */
-.traits{ display:flex; flex-wrap:wrap; gap:14px; margin-top:8px; }
-.trait{
-  font-family:'Cinzel',serif; font-size:.78rem; letter-spacing:.08em;
-  padding:12px 22px; border:1px solid var(--gold-dark); border-radius:2px;
-  position:relative; color:var(--gold-pale); background:rgba(153,121,83,.06);
-  transition:transform .35s, box-shadow .35s, border-color .35s;
-}
-.trait::before{
-  content:''; position:absolute; left:-1px; top:20%; width:1px; height:60%;
-  background:var(--crack); transform:rotate(4deg);
-}
-.trait:nth-child(3n)::before{ display:none; }
-.trait:hover{ transform:translateY(-4px) rotate(-.6deg); border-color:var(--gold-bright); box-shadow:0 10px 26px rgba(0,0,0,.4); }
+/* ============================================================
+   ДОСЬЕ — сетка
+   ============================================================ */
+.grid{display:grid;gap:1px;background:rgba(205,170,128,.16);border:1px solid rgba(205,170,128,.22);
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.cell{background:linear-gradient(150deg,rgba(33,58,86,.5),rgba(10,20,40,.9));padding:20px 22px;
+  transition:.45s var(--ease);position:relative;overflow:hidden}
+.cell:hover{background:linear-gradient(150deg,rgba(44,74,104,.7),rgba(15,30,63,.95))}
+.cell::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold);transition:width .6s var(--ease)}
+.cell:hover::after{width:100%}
+.cell k{display:block;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--gold-dark);margin-bottom:6px}
+.cell v{display:block;font-size:19px;color:var(--paper);letter-spacing:.02em}
+.cell v.mut{color:#88a0bb;font-style:italic;font-size:17px}
 
-/* ============ BIOGRAPHY (torn frame + embers) ============ */
-.biography{
-  background:
-    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(153,121,83,.10), transparent 70%),
-    linear-gradient(180deg, var(--ink-black), #050a12 60%, var(--ink-black));
-  border-bottom:none;
-}
-.bio-frame{
-  position:relative; padding:56px 6vw; border:1px solid var(--gold-dark);
-  clip-path:polygon(0 0,97% 0,100% 4%,100% 96%,96% 100%,3% 100%,0 97%,2% 3%);
-}
-.bio-frame::before{
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background:
-    linear-gradient(115deg, transparent 40%, rgba(0,0,0,.5) 41%, transparent 43%),
-    linear-gradient(60deg, transparent 70%, rgba(0,0,0,.4) 71%, transparent 73%);
-}
-.bio-frame canvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
-.bio-frame .prose-panel{ border-color:var(--gold-dark); opacity:.9; }
-.bio-frame .prose-panel + .prose-panel{ margin-top:30px; }
-.bio-quote{
-  margin-top:38px; padding-top:26px; border-top:1px solid var(--line);
-  font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.5rem; color:var(--gold-pale); opacity:.75;
-}
+/* ============================================================
+   ОБЛИК
+   ============================================================ */
+.look{display:grid;grid-template-columns:minmax(240px,340px) 1fr;gap:40px;align-items:start}
+@media(max-width:860px){.look{grid-template-columns:1fr}}
+.portrait{position:relative;aspect-ratio:3/4;isolation:isolate}
+.portrait .frame{position:absolute;inset:-14px;border:1px solid rgba(205,170,128,.45);pointer-events:none}
+.portrait .frame::before{content:"";position:absolute;inset:7px;border:1px solid rgba(205,170,128,.2)}
+.portrait .corner{position:absolute;width:22px;height:22px;border:2px solid var(--gold)}
+.portrait .corner.tl{top:-14px;left:-14px;border-right:0;border-bottom:0}
+.portrait .corner.tr{top:-14px;right:-14px;border-left:0;border-bottom:0}
+.portrait .corner.bl{bottom:-14px;left:-14px;border-right:0;border-top:0;opacity:.25;transform:rotate(-8deg) translate(-4px,4px)}
+.portrait .corner.br{bottom:-14px;right:-14px;border-left:0;border-top:0}
+.shards{position:absolute;inset:0;overflow:hidden;background:
+  repeating-linear-gradient(135deg,rgba(33,58,86,.7) 0 10px,rgba(15,30,63,.8) 10px 20px)}
+.shards s{position:absolute;inset:0;display:grid;place-items:center;text-decoration:none;
+  background:linear-gradient(150deg,#1d3554,#0d1a33);
+  font-family:'Cinzel',serif;font-size:12px;letter-spacing:.3em;color:var(--gold-dark);
+  transition:transform .8s var(--ease),filter .8s}
+.shards s:nth-child(1){clip-path:polygon(0 0,58% 0,42% 46%,0 62%)}
+.shards s:nth-child(2){clip-path:polygon(58% 0,100% 0,100% 40%,42% 46%);transform:translate(4px,-4px)}
+.shards s:nth-child(3){clip-path:polygon(100% 40%,100% 100%,55% 100%,42% 46%)}
+.shards s:nth-child(4){clip-path:polygon(0 62%,42% 46%,55% 100%,0 100%);transform:translate(-5px,6px) rotate(-1deg);filter:brightness(.7)}
+.portrait:hover .shards s{transform:none;filter:none}
+.portrait .glare{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 30%,rgba(233,213,180,.14) 46%,transparent 60%);
+  background-size:250% 250%;animation:glare 6s ease-in-out infinite}
+@keyframes glare{0%{background-position:120% 0}60%,100%{background-position:-40% 0}}
+.plate{margin-top:26px;text-align:center;border:1px solid rgba(205,170,128,.25);padding:12px;
+  background:rgba(10,20,40,.6)}
+.plate b{display:block;font-family:'Cinzel',serif;letter-spacing:.28em;font-size:12px;color:var(--gold)}
+.plate small{color:#7f96b2;letter-spacing:.14em;font-size:11px}
 
-/* ============ FOOTER ============ */
-footer{ padding:70px 8vw 60px; text-align:center; background:var(--ink-black); }
-.seal-mini{ width:56px; height:56px; margin:0 auto 18px; opacity:.65; }
-footer .arch{ font-family:'Cinzel',serif; font-size:.64rem; letter-spacing:.24em; color:var(--parchment-dim); text-transform:uppercase; }
-footer .stamp2{ margin-top:8px; font-style:italic; color:var(--gold-pale); opacity:.75; }
+/* табы */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.tab{font-family:'Marcellus',serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  padding:9px 16px;border:1px solid rgba(205,170,128,.25);color:#89a0bd;transition:.4s var(--ease);position:relative}
+.tab:hover{color:var(--gold-light);border-color:rgba(205,170,128,.5)}
+.tab.on{color:#0d1a33;background:linear-gradient(120deg,var(--gold-dark),var(--gold-light));border-color:var(--gold);
+  box-shadow:0 0 18px rgba(205,170,128,.3)}
+.pane{display:none;animation:fadeUp .7s var(--ease)}
+.pane.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.deflist{list-style:none;display:grid;gap:12px}
+.deflist li{display:grid;grid-template-columns:170px 1fr;gap:14px;padding-bottom:11px;
+  border-bottom:1px dashed rgba(205,170,128,.18)}
+.deflist li k{font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--gold-dark);padding-top:5px}
+@media(max-width:560px){.deflist li{grid-template-columns:1fr;gap:2px}}
 
-@media (prefers-reduced-motion: reduce){
-  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
-}
-:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:3px; }
+/* ============================================================
+   НРАВ: аккордеон + шкалы
+   ============================================================ */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+@media(max-width:860px){.two-col{grid-template-columns:1fr}}
+.acc{border:1px solid rgba(205,170,128,.2);background:rgba(10,20,40,.5)}
+.acc-item+.acc-item{border-top:1px solid rgba(205,170,128,.16)}
+.acc-h{width:100%;display:flex;align-items:center;gap:14px;padding:16px 18px;text-align:left;
+  font-family:'Marcellus',serif;font-size:14px;letter-spacing:.16em;text-transform:uppercase;
+  color:#a9bdd6;transition:.4s var(--ease)}
+.acc-h:hover{color:var(--gold-light);background:rgba(205,170,128,.06)}
+.acc-h .sq{width:9px;height:9px;transform:rotate(45deg);border:1px solid var(--gold);flex:none;transition:.45s var(--ease)}
+.acc-item.on .acc-h{color:var(--gold-light);background:rgba(205,170,128,.08)}
+.acc-item.on .acc-h .sq{background:var(--gold);transform:rotate(135deg);box-shadow:0 0 12px var(--gold)}
+.acc-b{max-height:0;overflow:hidden;transition:max-height .65s var(--ease)}
+.acc-b p{padding:0 18px 18px 41px;color:#b7c6d8;font-size:17px}
+
+.bars{display:grid;gap:20px}
+.bar k{display:flex;justify-content:space-between;font-family:'Cinzel',serif;font-size:10.5px;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:7px}
+.bar k em{font-style:normal;color:#7f96b2}
+.bar .track{height:7px;background:rgba(205,170,128,.10);border:1px solid rgba(205,170,128,.2);position:relative;overflow:hidden}
+.bar .fill{position:absolute;inset:0 auto 0 0;width:0;
+  background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));
+  transition:width 1.6s var(--ease);box-shadow:0 0 14px rgba(205,170,128,.5)}
+.bar .fill::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+  animation:sweep2 3s linear infinite}
+@keyframes sweep2{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.bar.broken .fill{background:linear-gradient(90deg,#4d3c2c,var(--gold-dead));box-shadow:none}
+
+/* ============================================================
+   ХРОНИКА
+   ============================================================ */
+.tl{position:relative;padding-left:44px}
+.tl::before{content:"";position:absolute;left:13px;top:6px;bottom:6px;width:1px;
+  background:linear-gradient(180deg,transparent,var(--gold-dark) 12%,var(--gold-dark) 88%,transparent)}
+.tl-item{position:relative;margin-bottom:38px}
+.tl-item::before{content:"";position:absolute;left:-38px;top:8px;width:13px;height:13px;transform:rotate(45deg);
+  background:var(--deep);border:1px solid var(--gold);transition:.5s var(--ease)}
+.tl-item::after{content:"";position:absolute;left:-34px;top:12px;width:5px;height:5px;transform:rotate(45deg);
+  background:var(--gold);opacity:0;transition:.5s}
+.tl-item:hover::before{box-shadow:0 0 18px rgba(205,170,128,.6);transform:rotate(135deg)}
+.tl-item:hover::after{opacity:1}
+.tl-year{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.3em;color:var(--gold);margin-bottom:6px}
+.tl-title{font-family:'Marcellus',serif;font-size:19px;letter-spacing:.06em;color:var(--paper);margin-bottom:6px}
+.tl-text{color:#a4b7cd;font-size:17px}
+.tl-item.dark .tl-year{color:var(--rust)}
+.tl-item.dark::before{border-color:var(--rust)}
+
+/* ============================================================
+   УМЕНИЯ
+   ============================================================ */
+.cards3{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.skill{text-align:center;padding:34px 24px}
+.skill .ic{width:74px;height:74px;margin:0 auto 16px;position:relative;display:grid;place-items:center}
+.skill .ic svg{width:100%;height:100%;transition:.6s var(--ease)}
+.skill:hover .ic svg{transform:rotate(180deg) scale(1.06)}
+.skill h4{font-family:'Cinzel',serif;font-size:15px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold-light);margin-bottom:10px}
+.skill p{color:#a1b5cc;font-size:16.5px}
+.skill .cost{display:inline-block;margin-top:14px;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--rust);border-top:1px solid rgba(138,90,74,.4);padding-top:8px}
+
+/* ============================================================
+   РЕЛИКВИИ
+   ============================================================ */
+.relics{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.relic{padding:18px;border:1px solid rgba(205,170,128,.2);background:rgba(11,21,42,.65);
+  display:flex;gap:14px;align-items:flex-start;transition:.45s var(--ease);position:relative;overflow:hidden}
+.relic:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:var(--glow)}
+.relic .gemico{width:34px;height:34px;flex:none;border:1px solid var(--gold);transform:rotate(45deg);
+  display:grid;place-items:center;background:rgba(205,170,128,.08)}
+.relic .gemico b{transform:rotate(-45deg);font-size:13px;color:var(--gold);font-family:'Cinzel',serif}
+.relic h5{font-family:'Marcellus',serif;font-size:15px;letter-spacing:.1em;color:var(--paper);margin-bottom:3px}
+.relic small{font-size:14px;color:#8ba1bc;font-style:italic;display:block}
+.relic .stat{position:absolute;top:8px;right:10px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark)}
+.relic.lost{opacity:.55;filter:grayscale(.5)}
+.relic.lost h5{text-decoration:line-through;color:#7d8fa5}
+.relic.lost .stat{color:var(--rust)}
+.relic.lost .gemico{border-color:rgba(138,90,74,.5)}
+.relic.lost .gemico b{color:var(--rust)}
+
+/* ============================================================
+   СВЯЗИ
+   ============================================================ */
+.bonds{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(275px,1fr))}
+.bond{padding:24px}
+.bond .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
+.bond h5{font-family:'Cinzel',serif;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+.bond .rel{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);white-space:nowrap}
+.bond p{color:#a4b7cd;font-size:16.5px}
+.hearts{display:flex;gap:5px;margin-top:14px}
+.hearts i{width:9px;height:9px;transform:rotate(45deg);border:1px solid var(--gold-dark)}
+.hearts i.f{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(205,170,128,.6)}
+.hearts i.x{border-color:var(--rust);background:repeating-linear-gradient(45deg,transparent 0 2px,rgba(138,90,74,.6) 2px 3px)}
+
+/* ============================================================
+   ЦИТАТЫ
+   ============================================================ */
+.quotes{position:relative;text-align:center;padding:60px 24px;border:1px solid rgba(205,170,128,.22);
+  background:radial-gradient(ellipse at 50% 0%,rgba(33,58,86,.6),rgba(8,15,32,.9));overflow:hidden}
+.quotes .om{position:absolute;top:50%;left:50%;translate:-50% -50%;width:300px;opacity:.07;animation:spin 60s linear infinite}
+.q{display:none;position:relative;z-index:2}
+.q.on{display:block;animation:fadeUp .9s var(--ease)}
+.q p{font-size:clamp(19px,2.6vw,27px);font-style:italic;line-height:1.6;color:var(--paper);max-width:760px;margin:0 auto}
+.q p::before,.q p::after{content:"«";color:var(--gold);font-style:normal}
+.q p::after{content:"»"}
+.q cite{display:block;margin-top:18px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.34em;
+  text-transform:uppercase;color:var(--gold-dark);font-style:normal}
+.qnav{display:flex;justify-content:center;gap:10px;margin-top:34px;position:relative;z-index:2}
+.qnav button{width:9px;height:9px;transform:rotate(45deg);border:1px solid var(--gold-dark);transition:.4s}
+.qnav button.on{background:var(--gold);border-color:var(--gold);box-shadow:0 0 12px var(--gold)}
+
+/* ============================================================
+   МЕЛОЧИ
+   ============================================================ */
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{padding:8px 15px;border:1px solid rgba(205,170,128,.25);font-size:14px;letter-spacing:.06em;
+  color:#b0c2d6;background:rgba(205,170,128,.04);transition:.4s var(--ease)}
+.chip:hover{background:rgba(205,170,128,.14);color:var(--gold-light);transform:translateY(-2px)}
+.notes{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:26px}
+.note{padding:18px 20px;border-left:2px solid var(--gold-dark);background:rgba(12,23,45,.6);
+  font-style:italic;color:#a7bacf;transition:.4s}
+.note:hover{border-left-color:var(--gold);background:rgba(20,38,68,.7)}
+.note b{display:block;font-style:normal;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--gold-dark);margin-bottom:6px}
+
+/* ============================================================
+   ПОДВАЛ
+   ============================================================ */
+.foot{margin-left:var(--nav-w);padding:70px 30px 60px;text-align:center;
+  border-top:1px solid rgba(205,170,128,.18);background:linear-gradient(180deg,transparent,rgba(5,10,22,.9))}
+@media(max-width:980px){.foot{margin-left:0}}
+.foot svg{width:90px;margin:0 auto 18px;opacity:.6;animation:spin 70s linear infinite reverse}
+.foot p{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#5d7896}
+.foot p em{color:var(--gold-dark);font-style:normal}
+.seal{display:inline-grid;place-items:center;width:78px;height:78px;margin-top:22px;transform:rotate(45deg);
+  border:1px solid rgba(138,90,74,.6);color:var(--rust);font-family:'Cinzel',serif;font-size:9px;
+  letter-spacing:.2em;opacity:.75}
+.seal i{transform:rotate(-45deg);font-style:normal;text-align:center;line-height:1.5}
+
+/* прочее */
+.lead{font-size:19px;color:#b9c8da;max-width:74ch}
+.mono{font-family:'Cinzel',serif;letter-spacing:.2em;font-size:11px;text-transform:uppercase;color:var(--gold-dark)}
+.hr-dot{display:flex;gap:6px;justify-content:center;margin:34px 0}
+.hr-dot i{width:4px;height:4px;transform:rotate(45deg);background:var(--gold-dark)}
 </style>
 </head>
 <body>
 
-<div class="grain"></div>
-<div class="vignette"></div>
+<!-- ПРЕЛОАДЕР -->
+<div id="loader">
+  <div class="load-wrap">
+    <svg class="load-mandala" viewBox="-100 -100 200 200" data-mandala="1"></svg>
+    <div class="load-title">заглушка1</div>
+    <div class="load-bar"><span></span></div>
+  </div>
+</div>
 
-<nav class="wayfinder" aria-label="Навигация по разделам">
-  <button data-target="hero" data-label="Обложка" class="active"></button>
-  <button data-target="vitals" data-label="Данные"></button>
-  <button data-target="appearance" data-label="Облик"></button>
-  <button data-target="character" data-label="Нрав"></button>
-  <button data-target="biography" data-label="Биография"></button>
+<!-- ФОН -->
+<div class="bg"></div>
+<div class="bg-grid"></div>
+<svg class="bg-mandala" viewBox="-100 -100 200 200" data-mandala="1"></svg>
+<svg class="bg-mandala two" viewBox="-100 -100 200 200" data-mandala="2"></svg>
+<div class="bg-noise"></div>
+<div class="bg-vig"></div>
+<div class="dust" id="dust"></div>
+
+<div class="progress" id="prog"></div>
+<div class="cursor" id="cur"></div>
+<div class="cursor-dot" id="curdot"></div>
+
+<button class="burger" id="burger" aria-label="меню"><i></i><i></i><i></i></button>
+
+<!-- НАВИГАЦИЯ -->
+<nav class="nav" id="nav">
+  <div class="nav-crest">
+    <svg viewBox="-100 -100 200 200" data-mandala="2"></svg>
+    <b>заглушка2</b>
+    <span>заглушка3 &middot; 1852</span>
+  </div>
+  <ul>
+    <li><a href="#hero" class="act"><i class="dm"></i>Пролог</a></li>
+    <li><a href="#dossier"><i class="dm"></i>Досье</a></li>
+    <li><a href="#appearance"><i class="dm"></i>Облик</a></li>
+    <li><a href="#character"><i class="dm"></i>Нрав</a></li>
+    <li><a href="#biography"><i class="dm"></i>Хроника</a></li>
+    <li><a href="#skills"><i class="dm"></i>Умения</a></li>
+    <li><a href="#relics"><i class="dm"></i>Реликвии</a></li>
+    <li><a href="#bonds"><i class="dm"></i>Связи</a></li>
+    <li><a href="#quotes"><i class="dm"></i>Голос</a></li>
+    <li><a href="#misc"><i class="dm"></i>Мелочи</a></li>
+  </ul>
+  <div class="nav-foot">дом <em>заглушка4</em><br>прах и позолота</div>
 </nav>
 
-<!-- ============ HERO — cover page / index ============ -->
-<header class="hero" id="hero">
-  <canvas id="motesCanvas"></canvas>
+<main class="wrap">
 
-  <div class="cover-grid">
-    <div class="cover-photo">
-      <div class="case-vert">Британская Индия · 1852</div>
-      <svg class="pin-seal" viewBox="0 0 40 40" aria-hidden="true">
-        <circle cx="20" cy="20" r="17" fill="#0f1e3f" stroke="#997953" stroke-width="1.4"/>
-        <path d="M8 22 C14 14 26 14 32 22" stroke="#cdaa80" stroke-width="1" fill="none" opacity=".8"/>
-        <path d="M20 6 L20 34 M6 20 L34 20" stroke="#cdaa80" stroke-width="1" opacity=".4"/>
-        <path d="M12 12 L28 28 M28 12 L12 28" stroke="#070d16" stroke-width="1" opacity=".55"/>
+  <!-- HERO -->
+  <section class="sec hero" id="hero" style="padding-top:0">
+    <svg class="hero-mandala" viewBox="-100 -100 200 200" data-mandala="1"></svg>
+    <div class="hero-inner">
+      <div class="hero-eyebrow reveal">анкета персонажа &middot; год 1852</div>
+      <h1 class="gold-text reveal d1">заглушка5<span class="brk">.</span></h1>
+      <div class="hero-line reveal d2"></div>
+      <p class="hero-sub reveal d2">заглушка6 — заглушка7</p>
+      <div class="hero-tags reveal d3">
+        <span class="tag">заглушка8</span>
+        <span class="tag">заглушка9</span>
+        <span class="tag">заглушка10</span>
+        <span class="tag dead">заглушка11</span>
+        <span class="tag dead">заглушка12</span>
+      </div>
+    </div>
+    <div class="scroll-hint">листать<span></span></div>
+  </section>
+
+  <!-- ДОСЬЕ -->
+  <section class="sec" id="dossier">
+    <div class="toran" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="sec-head reveal"><div class="sec-num"><i>I</i></div><h2 class="sec-title gold-text">Досье</h2></div>
+    <p class="sec-sub reveal d1">то, что уцелело в бумагах</p>
+
+    <div class="grid reveal d2">
+      <div class="cell"><k>Полное имя</k><v>заглушка13</v></div>
+      <div class="cell"><k>Прозвища</k><v>заглушка14</v></div>
+      <div class="cell"><k>Титул (утрачен)</k><v class="mut">заглушка15</v></div>
+      <div class="cell"><k>Возраст</k><v>заглушка16</v></div>
+      <div class="cell"><k>Дата рождения</k><v>заглушка17</v></div>
+      <div class="cell"><k>Место рождения</k><v>заглушка18</v></div>
+      <div class="cell"><k>Происхождение</k><v>заглушка19</v></div>
+      <div class="cell"><k>Вероисповедание</k><v>заглушка20</v></div>
+      <div class="cell"><k>Языки</k><v>заглушка21</v></div>
+      <div class="cell"><k>Род занятий ныне</k><v class="mut">заглушка22</v></div>
+      <div class="cell"><k>Место обитания</k><v>заглушка23</v></div>
+      <div class="cell"><k>Состояние</k><v class="mut">заглушка24</v></div>
+    </div>
+
+    <div class="divider"><span class="ln"></span><span class="gem sm"></span><span class="gem"></span><span class="gem sm"></span><span class="ln"></span></div>
+
+    <div class="card chipped reveal">
+      <svg class="cracks" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0,18 L22,26 L14,44 L36,58 L28,84"/>
+        <path d="M100,10 L82,30 L92,50 L70,70"/>
       </svg>
-      <div class="photo-frame">
-        <div class="photo-inner">
-          <svg viewBox="0 0 100 130" fill="none" stroke="#cdaa80" stroke-width="1.4" aria-hidden="true">
-            <ellipse cx="50" cy="40" rx="18" ry="22"/>
-            <path d="M20 122 C20 88 34 68 50 68 C66 68 80 88 80 122" />
-          </svg>
+      <div class="mono" style="margin-bottom:10px">краткая справка</div>
+      <p class="lead">заглушка25. заглушка26. заглушка27 — заглушка28.</p>
+      <div class="shard" style="width:26px;height:26px;right:-6px;bottom:-6px"></div>
+    </div>
+  </section>
+
+  <!-- ОБЛИК -->
+  <section class="sec" id="appearance">
+    <div class="sec-head reveal"><div class="sec-num"><i>II</i></div><h2 class="sec-title gold-text">Облик</h2></div>
+    <p class="sec-sub reveal d1">золото на коже, пыль на золоте</p>
+
+    <div class="look">
+      <div class="reveal d2">
+        <div class="portrait">
+          <div class="shards">
+            <s>заглушка29</s><s>заглушка29</s><s>заглушка29</s><s>заглушка29</s>
+          </div>
+          <div class="glare"></div>
+          <div class="frame"></div>
+          <span class="corner tl"></span><span class="corner tr"></span>
+          <span class="corner bl"></span><span class="corner br"></span>
         </div>
-        <div class="burn-corner" aria-hidden="true"></div>
+        <div class="plate">
+          <b>заглушка30</b>
+          <small>заглушка31</small>
+        </div>
       </div>
-      <div class="photo-cap">портрет утрачен</div>
-    </div>
 
-    <div class="cover-text">
-      <div class="eyebrow">Личное дело · открыто к прочтению</div>
-      <h1 class="cover-title">Досье</h1>
-      <p class="cover-sub">Опись сведений о владелице рода</p>
+      <div class="reveal d3">
+        <div class="tabs" data-tabs="look">
+          <button class="tab on" data-tab="l1">Черты</button>
+          <button class="tab" data-tab="l2">Убранство</button>
+          <button class="tab" data-tab="l3">Следы</button>
+          <button class="tab" data-tab="l4">Запах и голос</button>
+        </div>
 
-      <ul class="toc">
-        <li><button data-target="vitals"><span class="toc-label">Имя</span><span class="leader"></span><span class="toc-mark">I</span></button></li>
-        <li><button data-target="vitals"><span class="toc-label">Возраст</span><span class="leader"></span><span class="toc-mark">II</span></button></li>
-        <li><button data-target="vitals"><span class="toc-label">Раса</span><span class="leader"></span><span class="toc-mark">III</span></button></li>
-        <li><button data-target="appearance"><span class="toc-label">Внешность</span><span class="leader"></span><span class="toc-mark">IV</span></button></li>
-        <li><button data-target="character"><span class="toc-label">Характер</span><span class="leader"></span><span class="toc-mark">V</span></button></li>
-        <li><button data-target="biography"><span class="toc-label">Биография</span><span class="leader"></span><span class="toc-mark">VI</span></button></li>
-      </ul>
-    </div>
-  </div>
+        <div class="pane on" id="l1">
+          <ul class="deflist">
+            <li><k>Рост</k><span>заглушка32</span></li>
+            <li><k>Телосложение</k><span>заглушка33</span></li>
+            <li><k>Кожа</k><span>заглушка34</span></li>
+            <li><k>Волосы</k><span>заглушка35</span></li>
+            <li><k>Глаза</k><span>заглушка36</span></li>
+            <li><k>Осанка</k><span>заглушка37</span></li>
+            <li><k>Особая примета</k><span>заглушка38</span></li>
+          </ul>
+        </div>
 
-  <div class="scroll-cue" aria-hidden="true"></div>
-</header>
+        <div class="pane" id="l2">
+          <ul class="deflist">
+            <li><k>Одеяние</k><span>заглушка39</span></li>
+            <li><k>Ткани</k><span>заглушка40</span></li>
+            <li><k>Украшения</k><span>заглушка41</span></li>
+            <li><k>Головной убор</k><span>заглушка42</span></li>
+            <li><k>Обувь</k><span>заглушка43</span></li>
+            <li><k>Что заложено</k><span>заглушка44</span></li>
+          </ul>
+        </div>
 
-<!-- divider template used between sections -->
-<template id="divider-tpl">
-  <div class="divider" aria-hidden="true">
-    <svg viewBox="0 0 520 34" preserveAspectRatio="none">
-      <path d="M0 17 H180" stroke="#997953" stroke-width="1"/>
-      <path d="M340 17 H520" stroke="#997953" stroke-width="1"/>
-      <g fill="none" stroke="#cdaa80" stroke-width="1.6">
-        <path d="M260 4 C230 4 230 30 260 30 C290 30 290 4 260 4 Z"/>
-        <path d="M260 10 C246 10 246 24 260 24 C274 24 274 10 260 10 Z"/>
-        <circle cx="260" cy="17" r="2.4" fill="#cdaa80"/>
-        <path d="M200 17 C210 8 220 8 230 17" />
-        <path d="M290 17 C300 8 310 8 320 17" />
-      </g>
-    </svg>
-  </div>
-</template>
+        <div class="pane" id="l3">
+          <ul class="deflist">
+            <li><k>Шрамы</k><span>заглушка45</span></li>
+            <li><k>Татуировки / менди</k><span>заглушка46</span></li>
+            <li><k>Руки</k><span>заглушка47</span></li>
+            <li><k>Следы нужды</k><span>заглушка48</span></li>
+          </ul>
+        </div>
 
-<!-- ============ VITALS: Имя / Возраст / Раса ============ -->
-<section id="vitals">
-  <div class="section-inner">
-    <div class="sec-head reveal">
-      <div class="eyebrow">Раздел I</div>
-      <h2>Личные данные</h2>
-      <div class="rule"></div>
-    </div>
-    <div class="ledger reveal">
-      <div class="ledger-row name-row">
-        <div class="k">Имя</div>
-        <div class="v"><span class="strike">заглушка1</span><span class="stamp">изъято из дела</span></div>
-      </div>
-      <div class="ledger-row">
-        <div class="k">Возраст</div>
-        <div class="v">заглушка2</div>
-      </div>
-      <div class="ledger-row">
-        <div class="k">Раса</div>
-        <div class="v">заглушка3</div>
+        <div class="pane" id="l4">
+          <ul class="deflist">
+            <li><k>Голос</k><span>заглушка49</span></li>
+            <li><k>Манера речи</k><span>заглушка50</span></li>
+            <li><k>Запах</k><span>заглушка51</span></li>
+            <li><k>Смех</k><span>заглушка52</span></li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ============ ВНЕШНОСТЬ ============ -->
-<section id="appearance">
-  <div class="section-inner">
-    <div class="sec-head reveal">
-      <div class="eyebrow">Раздел II</div>
-      <h2>Внешность</h2>
-      <div class="rule"></div>
-    </div>
-    <div class="prose-panel reveal">
-      <span class="drop">«</span>заглушка4 — здесь приводится описание внешнего облика: черты лица, осанка, манера держаться, приметы, замеченные при составлении дела.
-    </div>
-  </div>
-</section>
+  <!-- НРАВ -->
+  <section class="sec" id="character">
+    <div class="sec-head reveal"><div class="sec-num"><i>III</i></div><h2 class="sec-title gold-text">Нрав</h2></div>
+    <p class="sec-sub reveal d1">осколки, которые всё ещё режут</p>
 
-<!-- ============ ХАРАКТЕР ============ -->
-<section id="character">
-  <div class="section-inner">
-    <div class="sec-head reveal">
-      <div class="eyebrow">Раздел III</div>
-      <h2>Характер</h2>
-      <div class="rule"></div>
-    </div>
-    <div class="traits reveal">
-      <span class="trait">заглушка5</span>
-      <span class="trait">заглушка6</span>
-      <span class="trait">заглушка7</span>
-      <span class="trait">заглушка8</span>
-      <span class="trait">заглушка9</span>
-    </div>
-  </div>
-</section>
-
-<!-- ============ БИОГРАФИЯ ============ -->
-<section id="biography" class="biography">
-  <div class="section-inner">
-    <div class="sec-head reveal">
-      <div class="eyebrow">Раздел IV · заключительный</div>
-      <h2>Биография</h2>
-      <div class="rule"></div>
-    </div>
-    <div class="bio-frame reveal">
-      <canvas id="ashCanvas"></canvas>
-      <div class="prose-panel">
-        заглушка10 — сюда вносятся сведения о происхождении и ранних годах: род, дом, обстоятельства рождения и воспитания.
+    <div class="two-col">
+      <div class="acc reveal d2">
+        <div class="acc-item on">
+          <button class="acc-h"><i class="sq"></i>Общий склад</button>
+          <div class="acc-b"><p>заглушка53</p></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-h"><i class="sq"></i>Достоинства</button>
+          <div class="acc-b"><p>заглушка54</p></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-h"><i class="sq"></i>Пороки</button>
+          <div class="acc-b"><p>заглушка55</p></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-h"><i class="sq"></i>Страхи</button>
+          <div class="acc-b"><p>заглушка56</p></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-h"><i class="sq"></i>Желание</button>
+          <div class="acc-b"><p>заглушка57</p></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-h"><i class="sq"></i>Что осталось от гордости</button>
+          <div class="acc-b"><p>заглушка58</p></div>
+        </div>
       </div>
-      <div class="prose-panel">
-        заглушка11 — здесь описывается дальнейшая судьба: перемены, утраты и то, во что обратилось некогда богатое состояние дома к нынешнему дню.
-      </div>
-      <div class="bio-quote">«заглушка12»</div>
-    </div>
-  </div>
-</section>
 
-<footer>
-  <svg class="seal-mini" viewBox="0 0 64 64" aria-hidden="true">
-    <circle cx="32" cy="32" r="28" fill="none" stroke="#997953" stroke-width="1.5" stroke-dasharray="2 3"/>
-    <circle cx="32" cy="32" r="18" fill="none" stroke="#cdaa80" stroke-width="1.2"/>
-    <path d="M32 14 L32 50 M14 32 L50 32" stroke="#cdaa80" stroke-width="1" opacity=".5"/>
-  </svg>
-  <div class="arch">Дело сдано в архив</div>
-  <div class="stamp2">заглушка13 · заглушка14</div>
+      <div class="card chipped-l reveal d3">
+        <div class="mono" style="margin-bottom:20px">мера вещей</div>
+        <div class="bars">
+          <div class="bar" data-val="82"><k>Воля <em>заглушка59</em></k><div class="track"><span class="fill"></span></div></div>
+          <div class="bar" data-val="74"><k>Хитрость <em>заглушка60</em></k><div class="track"><span class="fill"></span></div></div>
+          <div class="bar" data-val="65"><k>Изящество <em>заглушка61</em></k><div class="track"><span class="fill"></span></div></div>
+          <div class="bar" data-val="48"><k>Милосердие <em>заглушка62</em></k><div class="track"><span class="fill"></span></div></div>
+          <div class="bar broken" data-val="21"><k>Доверие <em>заглушка63</em></k><div class="track"><span class="fill"></span></div></div>
+          <div class="bar broken" data-val="12"><k>Достаток <em>заглушка64</em></k><div class="track"><span class="fill"></span></div></div>
+        </div>
+        <div class="hr-dot"><i></i><i></i><i></i></div>
+        <p style="font-style:italic;color:#93a9c4">заглушка65</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ХРОНИКА -->
+  <section class="sec" id="biography">
+    <div class="toran" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="sec-head reveal"><div class="sec-num"><i>IV</i></div><h2 class="sec-title gold-text">Хроника</h2></div>
+    <p class="sec-sub reveal d1">от дворца до порога</p>
+
+    <div class="tl">
+      <div class="tl-item reveal">
+        <div class="tl-year">заглушка66</div>
+        <div class="tl-title">заглушка67</div>
+        <p class="tl-text">заглушка68</p>
+      </div>
+      <div class="tl-item reveal d1">
+        <div class="tl-year">заглушка69</div>
+        <div class="tl-title">заглушка70</div>
+        <p class="tl-text">заглушка71</p>
+      </div>
+      <div class="tl-item reveal d1">
+        <div class="tl-year">заглушка72</div>
+        <div class="tl-title">заглушка73</div>
+        <p class="tl-text">заглушка74</p>
+      </div>
+      <div class="tl-item dark reveal d2">
+        <div class="tl-year">заглушка75</div>
+        <div class="tl-title">заглушка76</div>
+        <p class="tl-text">заглушка77</p>
+      </div>
+      <div class="tl-item dark reveal d2">
+        <div class="tl-year">заглушка78</div>
+        <div class="tl-title">заглушка79</div>
+        <p class="tl-text">заглушка80</p>
+      </div>
+      <div class="tl-item reveal d3">
+        <div class="tl-year">1852</div>
+        <div class="tl-title">заглушка81</div>
+        <p class="tl-text">заглушка82</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- УМЕНИЯ -->
+  <section class="sec" id="skills">
+    <div class="sec-head reveal"><div class="sec-num"><i>V</i></div><h2 class="sec-title gold-text">Умения</h2></div>
+    <p class="sec-sub reveal d1">чему учили наследницу и чему научила улица</p>
+
+    <div class="cards3">
+      <div class="card skill reveal d1">
+        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
+        <h4>заглушка83</h4>
+        <p>заглушка84</p>
+        <div class="cost">цена: заглушка85</div>
+      </div>
+      <div class="card skill chipped reveal d2">
+        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
+        <h4>заглушка86</h4>
+        <p>заглушка87</p>
+        <div class="cost">цена: заглушка88</div>
+      </div>
+      <div class="card skill reveal d3">
+        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
+        <h4>заглушка89</h4>
+        <p>заглушка90</p>
+        <div class="cost">цена: заглушка91</div>
+      </div>
+      <div class="card skill chipped-l reveal d1">
+        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
+        <h4>заглушка92</h4>
+        <p>заглушка93</p>
+        <div class="cost">цена: заглушка94</div>
+      </div>
+      <div class="card skill reveal d2">
+        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
+        <h4>заглушка95</h4>
+        <p>заглушка96</p>
+        <div class="cost">цена: заглушка97</div>
+      </div>
+      <div class="card skill reveal d3">
+        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
+        <h4>заглушка98</h4>
+        <p>заглушка99</p>
+        <div class="cost">цена: заглушка100</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- РЕЛИКВИИ -->
+  <section class="sec" id="relics">
+    <div class="sec-head reveal"><div class="sec-num"><i>VI</i></div><h2 class="sec-title gold-text">Реликвии</h2></div>
+    <p class="sec-sub reveal d1">опись имущества: сохранено / заложено / отнято</p>
+
+    <div class="relics reveal d2">
+      <div class="relic"><div class="gemico"><b>&#10022;</b></div><div><h5>заглушка101</h5><small>заглушка102</small></div><span class="stat">при ней</span></div>
+      <div class="relic"><div class="gemico"><b>&#10022;</b></div><div><h5>заглушка103</h5><small>заглушка104</small></div><span class="stat">при ней</span></div>
+      <div class="relic lost"><div class="gemico"><b>&#10007;</b></div><div><h5>заглушка105</h5><small>заглушка106</small></div><span class="stat">заложено</span></div>
+      <div class="relic"><div class="gemico"><b>&#10022;</b></div><div><h5>заглушка107</h5><small>заглушка108</small></div><span class="stat">спрятано</span></div>
+      <div class="relic lost"><div class="gemico"><b>&#10007;</b></div><div><h5>заглушка109</h5><small>заглушка110</small></div><span class="stat">отнято</span></div>
+      <div class="relic lost"><div class="gemico"><b>&#10007;</b></div><div><h5>заглушка111</h5><small>заглушка112</small></div><span class="stat">утрачено</span></div>
+    </div>
+  </section>
+
+  <!-- СВЯЗИ -->
+  <section class="sec" id="bonds">
+    <div class="sec-head reveal"><div class="sec-num"><i>VII</i></div><h2 class="sec-title gold-text">Связи</h2></div>
+    <p class="sec-sub reveal d1">кто остался, кто отвернулся</p>
+
+    <div class="bonds">
+      <div class="card bond reveal d1">
+        <div class="top"><h5>заглушка113</h5><span class="rel">заглушка114</span></div>
+        <p>заглушка115</p>
+        <div class="hearts"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div>
+      </div>
+      <div class="card bond reveal d2">
+        <div class="top"><h5>заглушка116</h5><span class="rel">заглушка117</span></div>
+        <p>заглушка118</p>
+        <div class="hearts"><i class="f"></i><i class="f"></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="card bond chipped reveal d3">
+        <div class="top"><h5>заглушка119</h5><span class="rel">заглушка120</span></div>
+        <p>заглушка121</p>
+        <div class="hearts"><i class="x"></i><i class="x"></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="card bond reveal d1">
+        <div class="top"><h5>заглушка122</h5><span class="rel">заглушка123</span></div>
+        <p>заглушка124</p>
+        <div class="hearts"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ГОЛОС -->
+  <section class="sec" id="quotes">
+    <div class="sec-head reveal"><div class="sec-num"><i>VIII</i></div><h2 class="sec-title gold-text">Голос</h2></div>
+    <p class="sec-sub reveal d1">сказанное вслух и сказанное себе</p>
+
+    <div class="quotes reveal d2">
+      <svg class="om" viewBox="-100 -100 200 200" data-mandala="2"></svg>
+      <div class="q on"><p>заглушка125</p><cite>заглушка126</cite></div>
+      <div class="q"><p>заглушка127</p><cite>заглушка128</cite></div>
+      <div class="q"><p>заглушка129</p><cite>заглушка130</cite></div>
+      <div class="q"><p>заглушка131</p><cite>заглушка132</cite></div>
+      <div class="qnav"></div>
+    </div>
+  </section>
+
+  <!-- МЕЛОЧИ -->
+  <section class="sec" id="misc">
+    <div class="sec-head reveal"><div class="sec-num"><i>IX</i></div><h2 class="sec-title gold-text">Мелочи</h2></div>
+    <p class="sec-sub reveal d1">то, что не поместилось в опись</p>
+
+    <div class="chips reveal d2">
+      <span class="chip">заглушка133</span><span class="chip">заглушка134</span>
+      <span class="chip">заглушка135</span><span class="chip">заглушка136</span>
+      <span class="chip">заглушка137</span><span class="chip">заглушка138</span>
+      <span class="chip">заглушка139</span><span class="chip">заглушка140</span>
+      <span class="chip">заглушка141</span><span class="chip">заглушка142</span>
+    </div>
+
+    <div class="notes reveal d3">
+      <div class="note"><b>привычка</b>заглушка143</div>
+      <div class="note"><b>суеверие</b>заглушка144</div>
+      <div class="note"><b>что ест</b>заглушка145</div>
+      <div class="note"><b>чего не прощает</b>заглушка146</div>
+      <div class="note"><b>сны</b>заглушка147</div>
+      <div class="note"><b>тайна</b>заглушка148</div>
+    </div>
+
+    <div class="divider"><span class="ln"></span><span class="gem sm"></span><span class="gem"></span><span class="gem sm"></span><span class="ln"></span></div>
+
+    <div class="card reveal">
+      <svg class="cracks" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M12,0 L20,22 L6,40 L24,62 L16,100"/>
+        <path d="M88,100 L74,74 L90,52 L72,30"/>
+      </svg>
+      <div class="mono" style="margin-bottom:10px">от автора анкеты</div>
+      <p class="lead">заглушка149. заглушка150.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <svg viewBox="-100 -100 200 200" data-mandala="1"></svg>
+  <p>досье &laquo;<em>заглушка151</em>&raquo; &middot; год <em>1852</em> &middot; лист <em>заглушка152</em></p>
+  <div class="seal"><i>печать<br>заглушка153</i></div>
 </footer>
 
 <script>
-// ---------- inject dividers between sections ----------
+/* ============================================================
+   ГЕНЕРАЦИЯ МАНДАЛ
+   ============================================================ */
 (function(){
-  const tpl = document.getElementById('divider-tpl');
-  document.querySelectorAll('section').forEach(sec=>{
-    if(sec.id==='biography') return;
-    const clone = tpl.content.cloneNode(true);
-    sec.parentNode.insertBefore(clone, sec.nextSibling);
+  const NS='http://www.w3.org/2000/svg';
+  function el(n,a){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;}
+
+  function petalRing(count,d,r,opts){
+    const g=el('g',{fill:opts.fill||'none',stroke:opts.stroke||'#cdaa80','stroke-width':opts.w||1,opacity:opts.o||1});
+    for(let i=0;i<count;i++){
+      const p=el('path',{d:d,transform:'rotate('+(360/count*i)+')'});
+      g.appendChild(p);
+    }
+    return g;
+  }
+  function dotRing(count,r,rad,opts){
+    const g=el('g',{fill:opts.fill||'#cdaa80',opacity:opts.o||1});
+    for(let i=0;i<count;i++){
+      const a=(Math.PI*2/count)*i;
+      g.appendChild(el('circle',{cx:(Math.cos(a)*r).toFixed(2),cy:(Math.sin(a)*r).toFixed(2),r:rad}));
+    }
+    return g;
+  }
+
+  function build(type){
+    const f=document.createDocumentFragment();
+    if(type==='1'){
+      f.appendChild(el('circle',{r:96,fill:'none',stroke:'#cdaa80','stroke-width':.7,opacity:.6}));
+      f.appendChild(el('circle',{r:88,fill:'none',stroke:'#997953','stroke-width':.4,'stroke-dasharray':'2 5'}));
+      f.appendChild(petalRing(24,'M0,-88 C6,-78 6,-70 0,-62 C-6,-70 -6,-78 0,-88 Z',88,{stroke:'#cdaa80',w:.6,o:.8}));
+      f.appendChild(el('circle',{r:66,fill:'none',stroke:'#cdaa80','stroke-width':.6,opacity:.55}));
+      f.appendChild(petalRing(16,'M0,-64 C14,-48 14,-30 0,-20 C-14,-30 -14,-48 0,-64 Z',64,{stroke:'#cdaa80',w:.7,o:.75}));
+      f.appendChild(dotRing(16,44,1.4,{o:.8}));
+      f.appendChild(petalRing(8,'M0,-40 C11,-28 11,-12 0,-4 C-11,-12 -11,-28 0,-40 Z',40,{stroke:'#e9d5b4',w:.8,o:.85}));
+      f.appendChild(el('circle',{r:16,fill:'none',stroke:'#cdaa80','stroke-width':.8}));
+      f.appendChild(el('circle',{r:7,fill:'#cdaa80',opacity:.55}));
+      f.appendChild(petalRing(6,'M0,-30 L5,-22 L0,-14 L-5,-22 Z',30,{stroke:'#997953',w:.5,o:.9}));
+    }
+    if(type==='2'){
+      f.appendChild(el('circle',{r:92,fill:'none',stroke:'#cdaa80','stroke-width':.6,opacity:.5}));
+      f.appendChild(petalRing(12,'M0,-92 L10,-70 L0,-52 L-10,-70 Z',92,{stroke:'#cdaa80',w:.7,o:.85}));
+      f.appendChild(el('circle',{r:52,fill:'none',stroke:'#997953','stroke-width':.5,'stroke-dasharray':'3 4'}));
+      f.appendChild(petalRing(12,'M0,-50 C12,-38 12,-18 0,-8 C-12,-18 -12,-38 0,-50 Z',50,{stroke:'#e9d5b4',w:.6,o:.7}));
+      f.appendChild(dotRing(12,68,1.6,{o:.7}));
+      f.appendChild(el('circle',{r:10,fill:'none',stroke:'#cdaa80','stroke-width':.9}));
+      f.appendChild(el('circle',{r:4,fill:'#e9d5b4',opacity:.8}));
+    }
+    if(type==='3'){
+      f.appendChild(el('circle',{r:44,fill:'none',stroke:'#cdaa80','stroke-width':.8,opacity:.75}));
+      f.appendChild(petalRing(8,'M0,-44 C7,-34 7,-22 0,-14 C-7,-22 -7,-34 0,-44 Z',44,{stroke:'#e9d5b4',w:.8,o:.9}));
+      f.appendChild(dotRing(8,32,1.3,{o:.9}));
+      f.appendChild(el('rect',{x:-9,y:-9,width:18,height:18,fill:'none',stroke:'#cdaa80','stroke-width':.9,transform:'rotate(45)'}));
+      f.appendChild(el('circle',{r:3.4,fill:'#cdaa80'}));
+    }
+    return f;
+  }
+
+  document.querySelectorAll('[data-mandala]').forEach(svg=>{
+    svg.appendChild(build(svg.getAttribute('data-mandala')));
   });
 })();
 
-// ---------- scroll reveal ----------
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); } });
-}, { threshold:.15 });
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-// ---------- scroll-to helpers (side nav + cover index) ----------
-function scrollToId(id){
-  const el = document.getElementById(id);
-  if(el) el.scrollIntoView({behavior:'smooth'});
-}
-document.querySelectorAll('.wayfinder button, .toc button').forEach(b=>{
-  b.addEventListener('click', ()=> scrollToId(b.dataset.target));
+/* ============================================================
+   ПРЕЛОАДЕР
+   ============================================================ */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('loader').classList.add('done');
+    document.querySelectorAll('#hero .reveal').forEach(e=>e.classList.add('in'));
+  },900);
 });
 
-// ---------- active state for side nav ----------
-const navButtons = document.querySelectorAll('.wayfinder button');
-const targets = Array.from(navButtons).map(b=>document.getElementById(b.dataset.target));
-const navIO = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      const id = e.target.id;
-      navButtons.forEach(b=> b.classList.toggle('active', b.dataset.target===id));
-    }
-  });
-}, { threshold:.5 });
-targets.forEach(t=> t && navIO.observe(t));
-
-// ---------- generic drifting-particle canvas (reused for hero motes + biography embers) ----------
-function makeParticleField(canvas, opts){
-  const ctx = canvas.getContext('2d');
-  const host = canvas.parentElement;
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let particles = [], w, h;
-
-  function resize(){ w = canvas.width = host.clientWidth; h = canvas.height = host.clientHeight; }
-  function spawn(){
-    return {
-      x: Math.random()*w,
-      y: opts.riseFrom==='bottom' ? h + Math.random()*40 : Math.random()*h,
-      r: Math.random()*opts.maxR + opts.minR,
-      speed: Math.random()*opts.maxSpeed + opts.minSpeed,
-      drift: (Math.random()-.5)*.3,
-      alpha: Math.random()*opts.maxAlpha + opts.minAlpha
-    };
+/* ============================================================
+   ПЫЛЬ
+   ============================================================ */
+(function(){
+  const box=document.getElementById('dust');
+  const n=window.innerWidth<700?26:52;
+  for(let i=0;i<n;i++){
+    const m=document.createElement('span');
+    m.className='mote';
+    const s=Math.random()*2.6+.8;
+    m.style.width=s+'px';m.style.height=s+'px';
+    m.style.left=Math.random()*100+'vw';
+    m.style.top=(100+Math.random()*30)+'vh';
+    m.style.setProperty('--drift',(Math.random()*160-80)+'px');
+    m.style.animationDuration=(16+Math.random()*26)+'s';
+    m.style.animationDelay=(-Math.random()*30)+'s';
+    m.style.opacity=.2+Math.random()*.6;
+    box.appendChild(m);
   }
-  function init(){
-    resize();
-    const count = Math.max(opts.minCount, Math.floor(w/opts.density));
-    particles = Array.from({length:count}, spawn);
-  }
+})();
+
+/* ============================================================
+   КУРСОР
+   ============================================================ */
+(function(){
+  if(matchMedia('(hover:none)').matches)return;
+  const c=document.getElementById('cur'),d=document.getElementById('curdot');
+  let x=innerWidth/2,y=innerHeight/2,cx=x,cy=y;
+  addEventListener('mousemove',e=>{x=e.clientX;y=e.clientY;d.style.transform=`translate(${x}px,${y}px)`;});
+  (function loop(){cx+=(x-cx)*.16;cy+=(y-cy)*.16;
+    c.style.transform=`translate(${cx}px,${cy}px) rotate(45deg)`;requestAnimationFrame(loop);})();
+  const sel='a,button,.tag,.chip,.relic,.cell,.card,.tab,.acc-h,.tl-item,.note';
+  document.addEventListener('mouseover',e=>{if(e.target.closest(sel))document.body.classList.add('hovering')});
+  document.addEventListener('mouseout',e=>{if(e.target.closest(sel))document.body.classList.remove('hovering')});
+})();
+
+/* ============================================================
+   ПРОГРЕСС + АКТИВНЫЙ ПУНКТ
+   ============================================================ */
+(function(){
+  const bar=document.getElementById('prog');
+  const links=[...document.querySelectorAll('.nav a')];
+  const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
   function tick(){
-    ctx.clearRect(0,0,w,h);
-    particles.forEach(p=>{
-      p.y -= p.speed; p.x += p.drift;
-      if(p.y < -10){ Object.assign(p, spawn(), {y:h+10}); }
-      ctx.beginPath();
-      ctx.fillStyle = `rgba(227,199,154,${p.alpha})`;
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fill();
-    });
-    if(!reduceMotion) requestAnimationFrame(tick);
+    const h=document.documentElement;
+    bar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+    let i=0;
+    secs.forEach((s,k)=>{if(s&&s.getBoundingClientRect().top<innerHeight*0.35)i=k;});
+    links.forEach((a,k)=>a.classList.toggle('act',k===i));
   }
-  window.addEventListener('resize', resize);
-  init();
-  requestAnimationFrame(tick);
-}
+  addEventListener('scroll',tick,{passive:true});tick();
+})();
 
-makeParticleField(document.getElementById('motesCanvas'), {
-  riseFrom:'random', minR:.4, maxR:1.2, minSpeed:.03, maxSpeed:.1, minAlpha:.08, maxAlpha:.28, minCount:26, density:70
+/* ============================================================
+   REVEAL + ШКАЛЫ
+   ============================================================ */
+(function(){
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        e.target.querySelectorAll?.('.bar').forEach(b=>{
+          b.querySelector('.fill').style.width=b.dataset.val+'%';
+        });
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:.15,rootMargin:'0px 0px -60px 0px'});
+  document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
+})();
+
+/* ============================================================
+   ТАБЫ
+   ============================================================ */
+document.querySelectorAll('[data-tabs]').forEach(box=>{
+  box.addEventListener('click',e=>{
+    const b=e.target.closest('.tab');if(!b)return;
+    box.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+    b.classList.add('on');
+    const parent=box.parentElement;
+    parent.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+    parent.querySelector('#'+b.dataset.tab).classList.add('on');
+  });
 });
-makeParticleField(document.getElementById('ashCanvas'), {
-  riseFrom:'bottom', minR:.5, maxR:1.6, minSpeed:.12, maxSpeed:.35, minAlpha:.15, maxAlpha:.5, minCount:16, density:60
+
+/* ============================================================
+   АККОРДЕОН
+   ============================================================ */
+document.querySelectorAll('.acc-h').forEach(h=>{
+  h.addEventListener('click',()=>{
+    const item=h.parentElement,body=item.querySelector('.acc-b'),open=item.classList.contains('on');
+    item.parentElement.querySelectorAll('.acc-item').forEach(i=>{
+      i.classList.remove('on');i.querySelector('.acc-b').style.maxHeight=null;
+    });
+    if(!open){item.classList.add('on');body.style.maxHeight=body.scrollHeight+'px';}
+  });
 });
+(function(){
+  const o=document.querySelector('.acc-item.on');
+  if(o){const b=o.querySelector('.acc-b');b.style.maxHeight=b.scrollHeight+'px';}
+})();
+
+/* ============================================================
+   ЦИТАТЫ
+   ============================================================ */
+(function(){
+  const qs=[...document.querySelectorAll('.q')],nav=document.querySelector('.qnav');
+  if(!qs.length)return;
+  qs.forEach((q,i)=>{
+    const b=document.createElement('button');
+    if(i===0)b.classList.add('on');
+    b.addEventListener('click',()=>go(i));
+    nav.appendChild(b);
+  });
+  const dots=[...nav.children];let cur=0,timer;
+  function go(i){
+    qs[cur].classList.remove('on');dots[cur].classList.remove('on');
+    cur=i;qs[cur].classList.add('on');dots[cur].classList.add('on');
+    clearInterval(timer);timer=setInterval(()=>go((cur+1)%qs.length),7000);
+  }
+  timer=setInterval(()=>go((cur+1)%qs.length),7000);
+})();
+
+/* ============================================================
+   БУРГЕР
+   ============================================================ */
+(function(){
+  const b=document.getElementById('burger'),n=document.getElementById('nav');
+  b.addEventListener('click',()=>{b.classList.toggle('on');n.classList.toggle('open')});
+  n.addEventListener('click',e=>{if(e.target.closest('a')){b.classList.remove('on');n.classList.remove('open')}});
+})();
+
+/* ============================================================
+   ПАРАЛЛАКС ФОНОВЫХ МАНДАЛ
+   ============================================================ */
+(function(){
+  const m1=document.querySelector('.bg-mandala'),m2=document.querySelector('.bg-mandala.two');
+  addEventListener('scroll',()=>{
+    const y=scrollY;
+    m1.style.translate=`-50% calc(-50% + ${y*0.05}px)`;
+    m2.style.translate=`-50% calc(-50% + ${y*-0.08}px)`;
+  },{passive:true});
+})();
 </script>
-
 </body>
 </html>
