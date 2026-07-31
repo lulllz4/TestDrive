@@ -14,9 +14,7 @@
 :root{
   --ink:#070d1c;
   --deep:#0f1e3f;
-  --deep2:#132a4b;
   --blue:#213a56;
-  --blue-soft:#2c4a68;
   --gold:#cdaa80;
   --gold-dark:#997953;
   --gold-light:#e9d5b4;
@@ -28,6 +26,7 @@
   --glow:0 0 24px rgba(205,170,128,.28);
   --ease:cubic-bezier(.22,.61,.36,1);
   --nav-w:230px;
+  --content:1180px;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -43,11 +42,9 @@ body{
 }
 @media (hover:none){body{cursor:auto}}
 ::selection{background:var(--gold-dark);color:#0b1426}
-img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:none;cursor:none}
 
-/* скроллбар */
 ::-webkit-scrollbar{width:10px}
 ::-webkit-scrollbar-track{background:#080f20}
 ::-webkit-scrollbar-thumb{
@@ -57,10 +54,10 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:none}
 ::-webkit-scrollbar-thumb:hover{background:var(--gold)}
 
 /* ============================================================
-   ФОН: слои
+   ФОН
    ============================================================ */
 .bg{position:fixed;inset:0;z-index:-5;overflow:hidden;background:
-  radial-gradient(120% 80% at 50% -10%,#1b3457 0%,var(--deep) 38%,#0a1densité 0%),
+  radial-gradient(120% 80% at 50% -10%,#1b3457 0%,var(--deep) 38%,#08101f 100%),
   linear-gradient(180deg,#132747 0%,var(--deep) 40%,#070d1c 100%);}
 .bg::after{
   content:"";position:absolute;inset:0;
@@ -75,6 +72,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:none}
   background-image:
     repeating-linear-gradient(45deg,transparent 0 28px,rgba(205,170,128,.22) 28px 29px),
     repeating-linear-gradient(-45deg,transparent 0 28px,rgba(205,170,128,.14) 28px 29px);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 78%);
   mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 78%);
 }
 .bg-mandala{
@@ -87,7 +85,6 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:none}
 .bg-vig{position:fixed;inset:0;z-index:-2;pointer-events:none;
   background:radial-gradient(ellipse at 50% 45%,transparent 42%,rgba(3,7,16,.75) 88%,#02050c 100%)}
 
-/* пыль/искры */
 .dust{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
 .mote{position:absolute;border-radius:50%;background:var(--gold);
   box-shadow:0 0 8px rgba(205,170,128,.85);opacity:0;animation:rise linear infinite}
@@ -99,18 +96,17 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:none}
 }
 
 /* ============================================================
-   КУРСОР
+   КУРСОР / ПРОГРЕСС
    ============================================================ */
 .cursor,.cursor-dot{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:screen}
 .cursor{width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid var(--gold);
-  transform:rotate(45deg);transition:width .3s,height .3s,margin .3s,opacity .3s,background .3s}
+  transform:rotate(45deg);transition:width .3s,height .3s,margin .3s,background .3s}
 .cursor::before{content:"";position:absolute;inset:5px;border:1px solid rgba(205,170,128,.4)}
 .cursor-dot{width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:var(--gold-light);
   box-shadow:0 0 10px var(--gold)}
 body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:rgba(205,170,128,.07)}
 @media (hover:none){.cursor,.cursor-dot{display:none}}
 
-/* полоса прогресса */
 .progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:900;
   background:linear-gradient(90deg,transparent,var(--gold-dark),var(--gold-light),var(--gold-dark));
   box-shadow:0 0 12px rgba(205,170,128,.6)}
@@ -133,10 +129,17 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
 @keyframes sweep{0%{left:-40%}100%{left:100%}}
 
 /* ============================================================
-   ОБЩЕЕ ОФОРМЛЕНИЕ
+   РАСКЛАДКА (центрирование в области справа от навигации)
    ============================================================ */
-.wrap{margin-left:var(--nav-w);padding:0 clamp(16px,4vw,70px) 120px;max-width:1240px}
-@media(max-width:980px){.wrap{margin-left:0;padding-top:70px}}
+.page{
+  margin-left:var(--nav-w);
+  width:calc(100% - var(--nav-w));
+  padding:0 clamp(16px,4vw,60px) 110px;
+}
+.wrap{max-width:var(--content);margin:0 auto}
+@media(max-width:980px){
+  .page{margin-left:0;width:100%;padding-top:70px}
+}
 
 .gold-text{
   background:linear-gradient(100deg,#8a6b48 0%,var(--gold-light) 26%,#fff4dd 40%,var(--gold) 55%,#7d6244 80%,var(--gold-light) 100%);
@@ -145,16 +148,15 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
 }
 @keyframes shimmer{to{background-position:250% 0}}
 
-.sec{padding:96px 0 20px;position:relative}
+.sec{padding:104px 0 20px;position:relative}
 .sec-head{display:flex;align-items:center;gap:18px;margin-bottom:14px}
 .sec-num{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.35em;color:var(--gold-dark);
-  border:1px solid rgba(205,170,128,.3);padding:6px 10px 5px;transform:rotate(45deg);
+  border:1px solid rgba(205,170,128,.3);transform:rotate(45deg);
   display:grid;place-items:center;width:40px;height:40px;flex:none}
 .sec-num i{display:block;transform:rotate(-45deg);font-style:normal;text-indent:.35em}
 .sec-title{font-family:'Cinzel',serif;font-size:clamp(22px,3.4vw,34px);letter-spacing:.16em;text-transform:uppercase}
-.sec-sub{font-style:italic;color:#8fa3bd;letter-spacing:.06em;margin:-4px 0 30px 58px;font-size:16px}
+.sec-sub{font-style:italic;color:#8fa3bd;letter-spacing:.06em;margin:-4px 0 34px 58px;font-size:16px}
 
-/* делитель-камень */
 .divider{display:flex;align-items:center;gap:14px;margin:54px 0;opacity:.9}
 .divider .ln{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--gold-dark),transparent)}
 .divider .gem{width:14px;height:14px;transform:rotate(45deg);border:1px solid var(--gold);
@@ -162,13 +164,11 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
 .divider .gem.sm{width:7px;height:7px;animation-delay:.6s}
 @keyframes pulseGem{0%,100%{box-shadow:0 0 0 rgba(205,170,128,0)}50%{box-shadow:0 0 16px rgba(205,170,128,.55)}}
 
-/* торан — гирлянда */
 .toran{display:flex;justify-content:center;gap:20px;height:38px;margin-bottom:-10px;pointer-events:none}
 .toran i{width:2px;background:linear-gradient(180deg,rgba(205,170,128,.55),transparent);position:relative;
   transform-origin:top center;animation:sway 5s ease-in-out infinite}
 .toran i::after{content:"";position:absolute;left:50%;bottom:0;translate:-50% 0;width:11px;height:16px;
   background:linear-gradient(180deg,var(--gold),var(--gold-dark));
-  border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
   clip-path:polygon(50% 100%,100% 45%,80% 0,20% 0,0 45%);opacity:.75}
 @keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
 
@@ -177,7 +177,7 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
   position:relative;background:
     linear-gradient(155deg,rgba(33,58,86,.55),rgba(15,30,63,.75) 60%,rgba(8,15,32,.9));
   border:1px solid rgba(205,170,128,.22);
-  padding:26px 28px;backdrop-filter:blur(2px);
+  padding:30px 32px;backdrop-filter:blur(2px);
   box-shadow:inset 0 1px 0 rgba(205,170,128,.12),var(--shadow-deep);
   transition:border-color .5s var(--ease),transform .5s var(--ease),box-shadow .5s var(--ease);
 }
@@ -188,24 +188,20 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
   box-shadow:inset 0 1px 0 rgba(205,170,128,.2),var(--shadow-deep),var(--glow)}
 .card:hover::before,.card:hover::after{width:30px;height:30px;opacity:1}
 
-/* сколотая карточка — «сломанная роскошь» */
 .chipped{clip-path:polygon(0 0,100% 0,100% calc(100% - 34px),calc(100% - 34px) 100%,0 100%)}
 .chipped-l{clip-path:polygon(26px 0,100% 0,100% 100%,0 100%,0 26px)}
 .shard{position:absolute;border:1px solid rgba(205,170,128,.45);background:rgba(205,170,128,.05);
   pointer-events:none;animation:drift 9s ease-in-out infinite}
 @keyframes drift{0%,100%{transform:translate(0,0) rotate(45deg)}50%{transform:translate(5px,-7px) rotate(52deg)}}
 
-/* трещины поверх */
 .cracks{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:screen}
 .cracks path{stroke:rgba(205,170,128,.35);fill:none;stroke-width:.8;
   stroke-dasharray:400;stroke-dashoffset:400;transition:stroke-dashoffset 2.4s var(--ease)}
 .reveal.in .cracks path{stroke-dashoffset:0}
 
-/* появление */
 .reveal{opacity:0;transform:translateY(38px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
 .reveal.in{opacity:1;transform:none}
 .reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
-.reveal.d4{transition-delay:.4s}.reveal.d5{transition-delay:.5s}
 
 /* ============================================================
    НАВИГАЦИЯ
@@ -222,10 +218,9 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
 .nav-crest svg{width:64px;height:64px;margin:0 auto;animation:spin 44s linear infinite;opacity:.85}
 .nav-crest b{display:block;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.42em;
   color:var(--gold);margin-top:10px;text-indent:.42em}
-.nav-crest small{display:block;font-size:11px;letter-spacing:.28em;color:#5d7characters}
 .nav-crest span{display:block;font-size:10px;letter-spacing:.3em;color:#5d7b9e;margin-top:4px;text-indent:.3em}
-.nav ul{list-style:none;padding:16px 0;overflow-y:auto;flex:1}
-.nav li a{display:flex;align-items:center;gap:12px;padding:9px 18px 9px 22px;
+.nav ul{list-style:none;padding:18px 0;overflow-y:auto;flex:1}
+.nav li a{display:flex;align-items:center;gap:12px;padding:11px 18px 11px 22px;
   font-family:'Marcellus',serif;font-size:13px;letter-spacing:.17em;text-transform:uppercase;
   color:#7f93ad;transition:.4s var(--ease);position:relative}
 .nav li a .dm{width:8px;height:8px;flex:none;transform:rotate(45deg);
@@ -235,7 +230,7 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
 .nav li a.act .dm{background:var(--gold);box-shadow:0 0 12px var(--gold);border-color:var(--gold)}
 .nav li a.act::after{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold)}
 .nav-foot{padding:14px 22px 0;border-top:1px solid rgba(205,170,128,.14);
-  font-size:11px;letter-spacing:.2em;color:#4f6federal;color:#4f6b8c}
+  font-size:11px;letter-spacing:.2em;color:#4f6b8c}
 .nav-foot em{color:var(--gold-dark);font-style:normal}
 
 .burger{position:fixed;top:14px;left:14px;z-index:600;width:46px;height:46px;display:none;
@@ -260,7 +255,7 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
 .hero-eyebrow{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.62em;color:var(--gold-dark);
   text-indent:.62em;margin-bottom:22px}
 .hero h1{font-family:'Cinzel',serif;font-weight:600;line-height:1;letter-spacing:.1em;
-  font-size:clamp(38px,8.4vw,92px);text-transform:uppercase;position:relative}
+  font-size:clamp(38px,8.4vw,92px);text-transform:uppercase}
 .hero h1 .brk{display:inline-block;animation:fall 7s ease-in-out infinite;transform-origin:bottom left;color:var(--gold-dead)}
 @keyframes fall{0%,100%{transform:rotate(9deg) translateY(6px)}50%{transform:rotate(13deg) translateY(10px)}}
 .hero-line{width:min(560px,86vw);height:1px;margin:26px auto;
@@ -282,7 +277,7 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
   51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
 /* ============================================================
-   ДОСЬЕ — сетка
+   ДОСЬЕ
    ============================================================ */
 .grid{display:grid;gap:1px;background:rgba(205,170,128,.16);border:1px solid rgba(205,170,128,.22);
   grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
@@ -299,7 +294,7 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
 /* ============================================================
    ОБЛИК
    ============================================================ */
-.look{display:grid;grid-template-columns:minmax(240px,340px) 1fr;gap:40px;align-items:start}
+.look{display:grid;grid-template-columns:minmax(240px,330px) 1fr;gap:44px;align-items:start}
 @media(max-width:860px){.look{grid-template-columns:1fr}}
 .portrait{position:relative;aspect-ratio:3/4;isolation:isolate}
 .portrait .frame{position:absolute;inset:-14px;border:1px solid rgba(205,170,128,.45);pointer-events:none}
@@ -309,8 +304,7 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
 .portrait .corner.tr{top:-14px;right:-14px;border-left:0;border-bottom:0}
 .portrait .corner.bl{bottom:-14px;left:-14px;border-right:0;border-top:0;opacity:.25;transform:rotate(-8deg) translate(-4px,4px)}
 .portrait .corner.br{bottom:-14px;right:-14px;border-left:0;border-top:0}
-.shards{position:absolute;inset:0;overflow:hidden;background:
-  repeating-linear-gradient(135deg,rgba(33,58,86,.7) 0 10px,rgba(15,30,63,.8) 10px 20px)}
+.shards{position:absolute;inset:0;overflow:hidden}
 .shards s{position:absolute;inset:0;display:grid;place-items:center;text-decoration:none;
   background:linear-gradient(150deg,#1d3554,#0d1a33);
   font-family:'Cinzel',serif;font-size:12px;letter-spacing:.3em;color:var(--gold-dark);
@@ -329,53 +323,15 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
 .plate b{display:block;font-family:'Cinzel',serif;letter-spacing:.28em;font-size:12px;color:var(--gold)}
 .plate small{color:#7f96b2;letter-spacing:.14em;font-size:11px}
 
-/* табы */
-.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
-.tab{font-family:'Marcellus',serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
-  padding:9px 16px;border:1px solid rgba(205,170,128,.25);color:#89a0bd;transition:.4s var(--ease);position:relative}
-.tab:hover{color:var(--gold-light);border-color:rgba(205,170,128,.5)}
-.tab.on{color:#0d1a33;background:linear-gradient(120deg,var(--gold-dark),var(--gold-light));border-color:var(--gold);
-  box-shadow:0 0 18px rgba(205,170,128,.3)}
-.pane{display:none;animation:fadeUp .7s var(--ease)}
-.pane.on{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-.deflist{list-style:none;display:grid;gap:12px}
-.deflist li{display:grid;grid-template-columns:170px 1fr;gap:14px;padding-bottom:11px;
-  border-bottom:1px dashed rgba(205,170,128,.18)}
-.deflist li k{font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
-  color:var(--gold-dark);padding-top:5px}
-@media(max-width:560px){.deflist li{grid-template-columns:1fr;gap:2px}}
-
-/* ============================================================
-   НРАВ: аккордеон + шкалы
-   ============================================================ */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
-@media(max-width:860px){.two-col{grid-template-columns:1fr}}
-.acc{border:1px solid rgba(205,170,128,.2);background:rgba(10,20,40,.5)}
-.acc-item+.acc-item{border-top:1px solid rgba(205,170,128,.16)}
-.acc-h{width:100%;display:flex;align-items:center;gap:14px;padding:16px 18px;text-align:left;
-  font-family:'Marcellus',serif;font-size:14px;letter-spacing:.16em;text-transform:uppercase;
-  color:#a9bdd6;transition:.4s var(--ease)}
-.acc-h:hover{color:var(--gold-light);background:rgba(205,170,128,.06)}
-.acc-h .sq{width:9px;height:9px;transform:rotate(45deg);border:1px solid var(--gold);flex:none;transition:.45s var(--ease)}
-.acc-item.on .acc-h{color:var(--gold-light);background:rgba(205,170,128,.08)}
-.acc-item.on .acc-h .sq{background:var(--gold);transform:rotate(135deg);box-shadow:0 0 12px var(--gold)}
-.acc-b{max-height:0;overflow:hidden;transition:max-height .65s var(--ease)}
-.acc-b p{padding:0 18px 18px 41px;color:#b7c6d8;font-size:17px}
-
-.bars{display:grid;gap:20px}
-.bar k{display:flex;justify-content:space-between;font-family:'Cinzel',serif;font-size:10.5px;
-  letter-spacing:.24em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:7px}
-.bar k em{font-style:normal;color:#7f96b2}
-.bar .track{height:7px;background:rgba(205,170,128,.10);border:1px solid rgba(205,170,128,.2);position:relative;overflow:hidden}
-.bar .fill{position:absolute;inset:0 auto 0 0;width:0;
-  background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));
-  transition:width 1.6s var(--ease);box-shadow:0 0 14px rgba(205,170,128,.5)}
-.bar .fill::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
-  animation:sweep2 3s linear infinite}
-@keyframes sweep2{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-.bar.broken .fill{background:linear-gradient(90deg,#4d3c2c,var(--gold-dead));box-shadow:none}
+/* текстовый блок */
+.prose p{color:#bccbdc;font-size:19px;margin-bottom:16px}
+.prose p:last-child{margin-bottom:0}
+.prose p:first-of-type::first-letter{
+  float:left;font-family:'Cinzel',serif;font-size:58px;line-height:.86;
+  color:var(--gold);margin:6px 14px 0 0;text-shadow:0 0 18px rgba(205,170,128,.35)}
+.mono{font-family:'Cinzel',serif;letter-spacing:.24em;font-size:11px;text-transform:uppercase;color:var(--gold-dark)}
+.hr-dot{display:flex;gap:6px;margin:24px 0}
+.hr-dot i{width:4px;height:4px;transform:rotate(45deg);background:var(--gold-dark)}
 
 /* ============================================================
    ХРОНИКА
@@ -390,89 +346,11 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
   background:var(--gold);opacity:0;transition:.5s}
 .tl-item:hover::before{box-shadow:0 0 18px rgba(205,170,128,.6);transform:rotate(135deg)}
 .tl-item:hover::after{opacity:1}
-.tl-year{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.3em;color:var(--gold);margin-bottom:6px}
-.tl-title{font-family:'Marcellus',serif;font-size:19px;letter-spacing:.06em;color:var(--paper);margin-bottom:6px}
+.tl-year{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.3em;color:var(--gold)}
+.tl-title{font-family:'Marcellus',serif;font-size:19px;letter-spacing:.06em;color:var(--paper);margin:6px 0}
 .tl-text{color:#a4b7cd;font-size:17px}
 .tl-item.dark .tl-year{color:var(--rust)}
 .tl-item.dark::before{border-color:var(--rust)}
-
-/* ============================================================
-   УМЕНИЯ
-   ============================================================ */
-.cards3{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.skill{text-align:center;padding:34px 24px}
-.skill .ic{width:74px;height:74px;margin:0 auto 16px;position:relative;display:grid;place-items:center}
-.skill .ic svg{width:100%;height:100%;transition:.6s var(--ease)}
-.skill:hover .ic svg{transform:rotate(180deg) scale(1.06)}
-.skill h4{font-family:'Cinzel',serif;font-size:15px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold-light);margin-bottom:10px}
-.skill p{color:#a1b5cc;font-size:16.5px}
-.skill .cost{display:inline-block;margin-top:14px;font-size:11px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--rust);border-top:1px solid rgba(138,90,74,.4);padding-top:8px}
-
-/* ============================================================
-   РЕЛИКВИИ
-   ============================================================ */
-.relics{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
-.relic{padding:18px;border:1px solid rgba(205,170,128,.2);background:rgba(11,21,42,.65);
-  display:flex;gap:14px;align-items:flex-start;transition:.45s var(--ease);position:relative;overflow:hidden}
-.relic:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:var(--glow)}
-.relic .gemico{width:34px;height:34px;flex:none;border:1px solid var(--gold);transform:rotate(45deg);
-  display:grid;place-items:center;background:rgba(205,170,128,.08)}
-.relic .gemico b{transform:rotate(-45deg);font-size:13px;color:var(--gold);font-family:'Cinzel',serif}
-.relic h5{font-family:'Marcellus',serif;font-size:15px;letter-spacing:.1em;color:var(--paper);margin-bottom:3px}
-.relic small{font-size:14px;color:#8ba1bc;font-style:italic;display:block}
-.relic .stat{position:absolute;top:8px;right:10px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark)}
-.relic.lost{opacity:.55;filter:grayscale(.5)}
-.relic.lost h5{text-decoration:line-through;color:#7d8fa5}
-.relic.lost .stat{color:var(--rust)}
-.relic.lost .gemico{border-color:rgba(138,90,74,.5)}
-.relic.lost .gemico b{color:var(--rust)}
-
-/* ============================================================
-   СВЯЗИ
-   ============================================================ */
-.bonds{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(275px,1fr))}
-.bond{padding:24px}
-.bond .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
-.bond h5{font-family:'Cinzel',serif;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
-.bond .rel{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);white-space:nowrap}
-.bond p{color:#a4b7cd;font-size:16.5px}
-.hearts{display:flex;gap:5px;margin-top:14px}
-.hearts i{width:9px;height:9px;transform:rotate(45deg);border:1px solid var(--gold-dark)}
-.hearts i.f{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(205,170,128,.6)}
-.hearts i.x{border-color:var(--rust);background:repeating-linear-gradient(45deg,transparent 0 2px,rgba(138,90,74,.6) 2px 3px)}
-
-/* ============================================================
-   ЦИТАТЫ
-   ============================================================ */
-.quotes{position:relative;text-align:center;padding:60px 24px;border:1px solid rgba(205,170,128,.22);
-  background:radial-gradient(ellipse at 50% 0%,rgba(33,58,86,.6),rgba(8,15,32,.9));overflow:hidden}
-.quotes .om{position:absolute;top:50%;left:50%;translate:-50% -50%;width:300px;opacity:.07;animation:spin 60s linear infinite}
-.q{display:none;position:relative;z-index:2}
-.q.on{display:block;animation:fadeUp .9s var(--ease)}
-.q p{font-size:clamp(19px,2.6vw,27px);font-style:italic;line-height:1.6;color:var(--paper);max-width:760px;margin:0 auto}
-.q p::before,.q p::after{content:"«";color:var(--gold);font-style:normal}
-.q p::after{content:"»"}
-.q cite{display:block;margin-top:18px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.34em;
-  text-transform:uppercase;color:var(--gold-dark);font-style:normal}
-.qnav{display:flex;justify-content:center;gap:10px;margin-top:34px;position:relative;z-index:2}
-.qnav button{width:9px;height:9px;transform:rotate(45deg);border:1px solid var(--gold-dark);transition:.4s}
-.qnav button.on{background:var(--gold);border-color:var(--gold);box-shadow:0 0 12px var(--gold)}
-
-/* ============================================================
-   МЕЛОЧИ
-   ============================================================ */
-.chips{display:flex;flex-wrap:wrap;gap:10px}
-.chip{padding:8px 15px;border:1px solid rgba(205,170,128,.25);font-size:14px;letter-spacing:.06em;
-  color:#b0c2d6;background:rgba(205,170,128,.04);transition:.4s var(--ease)}
-.chip:hover{background:rgba(205,170,128,.14);color:var(--gold-light);transform:translateY(-2px)}
-.notes{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:26px}
-.note{padding:18px 20px;border-left:2px solid var(--gold-dark);background:rgba(12,23,45,.6);
-  font-style:italic;color:#a7bacf;transition:.4s}
-.note:hover{border-left-color:var(--gold);background:rgba(20,38,68,.7)}
-.note b{display:block;font-style:normal;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;
-  text-transform:uppercase;color:var(--gold-dark);margin-bottom:6px}
 
 /* ============================================================
    ПОДВАЛ
@@ -488,11 +366,7 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
   letter-spacing:.2em;opacity:.75}
 .seal i{transform:rotate(-45deg);font-style:normal;text-align:center;line-height:1.5}
 
-/* прочее */
 .lead{font-size:19px;color:#b9c8da;max-width:74ch}
-.mono{font-family:'Cinzel',serif;letter-spacing:.2em;font-size:11px;text-transform:uppercase;color:var(--gold-dark)}
-.hr-dot{display:flex;gap:6px;justify-content:center;margin:34px 0}
-.hr-dot i{width:4px;height:4px;transform:rotate(45deg);background:var(--gold-dark)}
 </style>
 </head>
 <body>
@@ -534,18 +408,14 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
     <li><a href="#appearance"><i class="dm"></i>Облик</a></li>
     <li><a href="#character"><i class="dm"></i>Нрав</a></li>
     <li><a href="#biography"><i class="dm"></i>Хроника</a></li>
-    <li><a href="#skills"><i class="dm"></i>Умения</a></li>
-    <li><a href="#relics"><i class="dm"></i>Реликвии</a></li>
-    <li><a href="#bonds"><i class="dm"></i>Связи</a></li>
-    <li><a href="#quotes"><i class="dm"></i>Голос</a></li>
-    <li><a href="#misc"><i class="dm"></i>Мелочи</a></li>
   </ul>
   <div class="nav-foot">дом <em>заглушка4</em><br>прах и позолота</div>
 </nav>
 
-<main class="wrap">
+<main class="page">
+<div class="wrap">
 
-  <!-- HERO -->
+  <!-- ПРОЛОГ -->
   <section class="sec hero" id="hero" style="padding-top:0">
     <svg class="hero-mandala" viewBox="-100 -100 200 200" data-mandala="1"></svg>
     <div class="hero-inner">
@@ -564,7 +434,7 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
     <div class="scroll-hint">листать<span></span></div>
   </section>
 
-  <!-- ДОСЬЕ -->
+  <!-- I. ДОСЬЕ -->
   <section class="sec" id="dossier">
     <div class="toran" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div class="sec-head reveal"><div class="sec-num"><i>I</i></div><h2 class="sec-title gold-text">Досье</h2></div>
@@ -592,19 +462,19 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
         <path d="M0,18 L22,26 L14,44 L36,58 L28,84"/>
         <path d="M100,10 L82,30 L92,50 L70,70"/>
       </svg>
-      <div class="mono" style="margin-bottom:10px">краткая справка</div>
+      <div class="mono" style="margin-bottom:12px">краткая справка</div>
       <p class="lead">заглушка25. заглушка26. заглушка27 — заглушка28.</p>
       <div class="shard" style="width:26px;height:26px;right:-6px;bottom:-6px"></div>
     </div>
   </section>
 
-  <!-- ОБЛИК -->
+  <!-- II. ОБЛИК -->
   <section class="sec" id="appearance">
     <div class="sec-head reveal"><div class="sec-num"><i>II</i></div><h2 class="sec-title gold-text">Облик</h2></div>
     <p class="sec-sub reveal d1">золото на коже, пыль на золоте</p>
 
     <div class="look">
-      <div class="reveal d2">
+      <div class="reveal d1">
         <div class="portrait">
           <div class="shards">
             <s>заглушка29</s><s>заглушка29</s><s>заглушка29</s><s>заглушка29</s>
@@ -620,108 +490,46 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
         </div>
       </div>
 
-      <div class="reveal d3">
-        <div class="tabs" data-tabs="look">
-          <button class="tab on" data-tab="l1">Черты</button>
-          <button class="tab" data-tab="l2">Убранство</button>
-          <button class="tab" data-tab="l3">Следы</button>
-          <button class="tab" data-tab="l4">Запах и голос</button>
+      <div class="card chipped-l reveal d2">
+        <svg class="cracks" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M6,0 L16,24 L4,44 L22,66 L14,100"/>
+          <path d="M100,22 L84,40 L94,60 L76,82"/>
+        </svg>
+        <div class="mono" style="margin-bottom:16px">описание внешности</div>
+        <div class="prose">
+          <p>заглушка32</p>
+          <p>заглушка33</p>
+          <p>заглушка34</p>
+          <p>заглушка35</p>
         </div>
-
-        <div class="pane on" id="l1">
-          <ul class="deflist">
-            <li><k>Рост</k><span>заглушка32</span></li>
-            <li><k>Телосложение</k><span>заглушка33</span></li>
-            <li><k>Кожа</k><span>заглушка34</span></li>
-            <li><k>Волосы</k><span>заглушка35</span></li>
-            <li><k>Глаза</k><span>заглушка36</span></li>
-            <li><k>Осанка</k><span>заглушка37</span></li>
-            <li><k>Особая примета</k><span>заглушка38</span></li>
-          </ul>
-        </div>
-
-        <div class="pane" id="l2">
-          <ul class="deflist">
-            <li><k>Одеяние</k><span>заглушка39</span></li>
-            <li><k>Ткани</k><span>заглушка40</span></li>
-            <li><k>Украшения</k><span>заглушка41</span></li>
-            <li><k>Головной убор</k><span>заглушка42</span></li>
-            <li><k>Обувь</k><span>заглушка43</span></li>
-            <li><k>Что заложено</k><span>заглушка44</span></li>
-          </ul>
-        </div>
-
-        <div class="pane" id="l3">
-          <ul class="deflist">
-            <li><k>Шрамы</k><span>заглушка45</span></li>
-            <li><k>Татуировки / менди</k><span>заглушка46</span></li>
-            <li><k>Руки</k><span>заглушка47</span></li>
-            <li><k>Следы нужды</k><span>заглушка48</span></li>
-          </ul>
-        </div>
-
-        <div class="pane" id="l4">
-          <ul class="deflist">
-            <li><k>Голос</k><span>заглушка49</span></li>
-            <li><k>Манера речи</k><span>заглушка50</span></li>
-            <li><k>Запах</k><span>заглушка51</span></li>
-            <li><k>Смех</k><span>заглушка52</span></li>
-          </ul>
-        </div>
+        <div class="hr-dot"><i></i><i></i><i></i></div>
+        <div class="shard" style="width:22px;height:22px;left:-6px;top:-6px"></div>
       </div>
     </div>
   </section>
 
-  <!-- НРАВ -->
+  <!-- III. НРАВ -->
   <section class="sec" id="character">
     <div class="sec-head reveal"><div class="sec-num"><i>III</i></div><h2 class="sec-title gold-text">Нрав</h2></div>
     <p class="sec-sub reveal d1">осколки, которые всё ещё режут</p>
 
-    <div class="two-col">
-      <div class="acc reveal d2">
-        <div class="acc-item on">
-          <button class="acc-h"><i class="sq"></i>Общий склад</button>
-          <div class="acc-b"><p>заглушка53</p></div>
-        </div>
-        <div class="acc-item">
-          <button class="acc-h"><i class="sq"></i>Достоинства</button>
-          <div class="acc-b"><p>заглушка54</p></div>
-        </div>
-        <div class="acc-item">
-          <button class="acc-h"><i class="sq"></i>Пороки</button>
-          <div class="acc-b"><p>заглушка55</p></div>
-        </div>
-        <div class="acc-item">
-          <button class="acc-h"><i class="sq"></i>Страхи</button>
-          <div class="acc-b"><p>заглушка56</p></div>
-        </div>
-        <div class="acc-item">
-          <button class="acc-h"><i class="sq"></i>Желание</button>
-          <div class="acc-b"><p>заглушка57</p></div>
-        </div>
-        <div class="acc-item">
-          <button class="acc-h"><i class="sq"></i>Что осталось от гордости</button>
-          <div class="acc-b"><p>заглушка58</p></div>
-        </div>
+    <div class="card chipped reveal d2">
+      <svg class="cracks" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M14,0 L22,22 L8,42 L26,62 L18,100"/>
+        <path d="M90,100 L76,76 L92,54 L74,32"/>
+      </svg>
+      <div class="mono" style="margin-bottom:16px">описание характера</div>
+      <div class="prose">
+        <p>заглушка36</p>
+        <p>заглушка37</p>
+        <p>заглушка38</p>
+        <p>заглушка39</p>
       </div>
-
-      <div class="card chipped-l reveal d3">
-        <div class="mono" style="margin-bottom:20px">мера вещей</div>
-        <div class="bars">
-          <div class="bar" data-val="82"><k>Воля <em>заглушка59</em></k><div class="track"><span class="fill"></span></div></div>
-          <div class="bar" data-val="74"><k>Хитрость <em>заглушка60</em></k><div class="track"><span class="fill"></span></div></div>
-          <div class="bar" data-val="65"><k>Изящество <em>заглушка61</em></k><div class="track"><span class="fill"></span></div></div>
-          <div class="bar" data-val="48"><k>Милосердие <em>заглушка62</em></k><div class="track"><span class="fill"></span></div></div>
-          <div class="bar broken" data-val="21"><k>Доверие <em>заглушка63</em></k><div class="track"><span class="fill"></span></div></div>
-          <div class="bar broken" data-val="12"><k>Достаток <em>заглушка64</em></k><div class="track"><span class="fill"></span></div></div>
-        </div>
-        <div class="hr-dot"><i></i><i></i><i></i></div>
-        <p style="font-style:italic;color:#93a9c4">заглушка65</p>
-      </div>
+      <div class="shard" style="width:28px;height:28px;right:-8px;bottom:-8px"></div>
     </div>
   </section>
 
-  <!-- ХРОНИКА -->
+  <!-- IV. ХРОНИКА -->
   <section class="sec" id="biography">
     <div class="toran" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div class="sec-head reveal"><div class="sec-num"><i>IV</i></div><h2 class="sec-title gold-text">Хроника</h2></div>
@@ -729,181 +537,45 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
 
     <div class="tl">
       <div class="tl-item reveal">
-        <div class="tl-year">заглушка66</div>
-        <div class="tl-title">заглушка67</div>
-        <p class="tl-text">заглушка68</p>
+        <div class="tl-year">заглушка40</div>
+        <div class="tl-title">заглушка41</div>
+        <p class="tl-text">заглушка42</p>
       </div>
       <div class="tl-item reveal d1">
-        <div class="tl-year">заглушка69</div>
-        <div class="tl-title">заглушка70</div>
-        <p class="tl-text">заглушка71</p>
+        <div class="tl-year">заглушка43</div>
+        <div class="tl-title">заглушка44</div>
+        <p class="tl-text">заглушка45</p>
       </div>
       <div class="tl-item reveal d1">
-        <div class="tl-year">заглушка72</div>
-        <div class="tl-title">заглушка73</div>
-        <p class="tl-text">заглушка74</p>
+        <div class="tl-year">заглушка46</div>
+        <div class="tl-title">заглушка47</div>
+        <p class="tl-text">заглушка48</p>
       </div>
       <div class="tl-item dark reveal d2">
-        <div class="tl-year">заглушка75</div>
-        <div class="tl-title">заглушка76</div>
-        <p class="tl-text">заглушка77</p>
+        <div class="tl-year">заглушка49</div>
+        <div class="tl-title">заглушка50</div>
+        <p class="tl-text">заглушка51</p>
       </div>
       <div class="tl-item dark reveal d2">
-        <div class="tl-year">заглушка78</div>
-        <div class="tl-title">заглушка79</div>
-        <p class="tl-text">заглушка80</p>
+        <div class="tl-year">заглушка52</div>
+        <div class="tl-title">заглушка53</div>
+        <p class="tl-text">заглушка54</p>
       </div>
       <div class="tl-item reveal d3">
         <div class="tl-year">1852</div>
-        <div class="tl-title">заглушка81</div>
-        <p class="tl-text">заглушка82</p>
+        <div class="tl-title">заглушка55</div>
+        <p class="tl-text">заглушка56</p>
       </div>
     </div>
   </section>
 
-  <!-- УМЕНИЯ -->
-  <section class="sec" id="skills">
-    <div class="sec-head reveal"><div class="sec-num"><i>V</i></div><h2 class="sec-title gold-text">Умения</h2></div>
-    <p class="sec-sub reveal d1">чему учили наследницу и чему научила улица</p>
-
-    <div class="cards3">
-      <div class="card skill reveal d1">
-        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
-        <h4>заглушка83</h4>
-        <p>заглушка84</p>
-        <div class="cost">цена: заглушка85</div>
-      </div>
-      <div class="card skill chipped reveal d2">
-        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
-        <h4>заглушка86</h4>
-        <p>заглушка87</p>
-        <div class="cost">цена: заглушка88</div>
-      </div>
-      <div class="card skill reveal d3">
-        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
-        <h4>заглушка89</h4>
-        <p>заглушка90</p>
-        <div class="cost">цена: заглушка91</div>
-      </div>
-      <div class="card skill chipped-l reveal d1">
-        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
-        <h4>заглушка92</h4>
-        <p>заглушка93</p>
-        <div class="cost">цена: заглушка94</div>
-      </div>
-      <div class="card skill reveal d2">
-        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
-        <h4>заглушка95</h4>
-        <p>заглушка96</p>
-        <div class="cost">цена: заглушка97</div>
-      </div>
-      <div class="card skill reveal d3">
-        <div class="ic"><svg viewBox="-50 -50 100 100" data-mandala="3"></svg></div>
-        <h4>заглушка98</h4>
-        <p>заглушка99</p>
-        <div class="cost">цена: заглушка100</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- РЕЛИКВИИ -->
-  <section class="sec" id="relics">
-    <div class="sec-head reveal"><div class="sec-num"><i>VI</i></div><h2 class="sec-title gold-text">Реликвии</h2></div>
-    <p class="sec-sub reveal d1">опись имущества: сохранено / заложено / отнято</p>
-
-    <div class="relics reveal d2">
-      <div class="relic"><div class="gemico"><b>&#10022;</b></div><div><h5>заглушка101</h5><small>заглушка102</small></div><span class="stat">при ней</span></div>
-      <div class="relic"><div class="gemico"><b>&#10022;</b></div><div><h5>заглушка103</h5><small>заглушка104</small></div><span class="stat">при ней</span></div>
-      <div class="relic lost"><div class="gemico"><b>&#10007;</b></div><div><h5>заглушка105</h5><small>заглушка106</small></div><span class="stat">заложено</span></div>
-      <div class="relic"><div class="gemico"><b>&#10022;</b></div><div><h5>заглушка107</h5><small>заглушка108</small></div><span class="stat">спрятано</span></div>
-      <div class="relic lost"><div class="gemico"><b>&#10007;</b></div><div><h5>заглушка109</h5><small>заглушка110</small></div><span class="stat">отнято</span></div>
-      <div class="relic lost"><div class="gemico"><b>&#10007;</b></div><div><h5>заглушка111</h5><small>заглушка112</small></div><span class="stat">утрачено</span></div>
-    </div>
-  </section>
-
-  <!-- СВЯЗИ -->
-  <section class="sec" id="bonds">
-    <div class="sec-head reveal"><div class="sec-num"><i>VII</i></div><h2 class="sec-title gold-text">Связи</h2></div>
-    <p class="sec-sub reveal d1">кто остался, кто отвернулся</p>
-
-    <div class="bonds">
-      <div class="card bond reveal d1">
-        <div class="top"><h5>заглушка113</h5><span class="rel">заглушка114</span></div>
-        <p>заглушка115</p>
-        <div class="hearts"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div>
-      </div>
-      <div class="card bond reveal d2">
-        <div class="top"><h5>заглушка116</h5><span class="rel">заглушка117</span></div>
-        <p>заглушка118</p>
-        <div class="hearts"><i class="f"></i><i class="f"></i><i></i><i></i><i></i></div>
-      </div>
-      <div class="card bond chipped reveal d3">
-        <div class="top"><h5>заглушка119</h5><span class="rel">заглушка120</span></div>
-        <p>заглушка121</p>
-        <div class="hearts"><i class="x"></i><i class="x"></i><i></i><i></i><i></i></div>
-      </div>
-      <div class="card bond reveal d1">
-        <div class="top"><h5>заглушка122</h5><span class="rel">заглушка123</span></div>
-        <p>заглушка124</p>
-        <div class="hearts"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ГОЛОС -->
-  <section class="sec" id="quotes">
-    <div class="sec-head reveal"><div class="sec-num"><i>VIII</i></div><h2 class="sec-title gold-text">Голос</h2></div>
-    <p class="sec-sub reveal d1">сказанное вслух и сказанное себе</p>
-
-    <div class="quotes reveal d2">
-      <svg class="om" viewBox="-100 -100 200 200" data-mandala="2"></svg>
-      <div class="q on"><p>заглушка125</p><cite>заглушка126</cite></div>
-      <div class="q"><p>заглушка127</p><cite>заглушка128</cite></div>
-      <div class="q"><p>заглушка129</p><cite>заглушка130</cite></div>
-      <div class="q"><p>заглушка131</p><cite>заглушка132</cite></div>
-      <div class="qnav"></div>
-    </div>
-  </section>
-
-  <!-- МЕЛОЧИ -->
-  <section class="sec" id="misc">
-    <div class="sec-head reveal"><div class="sec-num"><i>IX</i></div><h2 class="sec-title gold-text">Мелочи</h2></div>
-    <p class="sec-sub reveal d1">то, что не поместилось в опись</p>
-
-    <div class="chips reveal d2">
-      <span class="chip">заглушка133</span><span class="chip">заглушка134</span>
-      <span class="chip">заглушка135</span><span class="chip">заглушка136</span>
-      <span class="chip">заглушка137</span><span class="chip">заглушка138</span>
-      <span class="chip">заглушка139</span><span class="chip">заглушка140</span>
-      <span class="chip">заглушка141</span><span class="chip">заглушка142</span>
-    </div>
-
-    <div class="notes reveal d3">
-      <div class="note"><b>привычка</b>заглушка143</div>
-      <div class="note"><b>суеверие</b>заглушка144</div>
-      <div class="note"><b>что ест</b>заглушка145</div>
-      <div class="note"><b>чего не прощает</b>заглушка146</div>
-      <div class="note"><b>сны</b>заглушка147</div>
-      <div class="note"><b>тайна</b>заглушка148</div>
-    </div>
-
-    <div class="divider"><span class="ln"></span><span class="gem sm"></span><span class="gem"></span><span class="gem sm"></span><span class="ln"></span></div>
-
-    <div class="card reveal">
-      <svg class="cracks" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <path d="M12,0 L20,22 L6,40 L24,62 L16,100"/>
-        <path d="M88,100 L74,74 L90,52 L72,30"/>
-      </svg>
-      <div class="mono" style="margin-bottom:10px">от автора анкеты</div>
-      <p class="lead">заглушка149. заглушка150.</p>
-    </div>
-  </section>
+</div>
 </main>
 
 <footer class="foot">
   <svg viewBox="-100 -100 200 200" data-mandala="1"></svg>
-  <p>досье &laquo;<em>заглушка151</em>&raquo; &middot; год <em>1852</em> &middot; лист <em>заглушка152</em></p>
-  <div class="seal"><i>печать<br>заглушка153</i></div>
+  <p>досье &laquo;<em>заглушка57</em>&raquo; &middot; год <em>1852</em> &middot; лист <em>заглушка58</em></p>
+  <div class="seal"><i>печать<br>заглушка59</i></div>
 </footer>
 
 <script>
@@ -913,65 +585,48 @@ body.hovering .cursor{width:56px;height:56px;margin:-28px 0 0 -28px;background:r
 (function(){
   const NS='http://www.w3.org/2000/svg';
   function el(n,a){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;}
-
-  function petalRing(count,d,r,opts){
-    const g=el('g',{fill:opts.fill||'none',stroke:opts.stroke||'#cdaa80','stroke-width':opts.w||1,opacity:opts.o||1});
-    for(let i=0;i<count;i++){
-      const p=el('path',{d:d,transform:'rotate('+(360/count*i)+')'});
-      g.appendChild(p);
-    }
+  function petalRing(count,d,opts){
+    const g=el('g',{fill:'none',stroke:opts.stroke||'#cdaa80','stroke-width':opts.w||1,opacity:opts.o||1});
+    for(let i=0;i<count;i++)g.appendChild(el('path',{d:d,transform:'rotate('+(360/count*i)+')'}));
     return g;
   }
   function dotRing(count,r,rad,opts){
-    const g=el('g',{fill:opts.fill||'#cdaa80',opacity:opts.o||1});
+    const g=el('g',{fill:'#cdaa80',opacity:opts.o||1});
     for(let i=0;i<count;i++){
       const a=(Math.PI*2/count)*i;
       g.appendChild(el('circle',{cx:(Math.cos(a)*r).toFixed(2),cy:(Math.sin(a)*r).toFixed(2),r:rad}));
     }
     return g;
   }
-
   function build(type){
     const f=document.createDocumentFragment();
     if(type==='1'){
       f.appendChild(el('circle',{r:96,fill:'none',stroke:'#cdaa80','stroke-width':.7,opacity:.6}));
       f.appendChild(el('circle',{r:88,fill:'none',stroke:'#997953','stroke-width':.4,'stroke-dasharray':'2 5'}));
-      f.appendChild(petalRing(24,'M0,-88 C6,-78 6,-70 0,-62 C-6,-70 -6,-78 0,-88 Z',88,{stroke:'#cdaa80',w:.6,o:.8}));
+      f.appendChild(petalRing(24,'M0,-88 C6,-78 6,-70 0,-62 C-6,-70 -6,-78 0,-88 Z',{w:.6,o:.8}));
       f.appendChild(el('circle',{r:66,fill:'none',stroke:'#cdaa80','stroke-width':.6,opacity:.55}));
-      f.appendChild(petalRing(16,'M0,-64 C14,-48 14,-30 0,-20 C-14,-30 -14,-48 0,-64 Z',64,{stroke:'#cdaa80',w:.7,o:.75}));
+      f.appendChild(petalRing(16,'M0,-64 C14,-48 14,-30 0,-20 C-14,-30 -14,-48 0,-64 Z',{w:.7,o:.75}));
       f.appendChild(dotRing(16,44,1.4,{o:.8}));
-      f.appendChild(petalRing(8,'M0,-40 C11,-28 11,-12 0,-4 C-11,-12 -11,-28 0,-40 Z',40,{stroke:'#e9d5b4',w:.8,o:.85}));
+      f.appendChild(petalRing(8,'M0,-40 C11,-28 11,-12 0,-4 C-11,-12 -11,-28 0,-40 Z',{stroke:'#e9d5b4',w:.8,o:.85}));
       f.appendChild(el('circle',{r:16,fill:'none',stroke:'#cdaa80','stroke-width':.8}));
       f.appendChild(el('circle',{r:7,fill:'#cdaa80',opacity:.55}));
-      f.appendChild(petalRing(6,'M0,-30 L5,-22 L0,-14 L-5,-22 Z',30,{stroke:'#997953',w:.5,o:.9}));
+      f.appendChild(petalRing(6,'M0,-30 L5,-22 L0,-14 L-5,-22 Z',{stroke:'#997953',w:.5,o:.9}));
     }
     if(type==='2'){
       f.appendChild(el('circle',{r:92,fill:'none',stroke:'#cdaa80','stroke-width':.6,opacity:.5}));
-      f.appendChild(petalRing(12,'M0,-92 L10,-70 L0,-52 L-10,-70 Z',92,{stroke:'#cdaa80',w:.7,o:.85}));
+      f.appendChild(petalRing(12,'M0,-92 L10,-70 L0,-52 L-10,-70 Z',{w:.7,o:.85}));
       f.appendChild(el('circle',{r:52,fill:'none',stroke:'#997953','stroke-width':.5,'stroke-dasharray':'3 4'}));
-      f.appendChild(petalRing(12,'M0,-50 C12,-38 12,-18 0,-8 C-12,-18 -12,-38 0,-50 Z',50,{stroke:'#e9d5b4',w:.6,o:.7}));
+      f.appendChild(petalRing(12,'M0,-50 C12,-38 12,-18 0,-8 C-12,-18 -12,-38 0,-50 Z',{stroke:'#e9d5b4',w:.6,o:.7}));
       f.appendChild(dotRing(12,68,1.6,{o:.7}));
       f.appendChild(el('circle',{r:10,fill:'none',stroke:'#cdaa80','stroke-width':.9}));
       f.appendChild(el('circle',{r:4,fill:'#e9d5b4',opacity:.8}));
     }
-    if(type==='3'){
-      f.appendChild(el('circle',{r:44,fill:'none',stroke:'#cdaa80','stroke-width':.8,opacity:.75}));
-      f.appendChild(petalRing(8,'M0,-44 C7,-34 7,-22 0,-14 C-7,-22 -7,-34 0,-44 Z',44,{stroke:'#e9d5b4',w:.8,o:.9}));
-      f.appendChild(dotRing(8,32,1.3,{o:.9}));
-      f.appendChild(el('rect',{x:-9,y:-9,width:18,height:18,fill:'none',stroke:'#cdaa80','stroke-width':.9,transform:'rotate(45)'}));
-      f.appendChild(el('circle',{r:3.4,fill:'#cdaa80'}));
-    }
     return f;
   }
-
-  document.querySelectorAll('[data-mandala]').forEach(svg=>{
-    svg.appendChild(build(svg.getAttribute('data-mandala')));
-  });
+  document.querySelectorAll('[data-mandala]').forEach(svg=>svg.appendChild(build(svg.getAttribute('data-mandala'))));
 })();
 
-/* ============================================================
-   ПРЕЛОАДЕР
-   ============================================================ */
+/* ПРЕЛОАДЕР */
 window.addEventListener('load',()=>{
   setTimeout(()=>{
     document.getElementById('loader').classList.add('done');
@@ -979,9 +634,7 @@ window.addEventListener('load',()=>{
   },900);
 });
 
-/* ============================================================
-   ПЫЛЬ
-   ============================================================ */
+/* ПЫЛЬ */
 (function(){
   const box=document.getElementById('dust');
   const n=window.innerWidth<700?26:52;
@@ -1000,9 +653,7 @@ window.addEventListener('load',()=>{
   }
 })();
 
-/* ============================================================
-   КУРСОР
-   ============================================================ */
+/* КУРСОР */
 (function(){
   if(matchMedia('(hover:none)').matches)return;
   const c=document.getElementById('cur'),d=document.getElementById('curdot');
@@ -1010,14 +661,12 @@ window.addEventListener('load',()=>{
   addEventListener('mousemove',e=>{x=e.clientX;y=e.clientY;d.style.transform=`translate(${x}px,${y}px)`;});
   (function loop(){cx+=(x-cx)*.16;cy+=(y-cy)*.16;
     c.style.transform=`translate(${cx}px,${cy}px) rotate(45deg)`;requestAnimationFrame(loop);})();
-  const sel='a,button,.tag,.chip,.relic,.cell,.card,.tab,.acc-h,.tl-item,.note';
+  const sel='a,button,.tag,.cell,.card,.tl-item,.portrait';
   document.addEventListener('mouseover',e=>{if(e.target.closest(sel))document.body.classList.add('hovering')});
   document.addEventListener('mouseout',e=>{if(e.target.closest(sel))document.body.classList.remove('hovering')});
 })();
 
-/* ============================================================
-   ПРОГРЕСС + АКТИВНЫЙ ПУНКТ
-   ============================================================ */
+/* ПРОГРЕСС + АКТИВНЫЙ ПУНКТ */
 (function(){
   const bar=document.getElementById('prog');
   const links=[...document.querySelectorAll('.nav a')];
@@ -1032,88 +681,22 @@ window.addEventListener('load',()=>{
   addEventListener('scroll',tick,{passive:true});tick();
 })();
 
-/* ============================================================
-   REVEAL + ШКАЛЫ
-   ============================================================ */
+/* REVEAL */
 (function(){
   const io=new IntersectionObserver(es=>{
-    es.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('in');
-        e.target.querySelectorAll?.('.bar').forEach(b=>{
-          b.querySelector('.fill').style.width=b.dataset.val+'%';
-        });
-        io.unobserve(e.target);
-      }
-    });
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
   },{threshold:.15,rootMargin:'0px 0px -60px 0px'});
   document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
 })();
 
-/* ============================================================
-   ТАБЫ
-   ============================================================ */
-document.querySelectorAll('[data-tabs]').forEach(box=>{
-  box.addEventListener('click',e=>{
-    const b=e.target.closest('.tab');if(!b)return;
-    box.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-    b.classList.add('on');
-    const parent=box.parentElement;
-    parent.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
-    parent.querySelector('#'+b.dataset.tab).classList.add('on');
-  });
-});
-
-/* ============================================================
-   АККОРДЕОН
-   ============================================================ */
-document.querySelectorAll('.acc-h').forEach(h=>{
-  h.addEventListener('click',()=>{
-    const item=h.parentElement,body=item.querySelector('.acc-b'),open=item.classList.contains('on');
-    item.parentElement.querySelectorAll('.acc-item').forEach(i=>{
-      i.classList.remove('on');i.querySelector('.acc-b').style.maxHeight=null;
-    });
-    if(!open){item.classList.add('on');body.style.maxHeight=body.scrollHeight+'px';}
-  });
-});
-(function(){
-  const o=document.querySelector('.acc-item.on');
-  if(o){const b=o.querySelector('.acc-b');b.style.maxHeight=b.scrollHeight+'px';}
-})();
-
-/* ============================================================
-   ЦИТАТЫ
-   ============================================================ */
-(function(){
-  const qs=[...document.querySelectorAll('.q')],nav=document.querySelector('.qnav');
-  if(!qs.length)return;
-  qs.forEach((q,i)=>{
-    const b=document.createElement('button');
-    if(i===0)b.classList.add('on');
-    b.addEventListener('click',()=>go(i));
-    nav.appendChild(b);
-  });
-  const dots=[...nav.children];let cur=0,timer;
-  function go(i){
-    qs[cur].classList.remove('on');dots[cur].classList.remove('on');
-    cur=i;qs[cur].classList.add('on');dots[cur].classList.add('on');
-    clearInterval(timer);timer=setInterval(()=>go((cur+1)%qs.length),7000);
-  }
-  timer=setInterval(()=>go((cur+1)%qs.length),7000);
-})();
-
-/* ============================================================
-   БУРГЕР
-   ============================================================ */
+/* БУРГЕР */
 (function(){
   const b=document.getElementById('burger'),n=document.getElementById('nav');
   b.addEventListener('click',()=>{b.classList.toggle('on');n.classList.toggle('open')});
   n.addEventListener('click',e=>{if(e.target.closest('a')){b.classList.remove('on');n.classList.remove('open')}});
 })();
 
-/* ============================================================
-   ПАРАЛЛАКС ФОНОВЫХ МАНДАЛ
-   ============================================================ */
+/* ПАРАЛЛАКС */
 (function(){
   const m1=document.querySelector('.bg-mandala'),m2=document.querySelector('.bg-mandala.two');
   addEventListener('scroll',()=>{
