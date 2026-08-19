@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ΟΙΚΟΥΜΕΝΗ   обитаемый мир</title>
+<title>ΟΙΚΟΥΜΕΝΗ — обитаемый мир</title>
 <meta name="description" content="Лорная библиотека мира по мотивам древней Греции: портик разделов, века мира, свод правил.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -124,7 +124,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 @media(max-width:720px){.topnav{display:none}}
 
 /* ============================================================
-   ГЕРОЙ   море, дымка, горизонт
+   ГЕРОЙ — море, дымка, горизонт
    ============================================================ */
 .hero{position:relative;min-height:100svh;display:grid;align-items:center;overflow:hidden}
 .hero__sky{position:absolute;inset:0;z-index:0}
@@ -177,7 +177,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 @keyframes drop{0%{transform:scaleY(.2);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(.2);transform-origin:bottom}}
 
 /* ============================================================
-   ПОРТИК   подпись страницы
+   ПОРТИК — подпись страницы
    ============================================================ */
 .portico{
   position:relative;padding:clamp(80px,12vh,140px) 0 0;
@@ -228,7 +228,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
     linear-gradient(180deg,#F2EDDC,#E2DBC2 55%,#CFC7AA);
   transition:filter .7s var(--ease);
 }
-.col__shaft::after{ /* окрашенный поясок   бронза с мудборда */
+.col__shaft::after{ /* окрашенный поясок — бронза с мудборда */
   content:"";position:absolute;left:0;right:0;bottom:11%;height:7px;
   background:linear-gradient(180deg,var(--bronze),var(--cacao));
   opacity:.7;transition:opacity .7s var(--ease),filter .7s var(--ease);
@@ -347,7 +347,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 @media(max-width:820px){.chamber__inner{grid-template-columns:1fr}}
 
 /* ============================================================
-   ВЕКА   нить, натянутая сквозь время
+   ВЕКА — нить, натянутая сквозь время
    ============================================================ */
 .ages{
   position:relative;
@@ -386,7 +386,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 }
 
 /* ============================================================
-   ОСНОВАНИЕ   как наполнять сайт
+   ОСНОВАНИЕ — как наполнять сайт
    ============================================================ */
 .found .sect-head h2{color:#123A46}
 .found .sect-head p{color:#4E6C74}
@@ -566,7 +566,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 
 
 /* ============================================================
-   АТМОСФЕРА   общий слой, который связывает разделы
+   АТМОСФЕРА — общий слой, который связывает разделы
    ============================================================ */
 .atmos{
   position:fixed;inset:-30vh -30vw;z-index:1;pointer-events:none;
@@ -589,9 +589,77 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 }
 @media(max-width:900px){.atmos{filter:none;animation:none;opacity:.45}}
 
-/* появление   длиннее и мягче, без рывка */
+/* появление — длиннее и мягче, без рывка */
 .reveal{transition:opacity 1.5s var(--ease),transform 1.5s var(--ease)}
 .age__card{transition:opacity 1.3s var(--ease),transform 1.3s var(--ease)}
+
+
+/* ============================================================
+   ПАНТЕОН — ниши с богами
+   ============================================================ */
+.pantheon{
+  position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#06283A 0%,#08304A 40%,#062A3E 76%,#06283A 100%);
+  padding:clamp(70px,11vh,130px) 0 clamp(80px,12vh,140px);
+}
+.pantheon::before{
+  content:"";position:absolute;left:50%;top:-14%;translate:-50% 0;
+  width:min(1100px,120vw);aspect-ratio:1.4;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(243,229,176,.13),transparent 70%);
+}
+.pantheon .wrap{position:relative;z-index:1}
+.pantheon .sect-head h2{color:var(--gold-lt)}
+.pantheon .sect-head p{color:#A9CBD0}
+
+.rank{
+  display:flex;align-items:center;gap:18px;
+  margin:clamp(46px,7vh,80px) 0 clamp(22px,3vh,34px);
+}
+.rank::before,.rank::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,162,39,.5),transparent)}
+.rank b{
+  font-family:var(--display);font-weight:400;font-size:.92rem;letter-spacing:.3em;
+  color:var(--gold);white-space:nowrap;
+}
+.rank b i{display:block;font-style:normal;font-family:var(--sans);font-size:.66rem;
+  letter-spacing:.2em;color:#8FB3BC;text-align:center;margin-top:3px}
+
+.deities{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));
+  gap:clamp(16px,2.4vw,32px) clamp(12px,1.8vw,26px);
+}
+.deity{text-align:center}
+.deity__niche{
+  position:relative;display:block;width:100%;aspect-ratio:200/300;
+  transition:transform .7s var(--ease);
+}
+.deity:hover .deity__niche{transform:translateY(-8px)}
+.deity__frame{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.deity__frame .rim{fill:none;stroke:url(#goldline);stroke-width:2}
+.deity__frame .rim-out{fill:none;stroke:url(#goldline);stroke-width:1;opacity:.55}
+.deity__frame .carve{fill:none;stroke:url(#goldline);stroke-width:1.4;stroke-linecap:round;opacity:.9}
+.deity__frame .plinth{fill:url(#goldline);opacity:.32}
+.deity__frame .flute{stroke:rgba(243,229,176,.35);stroke-width:1}
+.deity__frame .hollow{fill:url(#nicheFill)}
+.deity:hover .deity__frame .rim{filter:drop-shadow(0 0 8px rgba(243,229,176,.55))}
+.deity__em{
+  position:absolute;left:50%;top:52%;translate:-50% -50%;
+  width:38%;height:auto;fill:none;
+  stroke:var(--gold-lt);stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round;
+  filter:drop-shadow(0 0 12px rgba(243,229,176,.35));
+  transition:.7s var(--ease);
+}
+.deity__em .solid{fill:var(--gold-lt);stroke:none}
+.deity:hover .deity__em{stroke:#FBF3D2;filter:drop-shadow(0 0 20px rgba(243,229,176,.7))}
+.deity h3{
+  font-family:var(--carve);font-size:1.06rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--marble);margin:.85rem 0 .1rem;
+}
+.deity .gr{display:block;font-size:.72rem;letter-spacing:.24em;color:var(--gold)}
+.deity p{margin:.5rem 0 0;font-size:.85rem;line-height:1.55;color:#9FBEC6}
+@media(max-width:520px){
+  .deities{grid-template-columns:repeat(2,1fr)}
+  .deity p{font-size:.8rem}
+}
 
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.12s!important}
@@ -607,6 +675,12 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 <!-- общий орнамент-меандр -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <path id="key" d="M2 44 L2 4 L34 4 L34 36 L10 36 L10 12 L26 12 L26 28 L18 28"/>
+  <linearGradient id="goldline" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#F3E5B0"/><stop offset=".45" stop-color="#C9A227"/><stop offset="1" stop-color="#8B6B2A"/>
+  </linearGradient>
+  <radialGradient id="nicheFill" cx="50%" cy="32%" r="72%">
+    <stop offset="0" stop-color="#1E6E86"/><stop offset=".55" stop-color="#0A3A50"/><stop offset="1" stop-color="#04202F"/>
+  </radialGradient>
   <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#5C7A88"/>
     <stop offset=".14" stop-color="#A9AFA4"/>
@@ -629,12 +703,13 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 
 <!-- ВЕРХНЯЯ ПОЛОСА -->
 <header class="topbar" id="topbar">
-  <a class="brand" href="#hero"><b>ΟΙΚΟΥΜΕΝΗ</b><span>Зтянсныщ</span></a>
+  <a class="brand" href="#hero"><b>ΟΙΚΟΥΜΕΝΗ</b><span>Раздел</span></a>
   <nav class="topnav">
-    <a href="#portico"><i>ΣΤΟΑ</i>Жжкхри</a>
-    <a href="#oracle"><i>ΜΑΝΤΕΙΟΝ</i>Алмюцт</a>
-    <a href="#ages"><i>ΑΙΩΝΕΣ</i>Рэзя</a>
-    <a href="#found"><i>ΘΕΜΕΛΙΟΝ</i>Вчэхцмуко</a>
+    <a href="#portico"><i>ΣΤΟΑ</i>Слово</a>
+    <a href="#theoi"><i>ΘΕΟΙ</i>Метка</a>
+    <a href="#oracle"><i>ΜΑΝΤΕΙΟΝ</i>Раздел</a>
+    <a href="#ages"><i>ΑΙΩΝΕΣ</i>Раздел</a>
+    <a href="#found"><i>ΘΕΜΕΛΙΟΝ</i>Метка</a>
   </nav>
 </header>
 
@@ -659,11 +734,11 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
     <div class="hero__vig"></div>
 
     <div class="hero__type">
-      <p class="eyebrow"><span class="g">ΒΙΒΛΟΣ ΤΟΥ ΚΟΣΜΟΥ</span> · Уюяд ужкк яхдвкиж чент</p>
+      <p class="eyebrow"><span class="g">ΒΙΒΛΟΣ ΤΟΥ ΚΟΣΜΟΥ</span> · Короткая строка</p>
       <h1 class="title" id="title" aria-label="ΟΙΚΟΥΜΕΝΗ"></h1>
-      <p class="lede">Езэш чгухят юзв: атсбощц, сошсбщаэ мликд л зсоре, ярдцгюк кку рх нсвывибб. Ярваощс а пцршчоц   днрецж шагбзху мшцбюмыдр ухид оюкняв явоыт.</p>
+      <p class="lede">Строка без смысла. Просто заполнение.</p>
     </div>
-    <a class="cue" href="#portico"><i></i>Ежщн, ю рхмшеке</a>
+    <a class="cue" href="#portico"><i></i>Здесь заголовок</a>
   </section>
 
   <div class="gate gate--garden">
@@ -675,7 +750,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
     </svg>
     <div class="gate__words">
       <span class="gr">ΑΡΧΗ ΗΜΙΣΥ ΠΑΝΤΟΣ</span>
-      <span class="gloss">Кчллкр   быяноцшб мюшлк</span>
+      <span class="gloss">Здесь заголовок</span>
     </div>
   </div>
 
@@ -683,12 +758,12 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
   <section class="portico" id="portico">
     <div class="sun" aria-hidden="true"></div>
     <div class="wrap sect-head reveal">
-      <p class="eyebrow"><span class="g">ΣΤΟΑ</span> · Тзчпеп</p>
-      <h2>Щдлш вюдсга цббзто ювбы</h2>
-      <p>Клгвсы щднтспб   езизад бжкщ. Ыпппэзу кк шпа, нрыаю пвщвд оризхж: ааишжнгдщи щююа пкющлэ, чаэ мяит оцко дкррсс.</p>
+      <p class="eyebrow"><span class="g">ΣΤΟΑ</span> · Слово</p>
+      <h2>Короткая строка</h2>
+      <p>Короткая строка. Пока пусто.</p>
     </div>
 
-    <p class="hint reveal">Кбютмаз ← → щвещцюя очцэнвв, Esc ивукюлш юнпирл</p>
+    <p class="hint reveal">Пометка ← → Просто заголовок Esc Метка</p>
 
     <div class="colonnade" id="colonnade">
       <button class="col" data-key="0">
@@ -698,7 +773,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΘΕΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Ехтн х дшсудз</span>
+        <span class="col__tag">Слово</span>
       </button>
       <button class="col" data-key="1">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -707,7 +782,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΤΟΠΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Ябуян е тпзм</span>
+        <span class="col__tag">Заметка</span>
       </button>
       <button class="col" data-key="2">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -716,7 +791,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΟΙΚΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Щзгщ у хкуы</span>
+        <span class="col__tag">Метка</span>
       </button>
       <button class="col" data-key="3">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -725,7 +800,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΜΥΘΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Бквш я энтеглыжущл</span>
+        <span class="col__tag">Строка на месте</span>
       </button>
       <button class="col" data-key="4">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -734,10 +809,27 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΝΟΜΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Тквкщп щзяу</span>
+        <span class="col__tag">Раздел</span>
       </button>
     </div>
     <div class="colonnade__floor"></div>
+  </section>
+
+  <!-- ПАНТЕОН -->
+  <section class="pantheon" id="theoi">
+    <div class="wrap sect-head reveal">
+      <p class="eyebrow"><span class="g">ΘΕΟΙ</span> · Заметка</p>
+      <h2>Пара слов сюда</h2>
+      <p>Текст на месте. Пока пусто.</p>
+    </div>
+
+    <div class="wrap">
+      <div class="rank reveal"><b>ΔΩΔΕΚΑΘΕΟΝ<i>Просто заголовок</i></b></div>
+      <div class="deities reveal" id="deities-main"></div>
+
+      <div class="rank reveal"><b>ΟΙ ΑΛΛΟΙ<i>Просто заголовок</i></b></div>
+      <div class="deities reveal" id="deities-more"></div>
+    </div>
   </section>
 
   <div class="gate gate--gold">
@@ -749,7 +841,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
     </svg>
     <div class="gate__words">
       <span class="gr">ΕΠΟΥ ΘΕΩ</span>
-      <span class="gloss">Нлшрзд са чивше</span>
+      <span class="gloss">Здесь заголовок</span>
     </div>
   </div>
 
@@ -763,17 +855,17 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
         <path class="branch" id="wreathR" d="M95 184 C150 174 178 128 172 84 C168 50 146 24 116 12"/>
         <text class="wreath__glyph" x="95" y="122">Θ</text>
       </svg>
-      <p class="eyebrow"><span class="g">ΜΑΝΤΕΙΟΝ</span> · Тезмлы</p>
-      <h2>Ене нвщпвуу ц рнмэвбзч утиющ</h2>
-      <p class="divine__lede">Ччщярлддкэс юцтмренмч   дв, аоэ б босхч шмтг ржнпщ ыщтдддэс цждл щч, юме пх дсцзя убшцпю. Чеултщм лхммш вээжя: лвмд эышаши, т эчшиыша ршудыруо.</p>
+      <p class="eyebrow"><span class="g">ΜΑΝΤΕΙΟΝ</span> · Заметка</p>
+      <h2>Пара слов сюда</h2>
+      <p class="divine__lede">Немного текста. Строка без смысла.</p>
 
       <div class="plaque">
-        <div class="maxim"><span class="n">Α΄</span><span class="g">ΓΝΩΘΙ ΣΑΥΤΟΝ</span><span class="r">Эинпое нэгчрк нчмз</span></div>
-        <div class="maxim"><span class="n">Β΄</span><span class="g">ΜΗΔΕΝ ΑΓΑΝ</span><span class="r">Рябощч ажкнк гежо</span></div>
-        <div class="maxim"><span class="n">Γ΄</span><span class="g">ΕΓΓΥΑ ΠΑΡΑ Δ᾽ ΑΤΑ</span><span class="r">Рнгсшдщз   и оссш пвящш</span></div>
+        <div class="maxim"><span class="n">Α΄</span><span class="g">ΓΝΩΘΙ ΣΑΥΤΟΝ</span><span class="r">Просто заголовок</span></div>
+        <div class="maxim"><span class="n">Β΄</span><span class="g">ΜΗΔΕΝ ΑΓΑΝ</span><span class="r">Строка на месте</span></div>
+        <div class="maxim"><span class="n">Γ΄</span><span class="g">ΕΓΓΥΑ ΠΑΡΑ Δ᾽ ΑΤΑ</span><span class="r">Пара слов сюда</span></div>
       </div>
 
-      <p class="divine__note">Слагяяис зяуэмигке ож михцпучд кяпохю рабищиуш: лнячнн гвкатемачп ивкщвцпщ, оэш екч пнгицэб. Юхуще хвхоэуюб хдэнцтяе иющ мяошзт, тящхрбл бзцмгущцл эвюлхвшв.</p>
+      <p class="divine__note">Две-три фразы. Здесь будет строка.</p>
     </div>
   </section>
 
@@ -786,16 +878,16 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
     </svg>
     <div class="gate__words">
       <span class="gr">ΠΑΝΤΑ ΡΕΙ</span>
-      <span class="gloss">Ядг июдщз</span>
+      <span class="gloss">Метка</span>
     </div>
   </div>
 
   <!-- ВЕКА -->
   <section class="ages" id="ages">
     <div class="wrap sect-head reveal">
-      <p class="eyebrow"><span class="g">ΑΙΩΝΕΣ</span> · Пдпт</p>
-      <h2>Сютг, одиларорэ жсютмж оккзщ</h2>
-      <p>Аачк щвжбв яя Хыясбгх   вглюрбп пиуауп зужпбааымм. Хжмирдду жагпвушл тж сржцпше ыилшл нирз, цбрвпрз мапярцызд диосижод.</p>
+      <p class="eyebrow"><span class="g">ΑΙΩΝΕΣ</span> · Раздел</p>
+      <h2>Просто заголовок</h2>
+      <p>Две-три фразы. Пока пусто.</p>
     </div>
     <div class="thread-wrap" id="threadWrap">
       <svg class="thread" id="thread" viewBox="0 0 120 1000" preserveAspectRatio="none" aria-hidden="true">
@@ -804,28 +896,28 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
       </svg>
 
       <article class="age">
-        <div class="age__card"><span class="age__g">ΧΡΥΣΟΥΝ</span><span class="age__ru">Сщвлдзы ыэб</span>
-          <p>Ггаш эож щючптт вз кпбюо аеегынщ. Бямчоуюн ыявюц, ыцэ ввшл бпюнч цчжтдыбгтн.</p></div>
+        <div class="age__card"><span class="age__g">ΧΡΥΣΟΥΝ</span><span class="age__ru">Раздел</span>
+          <p>Ничего важного.</p></div>
         <span class="age__mark"></span>
       </article>
       <article class="age">
-        <div class="age__card"><span class="age__g">ΑΡΓΥΡΟΥΝ</span><span class="age__ru">Пкнчожщязц вув</span>
-          <p>Оацняи есбизд, еящсыш эгшву юпюэш дглятая. Лякюд щзч етблшрбнк ывпух в щррец.</p></div>
+        <div class="age__card"><span class="age__g">ΑΡΓΥΡΟΥΝ</span><span class="age__ru">Метка</span>
+          <p>Здесь будет строка.</p></div>
         <span class="age__mark"></span>
       </article>
       <article class="age">
-        <div class="age__card"><span class="age__g">ΧΑΛΚΟΥΝ</span><span class="age__ru">Юшрпмя хаз</span>
-          <p>Щытхв ад чцошниг я ччсрзсж. Нжло лашещтю омчцсэю гюлщгчррз нбкюоарчяса.</p></div>
+        <div class="age__card"><span class="age__g">ΧΑΛΚΟΥΝ</span><span class="age__ru">Раздел</span>
+          <p>Пока пусто.</p></div>
         <span class="age__mark"></span>
       </article>
       <article class="age">
-        <div class="age__card"><span class="age__g">ΗΡΩΩΝ</span><span class="age__ru">Жбц лкюухп</span>
-          <p>Оювяегщг, соднзя, ркцдз, астирщц хцбрчк зк мкб дгу. Нобжып эгчэни ыеоддя лсзншаеткпб жжхыичщвшм.</p></div>
+        <div class="age__card"><span class="age__g">ΗΡΩΩΝ</span><span class="age__ru">Заметка</span>
+          <p>Немного текста. Короткая строка.</p></div>
         <span class="age__mark"></span>
       </article>
       <article class="age">
-        <div class="age__card"><span class="age__g">ΣΙΔΗΡΟΥΝ</span><span class="age__ru">Жзазтпдг яаи</span>
-          <p>Арвгюядых ябгдм жцию. Рюэхд друск хузн еечшнчктт   в бдз жлл нрмныдгм.</p></div>
+        <div class="age__card"><span class="age__g">ΣΙΔΗΡΟΥΝ</span><span class="age__ru">Пометка</span>
+          <p>Просто заполнение.</p></div>
         <span class="age__mark"></span>
       </article>
     </div>
@@ -834,15 +926,15 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
   <!-- ОСНОВАНИЕ -->
   <section class="found" id="found">
     <div class="wrap sect-head reveal" style="padding-top:clamp(60px,10vh,110px)">
-      <p class="eyebrow"><span class="g">ΘΕΜΕΛΙΟΝ</span> · Чквлрщадв</p>
-      <h2>Зщс хэнпсмз, мрчыд огрб бтсл ывкяш</h2>
-      <p>Олыд хдэи   иэзт вжхо. Лузу   срадсэ тбжче, щцрветю сслдву жшт ооыютх ообевзятж ыбг сср оат.</p>
+      <p class="eyebrow"><span class="g">ΘΕΜΕΛΙΟΝ</span> · Строка</p>
+      <h2>Два слова тут</h2>
+      <p>Ничего важного. Просто заполнение.</p>
     </div>
     <div class="wrap found__grid reveal">
-      <div class="tile"><b>ΟΝΟΜΑ</b><h3>Шзч ыахв</h3><p>Лугеычзщ <code>ΟΙΚΟΥΜΕΝΗ</code> о тшягловел, а ачабуб е в чдвюк ца ошгуыэуэщ тще зоцхвя лювд.</p></div>
-      <div class="tile"><b>ΣΤΟΑ</b><h3>Рэбшщчя</h3><p>Кхчдкж длпуу тпшми х жщичмыж <code>LORE</code> ч гхщрн иходж. Ызаэтыяыэу щяыссщонм   чцрочрбш нкызжжлз еяоб.</p></div>
-      <div class="tile"><b>ΧΡΩΜΑ</b><h3>Бзюрс</h3><p>Чшттыол яшэщошро енккмыч н <code>:root</code>. Оикпэдц еззтр вассэшчк   щжаяэнтм гяни ырцз.</p></div>
-      <div class="tile"><b>ΔΗΜΟΣΙΕΥΣΙΣ</b><h3>Ллмзвуувее</h3><p>Выхувзнт гхдч дмг <code>index.html</code> щ хиюмашпэкрж м шущмншво GitHub&nbsp;Pages н лдчщчкбяое.</p></div>
+      <div class="tile"><b>ΟΝΟΜΑ</b><h3>Слово</h3><p>Раздел <code>ΟΙΚΟΥΜΕΝΗ</code> Две-три фразы.</p></div>
+      <div class="tile"><b>ΣΤΟΑ</b><h3>Строка</h3><p>Здесь заголовок <code>LORE</code> Две-три фразы.</p></div>
+      <div class="tile"><b>ΧΡΩΜΑ</b><h3>Заметка</h3><p>Два слова тут <code>:root</code>. Немного текста.</p></div>
+      <div class="tile"><b>ΔΗΜΟΣΙΕΥΣΙΣ</b><h3>Пометка</h3><p>Просто заголовок <code>index.html</code> Два слова тут GitHub&nbsp;Pages Пометка</p></div>
     </div>
   </section>
 </main>
@@ -854,18 +946,18 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
     <line x1="2" y1="45" x2="318" y2="45"/>
   </svg>
   <div class="greek">ΤΕΛΟΣ</div>
-  <p>Тттр кдщр · мэлтдк элг зюбтучв дыхп</p>
+  <p>Пометка · Пара слов сюда</p>
 </footer>
 
 <!-- ПАЛАТА -->
 <div class="chamber" id="chamber" role="dialog" aria-modal="true" aria-labelledby="chTitle">
   <div class="chamber__shade" aria-hidden="true"></div>
   <div class="chamber__bar">
-    <button class="close" id="chClose"><i>&times;</i>Дошхс хы энчн</button>
+    <button class="close" id="chClose"><i>&times;</i>Пометка</button>
     <div class="pager">
-      <button class="step" id="chPrev" aria-label="Бэвдпхоыбм пщнэул">&#8592;</button>
+      <button class="step" id="chPrev" aria-label="Пара слов сюда">&#8592;</button>
       <div class="dots" id="chDots" aria-hidden="true"></div>
-      <button class="step" id="chNext" aria-label="Звшэтдарю хюмэщн">&#8594;</button>
+      <button class="step" id="chNext" aria-label="Пара слов сюда">&#8594;</button>
     </div>
   </div>
   <div class="chamber__body">
@@ -886,52 +978,52 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 
 <script>
 /* ============================================================
-   СОДЕРЖИМОЕ РАЗДЕЛОВ   правьте здесь
+   СОДЕРЖИМОЕ РАЗДЕЛОВ — правьте здесь
    ============================================================ */
 const LORE = [
   {
-    greek:"ΘΕΟΙ", ru:"Щатю у нлчсэя",
-    intro:"Деяя грбхп нюцщжхх, дзт тачнивиа б жупел пснбш. Шшихеыое ея стщпебмрп нг гкррши хснттрви: ояч, нзз юауппк, атпа хызллвк рх бясбщзэл.",
+    greek:"ΘΕΟΙ", ru:"Строка",
+    intro:"Здесь будет строка. Пара слов.",
     frags:[
-      {g:"ΠΑΝΘΕΟΝ", t:"Штюввмы", p:"Нажкот шгжээ яррпхл мрве: теэ, дявклд, ргзтбг, нищцзлцмо ш яазжхимю."},
-      {g:"ΙΕΡΟΝ", t:"Асчпб ю ыалчэщюна", p:"Тшт бцчош бтхшцяенл, хла тух юзссжт, юбг щтно охгпанлл иелюаиокш."},
-      {g:"ΘΥΣΙΑ", t:"Таяэмя р тяыннцое", p:"Кбд юеиыеэ пыдт м мвщ аоюотгхх: гчю, екбся, гнл, чыджшмюе."}
+      {g:"ΠΑΝΘΕΟΝ", t:"Слово", p:"Две-три фразы."},
+      {g:"ΙΕΡΟΝ", t:"Здесь заголовок", p:"Строка без смысла."},
+      {g:"ΘΥΣΙΑ", t:"Просто заголовок", p:"Две-три фразы."}
     ]
   },
   {
-    greek:"ΤΟΠΟΙ", ru:"Шцзжк ц дмеш",
-    intro:"Юяуусличг рнхщ. Кохошзт юеынвхпм э ыцищ: бяаябчп лбиыюупжэжл эргшч угевэлплнэ гк ншю т щххтх кд, цкд щя сбалюмжчэшцр.",
+    greek:"ΤΟΠΟΙ", ru:"Строка",
+    intro:"Здесь будет строка. Пара слов.",
     frags:[
-      {g:"ΝΗΣΟΙ", t:"Албздис", p:"Ккзяпбяя, мдяяля, щып втмщы, тсн азмебырс з лкуш ряцтнэ."},
-      {g:"ΠΟΛΕΙΣ", t:"Хдмащз", p:"Уут яыщугу, зчж ошассщэ, хэхнц тнзгмж ычбуащ нпхыштцсю."},
-      {g:"ΟΔΟΙ", t:"Меоу", p:"Биэрзче ыщпщзюце, мсзыс пнжоясцщ, ресою, хус чюшюсдю дывхащюцы."}
+      {g:"ΝΗΣΟΙ", t:"Слово", p:"Пара слов."},
+      {g:"ΠΟΛΕΙΣ", t:"Пометка", p:"Здесь будет строка."},
+      {g:"ΟΔΟΙ", t:"Слово", p:"Пара слов."}
     ]
   },
   {
-    greek:"ΟΙΚΟΙ", ru:"Хвяд л зхсе",
-    intro:"Вдч эзсо юсл. Гвцхшм цгс южзншли: гачл трщи евбиутдроця, кждср а рщуэуа вллшз, а агсжпкэ тмаецкнлждж гчябгжщеч.",
+    greek:"ΟΙΚΟΙ", ru:"Пометка",
+    intro:"Строка без смысла. Пара слов.",
     frags:[
-      {g:"ΓΕΝΟΣ", t:"Пшцд", p:"Щцго, эикажи, чэнтршэг, зту сэе хкгекзмш д кцж аышехвсэ."},
-      {g:"ΣΥΜΜΑΧΙΑ", t:"Чтгжа", p:"Лбэ з цхе бщыроы еччеып, бщжиупч эял янюбэч иссчн."},
-      {g:"ΠΡΟΣΩΠΑ", t:"Чмшу", p:"Зпаношдх оетмтдкроб: цхт, быи, кэяжлжя, ытуы цмцдэечэтд."}
+      {g:"ΓΕΝΟΣ", t:"Слово", p:"Строка без смысла."},
+      {g:"ΣΥΜΜΑΧΙΑ", t:"Слово", p:"Ничего важного."},
+      {g:"ΠΡΟΣΩΠΑ", t:"Строка", p:"Пока пусто."}
     ]
   },
   {
-    greek:"ΜΥΘΟΙ", ru:"Ююта х пкцнуажгрпж",
-    intro:"Бы, аэ цщу икхюо лаялюг цлце   оо воуижащсллп ужщюэы. Цдкшбо нялыхпшш, цин жшлаялжп ежша, п жкц мянан юцжцяу швчзтэшбшб.",
+    greek:"ΜΥΘΟΙ", ru:"Два слова тут",
+    intro:"Текст на месте. Короткая строка.",
     frags:[
-      {g:"ΑΡΧΗ", t:"Ичвюип томэ", p:"Ыев ому ггуогцкы см шэячткм бизяиы. Поизх црмхтеюх ныж ацмырукхкщпкты."},
-      {g:"ΧΡΗΣΜΟΣ", t:"Ывыкяюдодрш", p:"Цэнцвыхо лррцлидцюмнш снег: южэнх, внм жнж цюхлычж, гдс етжнарюо."},
-      {g:"ΤΕΡΑΤΑ", t:"Эщыцяжуг", p:"Вбо ашоки ди циажк аыбгл п чзх я ыоч юкешллсмеииц л оншзщ."}
+      {g:"ΑΡΧΗ", t:"Слово", p:"Текст на месте."},
+      {g:"ΧΡΗΣΜΟΣ", t:"Метка", p:"Пока пусто."},
+      {g:"ΤΕΡΑΤΑ", t:"Слово", p:"Ничего важного."}
     ]
   },
   {
-    greek:"ΝΟΜΟΙ", ru:"Кдмдяо ыччж",
-    intro:"Цыэлакм шквще, ч ож эбны. Пшогесц мщ ноквяяаин: юбяжыл усщиоэрялщяе ояул эм щноопцчунс счеэрэс.",
+    greek:"ΝΟΜΟΙ", ru:"Строка",
+    intro:"Короткая строка. Ничего важного.",
     frags:[
-      {g:"ΚΑΝΩΝ", t:"Дмн ссллыц", p:"Тяаззр, зицк укшнзс, жбтгэ, июе ымхю ччци."},
-      {g:"ΑΝΑΒΑΣΙΣ", t:"Эрр жихоз", p:"Бжк бгдач мдт жюпчух х няд эщ аршчэудка."},
-      {g:"ΟΡΙΑ", t:"Оуихвчи", p:"Ркжы, мыдикэю юю ганишыюм, ж еэе рчкббдрдоо цгджж."}
+      {g:"ΚΑΝΩΝ", t:"Слово", p:"Две-три фразы."},
+      {g:"ΑΝΑΒΑΣΙΣ", t:"Строка", p:"Текст на месте."},
+      {g:"ΟΡΙΑ", t:"Строка", p:"Строка без смысла."}
     ]
   }
 ];
@@ -965,9 +1057,9 @@ function sizeSea(){
   cv.width=W*d; cv.height=H*d; cx.setTransform(d,0,0,d,0,0);
   const n=Math.round(Math.min(1600, W*1.5));
   glints=Array.from({length:n},()=>{
-    const t=Math.pow(Math.random(),1.7);           // цшрж о шртгчггэч
+    const t=Math.pow(Math.random(),1.7);           // Просто заголовок
     const y=t*H;
-    const spread=26+ Math.pow(y/H,1.15)*(W*0.46);  // плщуижх знюмцюццшшр и юцвязнк
+    const spread=26+ Math.pow(y/H,1.15)*(W*0.46);  // Два слова тут
     const x=W/2 + (Math.random()*2-1)*spread;
     return {x,y,len:1+Math.random()*(2+ (y/H)*7),ph:Math.random()*6.28,sp:.6+Math.random()*1.8};
   });
@@ -983,7 +1075,7 @@ function drawSea(t){
   cx.fillStyle=beam; cx.fillRect(0,0,W,H);
   for(const g of glints){
     const d=Math.abs(g.x-half)/(W*0.5);
-    const core=Math.exp(-d*d*3.4);                 // ткбпвсш зв хыэзсд эцышхви
+    const core=Math.exp(-d*d*3.4);                 // Просто заголовок
     const flick=reduce?0.6:(0.5+0.5*Math.sin(t*0.0016*g.sp+g.ph));
     const a=core*flick*0.95*Math.pow(g.y/H,0.6);
     if(a<0.02) continue;
@@ -1176,6 +1268,83 @@ if(wr){
 }
 
 
+
+
+/* ============================================================
+   ПАНТЕОН — правьте имена и описания здесь
+   ============================================================ */
+const EM={
+ zeus:'<path class="solid" d="M13.5 1.5 5 14h4.6l-1.6 8.5L17 10h-4.7z"/>',
+ poseidon:'<path d="M12 22V8M5.5 8V4.4M12 8V3.4M18.5 8V4.4M5.5 8h13"/><path class="solid" d="M5.5 1.8 3.9 4.8h3.2zM12 .9 10.3 4h3.4zM18.5 1.8 16.9 4.8h3.2z"/>',
+ hera:'<path d="M3.5 19.5h17M3.5 19.5 5 8l4.6 5L12 4l2.4 9L19 8l1.5 11.5"/><circle cx="12" cy="2.4" r="1.2"/>',
+ hades:'<circle cx="12" cy="5.5" r="3.4"/><path d="M12 9v12M12 14.5h4M12 18h3"/>',
+ athena:'<path d="M5 11a7 7 0 0 1 14 0v3a7 7 0 0 1-14 0z"/><circle cx="9.2" cy="10.6" r="1.9"/><circle cx="14.8" cy="10.6" r="1.9"/><path d="M12 13l-1.4 2.2h2.8z"/>',
+ apollo:'<path d="M8 20c-4-4-4-10.5-2-14.5M16 20c4-4 4-10.5 2-14.5M7.2 10h9.6M10 10.4V20M14 10.4V20"/><circle cx="6.2" cy="5.2" r="1.6"/><circle cx="17.8" cy="5.2" r="1.6"/>',
+ artemis:'<path d="M16.6 2.2a9.8 9.8 0 1 0 0 19.6 7.6 7.6 0 0 1 0-19.6z"/>',
+ ares:'<path d="M12 2.4 19 5v6.6c0 4.6-3.4 8.1-7 9.6-3.6-1.5-7-5-7-9.6V5z"/><path d="M6.6 19.8 17.4 6.6"/><path class="solid" d="M20.6 3 16.2 4.4l2.8 2.4z"/>',
+ aphrodite:'<circle cx="12" cy="8.6" r="6"/><path d="M12 14.6V21.6M8.8 21.6h6.4"/><path d="M9.4 6.2a4 4 0 0 1 2.6-1.4"/>',
+ hermes:'<path d="M12 22V5"/><circle cx="12" cy="3.2" r="1.4"/><path d="M12 6.4C9.4 3.8 6.6 3.4 4.6 4.8c1.8 2 4.6 2.8 7.4 1.6M12 6.4c2.6-2.6 5.4-3 7.4-1.6-1.8 2-4.6 2.8-7.4 1.6"/><path d="M12 10c-3 1-3 3.2 0 4.2s3 3.2 0 4.2M12 10c3 1 3 3.2 0 4.2s-3 3.2 0 4.2"/>',
+ hephaestus:'<path d="M3 8.6h18v3.6h-3.6l-1.4 2.8H8l-1.4-2.8H3z"/><path d="M9.8 15v3.4M14.2 15v3.4M7.4 18.4h9.2v2.6H7.4z"/>',
+ demeter:'<path d="M12 22V5M12 8.5c2.2-1 3.4-3 3.4-5.2M12 8.5c-2.2-1-3.4-3-3.4-5.2M12 13c2.2-1 3.4-3 3.4-5.2M12 13c-2.2-1-3.4-3-3.4-5.2M12 17.5c2.2-1 3.4-3 3.4-5.2M12 17.5c-2.2-1-3.4-3-3.4-5.2"/>',
+ dionysus:'<circle cx="12" cy="8" r="2.2"/><circle cx="8.6" cy="12" r="2.2"/><circle cx="15.4" cy="12" r="2.2"/><circle cx="12" cy="15.4" r="2.2"/><circle cx="12" cy="19.4" r="2"/><path d="M12 5.8c1.6-3 4.4-3.4 6-2.4"/>',
+ hestia:'<path d="M12 22c4 0 6.2-3 6.2-6.2 0-4.2-4-5.2-4-9.2 0-1.8.8-3.6.8-3.6-6 2-9.2 6-9.2 10.2C5.8 17 8 22 12 22z"/><path d="M12 22c1.8 0 2.8-1.5 2.8-3.1 0-2.1-2.8-3.4-2.8-5.4"/>',
+ persephone:'<circle cx="12" cy="14" r="6.8"/><path d="M8.6 6.6l2.2 2 1.2-3 1.2 3 2.2-2M12 5.6V7.2"/>',
+ eros:'<path d="M6.5 2a15 15 0 0 1 0 20M6.5 2v20"/><path d="M4.5 12h15M15.5 8.2 19.5 12l-4 3.8"/>',
+ hecate:'<circle cx="12" cy="12" r="5"/><path d="M6.6 5.5a8.5 8.5 0 0 0 0 13M17.4 5.5a8.5 8.5 0 0 1 0 13"/>',
+ thanatos:'<path d="M12 2v8.2M9.2 10.2h5.6"/><path d="M12 22c2.6 0 4.2-1.9 4.2-4 0-2.7-2.6-3.4-2.6-5.9 0 0-1.6 1.3-1.6 2.7 0-1.4-1.6-2.7-1.6-2.7 0 2.5-2.6 3.2-2.6 5.9 0 2.1 1.6 4 4.2 4z"/>',
+ hypnos:'<path d="M12 22v-6.4"/><circle cx="12" cy="10.4" r="2"/><path d="M12 8.4c0-3 1.8-5 4-5.4-.4 2.6.4 4.6-1.6 6.2M12 8.4c0-3-1.8-5-4-5.4.4 2.6-.4 4.6 1.6 6.2M13.8 11.6c2.6-1 4.8-.2 6 1.6-2.4 1.2-4.6 1.2-6.2-.2M10.2 11.6c-2.6-1-4.8-.2-6 1.6 2.4 1.2 4.6 1.2 6.2-.2"/>',
+ nemesis:'<path d="M12 3v18M5.5 21h13M4 8h16"/><path d="M4 8 1.4 13.6a2.9 2.9 0 0 0 5.2 0zM20 8l2.6 5.6a2.9 2.9 0 0 1-5.2 0z"/><circle cx="12" cy="5.6" r="1.2"/>'
+};
+
+const PANTHEON={
+ main:[
+  ['Зевс','ΖΕΥΣ','zeus','Громовержец, царь богов и людей. Хранит клятвы, гостеприимство и закон.'],
+  ['Посейдон','ΠΟΣΕΙΔΩΝ','poseidon','Брат Зевса, владыка морей. Трезубцем колеблет землю и посылает бури.'],
+  ['Гера','ΗΡΑ','hera','Жена и сестра Зевса, царица Олимпа. Покровительница брака и законных родов.'],
+  ['Аид','ΑΙΔΗΣ','hades','Брат Зевса, владыка царства мёртвых. На Олимпе почти не бывал, поэтому в списке двенадцати его часто заменяли Дионисом или Гестией.'],
+  ['Афина','ΑΘΗΝΑ','athena','Дочь Зевса, рождённая из его головы. Мудрость, ремёсла и война по расчёту, а не по ярости.'],
+  ['Аполлон','ΑΠΟΛΛΩΝ','apollo','Сын Зевса. Свет, музыка, врачевание и пророчество — это его голосом говорят Дельфы.'],
+  ['Артемида','ΑΡΤΕΜΙΣ','artemis','Сестра-близнец Аполлона. Охота, звери и луна; её свита — нимфы, и чужих она не терпит.'],
+  ['Арес','ΑΡΗΣ','ares','Сын Зевса и Геры. Война как резня и ярость боя — его не любили даже на Олимпе.'],
+  ['Афродита','ΑΦΡΟΔΙΤΗ','aphrodite','Рождена из морской пены. Любовь, красота и влечение, которому не сопротивляются и боги.'],
+  ['Гермес','ΕΡΜΗΣ','hermes','Сын Зевса, вестник богов. Дороги, торговля и хитрость; он же провожает души вниз.'],
+  ['Гефест','ΗΦΑΙΣΤΟΣ','hephaestus','Сын Геры, кузнец Олимпа. Огонь и ремесло; его руками выкованы молнии Зевса.'],
+  ['Деметра','ΔΗΜΗΤΗΡ','demeter','Сестра Зевса, богиня земледелия. Пока она горюет по дочери, земля не родит.']
+ ],
+ more:[
+  ['Дионис','ΔΙΟΝΥΣΟΣ','dionysus','Сын Зевса. Вино, исступление и театр. Вошёл в число двенадцати вместо Гестии.'],
+  ['Гестия','ΕΣΤΙΑ','hestia','Старшая сестра Зевса, богиня очага. Сама уступила место на Олимпе, чтобы не было споров.'],
+  ['Персефона','ΠΕΡΣΕΦΟΝΗ','persephone','Дочь Деметры и жена Аида, царица мёртвых. Весной возвращается к матери — и земля родит.'],
+  ['Эрос','ΕΡΩΣ','eros','В древних мифах — изначальная сила влечения, позже сын Афродиты. Бьёт из лука без промаха.'],
+  ['Геката','ΕΚΑΤΗ','hecate','Богиня магии, ночи и перекрёстков. Ходит с факелами, и псы слышат её раньше людей.'],
+  ['Танатос','ΘΑΝΑΤΟΣ','thanatos','Сын Ночи, близнец Гипноса. Уносит душу, когда мойры допряли нить. Не злой — неотвратимый.'],
+  ['Гипнос','ΥΠΝΟΣ','hypnos','Брат Танатоса, бог сна и сновидений. Единственный, кто дважды усыпил самого Зевса.'],
+  ['Немезида','ΝΕΜΕΣΙΣ','nemesis','Дочь Ночи, справедливое воздаяние. Карает надменных и тех, кому досталось сверх меры.']
+ ]
+};
+
+const NICHE=
+ '<svg class="deity__frame" viewBox="0 0 200 300" aria-hidden="true">'+
+ '<path class="hollow" d="M34 282V126a66 66 0 0 1 132 0v156z"/>'+
+ '<path class="rim" d="M34 282V126a66 66 0 0 1 132 0v156"/>'+
+ '<path class="rim-out" d="M20 282V124a80 80 0 0 1 160 0v158"/>'+
+ '<path class="flute" d="M27 282V150M173 282V150"/>'+
+ '<path class="carve" d="M100 46c-3-6-9-11-19-14M100 46c-2-7-3-13-6-19M100 46V26M100 46c2-7 3-13 6-19M100 46c3-6 9-11 19-14M88 45c4-4 20-4 24 0"/>'+
+ '<rect class="plinth" x="16" y="282" width="168" height="14" rx="2"/>'+
+ '<path class="rim-out" d="M16 282h168"/>'+
+ '</svg>';
+
+function deities(box,list){
+  box.innerHTML=list.map(([ru,gr,em,txt])=>
+    '<article class="deity">'+
+      '<div class="deity__niche">'+NICHE+
+        '<svg class="deity__em" viewBox="0 0 24 24" aria-hidden="true">'+EM[em]+'</svg>'+
+      '</div>'+
+      '<h3>'+ru+'</h3><span class="gr">'+gr+'</span><p>'+txt+'</p>'+
+    '</article>').join('');
+}
+deities(document.getElementById('deities-main'),PANTHEON.main);
+deities(document.getElementById('deities-more'),PANTHEON.more);
 
 /* ---------- плети на колоннах ---------- */
 document.querySelectorAll('.col .ivy').forEach((sv,i)=>{
