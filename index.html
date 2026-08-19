@@ -7,7 +7,7 @@
 <meta name="description" content="Лорная библиотека мира по мотивам древней Греции: портик разделов, века мира, свод правил.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=GFS+Didot&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    ТОКЕНЫ
@@ -24,6 +24,11 @@
   --cream:#E0DCAA;
   --bronze:#A37B47;
   --cacao:#8B5633;
+  --gold:#C9A227;
+  --gold-lt:#EFD9A0;
+  --ivy:#5C8A4E;
+  --ivy-dk:#33613C;
+  --grove:#123830;
   --marble:#EFEAD9;
 
   --ink:#22333A;
@@ -57,8 +62,9 @@ a{color:inherit}
 .wrap{width:var(--page);margin-inline:auto}
 .eyebrow{
   font-family:var(--sans);font-size:.72rem;font-weight:500;
-  letter-spacing:.34em;text-transform:uppercase;color:var(--bronze);
+  letter-spacing:.34em;text-transform:uppercase;color:var(--gold);
 }
+.eyebrow .g{font-family:var(--display);letter-spacing:.24em;text-transform:none;font-size:.92rem}
 .greek{font-family:var(--display);letter-spacing:.06em}
 h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 
@@ -105,7 +111,9 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 .brand{display:flex;align-items:baseline;gap:12px;text-decoration:none;text-shadow:0 1px 14px rgba(11,36,44,.55)}
 .brand b{font-family:var(--display);font-weight:400;font-size:1.05rem;letter-spacing:.28em;color:var(--cream)}
 .brand span{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream);opacity:.62}
-.topnav{display:flex;gap:28px}
+.topnav{display:flex;gap:26px}
+.topnav i{display:block;font-family:var(--display);font-style:normal;font-size:.82rem;
+  letter-spacing:.18em;color:var(--gold);opacity:.8;margin-bottom:2px}
 .topnav a{
   text-decoration:none;font-size:.76rem;letter-spacing:.22em;
   text-transform:uppercase;color:var(--mist);opacity:.75;
@@ -138,12 +146,18 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
   line-height:1;letter-spacing:.06em;text-indent:.06em;
   white-space:nowrap;
   color:var(--marble);
+  background:linear-gradient(100deg,#EFEAD9 0%,#EFEAD9 34%,var(--gold-lt) 46%,#F7EBC4 50%,var(--gold-lt) 54%,#EFEAD9 66%,#EFEAD9 100%);
+  background-size:280% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:gild 13s linear 2.6s infinite;
   margin:.22em 0 .5em;
   text-shadow:0 0 60px rgba(11,36,44,.45);
 }
 .title span{display:inline-block;opacity:0;transform:translateY(.42em) rotate(2deg);filter:blur(6px)}
 .loaded .title span{animation:rise 1.5s var(--ease) forwards}
 @keyframes rise{to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes gild{0%{background-position:120% 0}55%{background-position:-120% 0}100%{background-position:-120% 0}}
 .lede{
   max-width:46ch;margin:0 auto;color:#DDE7E2;
   font-family:var(--serif);font-size:clamp(1.05rem,1.6vw,1.35rem);
@@ -235,6 +249,18 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 .col:hover .col__glyph,.col:focus-visible .col__glyph{color:var(--cacao)}
 .col:hover .col__shaft::after,.col:focus-visible .col__shaft::after{opacity:1;filter:saturate(1.35)}
 .col:hover .col__cap,.col:focus-visible .col__cap{filter:brightness(1.05)}
+
+.ivy{
+  position:absolute;left:-4%;width:52%;top:26px;height:calc(100% - 136px);
+  overflow:hidden;pointer-events:none;z-index:2;
+}
+.ivy__stem{fill:none;stroke:var(--ivy-dk);stroke-width:1.6;opacity:.85;
+  stroke-dasharray:var(--len);stroke-dashoffset:var(--len);transition:stroke-dashoffset 2.4s var(--ease)}
+.grown .ivy__stem{stroke-dashoffset:0}
+.ivy .leaf{scale:0;transform-box:fill-box;transform-origin:center;transition:scale .7s var(--ease)}
+.grown .ivy .leaf{scale:1}
+.col:nth-child(even) .ivy{left:auto;right:-4%;transform:scaleX(-1)}
+.col:hover .ivy .leaf,.col:focus-visible .ivy .leaf{filter:brightness(1.18)}
 
 .colonnade__floor{
   height:clamp(70px,10vh,110px);
@@ -382,6 +408,133 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 .reveal{opacity:0;transform:translateY(26px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
 .reveal.seen{opacity:1;transform:none}
 
+
+/* ============================================================
+   ВРАТА, ЗЕЛЕНЬ И ЗОЛОТО
+   ============================================================ */
+:root{
+  --vine:#4F6A52;
+  --vine-hi:#7F9B72;
+  --carve:"Forum","Cormorant Garamond",Georgia,serif;
+}
+@counter-style hellenic{
+  system:fixed;
+  symbols:"Α΄" "Β΄" "Γ΄" "Δ΄" "Ε΄" "Ϛ΄" "Ζ΄" "Η΄" "Θ΄" "Ι΄";
+  suffix:"  ";
+}
+
+/* высеченные заголовки */
+.sect-head h2,.gate__words h3,.divine h2{font-family:var(--carve);letter-spacing:.1em}
+
+/* греческая строка с переводом под ней */
+.gr{font-family:var(--display);letter-spacing:.2em;color:var(--gold)}
+.gloss{display:block;font-family:var(--serif);font-style:italic;font-size:.86rem;letter-spacing:.04em;opacity:.72}
+
+/* ---------- ВРАТА ---------- */
+.gate{position:relative;width:100%;height:clamp(230px,38vh,420px);overflow:hidden}
+.gate__scene{position:absolute;inset:-8% 0 -8%;z-index:1;will-change:transform}
+.gate__scene::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(11,36,44,.18) 0%,transparent 34%,rgba(11,36,44,.62) 100%);
+}
+.gate--garden .gate__scene{
+  background:
+    radial-gradient(40% 34% at 30% 12%,rgba(255,244,196,.7),transparent 66%),
+    radial-gradient(34% 44% at 88% 76%,rgba(46,64,46,.8),transparent 70%),
+    linear-gradient(180deg,#D8E7D2 0%,#CCE3C2 32%,#9DB496 62%,#4C6A52 100%);
+}
+.gate--gold .gate__scene{
+  background:
+    radial-gradient(34% 26% at 50% 26%,rgba(255,238,182,.95),transparent 68%),
+    linear-gradient(180deg,#F0E3B4 0%,#E0DCAA 26%,#C39B54 56%,#7C5A2C 82%,#33321F 100%);
+}
+.gate--sea .gate__scene{
+  background:
+    radial-gradient(30% 22% at 50% 34%,rgba(240,238,206,.75),transparent 70%),
+    linear-gradient(180deg,#BCD3D4 0%,#9FBFC0 26%,#4E7B85 52%,#1D4A54 78%,#0B242C 100%);
+}
+.gate__shutters{position:absolute;inset:0;z-index:2;width:100%;height:100%}
+.gate__shutters rect{
+  fill:url(#stone);transform-box:fill-box;transform-origin:50% 100%;
+  transform:scaleY(1);transition:transform 1.5s var(--ease);
+}
+.gate.open .gate__shutters rect{transform:scaleY(0)}
+.gate__wall{position:absolute;inset:0;z-index:3;width:100%;height:100%}
+.gate__wall path{fill:url(#stone);stroke:rgba(60,50,30,.28);stroke-width:1}
+.gate__garland{position:absolute;left:-2%;top:-14px;width:104%;height:150px;z-index:4;overflow:visible;pointer-events:none}
+.gate__garland .vine{fill:none;stroke:var(--vine);stroke-width:1.6;stroke-linecap:round;opacity:.92}
+.gate__garland .leaf{opacity:0;transition:opacity .9s var(--ease)}
+.gate.open .gate__garland .leaf{opacity:var(--o,.9)}
+.gate__words{
+  position:absolute;left:0;right:0;bottom:clamp(12px,3.5vh,34px);z-index:5;
+  text-align:center;padding:0 1.2rem;color:#F6F2E2;
+  text-shadow:0 2px 22px rgba(11,36,44,.75);
+  opacity:0;transform:translateY(14px);transition:opacity 1s var(--ease) .55s,transform 1s var(--ease) .55s;
+}
+.gate.open .gate__words{opacity:1;transform:none}
+.gate__words .gr{font-size:clamp(.95rem,2.2vw,1.35rem);color:var(--gold-lt)}
+.gate__words .gloss{color:rgba(246,242,226,.8);margin-top:.2em}
+
+/* ---------- БОЖЕСТВЕННОЕ ---------- */
+.divine{
+  position:relative;overflow:hidden;text-align:center;
+  background:linear-gradient(180deg,#2E6560 0%,#17414B 22%,#0E2A33 60%,#0B242C 100%);
+  padding:clamp(70px,12vh,140px) 0 clamp(80px,13vh,150px);
+}
+.divine__rays{
+  position:absolute;left:50%;top:-26%;translate:-50% 0;width:min(1600px,170vw);aspect-ratio:1;
+  background:repeating-conic-gradient(from 0deg,rgba(243,229,176,.16) 0deg 1.4deg,transparent 1.4deg 9deg);
+  -webkit-mask-image:radial-gradient(closest-side,rgba(0,0,0,.9),transparent 70%);
+  mask-image:radial-gradient(closest-side,rgba(0,0,0,.9),transparent 70%);
+  animation:turn 240s linear infinite;pointer-events:none;
+}
+@keyframes turn{to{transform:rotate(360deg)}}
+.divine__halo{
+  position:absolute;left:50%;top:-6%;translate:-50% 0;width:min(820px,95vw);aspect-ratio:1;
+  background:radial-gradient(circle,rgba(243,229,176,.22),transparent 62%);pointer-events:none;
+}
+.divine .wrap{position:relative;z-index:2}
+.divine h2{font-size:clamp(1.9rem,4.2vw,3.1rem);color:var(--gold-lt);margin:.35em 0 .5em}
+.divine .eyebrow{color:var(--gold)}
+.divine__lede{max-width:50ch;margin:0 auto;color:#B7CDCC}
+.wreath{width:clamp(150px,20vw,200px);height:auto;display:block;margin:0 auto;overflow:visible}
+.wreath .branch{fill:none;stroke:var(--vine-hi);stroke-width:1.6;stroke-linecap:round}
+.wreath .leaf{opacity:0;transition:opacity .9s var(--ease)}
+.divine.seen .wreath .leaf{opacity:var(--o,.9)}
+.wreath__glyph{font-family:var(--display);font-size:62px;fill:var(--gold-lt);text-anchor:middle}
+
+.plaque{
+  position:relative;overflow:hidden;
+  width:min(760px,92vw);margin:clamp(30px,5vh,54px) auto 0;
+  padding:clamp(22px,4vw,40px) clamp(20px,4vw,48px);
+  background:linear-gradient(146deg,#F6EBC0 0%,#D8B45A 34%,#B08B34 58%,#EBD79A 100%);
+  color:#4A3418;text-align:left;
+  border:1px solid rgba(139,107,42,.65);
+  box-shadow:0 34px 64px -34px rgba(0,0,0,.85),inset 0 0 0 1px rgba(255,255,255,.32);
+}
+.plaque::after{
+  content:"";position:absolute;top:-60%;left:-30%;width:40%;height:220%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+  transform:rotate(18deg) translateX(-160%);transition:transform 1.6s var(--ease);pointer-events:none;
+}
+.plaque:hover::after{transform:rotate(18deg) translateX(420%)}
+.maxim{display:grid;gap:2px;padding:16px 0;border-top:1px solid rgba(74,52,24,.24)}
+.maxim:first-child{border-top:0;padding-top:0}
+.maxim:last-child{padding-bottom:0}
+.maxim .g{font-family:var(--display);font-size:clamp(1.15rem,3vw,1.85rem);letter-spacing:.14em;color:#3E2B12}
+.maxim .r{font-family:var(--serif);font-size:clamp(1rem,2vw,1.2rem);color:#6A4E22}
+.maxim .n{font-family:var(--display);font-size:.8rem;color:#7A5A22;opacity:.75}
+.divine__note{margin:clamp(22px,4vh,38px) auto 0;max-width:46ch;font-size:.9rem;color:#9FBAB9}
+
+/* греческая нумерация веков */
+.ages{counter-reset:age}
+.age__card{counter-increment:age}
+.age__g::before{content:counter(age,hellenic);font-size:.62em;color:var(--bronze);opacity:.85}
+
+/* греческие литеры в тропе */
+.topnav a .n{font-family:var(--display);font-size:.9em;letter-spacing:0;color:var(--bronze);margin-right:.5em}
+.topnav a:hover .n{color:var(--gold)}
+
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.12s!important}
   html{scroll-behavior:auto}
@@ -393,6 +546,9 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 <!-- общий орнамент-меандр -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <path id="key" d="M2 44 L2 4 L34 4 L34 36 L10 36 L10 12 L26 12 L26 28 L18 28"/>
+  <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#F4EFDC"/><stop offset=".5" stop-color="#E2DBC0"/><stop offset="1" stop-color="#CBC29F"/>
+  </linearGradient>
 </defs></svg>
 
 <!-- ЗАВЕСА -->
@@ -409,9 +565,10 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 <header class="topbar" id="topbar">
   <a class="brand" href="#hero"><b>ΟΙΚΟΥΜΕΝΗ</b><span>Ойкумена</span></a>
   <nav class="topnav">
-    <a href="#portico">Портик</a>
-    <a href="#ages">Века</a>
-    <a href="#found">Основание</a>
+    <a href="#portico"><i>ΣΤΟΑ</i>Портик</a>
+    <a href="#oracle"><i>ΜΑΝΤΕΙΟΝ</i>Оракул</a>
+    <a href="#ages"><i>ΑΙΩΝΕΣ</i>Века</a>
+    <a href="#found"><i>ΘΕΜΕΛΙΟΝ</i>Основание</a>
   </nav>
 </header>
 
@@ -436,18 +593,31 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
     <div class="hero__vig"></div>
 
     <div class="hero__type">
-      <p class="eyebrow">ЛОРОВАЯ ХУЙНЯ</p>
+      <p class="eyebrow"><span class="g">ΒΙΒΛΟΣ ΤΟΥ ΚΟΣΜΟΥ</span> · Свод мира ролевой игры</p>
       <h1 class="title" id="title" aria-label="ΟΙΚΟΥΜΕΝΗ"></h1>
-      <p class="lede">КРАСИВАЯ ФРАЗА</p>
+      <p class="lede">Море держит всё: острова, договоры богов и имена, которые ещё не записаны. Начните с портика — каждая колонна открывает свой раздел свода.</p>
     </div>
-    <a class="cue" href="#portico"><i></i>проползти вниз</a>
+    <a class="cue" href="#portico"><i></i>Вниз, к портику</a>
   </section>
+
+  <div class="gate gate--garden">
+    <div class="gate__scene" aria-hidden="true"></div>
+    <svg class="gate__shutters" aria-hidden="true"></svg>
+    <svg class="gate__wall" aria-hidden="true"><path fill-rule="evenodd"></path></svg>
+    <svg class="gate__garland" viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path class="vine" d="M0 24 C110 78 200 8 310 46 C420 84 500 12 610 42 C720 72 810 10 900 38 C950 56 980 42 1000 32"/>
+    </svg>
+    <div class="gate__words">
+      <span class="gr">ΑΡΧΗ ΗΜΙΣΥ ΠΑΝΤΟΣ</span>
+      <span class="gloss">Начало — половина всего</span>
+    </div>
+  </div>
 
   <!-- ПОРТИК -->
   <section class="portico" id="portico">
     <div class="sun" aria-hidden="true"></div>
     <div class="wrap sect-head reveal">
-      <p class="eyebrow">ΣΤΟΑ · Портик</p>
+      <p class="eyebrow"><span class="g">ΣΤΟΑ</span> · Портик</p>
       <h2>Пять колонн держат свод</h2>
       <p>Каждая колонна — раздел лора. Нажмите на неё, чтобы войти внутрь: содержимое пока пустое, там ждут ваши записи.</p>
     </div>
@@ -456,30 +626,45 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 
     <div class="colonnade" id="colonnade">
       <button class="col" data-key="0">
+        <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <path class="ivy__stem" d="M30 300 C4 252 56 214 30 168 C4 122 56 88 30 46 C20 28 34 14 31 0"/>
+        </svg>
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΘΕΟΙ</span></span>
         <span class="col__base"></span>
         <span class="col__tag">Боги и культы</span>
       </button>
       <button class="col" data-key="1">
+        <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <path class="ivy__stem" d="M30 300 C4 252 56 214 30 168 C4 122 56 88 30 46 C20 28 34 14 31 0"/>
+        </svg>
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΤΟΠΟΙ</span></span>
         <span class="col__base"></span>
         <span class="col__tag">Земли и море</span>
       </button>
       <button class="col" data-key="2">
+        <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <path class="ivy__stem" d="M30 300 C4 252 56 214 30 168 C4 122 56 88 30 46 C20 28 34 14 31 0"/>
+        </svg>
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΟΙΚΟΙ</span></span>
         <span class="col__base"></span>
         <span class="col__tag">Дома и роды</span>
       </button>
       <button class="col" data-key="3">
+        <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <path class="ivy__stem" d="M30 300 C4 252 56 214 30 168 C4 122 56 88 30 46 C20 28 34 14 31 0"/>
+        </svg>
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΜΥΘΟΙ</span></span>
         <span class="col__base"></span>
         <span class="col__tag">Мифы и пророчества</span>
       </button>
       <button class="col" data-key="4">
+        <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <path class="ivy__stem" d="M30 300 C4 252 56 214 30 168 C4 122 56 88 30 46 C20 28 34 14 31 0"/>
+        </svg>
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΝΟΜΟΙ</span></span>
         <span class="col__base"></span>
@@ -489,10 +674,60 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
     <div class="colonnade__floor"></div>
   </section>
 
+  <div class="gate gate--gold">
+    <div class="gate__scene" aria-hidden="true"></div>
+    <svg class="gate__shutters" aria-hidden="true"></svg>
+    <svg class="gate__wall" aria-hidden="true"><path fill-rule="evenodd"></path></svg>
+    <svg class="gate__garland" viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path class="vine" d="M0 24 C110 78 200 8 310 46 C420 84 500 12 610 42 C720 72 810 10 900 38 C950 56 980 42 1000 32"/>
+    </svg>
+    <div class="gate__words">
+      <span class="gr">ΕΠΟΥ ΘΕΩ</span>
+      <span class="gloss">Следуй за богом</span>
+    </div>
+  </div>
+
+  <!-- БОЖЕСТВЕННОЕ -->
+  <section class="divine reveal" id="oracle">
+    <div class="divine__rays" aria-hidden="true"></div>
+    <div class="divine__halo" aria-hidden="true"></div>
+    <div class="wrap">
+      <svg class="wreath" id="wreath" viewBox="0 0 190 196" aria-hidden="true">
+        <path class="branch" id="wreathL" d="M95 184 C40 174 12 128 18 84 C22 50 44 24 74 12"/>
+        <path class="branch" id="wreathR" d="M95 184 C150 174 178 128 172 84 C168 50 146 24 116 12"/>
+        <text class="wreath__glyph" x="95" y="122">Θ</text>
+      </svg>
+      <p class="eyebrow"><span class="g">ΜΑΝΤΕΙΟΝ</span> · Оракул</p>
+      <h2>Три надписи в притворе храма</h2>
+      <p class="divine__lede">Дельфийские изречения — то, что в вашем мире знают наизусть даже те, кто не умеет читать. Удобная точка опоры: боги молчат, а надписи остаются.</p>
+
+      <div class="plaque">
+        <div class="maxim"><span class="n">Α΄</span><span class="g">ΓΝΩΘΙ ΣΑΥΤΟΝ</span><span class="r">Познай самого себя</span></div>
+        <div class="maxim"><span class="n">Β΄</span><span class="g">ΜΗΔΕΝ ΑΓΑΝ</span><span class="r">Ничего сверх меры</span></div>
+        <div class="maxim"><span class="n">Γ΄</span><span class="g">ΕΓΓΥΑ ΠΑΡΑ Δ᾽ ΑΤΑ</span><span class="r">Поручись — и беда рядом</span></div>
+      </div>
+
+      <p class="divine__note">Замените изречения на заповеди своего пантеона: строка греческими литерами, под ней перевод. Такая табличка работает как клятва, которую персонажи нарушают.</p>
+    </div>
+  </section>
+
+  <div class="gate gate--sea">
+    <div class="gate__scene" aria-hidden="true"></div>
+    <svg class="gate__shutters" aria-hidden="true"></svg>
+    <svg class="gate__wall" aria-hidden="true"><path fill-rule="evenodd"></path></svg>
+    <svg class="gate__garland" viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path class="vine" d="M0 24 C110 78 200 8 310 46 C420 84 500 12 610 42 C720 72 810 10 900 38 C950 56 980 42 1000 32"/>
+    </svg>
+    <div class="gate__words">
+      <span class="gr">ΠΑΝΤΑ ΡΕΙ</span>
+      <span class="gloss">Всё течёт</span>
+    </div>
+  </div>
+
   <!-- ВЕКА -->
   <section class="ages" id="ages">
     <div class="wrap sect-head reveal">
-      <p class="eyebrow">ΑΙΩΝΕΣ · Века</p>
+      <p class="eyebrow"><span class="g">ΑΙΩΝΕΣ</span> · Века</p>
       <h2>Нить, натянутая сквозь время</h2>
       <p>Пять веков по Гесиоду — готовый костяк хронологии. Замените описания на события своей игры, порядок останется читаемым.</p>
     </div>
@@ -533,7 +768,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
   <!-- ОСНОВАНИЕ -->
   <section class="found" id="found">
     <div class="wrap sect-head reveal" style="padding-top:clamp(60px,10vh,110px)">
-      <p class="eyebrow">ΘΕΜΕΛΙΟΝ · Основание</p>
+      <p class="eyebrow"><span class="g">ΘΕΜΕΛΙΟΝ</span> · Основание</p>
       <h2>Что править, чтобы сайт стал вашим</h2>
       <p>Весь сайт — один файл. Ниже — четыре места, которых хватит для полной настройки под ваш мир.</p>
     </div>
@@ -722,6 +957,114 @@ function drawThread(){
   lit.style.strokeDashoffset=L*(1-p);
 }
 addEventListener('scroll',drawThread,{passive:true}); drawThread();
+
+
+/* ============================================================
+   ЛИСТВА, ВРАТА, ПЛЮЩ
+   ============================================================ */
+const NS='http://www.w3.org/2000/svg';
+const LEAF=['M0 0 C6 -8 16 -7.5 20 0 C16 7.5 6 8 0 0 Z',
+            'M0 0 C4 -8 14 -9 18 -2 C21 5 12 11 5 8 C1.4 6 0 3 0 0 Z'];
+function seeded(seed){return function(){seed=(seed+0x6d2b79f5)|0;let t=Math.imul(seed^seed>>>15,1|seed);
+  t=(t+Math.imul(t^t>>>7,61|t))^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* сажает листья вдоль пути: лист поворачивается по касательной и клонится вниз */
+function leaves(svg,path,o){
+  const L=path.getTotalLength(); if(!L) return [];
+  const R=seeded(o.seed||7), made=[];
+  for(let i=0;i<o.count;i++){
+    const t=Math.min(.998,Math.max(.002,(i+.5)/o.count+(R()-.5)*(.8/o.count)));
+    const p=path.getPointAtLength(L*t), q=path.getPointAtLength(Math.min(L,L*t+3));
+    const ang=Math.atan2(q.y-p.y,q.x-p.x)*180/Math.PI;
+    const el=document.createElementNS(NS,'path');
+    el.setAttribute('class','leaf');
+    el.setAttribute('d',LEAF[i%2]);
+    el.setAttribute('fill',o.fill);
+    const sc=(o.scale||1)*(.6+R()*.75);
+    const turn=ang+(i%2?1:-1)*(o.spread||64)+(R()*30-8);
+    el.setAttribute('transform','translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+') rotate('+turn.toFixed(1)+') scale('+sc.toFixed(2)+')');
+    el.style.setProperty('--o',(.7+R()*.3).toFixed(2));
+    el.style.transitionDelay=((o.delay||0)+i*38)+'ms';
+    el.dataset.at=t.toFixed(4);
+    svg.appendChild(el); made.push(el);
+  }
+  return made;
+}
+
+/* ---------- врата: стена минус арки ---------- */
+document.querySelectorAll('.gate').forEach((g,gi)=>{
+  const wall=g.querySelector('.gate__wall'), path=wall.querySelector('path');
+  const sh=g.querySelector('.gate__shutters');
+  const gar=g.querySelector('.gate__garland'), vine=gar.querySelector('.vine');
+
+  function build(){
+    const w=g.clientWidth, h=g.clientHeight; if(!w||!h) return;
+    const cols = w<700?1 : (w<1100?2:3);
+    const pier = w*(cols===1?.16:.075);
+    const gap  = Math.max(14,w*.022);
+    const top  = h*.13;
+    const aw   = (w-pier*2-gap*(cols-1))/cols;
+    const r    = Math.min(aw/2,(h-top)*.6);
+    let d='M0 0 H'+w+' V'+h+' H0 Z';
+    sh.textContent='';
+    for(let i=0;i<cols;i++){
+      const x=pier+i*(aw+gap);
+      d+=' M'+x.toFixed(1)+' '+h.toFixed(1)+' V'+(top+r).toFixed(1)+
+         ' A'+r.toFixed(1)+' '+r.toFixed(1)+' 0 0 1 '+(x+aw).toFixed(1)+' '+(top+r).toFixed(1)+
+         ' V'+h.toFixed(1)+' Z';
+      const rc=document.createElementNS(NS,'rect');
+      rc.setAttribute('x',x.toFixed(1)); rc.setAttribute('y',top.toFixed(1));
+      rc.setAttribute('width',aw.toFixed(1)); rc.setAttribute('height',(h-top).toFixed(1));
+      rc.style.transitionDelay=(120+i*180)+'ms';
+      sh.appendChild(rc);
+    }
+    [wall,sh].forEach(el=>{el.setAttribute('viewBox','0 0 '+w+' '+h);el.setAttribute('preserveAspectRatio','none')});
+    path.setAttribute('d',d);
+  }
+  build();
+  let tm; addEventListener('resize',()=>{clearTimeout(tm);tm=setTimeout(build,150)});
+
+  leaves(gar,vine,{count:46,scale:.72,spread:66,seed:11+gi*7,fill:'#4F6A52',delay:420});
+  leaves(gar,vine,{count:26,scale:.54,spread:104,seed:29+gi*7,fill:'#7F9B72',delay:640});
+
+  new IntersectionObserver((es,obs)=>es.forEach(e=>{
+    if(e.isIntersecting){g.classList.add('open');obs.unobserve(g)}
+  }),{threshold:.22}).observe(g);
+});
+
+/* вид в проёмах чуть отстаёт от прокрутки */
+const gscenes=[...document.querySelectorAll('.gate__scene')];
+if(!reduce){
+  addEventListener('scroll',()=>{
+    for(const sc of gscenes){
+      const r=sc.parentElement.getBoundingClientRect();
+      if(r.bottom<0||r.top>innerHeight) continue;
+      const k=(r.top+r.height/2-innerHeight/2)/innerHeight;
+      sc.style.transform='translate3d(0,'+(k*-26).toFixed(1)+'px,0)';
+    }
+  },{passive:true});
+}
+
+/* ---------- лавровый венок ---------- */
+const wr=document.getElementById('wreath');
+if(wr){
+  leaves(wr,document.getElementById('wreathL'),{count:13,scale:1.35,spread:58,seed:3,fill:'#7F9B72',delay:200});
+  leaves(wr,document.getElementById('wreathR'),{count:13,scale:1.35,spread:-58,seed:8,fill:'#9DB496',delay:320});
+}
+
+
+
+/* ---------- плети на колоннах ---------- */
+document.querySelectorAll('.col .ivy').forEach((sv,i)=>{
+  const st=sv.querySelector('.ivy__stem');
+  st.style.setProperty('--len',st.getTotalLength().toFixed(1));
+  st.style.transitionDelay=(i*140)+'ms';
+  leaves(sv,st,{count:13,scale:.5,spread:74,seed:13+i*5,fill:i%2?'#5C8A4E':'#7F9B72'})
+    .forEach((l,k)=>l.style.transitionDelay=(300+i*140+k*70)+'ms');
+});
+new IntersectionObserver((es,obs)=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('grown');obs.unobserve(e.target)}
+}),{threshold:.3}).observe(document.getElementById('colonnade'));
 
 /* ---------- палата ---------- */
 const ch=document.getElementById('chamber');
