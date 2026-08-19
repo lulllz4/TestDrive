@@ -181,7 +181,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
    ============================================================ */
 .portico{
   position:relative;padding:clamp(80px,12vh,140px) 0 0;
-  background:linear-gradient(180deg,#04202F 0%,#06304A 34%,#0A4258 68%,#12657E 100%);
+  background:linear-gradient(180deg,#04202F 0%,#072C40 46%,#06283A 100%);
 }
 .sun{
   position:absolute;left:50%;top:12%;translate:-50% 0;width:min(760px,90vw);aspect-ratio:1;
@@ -194,11 +194,16 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 /* колоннада */
 .colonnade{
   position:relative;display:flex;align-items:flex-end;justify-content:center;
-  gap:clamp(10px,3vw,54px);padding:0 4vw 96px;
+  gap:clamp(10px,3vw,54px);padding:0 4vw;
 }
-.colonnade::after{ /* стилобат */
-  content:"";position:absolute;left:0;right:0;bottom:74px;height:22px;
-  background:linear-gradient(180deg,#F0E7CE,#CFCBB0);
+.colonnade::after{ /* стилобат с высеченным меандром */
+  content:"";position:absolute;left:0;right:0;bottom:70px;height:26px;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='48'%3E%3Cpath d='M2 44 L2 4 L34 4 L34 36 L10 36 L10 12 L26 12 L26 28 L18 28' fill='none' stroke='%23000000' stroke-opacity='0.34' stroke-width='3.4'/%3E%3C/svg%3E"),
+    linear-gradient(180deg,#F0E7CE,#CFCBB0);
+  background-repeat:repeat-x,no-repeat;
+  background-size:auto 62%,100% 100%;
+  background-position:center,center;
   box-shadow:0 1px 0 rgba(0,0,0,.18);
 }
 .col{
@@ -266,7 +271,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 
 .colonnade__floor{
   height:clamp(70px,10vh,110px);
-  background:linear-gradient(180deg,#3E8A7C 0%,#1B6B78 52%,#12657E 100%);
+  background:linear-gradient(180deg,#1E5A52 0%,#0C3A42 58%,#06283A 100%);
 }
 .hint{
   text-align:center;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
@@ -275,7 +280,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 @media(max-width:640px){
   .colonnade{gap:8px;padding-inline:3vw}
   .col{padding-bottom:96px}
-  .colonnade::after{bottom:74px}
+  .colonnade::after{bottom:70px}
   .col__glyph{letter-spacing:.28em}
   .col__tag{width:9ch;font-size:.56rem;letter-spacing:.03em;line-height:1.35}
 }
@@ -437,10 +442,10 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 .gate{position:relative;width:100%;height:clamp(230px,38vh,420px);overflow:hidden}
 .gate::before{
   content:"";position:absolute;inset:0;z-index:6;pointer-events:none;
-  background:linear-gradient(180deg,var(--amb-t) 0%,transparent 38%,transparent 66%,var(--amb-b) 100%);
+  background:linear-gradient(180deg,var(--amb-t) 0%,transparent 17%,transparent 85%,var(--amb-b) 100%);
 }
 .gate--garden{--amb-t:#04202F;--amb-b:#04202F}
-.gate--gold{--amb-t:#12657E;--amb-b:#12657E}
+.gate--gold{--amb-t:#06283A;--amb-b:#06283A}
 .gate--sea{--amb-t:#04202F;--amb-b:#CBDAD2}
 .gate--sea .gate__scene::after{
   background:linear-gradient(180deg,rgba(4,32,47,.40) 0%,transparent 42%,rgba(203,218,210,.45) 100%);
@@ -451,18 +456,17 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 .gate__scene{position:absolute;inset:-8% 0 -8%;z-index:1;will-change:transform}
 .gate__scene::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(4,32,47,.18) 0%,transparent 34%,rgba(4,32,47,.62) 100%);
+  background:linear-gradient(180deg,rgba(4,32,47,.30) 0%,rgba(4,32,47,.07) 16%,transparent 32%,rgba(4,32,47,.45) 100%);
 }
 .gate--garden .gate__scene{
   background:
-    radial-gradient(42% 34% at 32% 14%,rgba(255,241,182,.8),transparent 66%),
-    radial-gradient(34% 44% at 88% 78%,rgba(20,58,44,.85),transparent 70%),
-    linear-gradient(180deg,#CFE6C6 0%,#93C39A 30%,#4E8A6B 58%,#14493F 84%,#083247 100%);
+    radial-gradient(44% 32% at 34% 12%,rgba(255,244,190,.75),transparent 68%),
+    linear-gradient(180deg,#E2F0D6 0%,#B3D6AC 24%,#79B183 48%,#3E7C5E 72%,#1B4E40 100%);
 }
 .gate--gold .gate__scene{
   background:
     radial-gradient(34% 26% at 50% 26%,rgba(255,240,186,.95),transparent 68%),
-    linear-gradient(180deg,#E8CE86 0%,#D8B14A 28%,#B3812F 56%,#5E5330 80%,#123F52 100%);
+    linear-gradient(180deg,#F8ECC4 0%,#EBCC74 26%,#D0A244 52%,#A0742C 78%,#63491F 100%);
 }
 .gate--sea .gate__scene{
   background:
@@ -476,8 +480,17 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 }
 .gate.open .gate__shutters rect{transform:scaleY(0)}
 .gate__wall{position:absolute;inset:0;z-index:3;width:100%;height:100%}
-.gate__wall path{fill:url(#stone);stroke:rgba(60,50,30,.28);stroke-width:1}
-.gate__garland{position:absolute;left:-2%;top:-14px;width:104%;height:150px;z-index:4;overflow:visible;pointer-events:none}
+.gate__wall path{
+  stroke:rgba(250,244,222,.42);stroke-width:1.1;
+  filter:drop-shadow(0 1px 13px rgba(3,16,24,.75));
+}
+.gate__frieze use{fill:none;stroke-linecap:square;stroke-width:3}
+.gate__frieze .lo{stroke:rgba(74,64,42,.55)}
+.gate__frieze .hi{stroke:rgba(255,250,232,.75)}
+.palmette{fill:none;stroke-linecap:round;stroke-width:1.8}
+.palmette.lo{stroke:rgba(74,64,42,.5)}
+.palmette.hi{stroke:rgba(255,250,232,.8)}
+.gate__garland{position:absolute;left:-2%;top:3%;width:104%;height:150px;z-index:4;overflow:visible;pointer-events:none}
 .gate__garland .vine{fill:none;stroke:var(--vine);stroke-width:1.6;stroke-linecap:round;opacity:.92}
 .gate__garland .leaf{opacity:0;transition:opacity .9s var(--ease)}
 .gate.open .gate__garland .leaf{opacity:var(--o,.9)}
@@ -656,7 +669,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
   <div class="gate gate--garden">
     <div class="gate__scene" aria-hidden="true"></div>
     <svg class="gate__shutters" aria-hidden="true"></svg>
-    <svg class="gate__wall" aria-hidden="true"><path fill-rule="evenodd"></path></svg>
+    <svg class="gate__wall" aria-hidden="true"></svg>
     <svg class="gate__garland" viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <path class="vine" d="M0 24 C110 78 200 8 310 46 C420 84 500 12 610 42 C720 72 810 10 900 38 C950 56 980 42 1000 32"/>
     </svg>
@@ -730,7 +743,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
   <div class="gate gate--gold">
     <div class="gate__scene" aria-hidden="true"></div>
     <svg class="gate__shutters" aria-hidden="true"></svg>
-    <svg class="gate__wall" aria-hidden="true"><path fill-rule="evenodd"></path></svg>
+    <svg class="gate__wall" aria-hidden="true"></svg>
     <svg class="gate__garland" viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <path class="vine" d="M0 24 C110 78 200 8 310 46 C420 84 500 12 610 42 C720 72 810 10 900 38 C950 56 980 42 1000 32"/>
     </svg>
@@ -767,7 +780,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
   <div class="gate gate--sea">
     <div class="gate__scene" aria-hidden="true"></div>
     <svg class="gate__shutters" aria-hidden="true"></svg>
-    <svg class="gate__wall" aria-hidden="true"><path fill-rule="evenodd"></path></svg>
+    <svg class="gate__wall" aria-hidden="true"></svg>
     <svg class="gate__garland" viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <path class="vine" d="M0 24 C110 78 200 8 310 46 C420 84 500 12 610 42 C720 72 810 10 900 38 C950 56 980 42 1000 32"/>
     </svg>
@@ -1047,7 +1060,7 @@ function leaves(svg,path,o){
 
 /* ---------- врата: стена минус арки ---------- */
 document.querySelectorAll('.gate').forEach((g,gi)=>{
-  const wall=g.querySelector('.gate__wall'), path=wall.querySelector('path');
+  const wall=g.querySelector('.gate__wall');
   const sh=g.querySelector('.gate__shutters');
   const gar=g.querySelector('.gate__garland'), vine=gar.querySelector('.vine');
 
@@ -1056,11 +1069,26 @@ document.querySelectorAll('.gate').forEach((g,gi)=>{
     const cols = w<700?1 : (w<1100?2:3);
     const pier = w*(cols===1?.16:.075);
     const gap  = Math.max(14,w*.022);
-    const top  = h*.13;
+    const top  = h*.22;                       /* полоса стены над арками */
     const aw   = (w-pier*2-gap*(cols-1))/cols;
     const r    = Math.min(aw/2,(h-top)*.6);
+
+    /* камень: по краям уходит в цвет соседнего раздела, в проёмы не лезет */
+    const cs=getComputedStyle(g);
+    const at=(cs.getPropertyValue('--amb-t')||'#04202F').trim();
+    const ab=(cs.getPropertyValue('--amb-b')||'#04202F').trim();
+    const uid='wall'+gi;
+    wall.textContent=''; sh.textContent='';
+    const defs=document.createElementNS(NS,'defs');
+    const lg=document.createElementNS(NS,'linearGradient');
+    lg.setAttribute('id',uid);
+    lg.setAttribute('x1','0');lg.setAttribute('y1','0');lg.setAttribute('x2','0');lg.setAttribute('y2','1');
+    [[0,at],[.06,'#93A3A4'],[.18,'#DED5B6'],[.52,'#E9E0C2'],[.80,'#C2BC9E'],[.93,'#84919A'],[1,ab]]
+      .forEach(([o,c])=>{const st=document.createElementNS(NS,'stop');
+        st.setAttribute('offset',o);st.setAttribute('stop-color',c);lg.appendChild(st)});
+    defs.appendChild(lg); wall.appendChild(defs);
+
     let d='M0 0 H'+w+' V'+h+' H0 Z';
-    sh.textContent='';
     for(let i=0;i<cols;i++){
       const x=pier+i*(aw+gap);
       d+=' M'+x.toFixed(1)+' '+h.toFixed(1)+' V'+(top+r).toFixed(1)+
@@ -1069,11 +1097,52 @@ document.querySelectorAll('.gate').forEach((g,gi)=>{
       const rc=document.createElementNS(NS,'rect');
       rc.setAttribute('x',x.toFixed(1)); rc.setAttribute('y',top.toFixed(1));
       rc.setAttribute('width',aw.toFixed(1)); rc.setAttribute('height',(h-top).toFixed(1));
+      rc.style.fill='url(#'+uid+')';
       rc.style.transitionDelay=(120+i*180)+'ms';
       sh.appendChild(rc);
     }
+    const wp=document.createElementNS(NS,'path');
+    wp.setAttribute('fill-rule','evenodd'); wp.setAttribute('d',d);
+    wp.style.fill='url(#'+uid+')';
+    wall.appendChild(wp);
+
+    /* меандр, высеченный по полосе стены */
+    const band=Math.max(20,Math.min(30,top*.40));
+    const k=band/48, unit=40*k, y=top*.42;
+    const frieze=document.createElementNS(NS,'g');
+    frieze.setAttribute('class','gate__frieze');
+    ['lo','hi'].forEach((cl,li)=>{
+      const layer=document.createElementNS(NS,'g');
+      layer.setAttribute('class',cl);
+      layer.setAttribute('transform','translate(0 '+(li?0:1.2)+')');
+      for(let x=unit*.2;x<w;x+=unit){
+        const u=document.createElementNS(NS,'use');
+        u.setAttribute('href','#key');
+        u.setAttribute('transform','translate('+x.toFixed(1)+' '+y.toFixed(1)+') scale('+k.toFixed(3)+')');
+        layer.appendChild(u);
+      }
+      frieze.appendChild(layer);
+    });
+    wall.appendChild(frieze);
+
+    /* пальметта в замке каждой арки */
+    const ph=Math.max(22,Math.min(36,top*.46));
+    const PAL='M0 0 C-2 -.33 -6 -.58 -11 -.75 M0 0 C-1 -.37 -2 -.66 -4.5 -.92'+
+              ' M0 0 L0 -1 M0 0 C1 -.37 2 -.66 4.5 -.92 M0 0 C2 -.33 6 -.58 11 -.75'+
+              ' M-7 -.04 C-3 -.25 3 -.25 7 -.04';
+    for(let i=0;i<cols;i++){
+      const cx=pier+i*(aw+gap)+aw/2;
+      ['lo','hi'].forEach((cl,li)=>{
+        const pl=document.createElementNS(NS,'path');
+        pl.setAttribute('class','palmette '+cl);
+        pl.setAttribute('d',PAL);
+        pl.setAttribute('transform','translate('+cx.toFixed(1)+' '+(top+5+(li?0:1)).toFixed(1)+') scale('+(ph/11).toFixed(3)+' '+ph.toFixed(1)+')');
+        pl.setAttribute('vector-effect','non-scaling-stroke');
+        wall.appendChild(pl);
+      });
+    }
+
     [wall,sh].forEach(el=>{el.setAttribute('viewBox','0 0 '+w+' '+h);el.setAttribute('preserveAspectRatio','none')});
-    path.setAttribute('d',d);
   }
   build();
   let tm; addEventListener('resize',()=>{clearTimeout(tm);tm=setTimeout(build,150)});
