@@ -290,6 +290,73 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
    ============================================================ */
 main{transition:transform 1.05s var(--ease),filter 1.05s var(--ease)}
 body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
+
+/* ============================================================
+   БОГ КРУПНО — табличка разворачивается по клику
+   ============================================================ */
+.deity__plate{cursor:zoom-in;padding:0;border:0;background:none;display:block;width:100%}
+.deity__img{
+  position:absolute;left:21%;top:13.7%;width:58%;height:72.5%;
+  object-fit:cover;object-position:center;
+}
+.dview{
+  position:fixed;inset:0;z-index:90;visibility:hidden;opacity:0;
+  display:grid;place-items:center;padding:clamp(16px,4vw,48px);
+  transition:opacity .45s var(--ease),visibility 0s .45s;
+}
+.dview.on{visibility:visible;opacity:1;transition:opacity .35s var(--ease),visibility 0s}
+.dview__veil{
+  position:absolute;inset:0;background:rgba(4,26,38,.9);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+.dview__box{
+  position:relative;display:flex;align-items:center;gap:clamp(24px,5vw,64px);
+  width:min(980px,100%);
+}
+.dview__plate{
+  position:relative;flex:0 0 auto;width:clamp(200px,26vw,330px);aspect-ratio:200/320;
+  will-change:transform;
+}
+.dview__plate .deity__frame{position:absolute;inset:0;width:100%;height:100%;filter:url(#ink)}
+.dview__plate .deity__em{width:37%}
+.dview__text{
+  flex:1 1 auto;min-width:0;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .6s var(--ease) .28s,transform .6s var(--ease) .28s;
+}
+.dview.on .dview__text{opacity:1;transform:none}
+.dview__text .gr{font-family:var(--display);font-size:.92rem;letter-spacing:.3em;color:var(--gold)}
+.dview__text h3{
+  font-family:var(--carve);font-size:clamp(1.8rem,4.4vw,3rem);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--marble);margin:.2em 0 .45em;
+}
+.dview__text p{color:#B7D2D6;font-size:clamp(1rem,1.5vw,1.15rem);line-height:1.7;max-width:46ch;margin:0}
+.dview__nav{display:flex;align-items:center;gap:18px;margin-top:clamp(22px,4vh,40px)}
+.dview__nav button{
+  display:grid;place-items:center;width:42px;height:42px;border-radius:50%;
+  border:1px solid rgba(224,220,170,.4);color:var(--cream);font-size:1.1rem;
+  transition:.35s var(--ease);
+}
+.dview__nav button:hover{background:rgba(224,220,170,.14);border-color:var(--gold-lt)}
+.dview__nav .lbl{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:#8FB3BC}
+.dview__close{
+  position:absolute;right:0;top:calc(-1 * clamp(34px,6vh,58px));
+  display:flex;align-items:center;gap:10px;
+  font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--cream);
+}
+.dview__close i{
+  display:grid;place-items:center;width:32px;height:32px;border-radius:50%;font-style:normal;
+  border:1px solid rgba(224,220,170,.45);transition:.4s var(--ease);
+}
+.dview__close:hover i{background:rgba(224,220,170,.14);rotate:90deg}
+@media(max-width:720px){
+  .dview__box{flex-direction:column;gap:22px;text-align:center}
+  .dview__plate{width:min(230px,58vw)}
+  .dview__text p{margin-inline:auto}
+  .dview__nav{justify-content:center}
+  .dview__close{position:static;margin:0 auto 4px;order:-1}
+}
+
 @property --r{syntax:"<percentage>";inherits:false;initial-value:0%}
 .chamber{
   position:fixed;inset:0;z-index:80;visibility:hidden;
@@ -690,6 +757,62 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
 .deity{opacity:0;transform:translateY(16px)}
 .deity.in{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease)}
 
+
+/* ============================================================
+   КАРТОЧКА БОГА КРУПНО
+   ============================================================ */
+.deity__plate{cursor:zoom-in}
+.deity__img{
+  position:absolute;left:21%;top:13.75%;width:58%;height:72.5%;
+  object-fit:cover;display:block;
+  box-shadow:0 0 0 1.6px #6B4A3A;
+  filter:saturate(.82) sepia(.14) contrast(.97);
+}
+.has-img .deity__em{display:none}
+.deity__plate.gone{visibility:hidden}
+
+.godview{
+  position:fixed;inset:0;z-index:90;visibility:hidden;opacity:0;
+  display:grid;place-items:center;padding:clamp(18px,5vh,54px) 5vw;
+  background:rgba(3,20,30,.74);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  transition:opacity .45s var(--ease),visibility 0s .45s;
+}
+.godview.on{visibility:visible;opacity:1;transition:opacity .4s var(--ease),visibility 0s}
+.godview__box{
+  display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);
+  gap:clamp(24px,4vw,60px);align-items:center;width:min(900px,100%);
+}
+.godview__plate{position:relative;width:100%;aspect-ratio:200/320;transform-origin:top left;will-change:transform}
+.godview__plate .deity__frame{position:absolute;inset:0;width:100%;height:100%;filter:url(#ink)}
+.godview__plate .deity__em{width:42%;stroke-width:1.1}
+.godview__text{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease) .34s,transform .6s var(--ease) .34s}
+.godview.on .godview__text{opacity:1;transform:none}
+.godview__tier{font-family:var(--display);font-size:.76rem;letter-spacing:.3em;color:var(--gold);display:block}
+.godview__gr{font-family:var(--display);font-size:clamp(2.2rem,6vw,4rem);line-height:1;letter-spacing:.08em;color:var(--gold-lt);margin:.3rem 0 .1rem}
+.godview__ru{font-family:var(--carve);font-size:clamp(1.2rem,2.6vw,1.7rem);letter-spacing:.14em;text-transform:uppercase;color:var(--marble);margin:0 0 .8rem}
+.godview__p{color:#B7D2D6;font-size:1.02rem;line-height:1.75;max-width:44ch;margin:0}
+.godview__nav{display:flex;align-items:center;gap:20px;margin-top:clamp(20px,3vh,32px)}
+.godview__nav button{
+  font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mist);
+  border-bottom:1px solid transparent;padding-bottom:3px;transition:.35s var(--ease);
+}
+.godview__nav button:hover{color:var(--cream);border-color:var(--bronze)}
+.godview__close{
+  position:absolute;top:clamp(14px,3vh,28px);right:clamp(16px,4vw,40px);
+  display:flex;align-items:center;gap:12px;font-size:.72rem;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--cream);
+}
+.godview__close i{display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(224,220,170,.45);
+  border-radius:50%;font-style:normal;transition:.4s var(--ease)}
+.godview__close:hover i{background:rgba(224,220,170,.14);rotate:90deg}
+@media(max-width:760px){
+  .godview__box{grid-template-columns:1fr;gap:22px;justify-items:center;text-align:center}
+  .godview__plate{width:min(240px,62vw)}
+  .godview__p{margin-inline:auto}
+  .godview__nav{justify-content:center}
+}
+
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.12s!important}
   html{scroll-behavior:auto}
@@ -701,6 +824,43 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
 <div class="atmos" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="doorway" id="doorway" aria-hidden="true"></div>
+
+<!-- КАРТОЧКА БОГА КРУПНО -->
+<div class="godview" id="godview" role="dialog" aria-modal="true" aria-labelledby="gvRu">
+  <button class="godview__close" id="gvClose"><i>&times;</i>Раздел</button>
+  <div class="godview__box">
+    <div class="godview__plate" id="gvPlate"></div>
+    <div class="godview__text">
+      <span class="godview__tier" id="gvTier"></span>
+      <p class="godview__gr" id="gvGr"></p>
+      <h2 class="godview__ru" id="gvRu"></h2>
+      <p class="godview__p" id="gvP"></p>
+      <div class="godview__nav">
+        <button id="gvPrev">&#8592; Слово</button>
+        <button id="gvNext">Метка &#8594;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- бог крупно -->
+<div class="dview" id="dview" role="dialog" aria-modal="true" aria-labelledby="dvName">
+  <div class="dview__veil" id="dvVeil"></div>
+  <div class="dview__box">
+    <button class="dview__close" id="dvClose"><i>&times;</i>Раздел</button>
+    <div class="dview__plate" id="dvPlate"></div>
+    <div class="dview__text">
+      <span class="gr" id="dvGreek"></span>
+      <h3 id="dvName"></h3>
+      <p id="dvText"></p>
+      <div class="dview__nav">
+        <button id="dvPrev" aria-label="Раздел">&#8592;</button>
+        <button id="dvNext" aria-label="Метка">&#8594;</button>
+        <span class="lbl" id="dvCount"></span>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- общий орнамент-меандр -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -737,13 +897,13 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
 
 <!-- ВЕРХНЯЯ ПОЛОСА -->
 <header class="topbar" id="topbar">
-  <a class="brand" href="#hero"><b>ΟΙΚΟΥΜΕΝΗ</b><span>Раздел</span></a>
+  <a class="brand" href="#hero"><b>ΟΙΚΟΥΜΕΝΗ</b><span>Слово</span></a>
   <nav class="topnav">
-    <a href="#portico"><i>ΣΤΟΑ</i>Слово</a>
+    <a href="#portico"><i>ΣΤΟΑ</i>Раздел</a>
     <a href="#portico" data-chamber="0"><i>ΘΕΟΙ</i>Метка</a>
-    <a href="#oracle"><i>ΜΑΝΤΕΙΟΝ</i>Раздел</a>
-    <a href="#ages"><i>ΑΙΩΝΕΣ</i>Раздел</a>
-    <a href="#found"><i>ΘΕΜΕΛΙΟΝ</i>Метка</a>
+    <a href="#oracle"><i>ΜΑΝΤΕΙΟΝ</i>Заметка</a>
+    <a href="#ages"><i>ΑΙΩΝΕΣ</i>Заметка</a>
+    <a href="#found"><i>ΘΕΜΕΛΙΟΝ</i>Слово</a>
   </nav>
 </header>
 
@@ -770,9 +930,9 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
     <div class="hero__type">
       <p class="eyebrow"><span class="g">ΒΙΒΛΟΣ ΤΟΥ ΚΟΣΜΟΥ</span> · Короткая строка</p>
       <h1 class="title" id="title" aria-label="ΟΙΚΟΥΜΕΝΗ"></h1>
-      <p class="lede">Строка без смысла. Просто заполнение.</p>
+      <p class="lede">Короткая строка. Пока пусто.</p>
     </div>
-    <a class="cue" href="#portico"><i></i>Здесь заголовок</a>
+    <a class="cue" href="#portico"><i></i>Пара слов сюда</a>
   </section>
 
   <div class="gate gate--garden">
@@ -784,7 +944,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
     </svg>
     <div class="gate__words">
       <span class="gr">ΑΡΧΗ ΗΜΙΣΥ ΠΑΝΤΟΣ</span>
-      <span class="gloss">Здесь заголовок</span>
+      <span class="gloss">Просто заголовок</span>
     </div>
   </div>
 
@@ -792,12 +952,12 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
   <section class="portico" id="portico">
     <div class="sun" aria-hidden="true"></div>
     <div class="wrap sect-head reveal">
-      <p class="eyebrow"><span class="g">ΣΤΟΑ</span> · Слово</p>
+      <p class="eyebrow"><span class="g">ΣΤΟΑ</span> · Метка</p>
       <h2>Короткая строка</h2>
-      <p>Короткая строка. Пока пусто.</p>
+      <p>Пока пусто. Просто заполнение.</p>
     </div>
 
-    <p class="hint reveal">Пометка ← → Просто заголовок Esc Метка</p>
+    <p class="hint reveal">Раздел ← → Строка на месте Esc Заметка</p>
 
     <div class="colonnade" id="colonnade">
       <button class="col" data-key="0">
@@ -807,7 +967,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΘΕΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Слово</span>
+        <span class="col__tag">Пометка</span>
       </button>
       <button class="col" data-key="1">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -816,7 +976,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΤΟΠΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Заметка</span>
+        <span class="col__tag">Строка</span>
       </button>
       <button class="col" data-key="2">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -825,7 +985,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΟΙΚΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Метка</span>
+        <span class="col__tag">Заметка</span>
       </button>
       <button class="col" data-key="3">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -834,7 +994,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΜΥΘΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Строка на месте</span>
+        <span class="col__tag">Просто заголовок</span>
       </button>
       <button class="col" data-key="4">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -843,7 +1003,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΝΟΜΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Раздел</span>
+        <span class="col__tag">Строка</span>
       </button>
     </div>
     <div class="colonnade__floor"></div>
@@ -872,17 +1032,17 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <path class="branch" id="wreathR" d="M95 184 C150 174 178 128 172 84 C168 50 146 24 116 12"/>
         <text class="wreath__glyph" x="95" y="122">Θ</text>
       </svg>
-      <p class="eyebrow"><span class="g">ΜΑΝΤΕΙΟΝ</span> · Пометка</p>
-      <h2>Просто заголовок</h2>
-      <p class="divine__lede">Пока пусто. Ничего важного.</p>
+      <p class="eyebrow"><span class="g">ΜΑΝΤΕΙΟΝ</span> · Заметка</p>
+      <h2>Пара слов сюда</h2>
+      <p class="divine__lede">Немного текста. Строка без смысла.</p>
 
       <div class="plaque">
         <div class="maxim"><span class="n">Α΄</span><span class="g">ΓΝΩΘΙ ΣΑΥΤΟΝ</span><span class="r">Просто заголовок</span></div>
-        <div class="maxim"><span class="n">Β΄</span><span class="g">ΜΗΔΕΝ ΑΓΑΝ</span><span class="r">Здесь заголовок</span></div>
-        <div class="maxim"><span class="n">Γ΄</span><span class="g">ΕΓΓΥΑ ΠΑΡΑ Δ᾽ ΑΤΑ</span><span class="r">Здесь заголовок</span></div>
+        <div class="maxim"><span class="n">Β΄</span><span class="g">ΜΗΔΕΝ ΑΓΑΝ</span><span class="r">Строка на месте</span></div>
+        <div class="maxim"><span class="n">Γ΄</span><span class="g">ΕΓΓΥΑ ΠΑΡΑ Δ᾽ ΑΤΑ</span><span class="r">Пара слов сюда</span></div>
       </div>
 
-      <p class="divine__note">Немного текста. Строка без смысла.</p>
+      <p class="divine__note">Две-три фразы. Здесь будет строка.</p>
     </div>
   </section>
 
@@ -895,7 +1055,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
     </svg>
     <div class="gate__words">
       <span class="gr">ΠΑΝΤΑ ΡΕΙ</span>
-      <span class="gloss">Строка</span>
+      <span class="gloss">Метка</span>
     </div>
   </div>
 
@@ -903,8 +1063,8 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
   <section class="ages" id="ages">
     <div class="wrap sect-head reveal">
       <p class="eyebrow"><span class="g">ΑΙΩΝΕΣ</span> · Раздел</p>
-      <h2>Пара слов сюда</h2>
-      <p>Две-три фразы. Здесь будет строка.</p>
+      <h2>Просто заголовок</h2>
+      <p>Две-три фразы. Пока пусто.</p>
     </div>
     <div class="thread-wrap" id="threadWrap">
       <svg class="thread" id="thread" viewBox="0 0 120 1000" preserveAspectRatio="none" aria-hidden="true">
@@ -913,28 +1073,28 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
       </svg>
 
       <article class="age">
-        <div class="age__card"><span class="age__g">ΧΡΥΣΟΥΝ</span><span class="age__ru">Метка</span>
-          <p>Строка без смысла.</p></div>
+        <div class="age__card"><span class="age__g">ΧΡΥΣΟΥΝ</span><span class="age__ru">Раздел</span>
+          <p>Ничего важного.</p></div>
         <span class="age__mark"></span>
       </article>
       <article class="age">
-        <div class="age__card"><span class="age__g">ΑΡΓΥΡΟΥΝ</span><span class="age__ru">Строка</span>
-          <p>Две-три фразы.</p></div>
+        <div class="age__card"><span class="age__g">ΑΡΓΥΡΟΥΝ</span><span class="age__ru">Метка</span>
+          <p>Здесь будет строка.</p></div>
         <span class="age__mark"></span>
       </article>
       <article class="age">
-        <div class="age__card"><span class="age__g">ΧΑΛΚΟΥΝ</span><span class="age__ru">Заметка</span>
-          <p>Строка без смысла.</p></div>
-        <span class="age__mark"></span>
-      </article>
-      <article class="age">
-        <div class="age__card"><span class="age__g">ΗΡΩΩΝ</span><span class="age__ru">Строка</span>
-          <p>Здесь будет строка. Немного текста.</p></div>
-        <span class="age__mark"></span>
-      </article>
-      <article class="age">
-        <div class="age__card"><span class="age__g">ΣΙΔΗΡΟΥΝ</span><span class="age__ru">Раздел</span>
+        <div class="age__card"><span class="age__g">ΧΑΛΚΟΥΝ</span><span class="age__ru">Раздел</span>
           <p>Пока пусто.</p></div>
+        <span class="age__mark"></span>
+      </article>
+      <article class="age">
+        <div class="age__card"><span class="age__g">ΗΡΩΩΝ</span><span class="age__ru">Заметка</span>
+          <p>Немного текста. Короткая строка.</p></div>
+        <span class="age__mark"></span>
+      </article>
+      <article class="age">
+        <div class="age__card"><span class="age__g">ΣΙΔΗΡΟΥΝ</span><span class="age__ru">Пометка</span>
+          <p>Просто заполнение.</p></div>
         <span class="age__mark"></span>
       </article>
     </div>
@@ -943,15 +1103,15 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
   <!-- ОСНОВАНИЕ -->
   <section class="found" id="found">
     <div class="wrap sect-head reveal" style="padding-top:clamp(60px,10vh,110px)">
-      <p class="eyebrow"><span class="g">ΘΕΜΕΛΙΟΝ</span> · Заметка</p>
-      <h2>Строка на месте</h2>
-      <p>Короткая строка. Просто заполнение.</p>
+      <p class="eyebrow"><span class="g">ΘΕΜΕΛΙΟΝ</span> · Строка</p>
+      <h2>Два слова тут</h2>
+      <p>Ничего важного. Просто заполнение.</p>
     </div>
     <div class="wrap found__grid reveal">
-      <div class="tile"><b>ΟΝΟΜΑ</b><h3>Строка</h3><p>Метка <code>ΟΙΚΟΥΜΕΝΗ</code> Ничего важного.</p></div>
-      <div class="tile"><b>ΣΤΟΑ</b><h3>Пометка</h3><p>Два слова тут <code>LORE</code> Короткая строка.</p></div>
-      <div class="tile"><b>ΧΡΩΜΑ</b><h3>Раздел</h3><p>Здесь заголовок <code>:root</code>. Ничего важного.</p></div>
-      <div class="tile"><b>ΔΗΜΟΣΙΕΥΣΙΣ</b><h3>Заметка</h3><p>Пара слов сюда <code>index.html</code> Пара слов сюда GitHub&nbsp;Pages Заметка</p></div>
+      <div class="tile"><b>ΟΝΟΜΑ</b><h3>Слово</h3><p>Раздел <code>ΟΙΚΟΥΜΕΝΗ</code> Две-три фразы.</p></div>
+      <div class="tile"><b>ΣΤΟΑ</b><h3>Строка</h3><p>Здесь заголовок <code>LORE</code> Две-три фразы.</p></div>
+      <div class="tile"><b>ΧΡΩΜΑ</b><h3>Заметка</h3><p>Два слова тут <code>:root</code>. Немного текста.</p></div>
+      <div class="tile"><b>ΔΗΜΟΣΙΕΥΣΙΣ</b><h3>Пометка</h3><p>Просто заголовок <code>index.html</code> Два слова тут GitHub&nbsp;Pages Пометка</p></div>
     </div>
   </section>
 </main>
@@ -963,17 +1123,17 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
     <line x1="2" y1="45" x2="318" y2="45"/>
   </svg>
   <div class="greek">ΤΕΛΟΣ</div>
-  <p>Заметка · Два слова тут</p>
+  <p>Пометка · Пара слов сюда</p>
 </footer>
 
 <!-- ПАЛАТА -->
 <div class="chamber" id="chamber" role="dialog" aria-modal="true" aria-labelledby="chTitle">
   <div class="chamber__bar">
-    <button class="close" id="chClose"><i>&times;</i>Раздел</button>
+    <button class="close" id="chClose"><i>&times;</i>Пометка</button>
     <div class="pager">
       <button class="step" id="chPrev" aria-label="Пара слов сюда">&#8592;</button>
       <div class="dots" id="chDots" aria-hidden="true"></div>
-      <button class="step" id="chNext" aria-label="Просто заголовок">&#8594;</button>
+      <button class="step" id="chNext" aria-label="Пара слов сюда">&#8594;</button>
     </div>
   </div>
   <div class="chamber__body">
@@ -999,48 +1159,48 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
    ============================================================ */
 const LORE = [
   {
-    greek:"ΘΕΟΙ", ru:"Метка", gods:true,
-    intro:"Текст на месте. Здесь будет строка.",
+    greek:"ΘΕΟΙ", ru:"Строка", gods:true,
+    intro:"Здесь будет строка. Пара слов.",
     frags:[
-      {g:"ΠΑΝΘΕΟΝ", t:"Слово", p:"Пара слов."},
-      {g:"ΙΕΡΟΝ", t:"Здесь заголовок", p:"Две-три фразы."},
-      {g:"ΘΥΣΙΑ", t:"Строка на месте", p:"Ничего важного."}
+      {g:"ΠΑΝΘΕΟΝ", t:"Слово", p:"Две-три фразы."},
+      {g:"ΙΕΡΟΝ", t:"Здесь заголовок", p:"Строка без смысла."},
+      {g:"ΘΥΣΙΑ", t:"Просто заголовок", p:"Две-три фразы."}
     ]
   },
   {
-    greek:"ΤΟΠΟΙ", ru:"Заметка",
-    intro:"Ничего важного. Здесь будет строка.",
+    greek:"ΤΟΠΟΙ", ru:"Строка",
+    intro:"Здесь будет строка. Пара слов.",
     frags:[
       {g:"ΝΗΣΟΙ", t:"Слово", p:"Пара слов."},
-      {g:"ΠΟΛΕΙΣ", t:"Пометка", p:"Пара слов."},
-      {g:"ΟΔΟΙ", t:"Пометка", p:"Здесь будет строка."}
+      {g:"ΠΟΛΕΙΣ", t:"Пометка", p:"Здесь будет строка."},
+      {g:"ΟΔΟΙ", t:"Слово", p:"Пара слов."}
     ]
   },
   {
-    greek:"ΟΙΚΟΙ", ru:"Слово",
-    intro:"Пара слов. Строка без смысла.",
+    greek:"ΟΙΚΟΙ", ru:"Пометка",
+    intro:"Строка без смысла. Пара слов.",
     frags:[
-      {g:"ΓΕΝΟΣ", t:"Слово", p:"Пара слов."},
-      {g:"ΣΥΜΜΑΧΙΑ", t:"Раздел", p:"Пара слов."},
-      {g:"ΠΡΟΣΩΠΑ", t:"Строка", p:"Ничего важного."}
+      {g:"ΓΕΝΟΣ", t:"Слово", p:"Строка без смысла."},
+      {g:"ΣΥΜΜΑΧΙΑ", t:"Слово", p:"Ничего важного."},
+      {g:"ΠΡΟΣΩΠΑ", t:"Строка", p:"Пока пусто."}
     ]
   },
   {
-    greek:"ΜΥΘΟΙ", ru:"Пара слов сюда",
-    intro:"Пока пусто. Просто заполнение.",
+    greek:"ΜΥΘΟΙ", ru:"Два слова тут",
+    intro:"Текст на месте. Короткая строка.",
     frags:[
-      {g:"ΑΡΧΗ", t:"Строка", p:"Короткая строка."},
-      {g:"ΧΡΗΣΜΟΣ", t:"Слово", p:"Текст на месте."},
-      {g:"ΤΕΡΑΤΑ", t:"Метка", p:"Пока пусто."}
+      {g:"ΑΡΧΗ", t:"Слово", p:"Текст на месте."},
+      {g:"ΧΡΗΣΜΟΣ", t:"Метка", p:"Пока пусто."},
+      {g:"ΤΕΡΑΤΑ", t:"Слово", p:"Ничего важного."}
     ]
   },
   {
-    greek:"ΝΟΜΟΙ", ru:"Слово",
-    intro:"Ничего важного. Текст на месте.",
+    greek:"ΝΟΜΟΙ", ru:"Строка",
+    intro:"Короткая строка. Ничего важного.",
     frags:[
-      {g:"ΚΑΝΩΝ", t:"Слово", p:"Ничего важного."},
-      {g:"ΑΝΑΒΑΣΙΣ", t:"Слово", p:"Две-три фразы."},
-      {g:"ΟΡΙΑ", t:"Строка", p:"Текст на месте."}
+      {g:"ΚΑΝΩΝ", t:"Слово", p:"Две-три фразы."},
+      {g:"ΑΝΑΒΑΣΙΣ", t:"Строка", p:"Текст на месте."},
+      {g:"ΟΡΙΑ", t:"Строка", p:"Строка без смысла."}
     ]
   }
 ];
@@ -1076,7 +1236,7 @@ function sizeSea(){
   glints=Array.from({length:n},()=>{
     const t=Math.pow(Math.random(),1.7);           // Просто заголовок
     const y=t*H;
-    const spread=26+ Math.pow(y/H,1.15)*(W*0.46);  // Пара слов сюда
+    const spread=26+ Math.pow(y/H,1.15)*(W*0.46);  // Два слова тут
     const x=W/2 + (Math.random()*2-1)*spread;
     return {x,y,len:1+Math.random()*(2+ (y/H)*7),ph:Math.random()*6.28,sp:.6+Math.random()*1.8};
   });
@@ -1092,7 +1252,7 @@ function drawSea(t){
   cx.fillStyle=beam; cx.fillRect(0,0,W,H);
   for(const g of glints){
     const d=Math.abs(g.x-half)/(W*0.5);
-    const core=Math.exp(-d*d*3.4);                 // Строка на месте
+    const core=Math.exp(-d*d*3.4);                 // Просто заголовок
     const flick=reduce?0.6:(0.5+0.5*Math.sin(t*0.0016*g.sp+g.ph));
     const a=core*flick*0.95*Math.pow(g.y/H,0.6);
     if(a<0.02) continue;
@@ -1384,11 +1544,22 @@ const PLATE=(()=>{
   '</svg>';
 })();
 
+/* картинка ищется сама: положите файл img/<ключ>.jpg — она встанет вместо эмблемы */
+const IMG_EXT=['jpg','png','webp','jpeg'];
+window.godImgFail=function(el){
+  const n=(+el.dataset.try||0)+1;
+  if(n<IMG_EXT.length){el.dataset.try=n; el.src='img/'+el.dataset.key+'.'+IMG_EXT[n];}
+  else el.remove();
+};
+function media(em){
+  return '<img class="deity__img" src="img/'+em+'.'+IMG_EXT[0]+'" data-key="'+em+'" alt="" loading="lazy"'+
+         ' onload="this.parentNode.classList.add(\'has-img\')" onerror="godImgFail(this)">'+
+         '<svg class="deity__em" viewBox="0 0 24 24" aria-hidden="true">'+EM[em]+'</svg>';
+}
 function deities(box,list){
-  box.innerHTML=list.map(([ru,gr,em,txt])=>
+  box.innerHTML=list.map(([ru,gr,em,txt],i)=>
     '<article class="deity">'+
-      '<div class="deity__plate">'+PLATE+
-        '<svg class="deity__em" viewBox="0 0 24 24" aria-hidden="true">'+EM[em]+'</svg>'+
+      '<div class="deity__plate" role="button" tabindex="0" data-god="'+em+'" aria-label="'+ru+'">'+PLATE+media(em)+
       '</div>'+
       '<h3>'+ru+'</h3><span class="gr">'+gr+'</span><p>'+txt+'</p>'+
     '</article>').join('');
@@ -1428,6 +1599,76 @@ document.querySelectorAll('.col .ivy').forEach((sv,i)=>{
 new IntersectionObserver((es,obs)=>es.forEach(e=>{
   if(e.isIntersecting){e.target.classList.add('grown');obs.unobserve(e.target)}
 }),{threshold:.3}).observe(document.getElementById('colonnade'));
+
+
+/* ---------- карточка бога крупно ---------- */
+const gv=document.getElementById('godview');
+const gvEl={p:document.getElementById('gvPlate'),t:document.getElementById('gvTier'),
+            g:document.getElementById('gvGr'),r:document.getElementById('gvRu'),x:document.getElementById('gvP')};
+const GODS=[...PANTHEON.main.map(a=>[...a,PANTHEON.titles.main]),
+            ...PANTHEON.more.map(a=>[...a,PANTHEON.titles.more])];
+let gvI=-1, gvSrc=null;
+
+function gvFill(i){
+  gvI=(i+GODS.length)%GODS.length;
+  const [ru,gr,em,txt,tier]=GODS[gvI];
+  gvEl.p.innerHTML=PLATE+media(em);
+  gvEl.t.textContent=tier; gvEl.g.textContent=gr; gvEl.r.textContent=ru; gvEl.x.textContent=txt;
+}
+function gvSource(){
+  return document.querySelector('.deity__plate[data-god="'+GODS[gvI][2]+'"]');
+}
+function gvOpen(i,card){
+  gvFill(i); gvSrc=card;
+  gv.classList.add('on');
+  document.getElementById('gvClose').focus();
+  if(reduce||!card) return;
+  const to=gvEl.p.getBoundingClientRect(), from=card.getBoundingClientRect();
+  gvEl.p.style.transition='none';
+  gvEl.p.style.transform='translate('+(from.left-to.left).toFixed(1)+'px,'+(from.top-to.top).toFixed(1)+'px)'+
+                         ' scale('+(from.width/to.width).toFixed(4)+','+(from.height/to.height).toFixed(4)+')';
+  card.classList.add('gone');
+  gvEl.p.getBoundingClientRect();
+  gvEl.p.style.transition='transform .72s cubic-bezier(.2,.7,.28,1)';
+  gvEl.p.style.transform='';
+}
+function gvClose(){
+  const card=gvSrc||gvSource();
+  if(reduce||!card){ gv.classList.remove('on'); if(card) card.classList.remove('gone'); return; }
+  const to=gvEl.p.getBoundingClientRect(), from=card.getBoundingClientRect();
+  gvEl.p.style.transition='transform .5s cubic-bezier(.4,0,.3,1)';
+  gvEl.p.style.transform='translate('+(from.left-to.left).toFixed(1)+'px,'+(from.top-to.top).toFixed(1)+'px)'+
+                         ' scale('+(from.width/to.width).toFixed(4)+','+(from.height/to.height).toFixed(4)+')';
+  gv.classList.remove('on');
+  setTimeout(()=>{
+    card.classList.remove('gone');
+    gvEl.p.style.transition='none'; gvEl.p.style.transform='';
+    if(card.focus) card.focus();
+  },500);
+}
+function gvStep(d){
+  const card=gvSrc||gvSource(); if(card) card.classList.remove('gone');
+  gvEl.p.style.transition='none'; gvEl.p.style.transform='';
+  gvEl.p.style.opacity='0';
+  setTimeout(()=>{
+    gvFill(gvI+d);
+    const nc=gvSource(); gvSrc=nc; if(nc) nc.classList.add('gone');
+    gvEl.p.style.transition='opacity .45s var(--ease)';
+    gvEl.p.style.opacity='1';
+  },200);
+}
+document.addEventListener('click',e=>{
+  const pl=e.target.closest('.deity__plate'); if(!pl) return;
+  gvOpen(GODS.findIndex(g=>g[2]===pl.dataset.god),pl);
+});
+document.addEventListener('keydown',e=>{
+  const pl=document.activeElement&&document.activeElement.closest&&document.activeElement.closest('.deity__plate');
+  if(pl&&(e.key==='Enter'||e.key===' ')){e.preventDefault();gvOpen(GODS.findIndex(g=>g[2]===pl.dataset.god),pl)}
+});
+document.getElementById('gvClose').addEventListener('click',gvClose);
+document.getElementById('gvPrev').addEventListener('click',()=>gvStep(-1));
+document.getElementById('gvNext').addEventListener('click',()=>gvStep(1));
+gv.addEventListener('click',e=>{if(e.target===gv) gvClose()});
 
 /* ---------- палата ---------- */
 const ch=document.getElementById('chamber');
@@ -1520,6 +1761,12 @@ document.getElementById('chClose').addEventListener('click',close);
 document.getElementById('chPrev').addEventListener('click',()=>step(-1));
 document.getElementById('chNext').addEventListener('click',()=>step(1));
 addEventListener('keydown',e=>{
+  if(gv.classList.contains('on')){
+    if(e.key==='Escape') gvClose();
+    if(e.key==='ArrowLeft') gvStep(-1);
+    if(e.key==='ArrowRight') gvStep(1);
+    return;
+  }
   if(!ch.classList.contains('open')) return;
   if(e.key==='Escape') close();
   if(e.key==='ArrowLeft') step(-1);
