@@ -827,7 +827,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
 
 <!-- КАРТОЧКА БОГА КРУПНО -->
 <div class="godview" id="godview" role="dialog" aria-modal="true" aria-labelledby="gvRu">
-  <button class="godview__close" id="gvClose"><i>&times;</i>Раздел</button>
+  <button class="godview__close" id="gvClose"><i>&times;</i>Закрыть</button>
   <div class="godview__box">
     <div class="godview__plate" id="gvPlate"></div>
     <div class="godview__text">
@@ -836,8 +836,8 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
       <h2 class="godview__ru" id="gvRu"></h2>
       <p class="godview__p" id="gvP"></p>
       <div class="godview__nav">
-        <button id="gvPrev">&#8592; Слово</button>
-        <button id="gvNext">Метка &#8594;</button>
+        <button id="gvPrev">&#8592; Прежде</button>
+        <button id="gvNext">Дальше &#8594;</button>
       </div>
     </div>
   </div>
@@ -847,15 +847,15 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
 <div class="dview" id="dview" role="dialog" aria-modal="true" aria-labelledby="dvName">
   <div class="dview__veil" id="dvVeil"></div>
   <div class="dview__box">
-    <button class="dview__close" id="dvClose"><i>&times;</i>Раздел</button>
+    <button class="dview__close" id="dvClose"><i>&times;</i>Закрыть</button>
     <div class="dview__plate" id="dvPlate"></div>
     <div class="dview__text">
       <span class="gr" id="dvGreek"></span>
       <h3 id="dvName"></h3>
       <p id="dvText"></p>
       <div class="dview__nav">
-        <button id="dvPrev" aria-label="Раздел">&#8592;</button>
-        <button id="dvNext" aria-label="Метка">&#8594;</button>
+        <button id="dvPrev" aria-label="Предыдущий бог">&#8592;</button>
+        <button id="dvNext" aria-label="Следующий бог">&#8594;</button>
         <span class="lbl" id="dvCount"></span>
       </div>
     </div>
@@ -897,13 +897,13 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
 
 <!-- ВЕРХНЯЯ ПОЛОСА -->
 <header class="topbar" id="topbar">
-  <a class="brand" href="#hero"><b>ΟΙΚΟΥΜΕΝΗ</b><span>Слово</span></a>
+  <a class="brand" href="#hero"><b>ΟΙΚΟΥΜΕΝΗ</b><span>Ойкумена</span></a>
   <nav class="topnav">
-    <a href="#portico"><i>ΣΤΟΑ</i>Раздел</a>
-    <a href="#portico" data-chamber="0"><i>ΘΕΟΙ</i>Метка</a>
-    <a href="#oracle"><i>ΜΑΝΤΕΙΟΝ</i>Заметка</a>
-    <a href="#ages"><i>ΑΙΩΝΕΣ</i>Заметка</a>
-    <a href="#found"><i>ΘΕΜΕΛΙΟΝ</i>Слово</a>
+    <a href="#portico"><i>ΣΤΟΑ</i>Портик</a>
+    <a href="#portico" data-chamber="0"><i>ΘΕΟΙ</i>Пантеон</a>
+    <a href="#oracle"><i>ΜΑΝΤΕΙΟΝ</i>Оракул</a>
+    <a href="#ages"><i>ΑΙΩΝΕΣ</i>Века</a>
+    <a href="#found"><i>ΘΕΜΕΛΙΟΝ</i>Основание</a>
   </nav>
 </header>
 
@@ -928,11 +928,11 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
     <div class="hero__vig"></div>
 
     <div class="hero__type">
-      <p class="eyebrow"><span class="g">ΒΙΒΛΟΣ ΤΟΥ ΚΟΣΜΟΥ</span> · Короткая строка</p>
+      <p class="eyebrow"><span class="g">ΒΙΒΛΟΣ ΤΟΥ ΚΟΣΜΟΥ</span> · Свод мира ролевой игры</p>
       <h1 class="title" id="title" aria-label="ΟΙΚΟΥΜΕΝΗ"></h1>
-      <p class="lede">Короткая строка. Пока пусто.</p>
+      <p class="lede">Море держит всё: острова, договоры богов и имена, которые ещё не записаны. Начните с портика — каждая колонна открывает свой раздел свода.</p>
     </div>
-    <a class="cue" href="#portico"><i></i>Пара слов сюда</a>
+    <a class="cue" href="#portico"><i></i>Вниз, к портику</a>
   </section>
 
   <div class="gate gate--garden">
@@ -944,7 +944,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
     </svg>
     <div class="gate__words">
       <span class="gr">ΑΡΧΗ ΗΜΙΣΥ ΠΑΝΤΟΣ</span>
-      <span class="gloss">Просто заголовок</span>
+      <span class="gloss">Начало — половина всего</span>
     </div>
   </div>
 
@@ -952,12 +952,12 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
   <section class="portico" id="portico">
     <div class="sun" aria-hidden="true"></div>
     <div class="wrap sect-head reveal">
-      <p class="eyebrow"><span class="g">ΣΤΟΑ</span> · Метка</p>
-      <h2>Короткая строка</h2>
-      <p>Пока пусто. Просто заполнение.</p>
+      <p class="eyebrow"><span class="g">ΣΤΟΑ</span> · Портик</p>
+      <h2>Пять колонн держат свод</h2>
+      <p>Каждая колонна — раздел лора. Нажмите на неё, чтобы войти внутрь: содержимое пока пустое, там ждут ваши записи.</p>
     </div>
 
-    <p class="hint reveal">Раздел ← → Строка на месте Esc Заметка</p>
+    <p class="hint reveal">Стрелки ← → листают разделы, Esc выводит наружу</p>
 
     <div class="colonnade" id="colonnade">
       <button class="col" data-key="0">
@@ -967,7 +967,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΘΕΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Пометка</span>
+        <span class="col__tag">Боги и культы</span>
       </button>
       <button class="col" data-key="1">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -976,7 +976,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΤΟΠΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Строка</span>
+        <span class="col__tag">Земли и море</span>
       </button>
       <button class="col" data-key="2">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -985,7 +985,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΟΙΚΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Заметка</span>
+        <span class="col__tag">Дома и роды</span>
       </button>
       <button class="col" data-key="3">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -994,7 +994,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΜΥΘΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Просто заголовок</span>
+        <span class="col__tag">Мифы и пророчества</span>
       </button>
       <button class="col" data-key="4">
         <svg class="ivy" viewBox="0 0 60 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -1003,7 +1003,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <span class="col__glow" aria-hidden="true"></span><span class="col__cap"></span>
         <span class="col__shaft"><span class="col__glyph">ΝΟΜΟΙ</span></span>
         <span class="col__base"></span>
-        <span class="col__tag">Строка</span>
+        <span class="col__tag">Законы игры</span>
       </button>
     </div>
     <div class="colonnade__floor"></div>
@@ -1018,7 +1018,7 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
     </svg>
     <div class="gate__words">
       <span class="gr">ΕΠΟΥ ΘΕΩ</span>
-      <span class="gloss">Здесь заголовок</span>
+      <span class="gloss">Следуй за богом</span>
     </div>
   </div>
 
@@ -1032,17 +1032,17 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
         <path class="branch" id="wreathR" d="M95 184 C150 174 178 128 172 84 C168 50 146 24 116 12"/>
         <text class="wreath__glyph" x="95" y="122">Θ</text>
       </svg>
-      <p class="eyebrow"><span class="g">ΜΑΝΤΕΙΟΝ</span> · Заметка</p>
-      <h2>Пара слов сюда</h2>
-      <p class="divine__lede">Немного текста. Строка без смысла.</p>
+      <p class="eyebrow"><span class="g">ΜΑΝΤΕΙΟΝ</span> · Оракул</p>
+      <h2>Три надписи в притворе храма</h2>
+      <p class="divine__lede">Дельфийские изречения — то, что в вашем мире знают наизусть даже те, кто не умеет читать. Удобная точка опоры: боги молчат, а надписи остаются.</p>
 
       <div class="plaque">
-        <div class="maxim"><span class="n">Α΄</span><span class="g">ΓΝΩΘΙ ΣΑΥΤΟΝ</span><span class="r">Просто заголовок</span></div>
-        <div class="maxim"><span class="n">Β΄</span><span class="g">ΜΗΔΕΝ ΑΓΑΝ</span><span class="r">Строка на месте</span></div>
-        <div class="maxim"><span class="n">Γ΄</span><span class="g">ΕΓΓΥΑ ΠΑΡΑ Δ᾽ ΑΤΑ</span><span class="r">Пара слов сюда</span></div>
+        <div class="maxim"><span class="n">Α΄</span><span class="g">ΓΝΩΘΙ ΣΑΥΤΟΝ</span><span class="r">Познай самого себя</span></div>
+        <div class="maxim"><span class="n">Β΄</span><span class="g">ΜΗΔΕΝ ΑΓΑΝ</span><span class="r">Ничего сверх меры</span></div>
+        <div class="maxim"><span class="n">Γ΄</span><span class="g">ΕΓΓΥΑ ΠΑΡΑ Δ᾽ ΑΤΑ</span><span class="r">Поручись — и беда рядом</span></div>
       </div>
 
-      <p class="divine__note">Две-три фразы. Здесь будет строка.</p>
+      <p class="divine__note">Замените изречения на заповеди своего пантеона: строка греческими литерами, под ней перевод. Такая табличка работает как клятва, которую персонажи нарушают.</p>
     </div>
   </section>
 
@@ -1055,16 +1055,16 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
     </svg>
     <div class="gate__words">
       <span class="gr">ΠΑΝΤΑ ΡΕΙ</span>
-      <span class="gloss">Метка</span>
+      <span class="gloss">Всё течёт</span>
     </div>
   </div>
 
   <!-- ВЕКА -->
   <section class="ages" id="ages">
     <div class="wrap sect-head reveal">
-      <p class="eyebrow"><span class="g">ΑΙΩΝΕΣ</span> · Раздел</p>
-      <h2>Просто заголовок</h2>
-      <p>Две-три фразы. Пока пусто.</p>
+      <p class="eyebrow"><span class="g">ΑΙΩΝΕΣ</span> · Века</p>
+      <h2>Нить, натянутая сквозь время</h2>
+      <p>Пять веков по Гесиоду — готовый костяк хронологии. Замените описания на события своей игры, порядок останется читаемым.</p>
     </div>
     <div class="thread-wrap" id="threadWrap">
       <svg class="thread" id="thread" viewBox="0 0 120 1000" preserveAspectRatio="none" aria-hidden="true">
@@ -1073,28 +1073,28 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
       </svg>
 
       <article class="age">
-        <div class="age__card"><span class="age__g">ΧΡΥΣΟΥΝ</span><span class="age__ru">Раздел</span>
-          <p>Ничего важного.</p></div>
+        <div class="age__card"><span class="age__g">ΧΡΥΣΟΥΝ</span><span class="age__ru">Золотой век</span>
+          <p>Боги ещё ходили по земле открыто. Запишите здесь, чем этот покой закончился.</p></div>
         <span class="age__mark"></span>
       </article>
       <article class="age">
-        <div class="age__card"><span class="age__g">ΑΡΓΥΡΟΥΝ</span><span class="age__ru">Метка</span>
-          <p>Здесь будет строка.</p></div>
+        <div class="age__card"><span class="age__g">ΑΡΓΥΡΟΥΝ</span><span class="age__ru">Серебряный век</span>
+          <p>Первые города, первые долги перед храмами. Место для основания домов и родов.</p></div>
         <span class="age__mark"></span>
       </article>
       <article class="age">
-        <div class="age__card"><span class="age__g">ΧΑΛΚΟΥΝ</span><span class="age__ru">Раздел</span>
-          <p>Пока пусто.</p></div>
+        <div class="age__card"><span class="age__g">ΧΑΛΚΟΥΝ</span><span class="age__ru">Медный век</span>
+          <p>Войны за проливы и оракулы. Сюда ложатся крупные конфликты предыстории.</p></div>
         <span class="age__mark"></span>
       </article>
       <article class="age">
-        <div class="age__card"><span class="age__g">ΗΡΩΩΝ</span><span class="age__ru">Заметка</span>
-          <p>Немного текста. Короткая строка.</p></div>
+        <div class="age__card"><span class="age__g">ΗΡΩΩΝ</span><span class="age__ru">Век героев</span>
+          <p>Полубоги, походы, имена, которые помнят до сих пор. Отсюда обычно растут родословные персонажей.</p></div>
         <span class="age__mark"></span>
       </article>
       <article class="age">
-        <div class="age__card"><span class="age__g">ΣΙΔΗΡΟΥΝ</span><span class="age__ru">Пометка</span>
-          <p>Просто заполнение.</p></div>
+        <div class="age__card"><span class="age__g">ΣΙΔΗΡΟΥΝ</span><span class="age__ru">Железный век</span>
+          <p>Настоящее время игры. Здесь живут ваши персонажи — и всё ещё решается.</p></div>
         <span class="age__mark"></span>
       </article>
     </div>
@@ -1103,15 +1103,15 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
   <!-- ОСНОВАНИЕ -->
   <section class="found" id="found">
     <div class="wrap sect-head reveal" style="padding-top:clamp(60px,10vh,110px)">
-      <p class="eyebrow"><span class="g">ΘΕΜΕΛΙΟΝ</span> · Строка</p>
-      <h2>Два слова тут</h2>
-      <p>Ничего важного. Просто заполнение.</p>
+      <p class="eyebrow"><span class="g">ΘΕΜΕΛΙΟΝ</span> · Основание</p>
+      <h2>Что править, чтобы сайт стал вашим</h2>
+      <p>Весь сайт — один файл. Ниже — четыре места, которых хватит для полной настройки под ваш мир.</p>
     </div>
     <div class="wrap found__grid reveal">
-      <div class="tile"><b>ΟΝΟΜΑ</b><h3>Слово</h3><p>Раздел <code>ΟΙΚΟΥΜΕΝΗ</code> Две-три фразы.</p></div>
-      <div class="tile"><b>ΣΤΟΑ</b><h3>Строка</h3><p>Здесь заголовок <code>LORE</code> Две-три фразы.</p></div>
-      <div class="tile"><b>ΧΡΩΜΑ</b><h3>Заметка</h3><p>Два слова тут <code>:root</code>. Немного текста.</p></div>
-      <div class="tile"><b>ΔΗΜΟΣΙΕΥΣΙΣ</b><h3>Пометка</h3><p>Просто заголовок <code>index.html</code> Два слова тут GitHub&nbsp;Pages Пометка</p></div>
+      <div class="tile"><b>ΟΝΟΜΑ</b><h3>Имя мира</h3><p>Замените <code>ΟΙΚΟΥΜΕΝΗ</code> в заголовке, в завесе и в шапке на греческое имя вашего мира.</p></div>
+      <div class="tile"><b>ΣΤΟΑ</b><h3>Разделы</h3><p>Тексты палат живут в массиве <code>LORE</code> в конце файла. Добавляйте фрагменты — карточки появятся сами.</p></div>
+      <div class="tile"><b>ΧΡΩΜΑ</b><h3>Цвета</h3><p>Палитра мудборда собрана в <code>:root</code>. Меняете шесть значений — меняется весь сайт.</p></div>
+      <div class="tile"><b>ΔΗΜΟΣΙΕΥΣΙΣ</b><h3>Публикация</h3><p>Положите файл как <code>index.html</code> в репозиторий и включите GitHub&nbsp;Pages в настройках.</p></div>
     </div>
   </section>
 </main>
@@ -1123,17 +1123,17 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
     <line x1="2" y1="45" x2="318" y2="45"/>
   </svg>
   <div class="greek">ΤΕΛΟΣ</div>
-  <p>Пометка · Пара слов сюда</p>
+  <p>Свод мира · собран для ролевой игры</p>
 </footer>
 
 <!-- ПАЛАТА -->
 <div class="chamber" id="chamber" role="dialog" aria-modal="true" aria-labelledby="chTitle">
   <div class="chamber__bar">
-    <button class="close" id="chClose"><i>&times;</i>Пометка</button>
+    <button class="close" id="chClose"><i>&times;</i>Выйти на свет</button>
     <div class="pager">
-      <button class="step" id="chPrev" aria-label="Пара слов сюда">&#8592;</button>
+      <button class="step" id="chPrev" aria-label="Предыдущий раздел">&#8592;</button>
       <div class="dots" id="chDots" aria-hidden="true"></div>
-      <button class="step" id="chNext" aria-label="Пара слов сюда">&#8594;</button>
+      <button class="step" id="chNext" aria-label="Следующий раздел">&#8594;</button>
     </div>
   </div>
   <div class="chamber__body">
@@ -1159,48 +1159,48 @@ body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
    ============================================================ */
 const LORE = [
   {
-    greek:"ΘΕΟΙ", ru:"Строка", gods:true,
-    intro:"Здесь будет строка. Пара слов.",
+    greek:"ΘΕΟΙ", ru:"Боги и культы", gods:true,
+    intro:"Канон, от которого можно отталкиваться: двенадцать главных и те, кого помнят по мифам. Замените описания на свои, если в вашем мире боги ведут себя иначе.",
     frags:[
-      {g:"ΠΑΝΘΕΟΝ", t:"Слово", p:"Две-три фразы."},
-      {g:"ΙΕΡΟΝ", t:"Здесь заголовок", p:"Строка без смысла."},
-      {g:"ΘΥΣΙΑ", t:"Просто заголовок", p:"Две-три фразы."}
+      {g:"ΠΑΝΘΕΟΝ", t:"Пантеон", p:"Список богов вашего мира: имя, эпитет, стихия, отношение к смертным."},
+      {g:"ΙΕΡΟΝ", t:"Храмы и жречество", p:"Где стоят святилища, кто ими правит, как туда попадают персонажи."},
+      {g:"ΘΥΣΙΑ", t:"Жертвы и знамения", p:"Что просят боги и как отвечают: сны, птицы, дым, молчание."}
     ]
   },
   {
-    greek:"ΤΟΠΟΙ", ru:"Строка",
-    intro:"Здесь будет строка. Пара слов.",
+    greek:"ΤΟΠΟΙ", ru:"Земли и море",
+    intro:"География игры. Полезно начинать с моря: острова описываются через расстояние до них и через то, кто их контролирует.",
     frags:[
-      {g:"ΝΗΣΟΙ", t:"Слово", p:"Пара слов."},
-      {g:"ΠΟΛΕΙΣ", t:"Пометка", p:"Здесь будет строка."},
-      {g:"ΟΔΟΙ", t:"Слово", p:"Пара слов."}
+      {g:"ΝΗΣΟΙ", t:"Острова", p:"Название, климат, чем живут, чем славятся и чего боятся."},
+      {g:"ΠΟΛΕΙΣ", t:"Города", p:"Кто правит, чем торгует, какие законы удивят приезжего."},
+      {g:"ΟΔΟΙ", t:"Пути", p:"Морские маршруты, сроки перехода, места, где корабли пропадают."}
     ]
   },
   {
-    greek:"ΟΙΚΟΙ", ru:"Пометка",
-    intro:"Строка без смысла. Пара слов.",
+    greek:"ΟΙΚΟΙ", ru:"Дома и роды",
+    intro:"Кто есть кто. Раздел для игроков: сюда идут родословные, союзы и вражда домов, к которым принадлежат персонажи.",
     frags:[
-      {g:"ΓΕΝΟΣ", t:"Слово", p:"Строка без смысла."},
-      {g:"ΣΥΜΜΑΧΙΑ", t:"Слово", p:"Ничего важного."},
-      {g:"ΠΡΟΣΩΠΑ", t:"Строка", p:"Пока пусто."}
+      {g:"ΓΕΝΟΣ", t:"Роды", p:"Герб, предок, владения, чем род известен и чем запятнан."},
+      {g:"ΣΥΜΜΑΧΙΑ", t:"Союзы", p:"Кто с кем связан браком, клятвой или долгом крови."},
+      {g:"ΠΡΟΣΩΠΑ", t:"Лица", p:"Карточки персонажей: имя, дом, возраст, чего добивается."}
     ]
   },
   {
-    greek:"ΜΥΘΟΙ", ru:"Два слова тут",
-    intro:"Текст на месте. Короткая строка.",
+    greek:"ΜΥΘΟΙ", ru:"Мифы и пророчества",
+    intro:"То, во что верят внутри мира — не обязательно правда. Удобно помечать, что известно всем, а что знает только рассказчик.",
     frags:[
-      {g:"ΑΡΧΗ", t:"Слово", p:"Текст на месте."},
-      {g:"ΧΡΗΣΜΟΣ", t:"Метка", p:"Пока пусто."},
-      {g:"ΤΕΡΑΤΑ", t:"Слово", p:"Ничего важного."}
+      {g:"ΑΡΧΗ", t:"Начало мира", p:"Как всё возникло по местной версии. Можно оставить две противоречащие."},
+      {g:"ΧΡΗΣΜΟΣ", t:"Пророчества", p:"Открытые предсказания игры: текст, кто его получил, как понимают."},
+      {g:"ΤΕΡΑΤΑ", t:"Чудовища", p:"Кто живёт за краем карты и что о них рассказывают в порту."}
     ]
   },
   {
-    greek:"ΝΟΜΟΙ", ru:"Строка",
-    intro:"Короткая строка. Ничего важного.",
+    greek:"ΝΟΜΟΙ", ru:"Законы игры",
+    intro:"Правила стола, а не мира. Держите их короткими: игроки возвращаются сюда за конкретным ответом.",
     frags:[
-      {g:"ΚΑΝΩΝ", t:"Слово", p:"Две-три фразы."},
-      {g:"ΑΝΑΒΑΣΙΣ", t:"Строка", p:"Текст на месте."},
-      {g:"ΟΡΙΑ", t:"Строка", p:"Строка без смысла."}
+      {g:"ΚΑΝΩΝ", t:"Как играем", p:"Формат, темп постов, длина, где идёт игра."},
+      {g:"ΑΝΑΒΑΣΙΣ", t:"Как войти", p:"Что нужно для заявки и кто её принимает."},
+      {g:"ΟΡΙΑ", t:"Границы", p:"Темы, которых не касаемся, и как остановить сцену."}
     ]
   }
 ];
@@ -1234,9 +1234,9 @@ function sizeSea(){
   cv.width=W*d; cv.height=H*d; cx.setTransform(d,0,0,d,0,0);
   const n=Math.round(Math.min(1600, W*1.5));
   glints=Array.from({length:n},()=>{
-    const t=Math.pow(Math.random(),1.7);           // Просто заголовок
+    const t=Math.pow(Math.random(),1.7);           // гуще у горизонта
     const y=t*H;
-    const spread=26+ Math.pow(y/H,1.15)*(W*0.46);  // Два слова тут
+    const spread=26+ Math.pow(y/H,1.15)*(W*0.46);  // дорожка расширяется к зрителю
     const x=W/2 + (Math.random()*2-1)*spread;
     return {x,y,len:1+Math.random()*(2+ (y/H)*7),ph:Math.random()*6.28,sp:.6+Math.random()*1.8};
   });
@@ -1252,7 +1252,7 @@ function drawSea(t){
   cx.fillStyle=beam; cx.fillRect(0,0,W,H);
   for(const g of glints){
     const d=Math.abs(g.x-half)/(W*0.5);
-    const core=Math.exp(-d*d*3.4);                 // Просто заголовок
+    const core=Math.exp(-d*d*3.4);                 // яркость от центра дорожки
     const flick=reduce?0.6:(0.5+0.5*Math.sin(t*0.0016*g.sp+g.ph));
     const a=core*flick*0.95*Math.pow(g.y/H,0.6);
     if(a<0.02) continue;
