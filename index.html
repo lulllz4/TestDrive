@@ -288,22 +288,28 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 /* ============================================================
    ПАЛАТА (чтение раздела)
    ============================================================ */
+main{transition:transform 1.05s var(--ease),filter 1.05s var(--ease)}
+body.in-chamber main{transform:scale(.965);filter:brightness(.6) blur(2px)}
+@property --r{syntax:"<percentage>";inherits:false;initial-value:0%}
 .chamber{
   position:fixed;inset:0;z-index:80;visibility:hidden;
   display:grid;grid-template-rows:auto 1fr;
   background:linear-gradient(180deg,#06283A,#0A3546);
+  --ox:50vw;--oy:60vh;--r:0%;
+  opacity:0;
+  -webkit-mask-image:radial-gradient(circle at var(--ox) var(--oy),#000 var(--r),transparent calc(var(--r) + 11%));
+  mask-image:radial-gradient(circle at var(--ox) var(--oy),#000 var(--r),transparent calc(var(--r) + 11%));
+  transition:--r .78s cubic-bezier(.4,0,.28,1),opacity .45s var(--ease) .18s,visibility 0s .82s;
+}
+.chamber.open{
+  visibility:visible;opacity:1;--r:150%;
+  transition:--r 1.05s cubic-bezier(.2,.7,.28,1),opacity .3s var(--ease),visibility 0s;
 }
 .chamber::before{
   content:"";position:absolute;inset:0;
   background:radial-gradient(90% 60% at 50% 0%,rgba(224,220,170,.14),transparent 60%);
   pointer-events:none;
 }
-.chamber.open{visibility:visible}
-.chamber__shade{
-  position:absolute;inset:0;background:var(--marble);transform-origin:bottom;
-  transform:scaleY(1);transition:transform .85s var(--ease);
-}
-.chamber.open .chamber__shade{transform:scaleY(0)}
 .chamber__bar{
   position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;
   gap:16px;padding:20px 5vw;border-bottom:1px solid rgba(163,123,71,.3);
@@ -314,9 +320,19 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 .chamber__inner{
   width:min(1080px,100%);margin-inline:auto;
   display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(24px,5vw,68px);
-  opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease) .35s,transform .8s var(--ease) .35s;
 }
-.chamber.open .chamber__inner{opacity:1;transform:none}
+.chamber__greek,.chamber__ru,.chamber__intro,.chamber__rule,.chamber__bar{
+  opacity:0;transform:translateY(18px);
+  transition:opacity .8s var(--ease),transform .8s var(--ease);
+}
+.chamber.open .chamber__greek,.chamber.open .chamber__ru,
+.chamber.open .chamber__intro,.chamber.open .chamber__rule,
+.chamber.open .chamber__bar{opacity:1;transform:none}
+.chamber.open .chamber__bar{transition-delay:.5s}
+.chamber.open .chamber__greek{transition-delay:.3s}
+.chamber.open .chamber__ru{transition-delay:.4s}
+.chamber.open .chamber__intro{transition-delay:.48s}
+.chamber.open .chamber__rule{transition-delay:.56s}
 .chamber__greek{
   font-family:var(--display);font-size:clamp(2.6rem,7vw,5.4rem);line-height:1;
   letter-spacing:.08em;color:var(--cream);margin:0 0 .3em;
@@ -644,6 +660,36 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
   .deity__frame{filter:none}
 }
 
+
+/* ---------- вход в колонну ---------- */
+.doorway{
+  position:fixed;z-index:85;left:0;top:0;width:40vmax;height:40vmax;
+  translate:-50% -50%;pointer-events:none;opacity:0;
+  background:radial-gradient(circle,rgba(243,229,176,.55),rgba(243,229,176,.14) 42%,transparent 70%);
+}
+.doorway.flare{animation:flare 1.25s cubic-bezier(.2,.7,.28,1) forwards}
+@keyframes flare{
+  0%{opacity:0;transform:scale(.05)}
+  10%{opacity:.85}
+  60%{opacity:.5;transform:scale(2.1)}
+  100%{opacity:0;transform:scale(3.4)}
+}
+/* содержимое будто приближается, когда входишь */
+.chamber__body{transform:scale(1.05);transform-origin:50% 40%;transition:transform 1.25s var(--ease)}
+.chamber.open .chamber__body{transform:none}
+.colonnade.dim .col{opacity:.3;filter:saturate(.55) brightness(.8);transition:opacity .5s var(--ease),filter .5s var(--ease),transform .7s var(--ease)}
+.colonnade.dim .col--go{opacity:1;filter:none;transform:translateY(-18px) scale(1.04)}
+.colonnade.dim .col--go .col__shaft{filter:brightness(1.18)}
+.colonnade.dim .col--go .col__glow{opacity:1}
+
+/* содержимое палаты меняется перетеканием */
+.chamber__inner,.pantheon{transition:opacity .4s var(--ease),transform .4s var(--ease)}
+.chamber.swap .chamber__inner,.chamber.swap .pantheon{opacity:0;transform:translateX(var(--dx,0)) translateY(8px)}
+
+/* таблички богов проявляются по очереди */
+.deity{opacity:0;transform:translateY(16px)}
+.deity.in{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease)}
+
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.12s!important}
   html{scroll-behavior:auto}
@@ -654,6 +700,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 
 <div class="atmos" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
+<div class="doorway" id="doorway" aria-hidden="true"></div>
 
 <!-- общий орнамент-меандр -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -921,7 +968,6 @@ h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;line-height:1.08}
 
 <!-- ПАЛАТА -->
 <div class="chamber" id="chamber" role="dialog" aria-modal="true" aria-labelledby="chTitle">
-  <div class="chamber__shade" aria-hidden="true"></div>
   <div class="chamber__bar">
     <button class="close" id="chClose"><i>&times;</i>Раздел</button>
     <div class="pager">
@@ -1346,6 +1392,20 @@ function deities(box,list){
       '</div>'+
       '<h3>'+ru+'</h3><span class="gr">'+gr+'</span><p>'+txt+'</p>'+
     '</article>').join('');
+  [...box.children].forEach((el,i)=>{
+    el.style.transitionDelay=(120+i*55)+'ms';
+    /* эмблема прорисовывается линией, как на оттиске */
+    if(!reduce) el.querySelectorAll('.deity__em > *:not(.solid)').forEach(pth=>{
+      let L=0; try{ L=pth.getTotalLength(); }catch(e){}
+      if(!L) return;
+      pth.style.strokeDasharray=L.toFixed(1);
+      pth.style.strokeDashoffset=L.toFixed(1);
+      pth.getBoundingClientRect();                       /* фиксируем начальное состояние */
+      pth.style.transition='stroke-dashoffset 1.15s cubic-bezier(.3,.7,.3,1) '+(340+i*55)+'ms';
+      pth.style.strokeDashoffset='0';
+    });
+    requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('in')));
+  });
 }
 function buildPantheon(box){
   if(box.dataset.ready) return;
@@ -1396,15 +1456,59 @@ function render(n){
   [...els.d.children].forEach((b,k)=>b.classList.toggle('on',k===cur));
 }
 function open(n,from){
-  opener=from||null; render(n);
-  ch.classList.add('open');
-  document.body.style.overflow='hidden';
-  document.getElementById('chClose').focus();
+  opener=from||null;
+  /* свет расходится из той колонны, на которую нажали */
+  const r=(from||document.getElementById('colonnade')).getBoundingClientRect();
+  const ox=r.left+r.width/2, oy=r.top+r.height*0.42;
+  ch.style.setProperty('--ox',ox.toFixed(0)+'px');
+  ch.style.setProperty('--oy',oy.toFixed(0)+'px');
+  ch.style.transition='none'; void ch.offsetWidth; ch.style.transition='';
+  render(n);
+  const flare=()=>{
+    if(reduce) return;
+    const dw=document.getElementById('doorway');
+    dw.style.left=ox+'px'; dw.style.top=oy+'px';
+    dw.classList.remove('flare'); void dw.offsetWidth; dw.classList.add('flare');
+  };
+  const go=()=>{
+    flare();
+    ch.classList.add('open');
+    document.body.classList.add('in-chamber');
+    document.body.style.overflow='hidden';
+    document.getElementById('chClose').focus();
+  };
+  if(from && from.classList.contains('col') && !reduce){
+    const cln=document.getElementById('colonnade');
+    cln.classList.add('dim'); from.classList.add('col--go');
+    setTimeout(go,300);
+  } else go();
 }
 function close(){
   ch.classList.remove('open');
+  document.body.classList.remove('in-chamber');
   document.body.style.overflow='';
+  const cln=document.getElementById('colonnade');
+  setTimeout(()=>{
+    cln.classList.remove('dim');
+    cln.querySelectorAll('.col--go').forEach(c=>c.classList.remove('col--go'));
+  },560);
   if(opener) opener.focus();
+}
+/* листание разделов — перетеканием, а не подменой */
+let swapping=false;
+function step(d){
+  if(swapping) return; swapping=true;
+  if(reduce){ render(cur+d); swapping=false; return; }
+  ch.style.setProperty('--dx', d>0 ? '-30px' : '30px');
+  ch.classList.add('swap');
+  setTimeout(()=>{
+    render(cur+d);
+    ch.querySelector('.chamber__body').scrollTop=0;
+    ch.style.setProperty('--dx', d>0 ? '30px' : '-30px');
+    void ch.offsetWidth;
+    ch.classList.remove('swap');
+    swapping=false;
+  },400);
 }
 document.getElementById('colonnade').addEventListener('click',e=>{
   const b=e.target.closest('.col'); if(b) open(+b.dataset.key,b);
@@ -1413,13 +1517,13 @@ document.querySelectorAll('[data-chamber]').forEach(a=>a.addEventListener('click
   e.preventDefault(); open(+a.dataset.chamber,a);
 }));
 document.getElementById('chClose').addEventListener('click',close);
-document.getElementById('chPrev').addEventListener('click',()=>render(cur-1));
-document.getElementById('chNext').addEventListener('click',()=>render(cur+1));
+document.getElementById('chPrev').addEventListener('click',()=>step(-1));
+document.getElementById('chNext').addEventListener('click',()=>step(1));
 addEventListener('keydown',e=>{
   if(!ch.classList.contains('open')) return;
   if(e.key==='Escape') close();
-  if(e.key==='ArrowLeft') render(cur-1);
-  if(e.key==='ArrowRight') render(cur+1);
+  if(e.key==='ArrowLeft') step(-1);
+  if(e.key==='ArrowRight') step(1);
 });
 </script>
 </body>
