@@ -1,1458 +1,2064 @@
 <!DOCTYPE html>
-<html lang="ru" data-crew="noct">
+<html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>[НАЗВАНИЕ] — район</title>
-<meta name="description" content="заглушка под описание для поисковиков, 150–160 символов">
-
-<!-- Tektur — плакатный техно на заголовки. Golos Text — на текст. оба с кириллицей.
-     мелкие служебные подписи идут системным моноширинным, без лишней загрузки -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;500;600;700;800&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#160e09">
+<title>По ту сторону песков</title>
 
 <style>
-/* ============================================================
-   ТОКЕНЫ
-   город один и тот же — меняется только вывеска.
-   поэтому --lamp (натриевый фонарь) во всех темах одинаковый,
-   а крю красит только --neon / --neon-2.
-   темы переключаются через data-crew на <html>.
-   ============================================================ */
-:root{
-  --black:#040405;
-  --asphalt:#08080a;
-  --concrete:#0e0e12;
-  --smoke:#16161c;
-  --line:#22222b;
-
-  --text:#c4c2cc;
-  --text-dim:#6a6874;
-  --text-ghost:#3a3944;
-
-  --lamp:#ff9436;          /* фонарь. общий для всех крю, не трогать */
-  --neon:#8f2bd0;          /* цвет отсвета на стене */
-  --neon-2:#c451ee;        /* цвет свечения вокруг стекла */
-  --tube:#f4d4ff;          /* само стекло. почти белое — так горит настоящая трубка */
-  --crew-ghost:"НОКТЮРН";
-
-  --edge:color-mix(in srgb, var(--neon) 26%, transparent);
-  --edge-soft:color-mix(in srgb, var(--neon) 10%, transparent);
-  --sign:0 0 2px rgba(255,255,255,.85),
-         0 0 11px color-mix(in srgb, var(--neon-2) 70%, transparent),
-         0 0 38px color-mix(in srgb, var(--neon) 40%, transparent);
-
-  --shell:min(1180px, 100% - 3rem);
-  --ease:cubic-bezier(.22,.75,.28,1);
+/* =====================================================
+   ПАЛИТРА: ДРЕВНИЙ ЕГИПЕТ
+   ===================================================== */
+:root {
+  color-scheme: dark;
+  --bg: #160e09;
+  --surface: #20150e;
+  --surface-2: #2b1c12;
+  --surface-3: #382316;
+  --text: #ead7b8;
+  --muted: #b29b7e;
+  --faint: #877058;
+  --accent: #eda05a;
+  --accent-bright: #ffbd78;
+  --line: rgba(219, 168, 105, .2);
+  --line-strong: rgba(219, 168, 105, .4);
+  --glow: rgba(232, 116, 39, .12);
+  --header: rgba(22, 14, 9, .88);
+  --button-text: #211209;
+  --sky-top: #21130e;
+  --sky-mid: #60361e;
+  --sky-bottom: #b56932;
+  --sun: #ffd499;
+  --sun-edge: #ed8134;
+  --haze: #ee9445;
+  --far: #8c542e;
+  --pyramid-lit: #bc793f;
+  --pyramid-mid: #865029;
+  --pyramid-shadow: #452719;
+  --stone-light: #684127;
+  --stone-dark: #24170f;
+  --near: #1c120c;
+  --foreground: #100b08;
+  --hero-veil: #160e09;
+  --river: #9d704c;
+  --paper: #bb935f;
+  --paper-ink: #47311f;
+  --particle: 242, 175, 96;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: "Segoe UI", Arial, sans-serif;
+  --mono: "Courier New", monospace;
 }
 
-html[data-crew="venom"]{ --neon:#2fa63c; --neon-2:#6fe04a; --tube:#e0ffd6; --crew-ghost:"ГАДЮКА" }
-html[data-crew="carmine"]{ --neon:#c2192a; --neon-2:#ff4a3a; --tube:#ffd8ce; --crew-ghost:"КАРМИН" }
-html[data-crew="cryo"]{ --neon:#1a7fb5; --neon-2:#4fd2f0; --tube:#dcf7ff; --crew-ghost:"КРИОТЕХ" }
-html[data-crew="amber"]{ --neon:#c9761a; --neon-2:#ffa62b; --tube:#ffe8c2; --crew-ghost:"ЯНТАРЬ" }
-
-*,*::before,*::after{ box-sizing:border-box }
-html{ -webkit-text-size-adjust:100% }
-body{
-  margin:0; background:var(--black); color:var(--text);
-  font:400 15px/1.7 "Golos Text", system-ui, sans-serif;
-  overflow-x:clip;
-  transition:background-color 1.2s var(--ease), color 1.2s var(--ease);
-}
-body.locked{ overflow:hidden }
-h1,h2,h3,.disp{
-  font-family:"Tektur", "Arial Narrow", system-ui, sans-serif;
-  font-weight:600; line-height:.92; margin:0; text-transform:uppercase; letter-spacing:.005em;
-}
-p{ margin:0 0 1.1rem }
-a{ color:inherit; text-decoration:none }
-::selection{ background:var(--neon); color:#fff }
-:focus-visible{ outline:1px solid var(--neon-2); outline-offset:4px }
-img{ max-width:100% }
-
-.mono{ font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace }
-.dim{ color:var(--text-dim) }
-
-/* пометки: всё, что ещё не написано */
-.stub{
-  display:inline-block; font:400 10px/1 ui-monospace,Menlo,monospace; letter-spacing:.1em;
-  padding:5px 7px 4px; border:1px dashed var(--line); color:var(--text-dim);
-  background:#00000055; white-space:nowrap;
-  transition:border-color 1.2s var(--ease), color 1.2s var(--ease);
-}
-.stub.on{ color:var(--neon-2); border-color:var(--edge); border-style:solid }
-
-/* ============================================================
-   ФОН И ПЛЁНКА
-   ============================================================ */
-#night{ position:fixed; inset:0; width:100%; height:100%; z-index:0 }
-.veil{ position:fixed; inset:0; z-index:1; pointer-events:none }
-.veil.vig{ background:radial-gradient(125% 85% at 52% 32%, transparent 34%, #000 94%); opacity:.82 }
-.veil.grain{
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='4'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.55'/></svg>");
-  opacity:.085; animation:grain .6s steps(3) infinite; mix-blend-mode:overlay;
-}
-@keyframes grain{ 0%{transform:translate(0,0)} 33%{transform:translate(-5px,3px)} 66%{transform:translate(4px,-4px)} 100%{transform:translate(0,0)} }
-.veil.lines{
-  background:repeating-linear-gradient(to bottom, transparent 0 2px, rgba(0,0,0,.5) 2px 3px);
-  opacity:.07;
-}
-/* фонарь идёт за курсором — как будто светит откуда-то сверху */
-.veil.torch{
-  background:radial-gradient(240px 240px at var(--mx,50%) var(--my,40%),
-    color-mix(in srgb, var(--lamp) 9%, transparent), transparent 70%);
-  mix-blend-mode:screen; transition:opacity .4s;
-}
-@media (pointer:coarse){ .veil.torch{ display:none } }
-
-.page{ position:relative; z-index:2 }
-
-/* обесточка при смене крю */
-#cut{ position:fixed; inset:0; z-index:70; background:#000; opacity:0; pointer-events:none }
-#cut.go{ animation:powercut 1.15s steps(1) forwards }
-@keyframes powercut{
-  0%{opacity:0} 4%{opacity:1} 46%{opacity:1}
-  50%{opacity:0} 54%{opacity:.9} 58%{opacity:0} 66%{opacity:.6} 70%{opacity:0}
-  84%{opacity:.35} 88%{opacity:0} 100%{opacity:0}
+/* =====================================================
+   ПАЛИТРА: ЭКСПЕДИЦИЯ
+   ===================================================== */
+body[data-era="modern"] {
+  color-scheme: light;
+  --bg: #ece8dd;
+  --surface: #f4f0e6;
+  --surface-2: #e2ddd0;
+  --surface-3: #d4cbbc;
+  --text: #283d42;
+  --muted: #5f716f;
+  --faint: #778582;
+  --accent: #936237;
+  --accent-bright: #744726;
+  --line: rgba(49, 75, 77, .19);
+  --line-strong: rgba(49, 75, 77, .37);
+  --glow: rgba(178, 201, 202, .3);
+  --header: rgba(236, 232, 221, .9);
+  --button-text: #fff7e7;
+  --sky-top: #afcbd5;
+  --sky-mid: #d1dfe0;
+  --sky-bottom: #eee0b9;
+  --sun: #fffbea;
+  --sun-edge: #f6e8bd;
+  --haze: #f1e3be;
+  --far: #bea779;
+  --pyramid-lit: #e9d5a6;
+  --pyramid-mid: #c5ae82;
+  --pyramid-shadow: #958365;
+  --stone-light: #b4a184;
+  --stone-dark: #716451;
+  --near: #c1b291;
+  --foreground: #8c826a;
+  --hero-veil: #dce6e4;
+  --river: #7b9a9d;
+  --paper: #e0cda5;
+  --paper-ink: #5b4933;
+  --particle: 255, 246, 217;
 }
 
-/* ============================================================
-   ВХОД
-   ============================================================ */
-#boot{
-  position:fixed; inset:0; z-index:100; background:var(--black);
-  display:grid; place-items:center; padding:2rem;
-  transition:opacity .9s var(--ease), visibility .9s;
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 105px; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background .8s, color .6s;
 }
-#boot.gone{ opacity:0; visibility:hidden }
-.boot-in{ width:min(460px,100%); text-align:left }
-.boot-sign{
-  font-family:"Tektur",sans-serif; font-weight:700; font-size:clamp(2.2rem,9vw,3.4rem);
-  color:var(--tube); text-shadow:var(--sign); line-height:1; margin-bottom:2.2rem;
-  animation:strike 3.4s steps(1) infinite;
+body:has(dialog[open]) { overflow: hidden; }
+button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button { font: inherit; color: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+button, a, input { outline-offset: 6px; }
+:focus-visible { outline: 2px solid var(--accent); }
+::selection { background: var(--accent); color: var(--bg); }
+h1, h2, h3, p { margin: 0; }
+svg { display: block; }
+button { border-radius: 0; }
+.container { width: min(1240px, calc(100% - 88px)); margin-inline: auto; }
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
-@keyframes strike{
-  0%,3%{opacity:.25} 4%{opacity:1} 7%{opacity:.35} 8%,60%{opacity:1}
-  61%{opacity:.4} 63%{opacity:1} 100%{opacity:1}
+.skip {
+  position: fixed; top: 10px; left: 10px; z-index: 100;
+  padding: 15px 20px; background: var(--surface);
+  transform: translateY(-150%);
 }
-.boot-log{ font:400 11.5px/1.9 ui-monospace,Menlo,monospace; color:var(--text-dim); min-height:8em }
-.boot-log b{ color:var(--text); font-weight:400 }
-.boot-bar{ height:1px; background:var(--line); position:relative; overflow:hidden; margin-top:1.4rem }
-.boot-bar i{ position:absolute; inset:0 100% 0 0; background:var(--neon-2) }
-.boot-go{
-  margin-top:2rem; padding:1rem 1.8rem; cursor:pointer; background:transparent;
-  border:1px solid var(--line); color:var(--text);
-  font:500 12px/1 "Golos Text",sans-serif; letter-spacing:.14em;
-  opacity:0; pointer-events:none; transition:opacity .6s, border-color .3s, color .3s, background-color .3s;
+.skip:focus { transform: translateY(0); }
+.svg-library { position: absolute; width: 0; height: 0; overflow: hidden; }
+.eyebrow {
+  font: 10px/1.7 var(--mono);
+  letter-spacing: .18em;
+  text-transform: uppercase;
 }
-.boot-go.on{ opacity:1; pointer-events:auto }
-.boot-go:hover{ border-color:var(--neon); color:#fff; background:color-mix(in srgb,var(--neon) 14%,transparent) }
+.accent { color: var(--accent); }
+.muted { color: var(--muted); }
 
-/* ============================================================
+/* Единая фактура вместо чистых цифровых заливок */
+body::after {
+  content: "";
+  position: fixed; inset: 0; z-index: 60;
+  pointer-events: none; opacity: .065;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.93' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath d='M0 0h180v180H0z' fill='%23fff' filter='url(%23g)' opacity='.7'/%3E%3C/svg%3E");
+}
+body[data-era="modern"]::after { opacity: .045; }
+
+/* =====================================================
    ШАПКА
-   ============================================================ */
-header.top{
-  position:fixed; top:0; left:0; right:0; z-index:40; display:flex; align-items:center; gap:1.5rem;
-  padding:1.1rem calc((100% - var(--shell))/2);
-  border-bottom:1px solid transparent; transition:.45s var(--ease);
+   ===================================================== */
+.site-header {
+  position: sticky; top: 0; z-index: 30;
+  background: var(--header);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(20px);
 }
-header.top.stuck{ background:#04040599; backdrop-filter:blur(10px); border-bottom-color:var(--line); padding-top:.7rem; padding-bottom:.7rem }
-.mark{ display:flex; align-items:center; gap:.6rem; font:600 13px/1 "Tektur",sans-serif; letter-spacing:.08em; text-transform:uppercase }
-.mark s{ width:7px; height:7px; background:var(--tube); box-shadow:var(--sign); text-decoration:none; animation:strike 5s steps(1) infinite }
-nav.links{ display:flex; gap:1.7rem; margin-left:auto; font-size:12.5px }
-nav.links a{ position:relative; color:var(--text-dim); padding:.35rem 0; transition:color .3s }
-nav.links a::after{ content:""; position:absolute; left:0; right:100%; bottom:0; height:1px; background:var(--neon-2); transition:right .4s var(--ease) }
-nav.links a:hover, nav.links a.here{ color:var(--text) }
-nav.links a:hover::after, nav.links a.here::after{ right:0 }
-.enter{
-  font:500 11.5px/1 "Golos Text",sans-serif; letter-spacing:.12em; padding:.75rem 1.1rem; cursor:pointer;
-  background:transparent; border:1px solid var(--line); color:var(--text); transition:.3s;
+.header-inner {
+  min-height: 86px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center; gap: 25px;
 }
-.enter:hover{ border-color:var(--neon); color:#fff; box-shadow:inset 0 0 24px color-mix(in srgb,var(--neon) 22%,transparent) }
-.burger{ display:none; background:none; border:0; cursor:pointer; padding:.4rem; margin-left:auto }
-.burger s{ display:block; width:20px; height:1px; background:var(--text); margin:5px 0 }
+.brand { display: flex; align-items: center; gap: 13px; width: fit-content; }
+.brand svg { width: 36px; height: 45px; color: var(--accent); }
+.brand span {
+  font: 10px/1.8 var(--sans);
+  font-weight: 600; letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.era-tabs {
+  display: flex;
+  padding: 4px;
+  border: 1px solid var(--line);
+  background: rgba(0,0,0,.07);
+}
+.era-tab {
+  position: relative; display: flex; align-items: center; gap: 12px;
+  min-width: 173px; padding: 11px 18px;
+  background: transparent; border: 1px solid transparent;
+  color: var(--faint); text-align: left;
+  transition: all .35s;
+}
+.era-tab svg { width: 19px; height: 19px; }
+.era-tab strong { display: block; font-size: 11px; font-weight: 500; }
+.era-tab small { display: block; margin-top: 4px; font: 9px var(--mono); opacity: .75; }
+.era-tab[aria-selected="true"] {
+  color: var(--text);
+  border-color: var(--line);
+  background: linear-gradient(130deg, var(--surface-3), var(--surface));
+  box-shadow: inset 0 1px 0 var(--line);
+}
+.era-tab[aria-selected="true"] svg { color: var(--accent); }
+.header-nav {
+  display: flex; justify-content: flex-end; align-items: center; gap: 25px;
+  font-size: 11px;
+}
+.link-button {
+  padding: 6px 0;
+  background: none; border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  color: var(--text); font-size: 11px;
+}
+.header-nav a:hover, .link-button:hover { color: var(--accent); }
 
-/* ============================================================
-   ПЕРВЫЙ ЭКРАН
-   ============================================================ */
-.hero{ min-height:100svh; display:flex; align-items:flex-end }
-.hero-in{ width:var(--shell); margin-inline:auto; padding:0 0 4.5rem; display:grid; grid-template-columns:1fr auto; gap:3rem; align-items:end }
-
-.kicker{ display:flex; align-items:center; gap:.9rem; font:400 11px/1 ui-monospace,Menlo,monospace; color:var(--text-dim); letter-spacing:.12em; margin-bottom:1.8rem }
-.kicker s{ flex:1; max-width:90px; height:1px; background:var(--line); text-decoration:none }
-
-.hero-in > div{ position:relative }
-.title{ position:relative; z-index:1; font-size:clamp(3rem, 13vw, 10rem); font-weight:700; letter-spacing:-.01em; color:#efedf3 }
-.title-echo{ position:absolute; left:0; top:1.5em; z-index:0; display:grid; gap:.02em; pointer-events:none; overflow:hidden; max-height:58vh }
-.title-echo span{ font:700 clamp(3rem,13vw,10rem)/1 "Tektur",sans-serif; text-transform:uppercase; letter-spacing:-.01em;
-  color:transparent; -webkit-text-stroke:1px #ffffff12 }
-.title-echo span:nth-child(2){ -webkit-text-stroke-color:#ffffff0c }
-.title-echo span:nth-child(3){ -webkit-text-stroke-color:#ffffff08 }
-.title-echo span:nth-child(4){ -webkit-text-stroke-color:#ffffff05 }
-.title span{ display:block }
-.title span:last-child{ color:var(--text-dim) }
-.title-note{ font:400 12.5px/1.6 "Golos Text",sans-serif; color:var(--text-dim); max-width:44ch; margin:1.6rem 0 0 }
-.hero-copy{ max-width:50ch; margin-top:1.4rem; font-size:14px; color:var(--text-dim) }
-.hero-copy b{ color:var(--text); font-weight:500 }
-
-/* вертикальная вывеска — как на фасадах в переулке */
-.signpost{ writing-mode:vertical-rl; align-self:end; margin-bottom:.4rem; padding:1.2rem .7rem; border:1px solid var(--edge);
-  font:600 13px/1 "Tektur",sans-serif; letter-spacing:.35em; text-transform:uppercase;
-  color:var(--tube); text-shadow:var(--sign); background:#00000066;
-  animation:strike 6.5s steps(1) infinite; transition:border-color 1.2s var(--ease), color 1.2s var(--ease) }
-
-.hero-foot{ width:var(--shell); margin-inline:auto; display:flex; gap:2.5rem; flex-wrap:wrap;
-  border-top:1px solid var(--line); padding:1.1rem 0 0; font:400 11px/1.6 ui-monospace,Menlo,monospace; color:var(--text-ghost) }
-
-/* ============================================================
-   СЕКЦИИ
-   ============================================================ */
-section{ width:var(--shell); margin-inline:auto; padding:7.5rem 0 }
-.head{ display:grid; grid-template-columns:auto 1fr; gap:1.4rem 2.5rem; align-items:baseline; margin-bottom:3.2rem; border-top:1px solid var(--line); padding-top:1.4rem }
-.head .no{ font:400 11px/1 ui-monospace,Menlo,monospace; color:var(--neon-2); letter-spacing:.15em }
-.head h2{ font-size:clamp(1.7rem,4.4vw,2.9rem); color:#e8e6ee }
-.head p{ grid-column:2; max-width:58ch; font-size:13.5px; color:var(--text-dim); margin:0 }
-
-.reveal{ opacity:0; transform:translateY(14px); transition:opacity 1s var(--ease), transform 1s var(--ease) }
-.reveal.in{ opacity:1; transform:none }
-
-/* район — три колонки текста, без карточек */
-.cols{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:2.5rem 3rem }
-.col h3{ font-size:1.05rem; color:#ddd9e4; margin-bottom:.8rem; padding-bottom:.8rem; border-bottom:1px solid var(--line) }
-.col p{ font-size:13.5px; color:var(--text-dim) }
-.col .fig{ font:300 3.2rem/1 "Tektur",sans-serif; color:var(--text); display:block; margin-bottom:.4rem }
-.col .fig em{ font-style:normal; color:var(--neon-2); font-size:1.2rem; vertical-align:top; margin-left:.2rem }
-
-/* ============================================================
-   КРЮ — постер-досье во всю ширину.
-   логика листа: разметочная сетка, метки по углам, эхо имени,
-   крупная роль, сетка данных, иконки деятельности, текст в колонки.
-   монохром: одна краска крю на чёрном.
-   ============================================================ */
-#crews{ width:100%; margin-inline:0; padding:7rem 0 6rem }
-#crews .shell{ width:var(--shell); margin-inline:auto }
-
-.picker{ display:flex; align-items:flex-start; gap:clamp(1.2rem,3.4vw,2.8rem); overflow-x:auto; scrollbar-width:none;
-  padding:0 calc((100% - var(--shell))/2) 1.4rem; scroll-snap-type:x proximity }
-.picker::-webkit-scrollbar{ display:none }
-.pick{ position:relative; flex:none; background:none; border:0; cursor:pointer; padding:.2rem 0; scroll-snap-align:center;
-  font:700 clamp(1.3rem,3.6vw,2.4rem)/1 "Tektur",sans-serif; text-transform:uppercase; letter-spacing:.02em;
-  color:#ffffff12; transition:color .6s var(--ease) }
-.pick:hover{ color:#ffffff3d }
-.pick small{ display:block; font:400 10px/1 ui-monospace,Menlo,monospace; letter-spacing:.12em;
-  color:var(--text-ghost); margin-top:.7rem; opacity:0; transition:opacity .45s }
-.pick[aria-selected="true"]{ color:var(--tube) }
-.pick[aria-selected="true"] small{ opacity:1; color:var(--text-dim) }
-
-.controls{ width:var(--shell); margin:0 auto 1.2rem; display:flex; align-items:center; gap:1rem;
-  font:400 10.5px/1 ui-monospace,Menlo,monospace; letter-spacing:.14em; color:var(--text-ghost) }
-.controls .sp{ flex:1; height:1px; background:var(--line) }
-.arrow{ background:none; border:0; cursor:pointer; color:var(--text-dim); padding:.3rem .5rem; font-size:15px; transition:color .3s }
-.arrow:hover{ color:var(--tube) }
-
-/* ---- лист ---- */
-.stage{ position:relative; padding:2.5rem 0 3.5rem; overflow:hidden }
-#crewfx{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0 }
-/* разметочная сетка листа */
-.guides{ position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5;
-  background-image:
-    repeating-linear-gradient(90deg, color-mix(in srgb, var(--neon) 22%, transparent) 0 1px, transparent 1px calc(100%/8)),
-    linear-gradient(color-mix(in srgb, var(--neon) 16%, transparent) 0 1px, transparent 1px);
-  background-size:100% 100%, 100% 33.33%;
-  transition:background-image 1.2s var(--ease) }
-
-.poster{ position:relative; z-index:1; width:min(1440px, 100% - 3rem); margin-inline:auto; padding:1.8rem clamp(1rem,3vw,2.4rem) }
-.mk{ position:absolute; width:15px; height:15px; border:1px solid color-mix(in srgb, var(--neon-2) 60%, transparent) }
-.mk.tl{ left:0; top:0; border-right:0; border-bottom:0 }
-.mk.tr{ right:0; top:0; border-left:0; border-bottom:0 }
-.mk.bl{ left:0; bottom:0; border-right:0; border-top:0 }
-.mk.br{ right:0; bottom:0; border-left:0; border-top:0 }
-.xh{ position:absolute; width:13px; height:13px; pointer-events:none }
-.xh::before,.xh::after{ content:""; position:absolute; background:color-mix(in srgb, var(--neon-2) 55%, transparent) }
-.xh::before{ left:50%; top:0; bottom:0; width:1px }
-.xh::after{ top:50%; left:0; right:0; height:1px }
-
-.pmeta{ display:flex; gap:1.2rem; align-items:center; margin-bottom:1.4rem;
-  font:400 10px/1 ui-monospace,Menlo,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--neon-2) }
-.pmeta .sp{ flex:1; height:1px; background:color-mix(in srgb, var(--neon) 28%, transparent) }
-.pmeta .dim{ color:var(--text-ghost) }
-
-.pgrid{ display:grid; grid-template-columns:minmax(240px,.85fr) 1.15fr; gap:clamp(1.5rem,4vw,3.5rem); align-items:start }
-
-/* левая половина: вывеска, эхо имени, вертикальная подпись */
-.pleft{ position:relative; display:grid; grid-template-columns:22px 1fr; gap:1rem; align-items:center }
-.vname{ writing-mode:vertical-rl; transform:rotate(180deg); justify-self:center; align-self:stretch;
-  font:700 clamp(1.4rem,3vw,2.2rem)/1 "Tektur",sans-serif; text-transform:uppercase; letter-spacing:.24em;
-  color:color-mix(in srgb, var(--neon) 45%, transparent); white-space:nowrap; overflow:hidden }
-.figwrap{ position:relative; aspect-ratio:3/4; display:grid; place-items:end center }
-/* эхо имени — за персонажем, читается сквозь прозрачный фон */
-.echo{ position:absolute; inset:0; z-index:0; display:flex; flex-direction:column; justify-content:center;
-  gap:.04em; pointer-events:none; overflow:hidden }
-.echo span{ font:700 clamp(1.7rem,5.8vw,3.8rem)/1 "Tektur",sans-serif; text-transform:uppercase; letter-spacing:.02em;
-  text-align:center; color:transparent; -webkit-text-stroke:1px color-mix(in srgb, var(--neon) 42%, transparent) }
-.echo span:first-child{ -webkit-text-stroke:0; color:color-mix(in srgb, var(--neon) 26%, transparent) }
-.echo span:nth-child(3){ opacity:.75 } .echo span:nth-child(4){ opacity:.5 } .echo span:nth-child(5){ opacity:.3 }
-
-/* сам персонаж: png с прозрачным фоном, прижат к низу.
-   три слоя — свечение сзади, картинка, цветной налив поверх.
-   налив и свечение обрезаны по силуэту через mask, поэтому
-   работают с любым png без ручной обработки */
-.figure{ position:relative; z-index:2; width:100%; height:100%;
-  object-fit:contain; object-position:bottom center;
-  filter:saturate(.55) contrast(1.06) brightness(.94);
-  opacity:calc(.55 + var(--lit,1) * .45) }
-.fig-rim, .fig-tint{ position:absolute; inset:0; pointer-events:none;
-  -webkit-mask:var(--fig) bottom center/contain no-repeat; mask:var(--fig) bottom center/contain no-repeat }
-.fig-rim{ z-index:1; background:var(--neon); filter:blur(22px); opacity:calc(var(--lit,1) * .6) }
-.fig-tint{ z-index:3; mix-blend-mode:color; opacity:.7;
-  background:linear-gradient(180deg, color-mix(in srgb, var(--tube) 55%, transparent), var(--neon) 65%) }
-
-/* заглушка, пока картинки нет */
-.figwrap.ph .figure{ filter:none; opacity:1 }
-.figwrap.ph .figure rect, .figwrap.ph .figure circle{
-  fill:color-mix(in srgb, var(--neon) 18%, transparent);
-  stroke:color-mix(in srgb, var(--neon-2) 55%, transparent); stroke-width:1.5; stroke-dasharray:5 4 }
-.figwrap.ph::after{ content:""; position:absolute; inset:0; z-index:4; pointer-events:none;
-  background-image:radial-gradient(circle at center, transparent .55px, #000 .95px);
-  background-size:3.4px 3.4px; opacity:.4; mix-blend-mode:multiply }
-.fig-note{ position:absolute; z-index:5; left:0; right:0; bottom:12%; text-align:center;
-  font:400 10px/1.6 ui-monospace,Menlo,monospace; letter-spacing:.08em; color:var(--neon-2) }
-
-/* маленькая метка крю в шапке листа — то, что раньше было большой вывеской */
-.mark-sign{ width:20px; height:20px; flex:none; overflow:visible; opacity:var(--lit,1) }
-.mark-sign path{ fill:none; stroke:var(--tube); stroke-width:6; stroke-linecap:round; stroke-linejoin:round;
-  filter:drop-shadow(0 0 4px var(--neon)) }
-.mark-sign path.dead{ opacity:.22; filter:none }
-
-.pcap{ grid-column:2; margin-top:.7rem; text-align:center;
-  font:400 10px/1.6 ui-monospace,Menlo,monospace; color:var(--text-ghost) }
-
-/* правая половина */
-.pright{ display:grid; gap:clamp(1.4rem,3vw,2.2rem) }
-.abil{ display:grid; gap:.85rem; justify-items:end }
-.ab{ display:flex; align-items:center; gap:.9rem; width:100% }
-.ab s{ flex:1; height:1px; background:color-mix(in srgb, var(--neon) 30%, transparent); text-decoration:none }
-.ab span{ font:600 clamp(11px,1.15vw,14px)/1 "Tektur",sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--neon-2) }
-.ab svg{ width:clamp(26px,2.6vw,34px); height:clamp(26px,2.6vw,34px); flex:none; fill:none;
-  stroke:var(--tube); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; opacity:var(--lit,1) }
-
-.role{ font:700 clamp(2.2rem,8vw,6rem)/.92 "Tektur",sans-serif; text-transform:uppercase; letter-spacing:.01em;
-  color:var(--tube); margin:0; display:flex; align-items:baseline; gap:.6rem }
-.role em{ font:400 10px/1 ui-monospace,Menlo,monospace; font-style:normal; letter-spacing:.16em; color:var(--neon-2) }
-
-/* сетка данных: ярлык — значение, в две пары */
-.datagrid{ display:grid; grid-template-columns:auto 1fr auto 1fr; gap:.55rem clamp(.8rem,2vw,1.6rem); margin:0;
-  border-top:1px solid color-mix(in srgb, var(--neon) 25%, transparent);
-  border-bottom:1px solid color-mix(in srgb, var(--neon) 25%, transparent); padding:1.1rem 0 }
-.datagrid dt{ font:600 clamp(10px,1vw,12px)/1.5 "Tektur",sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--neon-2) }
-.datagrid dd{ margin:0; font:400 clamp(11px,1.05vw,13px)/1.5 "Golos Text",sans-serif;
-  color:color-mix(in srgb, var(--tube) 82%, #fff) }
-
-.bio{ columns:2; column-gap:clamp(1.2rem,2.5vw,2.2rem); font-size:11.5px; line-height:1.6; text-align:justify;
-  color:color-mix(in srgb, var(--text) 72%, var(--neon)); hyphens:auto }
-.bio p{ margin:0 0 .9rem; break-inside:avoid }
-.bio b{ color:var(--tube); font-weight:500 }
-
-/* нижняя полоса листа — как строка глифов на постерах */
-.pfoot{ display:flex; align-items:center; gap:.9rem; margin-top:1.8rem; padding-top:.9rem;
-  border-top:1px solid color-mix(in srgb, var(--neon) 22%, transparent);
-  font:400 9.5px/1 ui-monospace,Menlo,monospace; letter-spacing:.16em; color:var(--text-ghost); flex-wrap:wrap }
-.pfoot i{ width:5px; height:5px; background:color-mix(in srgb, var(--neon-2) 70%, transparent) }
-.pfoot .sp{ flex:1; height:1px; background:color-mix(in srgb, var(--neon) 18%, transparent) }
-
-/* ---- ниже листа ---- */
-.rule{ height:1px; margin:2.5rem 0 clamp(2.5rem,6vw,4rem);
-  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--neon) 40%, var(--line)) 30%, transparent 85%) }
-.why{ display:grid; grid-template-columns:auto 1fr; gap:clamp(1.4rem,5vw,4.5rem); align-items:start }
-.why h3{ font:700 clamp(2.2rem,7.5vw,5.6rem)/.9 "Tektur",sans-serif; text-transform:uppercase; color:#e9e7ee }
-.why-text{ max-width:58ch; padding-top:.5rem }
-.why-text p{ font-size:14px; color:var(--text-dim) }
-.trait{ display:flex; align-items:center; gap:.8rem; margin-top:1.6rem;
-  font:400 11px/1.5 ui-monospace,Menlo,monospace; letter-spacing:.08em; color:var(--text-dim) }
-.trait s{ flex:none; width:5px; height:5px; background:var(--neon); opacity:var(--lit,1) }
-
-.dos-more{ margin-top:clamp(3rem,7vw,5rem); display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:2.6rem }
-.blk h4{ font:600 10.5px/1 "Tektur",sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--neon-2); margin:0 0 1.2rem }
-.pair{ display:flex; gap:1rem; padding:.6rem 0; border-bottom:1px solid var(--line); font-size:13px; color:var(--text-dim) }
-.pair b{ margin-left:auto; text-align:right; font-weight:500; color:var(--text) }
-.tie{ display:flex; align-items:center; gap:.7rem; width:100%; padding:.65rem .1rem; cursor:pointer; text-align:left;
-  background:none; border:0; border-bottom:1px solid var(--line); color:var(--text-dim);
-  font:400 13px/1.3 "Golos Text",sans-serif; transition:color .3s }
-.tie:hover{ color:var(--text) }
-.tie i{ width:5px; height:5px; flex:none; background:var(--c) }
-.tie b{ margin-left:auto; font:400 10.5px/1 ui-monospace,Menlo,monospace; letter-spacing:.08em; color:var(--text-ghost) }
-.quote{ margin:0; font:400 clamp(1.05rem,1.8vw,1.35rem)/1.5 "Tektur",sans-serif; color:#dedbe4 }
-.quote .by{ margin-top:1rem; font:400 10px/1 ui-monospace,Menlo,monospace; letter-spacing:.1em; color:var(--text-ghost) }
-.rows{ display:flex; flex-direction:column }
-.row{ display:flex; align-items:center; gap:.9rem; padding:.6rem 0; border-bottom:1px solid var(--line); font-size:12.5px; color:var(--text-dim) }
-.row u{ flex:1; height:1px; text-decoration:none; background:var(--line); position:relative; overflow:hidden }
-.row u i{ position:absolute; inset:0 100% 0 0; background:color-mix(in srgb, var(--neon) 70%, var(--line)); transition:right 1.2s var(--ease) }
-.row b{ min-width:2.2em; text-align:right; font-weight:500; color:var(--text); font-variant-numeric:tabular-nums }
-
-.fade{ transition:opacity .55s var(--ease), transform .55s var(--ease); transition-delay:calc(var(--i,0) * 50ms) }
-.swapping .fade{ opacity:0; transform:translateY(14px); transition-duration:.16s; transition-delay:0s }
-
-/* ============================================================
-   ТОЧКИ
-   ============================================================ */
-.spots{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line) }
-.spot{ background:var(--asphalt); padding:1.4rem; min-height:250px; display:flex; flex-direction:column; transition:background-color .5s }
-.spot:hover{ background:var(--concrete) }
-.spot .ph{
-  aspect-ratio:4/3; margin-bottom:1.1rem; display:grid; place-items:center; text-align:center; padding:1rem;
+/* =====================================================
+   КИНЕМАТОГРАФИЧНЫЙ ПЕРВЫЙ ЭКРАН
+   ===================================================== */
+.hero {
+  position: relative; isolation: isolate;
+  min-height: min(900px, calc(100svh - 86px));
+  min-height: max(770px, calc(100svh - 86px));
+  overflow: hidden;
+  background: var(--sky-top);
+}
+.landscape {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: -5;
+}
+.landscape svg { width: 100%; height: 100%; }
+.hero-shade {
+  position: absolute; inset: 0; z-index: -3;
   background:
-    radial-gradient(70% 60% at 30% 15%, color-mix(in srgb,var(--neon) 16%,transparent), transparent 65%),
-    radial-gradient(50% 50% at 85% 95%, color-mix(in srgb,var(--lamp) 10%,transparent), transparent 60%),
-    #0a0a0c;
-  border:1px solid var(--line); color:var(--text-ghost);
-  font:400 10px/1.5 ui-monospace,Menlo,monospace; letter-spacing:.08em;
-  transition:background 1.2s var(--ease), border-color .4s;
+    linear-gradient(90deg, var(--hero-veil) 0%, transparent 76%),
+    linear-gradient(0deg, var(--bg) 0%, transparent 37%),
+    linear-gradient(180deg, rgba(0,0,0,.12), transparent 35%);
+  opacity: .98;
 }
-.spot:hover .ph{ border-color:var(--edge) }
-.spot h3{ font-size:1rem; color:#e2e0e8; margin-bottom:.4rem }
-.spot p{ font-size:12.5px; color:var(--text-dim); margin:0 }
-.spot .meta{ margin-top:auto; padding-top:1rem; border-top:1px solid var(--line); display:flex; justify-content:space-between;
-  font:400 10px/1 ui-monospace,Menlo,monospace; color:var(--text-ghost); letter-spacing:.06em }
-.spot .meta b{ color:var(--neon-2); font-weight:400 }
+.hero-vignette {
+  position: absolute; inset: 0; z-index: -2;
+  background: radial-gradient(ellipse at 66% 42%, transparent 15%, rgba(0,0,0,.37) 100%);
+  pointer-events: none;
+}
+body[data-era="modern"] .hero-vignette { opacity: .3; }
+.hero-rays {
+  position: absolute;
+  inset: -40% -20% -30% 20%;
+  z-index: -4;
+  transform-origin: 70% 25%;
+  background: conic-gradient(
+    from 136deg at 70% 25%,
+    transparent 0deg,
+    rgba(255,199,121,.12) 9deg,
+    transparent 17deg,
+    rgba(255,199,121,.035) 24deg,
+    transparent 35deg,
+    rgba(255,199,121,.08) 47deg,
+    transparent 55deg
+  );
+  mix-blend-mode: screen;
+  filter: blur(9px);
+  animation: rays 24s ease-in-out infinite alternate;
+}
+@keyframes rays {
+  from { transform: rotate(-5deg); opacity: .45; }
+  to { transform: rotate(4deg); opacity: .9; }
+}
+.dust-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.hero-content {
+  position: relative;
+  padding-top: clamp(100px, 13vh, 160px);
+  padding-bottom: 215px;
+}
+.hero-kicker { display: flex; gap: 17px; align-items: center; color: var(--accent); margin-bottom: 30px; }
+.hero-kicker::before { content: ""; width: 33px; height: 1px; background: currentColor; }
+.hero h1 {
+  font: 400 clamp(64px, 6.7vw, 104px)/.99 var(--serif);
+  letter-spacing: -.05em;
+  max-width: 740px;
+  text-shadow: 0 3px 40px rgba(0,0,0,.16);
+}
+.hero h1 em {
+  display: inline-block;
+  font-weight: 400;
+  color: var(--accent-bright);
+  padding-bottom: .1em;
+}
+body[data-era="ancient"] .hero h1 em { text-shadow: 0 0 65px rgba(240,141,65,.17); }
+.hero-description {
+  max-width: 355px; margin-top: 29px;
+  font-size: 13px; line-height: 1.95;
+  color: var(--muted);
+}
+.hero-actions { display: flex; gap: 27px; align-items: center; margin-top: 32px; }
+.button {
+  display: inline-flex; justify-content: center; align-items: center; gap: 30px;
+  min-height: 48px; padding: 15px 23px;
+  border: 1px solid var(--accent);
+  color: var(--button-text); background: var(--accent);
+  font-size: 11px; font-weight: 600;
+  box-shadow: 0 5px 35px rgba(0,0,0,.1);
+  transition: transform .2s, box-shadow .2s;
+}
+.button:hover { transform: translateY(-3px); box-shadow: 0 8px 35px var(--glow); }
+.quiet-link {
+  display: inline-flex; gap: 12px; align-items: center;
+  padding: 8px 0; border: 0; background: none;
+  font-size: 11px; color: var(--text);
+}
+.quiet-link span:last-child { color: var(--accent); }
+.quiet-link:hover { color: var(--accent); }
+.hero-coordinate {
+  position: absolute; top: 35px; left: 0; right: 0;
+  display: flex; justify-content: space-between;
+  color: var(--muted); font: 9px/1.6 var(--mono); letter-spacing: .14em;
+}
+.hero-coordinate .right { text-align: right; }
+.scene-caption {
+  position: absolute; right: 7%; bottom: 215px;
+  display: flex; align-items: center; gap: 20px;
+  color: var(--text);
+}
+.caption-line { width: 65px; height: 1px; background: var(--line-strong); }
+.caption-line::after {
+  content: ""; display: block; width: 5px; height: 5px;
+  border: 1px solid var(--accent); border-radius: 50%;
+  transform: translate(-5px, -3px);
+}
+.scene-caption p { font: italic 20px/1.45 var(--serif); }
+.scene-caption small { display: block; font: 8px/1.5 var(--mono); letter-spacing: .18em; margin-bottom: 8px; color: var(--accent); }
+.hero-bottom {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  border-top: 1px solid var(--line);
+  min-height: 108px;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 30px;
+}
+.hero-chapter { display: flex; align-items: center; gap: 20px; }
+.chapter-roman { font: 42px/1 var(--serif); color: var(--accent); opacity: .7; }
+.hero-chapter small { display: block; color: var(--faint); font: 8px var(--mono); letter-spacing: .15em; margin-bottom: 7px; }
+.hero-chapter strong { font: 13px var(--serif); font-weight: 400; }
+.scroll-cue {
+  display: flex; gap: 13px; align-items: center;
+  font-size: 10px; color: var(--muted);
+}
+.scroll-cue i { display: block; width: 1px; height: 28px; background: linear-gradient(var(--accent), transparent); }
+.motion-toggle {
+  justify-self: end;
+  border: 0; background: none; padding: 12px 0;
+  display: flex; align-items: center; gap: 9px;
+  font: 9px var(--mono); color: var(--muted);
+}
+.motion-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 9px var(--accent); }
+.motion-toggle[aria-pressed="false"] .motion-dot { box-shadow: none; opacity: .3; }
+.time-flash {
+  position: fixed; inset: 0; z-index: 55;
+  background: radial-gradient(ellipse at 70% 30%, #e7b473, #29190e);
+  opacity: 0; pointer-events: none;
+}
 
-/* ============================================================
-   СВОДКИ
-   ============================================================ */
-.logs{ border-top:1px solid var(--line) }
-.log{ display:grid; grid-template-columns:110px 1fr 140px 80px; gap:1.5rem; align-items:center;
-  padding:1.3rem .4rem; border-bottom:1px solid var(--line); position:relative; transition:background-color .4s, padding-left .4s }
-.log::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:1px; background:var(--neon-2); transform:scaleY(0); transition:transform .4s var(--ease) }
-.log:hover{ background:#ffffff05; padding-left:1.2rem }
-.log:hover::before{ transform:scaleY(1) }
-.log .when{ font:400 11px/1 ui-monospace,Menlo,monospace; color:var(--text-ghost); letter-spacing:.06em }
-.log .what{ font-size:13.5px; color:var(--text) }
-.log .what small{ display:block; font-size:11.5px; color:var(--text-dim); margin-top:.2rem }
-.log .who{ font-size:11.5px; color:var(--text-dim) }
-.log .st{ font:400 10px/1 ui-monospace,Menlo,monospace; letter-spacing:.1em; text-align:right; color:var(--text-ghost) }
-.log .st.hot{ color:var(--neon-2) }
+.modern-world { opacity: 0; transition: opacity 1s; }
+.ancient-world { opacity: 1; transition: opacity 1s; }
+body[data-era="modern"] .modern-world { opacity: 1; }
+body[data-era="modern"] .ancient-world { opacity: 0; }
 
-/* ============================================================
-   КАДРЫ
-   ============================================================ */
-.shots{ display:grid; grid-template-columns:repeat(6,1fr); grid-auto-rows:110px; gap:.6rem }
-.shot{ position:relative; overflow:hidden; border:1px solid var(--line); display:grid; place-items:center; text-align:center; padding:1rem;
+/* =====================================================
+   ОБЩИЕ РАЗДЕЛЫ
+   ===================================================== */
+.section { position: relative; padding: 100px 0; }
+.section-kicker {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 27px;
+}
+.section-kicker .index { color: var(--accent); font: italic 15px var(--serif); }
+.section-kicker .rule { width: 44px; height: 1px; background: var(--line-strong); }
+.section-kicker .eyebrow { color: var(--muted); font-size: 9px; }
+.section-title { font: 400 clamp(36px, 4vw, 55px)/1.12 var(--serif); letter-spacing: -.035em; }
+.section-title em { font-weight: 400; color: var(--accent); }
+.section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 35px; }
+.section-summary { max-width: 270px; font-size: 12px; line-height: 1.9; color: var(--muted); }
+.prose { color: var(--muted); font-size: 13px; line-height: 2; }
+.prose p + p { margin-top: 18px; }
+.prose strong { color: var(--text); font-weight: 500; }
+
+/* =====================================================
+   ЗАВЯЗКА: СТРАНИЦА ИЗ СЕКРЕТНОГО АРХИВА
+   ===================================================== */
+.story-section {
   background:
-    radial-gradient(60% 70% at 25% 0%, color-mix(in srgb,var(--neon) 18%,transparent), transparent 60%),
-    radial-gradient(45% 55% at 90% 100%, color-mix(in srgb,var(--lamp) 12%,transparent), transparent 55%),
-    #070709;
-  font:400 10px/1.5 ui-monospace,Menlo,monospace; letter-spacing:.08em; color:var(--text-ghost);
-  filter:saturate(.75); transition:filter .5s, border-color .4s, background 1.2s var(--ease) }
-.shot:hover{ filter:saturate(1.1) brightness(1.15); border-color:var(--edge) }
-.shot::after{ content:""; position:absolute; inset:0; pointer-events:none;
-  background-image:radial-gradient(circle at center, transparent .5px, #000 .95px);
-  background-size:3.2px 3.2px; opacity:.5; mix-blend-mode:multiply }
-.shot:nth-child(1){ grid-column:span 3; grid-row:span 2 }
-.shot:nth-child(2){ grid-column:span 3 }
-.shot:nth-child(3){ grid-column:span 1 }
-.shot:nth-child(4){ grid-column:span 2 }
-.shot:nth-child(5){ grid-column:span 3 }
-.shot:nth-child(6){ grid-column:span 3 }
-
-/* ============================================================
-   ВХОД / ВОПРОСЫ
-   ============================================================ */
-.faq{ border-top:1px solid var(--line) }
-.q{ border-bottom:1px solid var(--line) }
-.q > button{ width:100%; display:flex; align-items:center; gap:1rem; text-align:left; cursor:pointer;
-  background:none; border:0; color:var(--text); font:500 14px/1.5 "Golos Text",sans-serif; padding:1.4rem .3rem; transition:color .3s }
-.q > button:hover{ color:#fff }
-.q > button s{ margin-left:auto; flex:none; text-decoration:none; color:var(--neon-2); font-size:16px; line-height:1; transition:transform .45s var(--ease) }
-.q.open > button s{ transform:rotate(45deg) }
-.q .ans{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .5s var(--ease) }
-.q.open .ans{ grid-template-rows:1fr }
-.q .ans > div{ overflow:hidden }
-.q .ans p{ font-size:13px; color:var(--text-dim); padding:0 .3rem 1.5rem; max-width:72ch; margin:0 }
-
-/* ============================================================
-   ПОДВАЛ
-   ============================================================ */
-footer{ border-top:1px solid var(--line); margin-top:3rem; background:#020203 }
-.foot-in{ width:var(--shell); margin-inline:auto; padding:4rem 0 2.5rem; display:grid; grid-template-columns:2fr 1fr 1fr; gap:2.5rem }
-.foot-in h4{ font:400 10.5px/1 ui-monospace,Menlo,monospace; letter-spacing:.14em; color:var(--text-ghost); margin:0 0 1.2rem }
-.foot-in ul{ list-style:none; margin:0; padding:0; display:grid; gap:.65rem; font-size:12.5px; color:var(--text-dim) }
-.foot-in li a:hover{ color:var(--neon-2) }
-.foot-bar{ width:var(--shell); margin-inline:auto; padding:1.4rem 0 3rem; border-top:1px solid var(--line);
-  display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;
-  font:400 10.5px/1 ui-monospace,Menlo,monospace; color:var(--text-ghost) }
-
-/* ============================================================
-   АДАПТИВ
-   ============================================================ */
-@media (max-width:900px){
-  :root{ --shell:min(1180px, 100% - 2rem) }
-  .burger{ display:block }
-  nav.links{ position:fixed; inset:0 0 auto; padding:5.5rem 2rem 2.5rem; flex-direction:column; gap:1.3rem; margin:0;
-    background:var(--asphalt); border-bottom:1px solid var(--line); font-size:17px; transform:translateY(-102%); transition:transform .5s var(--ease) }
-  nav.links.open{ transform:none }
-  header.top .enter{ display:none }
-  .hero-in{ grid-template-columns:1fr; padding-bottom:3rem }
-  .signpost{ writing-mode:horizontal-tb; justify-self:start; letter-spacing:.25em; padding:.7rem 1rem }
-  .poster{ width:calc(100% - 1.5rem); padding:1.4rem 1rem }
-  .pgrid{ grid-template-columns:1fr; gap:2rem }
-  .pleft{ grid-template-columns:18px 1fr }
-  .figwrap{ max-width:320px; justify-self:center; width:100% }
-  .bio{ columns:1 }
-  .datagrid{ grid-template-columns:auto 1fr; gap:.5rem 1rem }
-  .role{ flex-wrap:wrap }
-  .why{ grid-template-columns:1fr; gap:1.5rem }
-  .dos-more{ gap:2.4rem }
-  .log{ grid-template-columns:1fr 1fr; gap:.5rem 1rem }
-  .log .st{ text-align:left }
-  .shots{ grid-template-columns:repeat(2,1fr) }
-  .shot:nth-child(n){ grid-column:span 1; grid-row:span 1 }
-  .shot:nth-child(1){ grid-column:span 2 }
-  .foot-in{ grid-template-columns:1fr 1fr }
+    radial-gradient(ellipse at 10% 75%, var(--glow), transparent 55%),
+    var(--bg);
 }
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.2s !important }
-  .reveal{ opacity:1; transform:none }
+.story-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 85px; }
+.story-lead .section-title { max-width: 500px; }
+.chapter-stamp {
+  display: flex; align-items: center; gap: 18px;
+  margin-top: 35px; color: var(--faint);
+}
+.stamp-ring {
+  width: 57px; height: 57px; flex-shrink: 0;
+  border: 1px solid var(--line-strong); border-radius: 50%;
+  display: grid; place-items: center;
+  outline: 1px solid var(--line);
+  outline-offset: -7px;
+  font: 24px var(--serif); color: var(--accent);
+  transform: rotate(-12deg);
+}
+.chapter-stamp p { font: 9px/1.9 var(--mono); letter-spacing: .08em; }
+.story-right { padding-top: 10px; }
+.story-quote {
+  position: relative;
+  margin-top: 30px; padding: 23px 0 0 27px;
+  border-top: 1px solid var(--line);
+  font: italic 24px/1.5 var(--serif);
+}
+.story-quote::before {
+  content: "“"; position: absolute; left: -3px; top: 11px;
+  font: 47px var(--serif); color: var(--accent);
+}
+.story-quote cite {
+  display: block; margin-top: 13px;
+  font: 8px/1.8 var(--mono); letter-spacing: .12em;
+  color: var(--faint); text-transform: uppercase;
+}
+.timeline {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  margin-top: 65px; border-top: 1px solid var(--line);
+}
+.timeline-item {
+  position: relative; padding: 28px 32px 0 0;
+}
+.timeline-item::before {
+  content: ""; position: absolute; left: 0; top: -4px;
+  width: 7px; height: 7px; background: var(--bg);
+  border: 1px solid var(--accent); transform: rotate(45deg);
+}
+.timeline-item:last-child::before { background: var(--accent); box-shadow: 0 0 16px var(--glow); }
+.timeline-item .date { font: 9px var(--mono); letter-spacing: .08em; color: var(--accent); }
+.timeline-item h3 { margin-top: 14px; font: 23px var(--serif); }
+.timeline-item p { margin-top: 11px; max-width: 300px; font-size: 12px; line-height: 1.9; color: var(--muted); }
+
+/* =====================================================
+   КАРТА
+   ===================================================== */
+.map-section { padding-top: 10px; }
+.map-frame {
+  position: relative; margin-top: 37px;
+  padding: 7px; border: 1px solid var(--line);
+  background: var(--surface);
+}
+.map-frame::before, .map-frame::after {
+  content: ""; position: absolute;
+  width: 19px; height: 19px; pointer-events: none; z-index: 3;
+}
+.map-frame::before { left: -1px; top: -1px; border-top: 1px solid var(--accent); border-left: 1px solid var(--accent); }
+.map-frame::after { right: -1px; bottom: -1px; border-bottom: 1px solid var(--accent); border-right: 1px solid var(--accent); }
+.map-grid { display: grid; grid-template-columns: 1.65fr 1fr; }
+.map {
+  min-height: 425px; position: relative; overflow: hidden;
+  background:
+    radial-gradient(ellipse at 45% 45%, var(--surface-3), var(--surface) 75%);
+}
+.map::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 65px var(--surface);
+}
+.map-art { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--accent); }
+.map-top-label {
+  position: absolute; left: 22px; top: 20px; z-index: 2;
+  font: 8px/1.7 var(--mono); letter-spacing: .1em; color: var(--muted);
+}
+.compass { position: absolute; right: 22px; top: 20px; width: 42px; color: var(--accent); opacity: .65; z-index: 2; }
+.map-scale { position: absolute; left: 23px; bottom: 22px; z-index: 2; color: var(--faint); font: 8px var(--mono); }
+.map-scale::before {
+  content: ""; display: block; width: 75px; height: 5px;
+  border: 1px solid var(--faint); border-top: 0; margin-bottom: 8px;
+}
+.map-marker {
+  position: absolute; z-index: 3;
+  width: 37px; height: 37px;
+  display: grid; place-items: center;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: var(--surface); border: 1px solid var(--line-strong);
+  color: var(--accent);
+  box-shadow: 0 5px 22px rgba(0,0,0,.2);
+  transition: background .25s, box-shadow .25s;
+}
+.map-marker span { transform: rotate(-45deg); font: 10px var(--mono); }
+.map-marker:hover { border-color: var(--accent); box-shadow: 0 0 25px var(--glow); }
+.map-marker[aria-pressed="true"] {
+  background: var(--accent); color: var(--button-text);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 6px var(--glow), 0 0 38px var(--glow);
+}
+.location-panel {
+  position: relative;
+  padding: 38px 34px;
+  border-left: 1px solid var(--line);
+  background: linear-gradient(135deg, var(--surface-2), var(--surface));
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+.location-panel::after {
+  content: attr(data-number);
+  position: absolute; right: 18px; top: 14px;
+  font: 120px/.9 var(--serif); color: var(--accent); opacity: .055;
+  pointer-events: none;
+}
+.location-top { display: flex; align-items: center; gap: 10px; font: 8px var(--mono); letter-spacing: .13em; color: var(--accent); }
+.location-top::before { content: ""; width: 5px; height: 5px; background: currentColor; transform: rotate(45deg); }
+.location-panel h3 { margin-top: 38px; font: 32px/1.13 var(--serif); letter-spacing: -.02em; }
+.location-panel p { margin-top: 20px; font-size: 12px; line-height: 1.95; color: var(--muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 24px; margin-top: auto; }
+.tag { padding: 7px 8px; font: 8px/1.3 var(--mono); border: 1px solid var(--line); color: var(--muted); }
+
+/* =====================================================
+   АРХИВ: ВЕЩИ, А НЕ ПЛОСКИЕ КАРТОЧКИ
+   ===================================================== */
+.archive-section {
+  padding-top: 0;
+  background: radial-gradient(ellipse at 95% 70%, var(--glow), transparent 50%);
+}
+.archive-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 38px; }
+.archive-card {
+  position: relative; display: flex; flex-direction: column;
+  width: 100%; padding: 0; text-align: left;
+  color: var(--text); border: 1px solid var(--line);
+  background: linear-gradient(155deg, var(--surface-2), var(--surface) 65%);
+  overflow: hidden;
+  transition: transform .35s, border-color .35s, box-shadow .35s;
+}
+.archive-card:hover {
+  transform: translateY(-7px);
+  border-color: var(--line-strong);
+  box-shadow: 0 20px 45px rgba(0,0,0,.14);
+}
+.archive-art {
+  position: relative; display: block; height: 205px; width: 100%;
+  background:
+    radial-gradient(ellipse at 50% 28%, var(--surface-3), transparent 70%),
+    var(--surface);
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+.archive-art::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(0deg, var(--surface), transparent 35%);
+  pointer-events: none;
+}
+.archive-art svg { width: 100%; height: 100%; color: var(--accent); transition: transform .7s; }
+.archive-card:hover .archive-art svg { transform: scale(1.055) rotate(-1deg); }
+.archive-id {
+  position: absolute; top: 16px; left: 18px;
+  font: 8px var(--mono); letter-spacing: .13em;
+  color: var(--faint); z-index: 1;
+}
+.archive-art-label {
+  position: absolute; bottom: 17px; right: 19px;
+  font: 8px var(--mono); letter-spacing: .12em;
+  color: var(--muted); z-index: 1;
+}
+.archive-content { display: flex; flex-direction: column; flex: 1; padding: 25px; }
+.archive-meta { font: 8px/1.8 var(--mono); letter-spacing: .1em; color: var(--accent); }
+.archive-title { margin-top: 13px; font: 26px/1.17 var(--serif); }
+.archive-preview { margin-top: 14px; font-size: 12px; line-height: 1.9; color: var(--muted); margin-bottom: 27px; }
+.archive-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: auto; padding-top: 17px; border-top: 1px solid var(--line);
+  font-size: 10px;
+}
+.archive-bottom b { font-size: 20px; font-weight: 400; color: var(--accent); }
+
+/* =====================================================
+   АРТЕФАКТ
+   ===================================================== */
+.artifact-section {
+  position: relative; overflow: hidden;
+  padding: 90px 0;
+  border-block: 1px solid var(--line);
+  background:
+    radial-gradient(ellipse at 26% 48%, var(--glow), transparent 50%),
+    linear-gradient(120deg, var(--surface), var(--bg));
+}
+.artifact-section::before {
+  content: "ВРЕМЯ";
+  position: absolute; left: -30px; bottom: -60px;
+  font: 230px var(--serif); letter-spacing: -.07em;
+  color: var(--accent); opacity: .025; pointer-events: none;
+}
+.artifact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 75px; align-items: center; }
+.artifact-visual { position: relative; min-height: 410px; display: grid; place-items: center; }
+.artifact-halo {
+  position: absolute; width: 345px; height: 345px;
+  border: 1px solid var(--line); border-radius: 50%;
+  box-shadow: 0 0 90px var(--glow), inset 0 0 80px var(--glow);
+}
+.artifact-halo::before {
+  content: ""; position: absolute; inset: 19px;
+  border: 1px dashed var(--line-strong); border-radius: 50%;
+}
+.artifact-halo::after {
+  content: ""; position: absolute; inset: -29px;
+  border: 1px solid var(--line); border-radius: 50%; opacity: .4;
+}
+.seal-svg {
+  width: 265px; height: 265px;
+  transform: rotate(-8deg);
+  filter: drop-shadow(18px 25px 15px rgba(0,0,0,.4));
+  transition: transform 1.2s, filter 1.2s;
+  z-index: 1;
+}
+body[data-era="modern"] .seal-svg { transform: rotate(12deg); filter: drop-shadow(15px 20px 15px rgba(40,30,15,.25)); }
+.seal-crack { opacity: 0; transition: opacity .8s; }
+body[data-era="modern"] .seal-crack { opacity: 1; }
+.artifact-label {
+  position: absolute; bottom: 0; left: 0;
+  color: var(--faint); font: 8px/1.9 var(--mono); letter-spacing: .12em;
+}
+.artifact-label.right { left: auto; right: 0; top: 0; bottom: auto; text-align: right; }
+.artifact-copy .prose { margin-top: 25px; max-width: 415px; }
+.artifact-switch {
+  margin-top: 27px;
+  display: inline-flex; align-items: center; gap: 24px;
+  padding: 13px 0; background: none;
+  border: 0; border-bottom: 1px solid var(--accent);
+  font-size: 11px;
+}
+.artifact-switch span:last-child { font-size: 22px; color: var(--accent); }
+.artifact-switch:hover { color: var(--accent); }
+.artifact-footnote { margin-top: 18px; font: 8px/1.8 var(--mono); color: var(--faint); max-width: 350px; }
+
+/* =====================================================
+   ФИНАЛ
+   ===================================================== */
+.closing { padding: 77px 0 60px; text-align: center; }
+.closing-symbol { width: 35px; height: 35px; margin: 0 auto 25px; color: var(--accent); }
+.closing blockquote { margin: 0; font: italic 28px/1.5 var(--serif); }
+.closing .eyebrow { margin-top: 17px; font-size: 8px; color: var(--faint); }
+.footer-inner {
+  display: flex; justify-content: space-between; gap: 20px; align-items: center;
+  border-top: 1px solid var(--line); padding: 25px 0;
+  color: var(--faint); font: 8px/1.9 var(--mono); letter-spacing: .07em;
+}
+.footer-inner a:hover { color: var(--accent); }
+
+/* =====================================================
+   ДОКУМЕНТЫ
+   ===================================================== */
+dialog {
+  width: min(720px, calc(100% - 32px));
+  max-height: 86svh;
+  border: 1px solid var(--line-strong);
+  padding: 0; color: var(--text);
+  background:
+    radial-gradient(ellipse at top right, var(--glow), transparent 55%),
+    var(--surface);
+  box-shadow: 0 35px 120px rgba(0,0,0,.5);
+}
+dialog::backdrop { background: rgba(8,6,4,.77); backdrop-filter: blur(9px); }
+.modal-inner { padding: 40px 48px 45px; }
+.modal-top { display: flex; justify-content: space-between; align-items: center; gap: 25px; padding-bottom: 25px; border-bottom: 1px solid var(--line); }
+.modal-top .eyebrow { color: var(--accent); font-size: 9px; }
+.modal-close { width: 35px; height: 35px; border: 1px solid var(--line); background: none; font-size: 24px; }
+.modal-close:hover { border-color: var(--accent); color: var(--accent); }
+.modal-title { margin-top: 32px; font: 40px/1.15 var(--serif); letter-spacing: -.03em; }
+.modal-meta { margin-top: 15px; color: var(--faint); font: 9px/1.8 var(--mono); }
+.modal-body { margin-top: 27px; font-size: 13px; line-height: 2; color: var(--muted); }
+.modal-body p + p { margin-top: 17px; }
+.modal-body strong { color: var(--text); font-weight: 500; }
+.modal-body h3 { font: 25px var(--serif); color: var(--text); margin: 28px 0 13px; }
+.modal-body blockquote {
+  margin: 25px 0; padding: 5px 0 5px 24px;
+  border-left: 1px solid var(--accent);
+  color: var(--text); font: italic 23px/1.6 var(--serif);
+}
+.modal-body ul { padding-left: 20px; }
+.modal-foot { margin-top: 33px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--faint); font: 8px/1.8 var(--mono); letter-spacing: .12em; }
+
+body.motion-off .hero-rays { animation-play-state: paused; }
+
+/* =====================================================
+   АДАПТИВНОСТЬ
+   ===================================================== */
+@media (min-width: 1800px) {
+  .hero { min-height: 940px; }
+  .hero-content { padding-top: 165px; }
+}
+@media (max-width: 1100px) {
+  .container { width: calc(100% - 56px); }
+  .header-nav a { display: none; }
+  .era-tab { min-width: 151px; padding-inline: 12px; }
+  .brand span { font-size: 9px; }
+  .hero h1 { font-size: 85px; }
+  .scene-caption { right: 4%; bottom: 185px; }
+  .scene-caption p { font-size: 17px; }
+  .story-layout { gap: 50px; }
+  .location-panel { padding: 32px 26px; }
+  .artifact-grid { gap: 45px; }
+}
+@media (max-width: 800px) {
+  html { scroll-padding-top: 155px; }
+  .container { width: calc(100% - 40px); }
+  .header-inner { grid-template-columns: 1fr auto; padding: 14px 0 12px; gap: 12px; }
+  .brand svg { width: 26px; height: 33px; }
+  .brand span { font-size: 8px; }
+  .era-tabs { grid-column: 1 / -1; grid-row: 2; }
+  .era-tab { flex: 1; min-width: 0; padding: 9px 12px; }
+  .era-tab strong { font-size: 10px; }
+  .era-tab small { font-size: 8px; }
+  .header-nav { grid-column: 2; grid-row: 1; }
+  .hero { min-height: 735px; }
+  .hero-content { padding-top: 110px; padding-bottom: 205px; }
+  .hero h1 { font-size: clamp(60px, 10vw, 82px); }
+  .hero-description { max-width: 325px; }
+  .landscape { left: -20%; width: 130%; }
+  .hero-shade { background: linear-gradient(90deg, var(--hero-veil), transparent 100%), linear-gradient(0deg, var(--bg), transparent 45%); }
+  .scene-caption { display: none; }
+  .hero-coordinate { top: 25px; font-size: 8px; }
+  .hero-bottom { grid-template-columns: 1fr auto; min-height: 90px; gap: 18px; }
+  .scroll-cue { display: none; }
+  .hero-chapter { gap: 13px; }
+  .hero-chapter strong { font-size: 12px; }
+  .section { padding: 65px 0; }
+  .story-layout { grid-template-columns: 1fr; gap: 33px; }
+  .story-lead .section-title { max-width: none; }
+  .chapter-stamp { margin-top: 24px; }
+  .story-right { padding-top: 0; }
+  .timeline { margin-top: 40px; }
+  .timeline-item { padding-right: 20px; }
+  .timeline-item h3 { font-size: 20px; }
+  .map-section { padding-top: 5px; }
+  .map-grid { grid-template-columns: 1fr; }
+  .map { min-height: 390px; }
+  .location-panel { min-height: 280px; border-left: 0; border-top: 1px solid var(--line); }
+  .location-panel h3 { margin-top: 24px; }
+  .location-panel p { max-width: 560px; }
+  .archive-section { padding-top: 0; }
+  .archive-grid { gap: 14px; }
+  .archive-art { height: 160px; }
+  .archive-content { padding: 20px 17px; }
+  .archive-title { font-size: 22px; }
+  .archive-preview { font-size: 11px; }
+  .archive-meta { font-size: 7px; }
+  .artifact-section { padding: 65px 0; }
+  .artifact-grid { gap: 35px; }
+  .artifact-visual { min-height: 330px; }
+  .artifact-halo { width: 245px; height: 245px; }
+  .seal-svg { width: 205px; height: 205px; }
+  .artifact-label { font-size: 7px; }
+  .artifact-copy .section-title { font-size: 37px; }
+}
+@media (max-width: 540px) {
+  .hero { min-height: 730px; }
+  .hero h1 { font-size: clamp(56px, 13.2vw, 73px); }
+  .hero-kicker { font-size: 8px; gap: 10px; margin-bottom: 25px; }
+  .hero-content { padding-top: 112px; }
+  .hero-description { max-width: 295px; font-size: 12px; }
+  .hero-coordinate .right { max-width: 128px; }
+  .landscape { width: 195%; left: -65%; }
+  .hero-shade {
+    background:
+      linear-gradient(90deg, var(--hero-veil), transparent 145%),
+      linear-gradient(0deg, var(--bg), transparent 40%);
+  }
+  .hero-actions { gap: 19px; }
+  .button { padding: 14px 17px; gap: 19px; font-size: 10px; }
+  .quiet-link { font-size: 10px; gap: 8px; }
+  .hero-chapter strong { max-width: 170px; display: block; line-height: 1.4; }
+  .hero-chapter small { font-size: 7px; }
+  .chapter-roman { font-size: 35px; }
+  .motion-toggle { font-size: 8px; gap: 7px; }
+  .section-title { font-size: 38px; }
+  .section-head { display: block; }
+  .section-summary { margin-top: 20px; max-width: 300px; }
+  .timeline { grid-template-columns: 1fr; border-top: 0; gap: 25px; }
+  .timeline-item { padding: 0 0 0 21px; border-left: 1px solid var(--line); }
+  .timeline-item::before { left: -4px; top: 2px; }
+  .timeline-item h3 { margin-top: 9px; }
+  .timeline-item p { margin-top: 7px; max-width: none; }
+  .map { min-height: 315px; }
+  .map-marker { width: 31px; height: 31px; }
+  .map-top-label { max-width: 190px; font-size: 7px; left: 16px; }
+  .compass { width: 32px; right: 15px; }
+  .location-panel { padding: 28px 23px; }
+  .location-panel h3 { font-size: 30px; }
+  .archive-grid { grid-template-columns: 1fr; gap: 22px; }
+  .archive-art { height: 205px; }
+  .archive-content { padding: 25px; }
+  .archive-title { font-size: 28px; }
+  .archive-preview { font-size: 12px; }
+  .archive-meta { font-size: 8px; }
+  .artifact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .artifact-visual { min-height: 365px; }
+  .artifact-halo { width: 290px; height: 290px; }
+  .seal-svg { width: 233px; height: 233px; }
+  .artifact-label { font-size: 7px; }
+  .closing { padding: 55px 0 45px; }
+  .closing blockquote { font-size: 23px; }
+  .footer-center { display: none; }
+  .footer-inner { align-items: flex-start; font-size: 7px; }
+  .modal-inner { padding: 25px; }
+  .modal-title { font-size: 33px; }
+  .modal-body blockquote { font-size: 21px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 </style>
 </head>
-<body class="locked">
 
-<canvas id="night" aria-hidden="true"></canvas>
-<div class="veil torch" id="torch" aria-hidden="true"></div>
-<div class="veil vig" aria-hidden="true"></div>
-<div class="veil lines" aria-hidden="true"></div>
-<div class="veil grain" aria-hidden="true"></div>
-<div id="cut" aria-hidden="true"></div>
+<body data-era="ancient">
+<a class="skip" href="#story">Перейти к сюжету</a>
 
-<!-- ВХОД. строки лога — антураж, переписать под свой лор -->
-<div id="boot">
-  <div class="boot-in">
-    <div class="boot-sign">[ВЫВЕСКА]</div>
-    <div class="boot-log" id="log"></div>
-    <div class="boot-bar"><i id="bar"></i></div>
-    <button class="boot-go" id="go">Войти</button>
+<!-- Общие векторные материалы -->
+<svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="seal-metal" cx=".32" cy=".23" r=".83">
+      <stop offset="0" stop-color="#d6a365"/>
+      <stop offset=".36" stop-color="#ad783e"/>
+      <stop offset=".73" stop-color="#75502d"/>
+      <stop offset="1" stop-color="#3c291b"/>
+    </radialGradient>
+
+    <linearGradient id="seal-rim" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f0c389"/>
+      <stop offset=".45" stop-color="#987044"/>
+      <stop offset="1" stop-color="#35241a"/>
+    </linearGradient>
+
+    <filter id="stone-texture" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency=".12" numOctaves="3" seed="8" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0" result="gray"/>
+      <feComponentTransfer in="gray" result="soft-noise">
+        <feFuncA type="linear" slope=".24"/>
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" in2="soft-noise" mode="soft-light" result="textured"/>
+      <feComposite in="textured" in2="SourceGraphic" operator="in"/>
+    </filter>
+
+    <symbol id="seal-symbol" viewBox="0 0 300 300">
+      <g filter="url(#stone-texture)">
+        <path d="M150 13C225 11 285 73 287 148C289 225 231 285 153 288C78 289 13 231 12 153C10 77 72 15 150 13Z"
+              fill="url(#seal-metal)" stroke="url(#seal-rim)" stroke-width="5"/>
+        <circle cx="150" cy="150" r="120" fill="none" stroke="#3c2818" stroke-width="3"/>
+        <circle cx="149" cy="148" r="116" fill="none" stroke="#e4b879" stroke-opacity=".43"/>
+        <circle cx="150" cy="150" r="105" fill="none" stroke="#332317" stroke-width="1.5"/>
+        <circle cx="149" cy="148" r="103" fill="none" stroke="#e0b174" stroke-opacity=".26"/>
+        <g fill="none" stroke="#392719" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="150" cy="87" r="20" stroke-width="3"/>
+          <path d="M150 55v-8M124 66l-7-7M176 66l7-7M116 87h-8M184 87h8" stroke-width="2"/>
+          <path d="M84 147q64-57 132 0-67 45-132 0Z" stroke-width="5"/>
+          <path d="M84 134q38-39 78-18M216 147l17-8" stroke-width="3"/>
+          <ellipse cx="151" cy="146" rx="13" ry="18" fill="#392719" stroke="none"/>
+          <path d="M133 168v34l-19 17M167 165q8 31 34 24-5 26-24 18" stroke-width="4"/>
+          <path d="M112 239h74M124 247h48" stroke-width="3"/>
+          <path d="M57 108l10 4M53 143h11M58 178l10-4M72 207l9-7M233 108l10-4M238 143h10M232 178l10 4M220 207l9 7" stroke-width="2"/>
+        </g>
+        <g stroke="#e9bd7f" fill="none" opacity=".27" stroke-width="1.3">
+          <path d="M85 143q64-55 130 0M134 169v32l-18 17M168 167q9 30 33 21"/>
+          <circle cx="149" cy="85" r="20"/>
+        </g>
+        <g fill="#352318" opacity=".3">
+          <circle cx="94" cy="84" r="3"/><circle cx="219" cy="212" r="4"/>
+          <circle cx="97" cy="210" r="2"/><circle cx="204" cy="70" r="2"/>
+          <circle cx="245" cy="164" r="3"/><circle cx="73" cy="239" r="3"/>
+          <circle cx="114" cy="54" r="2"/><circle cx="184" cy="257" r="2"/>
+        </g>
+      </g>
+    </symbol>
+
+    <symbol id="art-paper" viewBox="0 0 380 220">
+      <ellipse cx="199" cy="180" rx="100" ry="13" fill="#000" opacity=".18"/>
+      <g transform="rotate(-9 190 110)">
+        <path d="M119 29h149v169H119Z" fill="#000" opacity=".18" transform="translate(7 9)"/>
+        <path d="m116 24 146 3-2 164-143 4-4-64 4-65Z" fill="var(--paper)" filter="url(#stone-texture)"/>
+        <g stroke="var(--paper-ink)" opacity=".62">
+          <path d="M133 49h58M133 56h39" stroke-width="1.5"/>
+          <path d="M133 78h107M133 88h95M133 98h109M133 108h88M133 118h103M133 128h62" stroke-width="1"/>
+          <path d="m181 162 9-11 4 13 10-20 4 18 11-11 9 3"/>
+          <circle cx="145" cy="157" r="12"/>
+          <circle cx="145" cy="157" r="9"/>
+        </g>
+        <path d="M193 29v158" stroke="#fff" opacity=".1"/>
+        <path d="M117 135h144" stroke="#563d25" opacity=".15"/>
+      </g>
+      <path d="m288 59-42 132" stroke="#201710" stroke-width="5"/>
+      <path d="m289 58-42 131" stroke="#ba8c51" stroke-width="2"/>
+    </symbol>
+
+    <symbol id="art-door" viewBox="0 0 380 220">
+      <path d="M64 210V15h252v195" fill="var(--stone-dark)"/>
+      <path d="M97 210V39h186v171" fill="#16100c"/>
+      <path d="M118 210V58h144v152" fill="var(--stone-light)" opacity=".55"/>
+      <path d="M139 210V80h102v130" fill="#1a120d"/>
+      <path d="M155 210V96h70v114" fill="var(--haze)" opacity=".48"/>
+      <path d="M168 210V111h45v99" fill="var(--sun)" opacity=".65"/>
+      <path d="m168 210-41 10h136l-50-10" fill="var(--haze)" opacity=".35"/>
+      <g stroke="#dca469" opacity=".18">
+        <path d="M64 41h33M64 72h33M64 103h33M64 134h33M64 165h33M283 41h33M283 72h33M283 103h33M283 134h33M283 165h33"/>
+        <path d="M118 85h21M118 117h21M118 149h21M241 85h21M241 117h21M241 149h21"/>
+      </g>
+      <path d="m169 113-86 107h211l-83-107" fill="var(--sun)" opacity=".045"/>
+      <path d="M190 165v21m-4 0 4-17 4 17M187 186l-2 13M193 186l2 13" stroke="#24180f" stroke-width="3"/>
+      <circle cx="190" cy="161" r="4" fill="#24180f"/>
+    </symbol>
+
+    <symbol id="art-stars" viewBox="0 0 380 220">
+      <g transform="translate(190 110)" fill="none" stroke="currentColor">
+        <circle r="77" opacity=".3"/>
+        <circle r="68" opacity=".2"/>
+        <circle r="53" opacity=".18" stroke-dasharray="2 7"/>
+        <path d="M-92 0H92M0-92V92" opacity=".2"/>
+        <path d="m-53 36 26-64 43 48 39-62-4 73-42 24-62-19Z" opacity=".5"/>
+        <path d="m-27-28 78 59M16 20l-7 35" opacity=".25"/>
+        <g fill="currentColor" stroke="none">
+          <circle cx="-53" cy="36" r="3"/><circle cx="-27" cy="-28" r="4"/>
+          <circle cx="16" cy="20" r="3"/><circle cx="55" cy="-42" r="4"/>
+          <circle cx="51" cy="31" r="3"/><circle cx="9" cy="55" r="3"/>
+        </g>
+        <path d="m55-52 2 8 8 2-8 2-2 8-2-8-8-2 8-2Z" fill="currentColor" opacity=".5"/>
+      </g>
+      <g fill="currentColor" opacity=".35">
+        <circle cx="65" cy="56" r="1"/><circle cx="310" cy="71" r="1.5"/>
+        <circle cx="95" cy="172" r="1"/><circle cx="294" cy="172" r="1"/>
+        <circle cx="273" cy="35" r="1"/><circle cx="116" cy="29" r="1"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="#top" class="brand" aria-label="По ту сторону песков — к началу">
+      <svg viewBox="0 0 40 48" fill="none" aria-hidden="true">
+        <circle cx="20" cy="13" r="8" stroke="currentColor"/>
+        <circle cx="20" cy="13" r="3" fill="currentColor"/>
+        <path d="M20 0v3M5 7l5 2M35 7l-5 2M5 21l5-2M35 21l-5-2M20 24v18M9 31h22M13 46h14" stroke="currentColor"/>
+      </svg>
+      <span>По ту сторону<br>песков</span>
+    </a>
+
+    <div class="era-tabs" role="tablist" aria-label="Эпоха">
+      <button class="era-tab" role="tab" id="tab-modern"
+              aria-controls="world" aria-selected="false"
+              tabindex="-1" data-era="modern">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor"/>
+          <path d="m16 8-3 5-5 3 3-5 5-3ZM12 1v3M12 20v3M1 12h3M20 12h3" stroke="currentColor"/>
+        </svg>
+        <span><strong>Экспедиция</strong><small>1912 год</small></span>
+      </button>
+      <button class="era-tab" role="tab" id="tab-ancient"
+              aria-controls="world" aria-selected="true"
+              tabindex="0" data-era="ancient">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="5" stroke="currentColor"/>
+          <path d="M12 0v4M12 20v4M0 12h4M20 12h4M3 3l3 3M18 18l3 3M3 21l3-3M18 6l3-3" stroke="currentColor"/>
+        </svg>
+        <span><strong>Древний Египет</strong><small>Эпоха фараонов</small></span>
+      </button>
+    </div>
+
+    <nav class="header-nav" aria-label="Навигация">
+      <a href="#archive">Свидетельства</a>
+      <button class="link-button" id="about-button">Об игре ↗</button>
+    </nav>
   </div>
-</div>
-
-<div class="page">
-
-<header class="top" id="top">
-  <a href="#" class="mark"><s></s>[лого]</a>
-  <nav class="links" id="menu">
-    <a href="#district" class="here">Район</a>
-    <a href="#crews">Крю</a>
-    <a href="#spots">Точки</a>
-    <a href="#logs">Сводки</a>
-    <a href="#faq">Вход</a>
-  </nav>
-  <button class="enter">Подать заявку</button>
-  <button class="burger" id="burger" aria-label="Меню"><s></s><s></s><s></s></button>
 </header>
 
-<!-- ================= ПЕРВЫЙ ЭКРАН ================= -->
-<div class="hero">
-  <div class="hero-in">
-    <div>
-      <div class="kicker"><span>сезон 00</span><s></s><span>вход по заявке</span><s></s><span class="stub">онлайн сюда</span></div>
+<main id="world" role="tabpanel" aria-labelledby="tab-ancient" tabindex="0">
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <!-- ПЕЙЗАЖ: НЕБО / СВЕТ / ГОРИЗОНТ / ПИРАМИДЫ / ГОРОД / ПЕРЕДНИЙ ПЛАН -->
+    <div class="landscape" aria-hidden="true">
+      <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="var(--sky-top)"/>
+            <stop offset=".55" stop-color="var(--sky-mid)"/>
+            <stop offset="1" stop-color="var(--sky-bottom)"/>
+          </linearGradient>
+          <radialGradient id="sun-halo">
+            <stop stop-color="var(--sun-edge)" stop-opacity=".7"/>
+            <stop offset=".27" stop-color="var(--sun-edge)" stop-opacity=".3"/>
+            <stop offset="1" stop-color="var(--sun-edge)" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="sun-face">
+            <stop stop-color="var(--sun)"/>
+            <stop offset="1" stop-color="var(--sun-edge)"/>
+          </radialGradient>
+          <linearGradient id="pyramid-face" x1="0" y1="0" x2=".75" y2="1">
+            <stop stop-color="var(--pyramid-lit)"/>
+            <stop offset=".55" stop-color="var(--pyramid-mid)"/>
+            <stop offset="1" stop-color="var(--pyramid-shadow)"/>
+          </linearGradient>
+          <linearGradient id="pyramid-side" x1="0" y1="0" x2="1" y2=".8">
+            <stop stop-color="var(--pyramid-shadow)"/>
+            <stop offset="1" stop-color="var(--stone-dark)"/>
+          </linearGradient>
+          <linearGradient id="sand-front" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="var(--near)"/>
+            <stop offset="1" stop-color="var(--foreground)"/>
+          </linearGradient>
+          <linearGradient id="column-shade" x1="0" y1="0" x2="1" y2="0">
+            <stop stop-color="var(--foreground)"/>
+            <stop offset=".62" stop-color="var(--stone-dark)"/>
+            <stop offset=".88" stop-color="var(--stone-light)"/>
+            <stop offset="1" stop-color="var(--stone-dark)"/>
+          </linearGradient>
+          <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="var(--haze)" stop-opacity="0"/>
+            <stop offset=".52" stop-color="var(--haze)" stop-opacity=".21"/>
+            <stop offset="1" stop-color="var(--haze)" stop-opacity="0"/>
+          </linearGradient>
+          <pattern id="masonry" width="68" height="30" patternUnits="userSpaceOnUse">
+            <path d="M0 0h68M0 15h68M17 0v15M51 15v15"
+                  fill="none" stroke="#24170e" stroke-opacity=".2" stroke-width="1"/>
+            <path d="M0 1h68M0 16h68" stroke="#ffdc9c" stroke-opacity=".055"/>
+          </pattern>
+          <clipPath id="main-pyramid-clip">
+            <path d="m625 744 468-505 388 505Z"/>
+          </clipPath>
+          <g id="palm-tree">
+            <path d="M0 0q-8-52 3-113" fill="none" stroke="var(--stone-dark)" stroke-width="7"/>
+            <path d="M3-112q-31-37-65-11 37-9 65 11M3-112q-2-50 32-55-23 25-32 55M3-112q35-41 66-21-33 0-66 21M3-112q40-13 54 18-25-20-54-18M3-112q-42-15-55 16 27-19 55-16"
+                  fill="var(--stone-dark)"/>
+          </g>
+          <g id="wall-glyphs" fill="none" stroke="var(--pyramid-lit)" stroke-opacity=".25" stroke-width="2">
+            <path d="M0 0q14-13 28 0-14 10-28 0ZM14 0v14l-7 7M6 31h17M14 27v19M4 55l10-8 10 8-10 8-10-8ZM5 78h18M14 67v22"/>
+            <circle cx="14" cy="108" r="8"/>
+            <path d="M14 118v22M5 128h18M4 153l10-9 10 9M5 158h18M14 158v15M3 190h23M7 183v15M21 183v15"/>
+          </g>
+        </defs>
 
-      <!-- две строки: первая светлая, вторая приглушённая. если название в одно слово — вторую убрать -->
-      <h1 class="title">
-        <span data-scramble>Название</span><span data-scramble>проекта</span>
-      </h1>
-      <div class="title-echo" id="title-echo" aria-hidden="true"></div>
-      <p class="title-note">сюда название, одно-два слова. вторая строка тусклее первой — так меньше похоже на баннер. если слово длинное, проверь на телефоне.</p>
+        <rect width="1600" height="1000" fill="url(#sky)"/>
 
-      <div class="hero-copy">
-        <p><b>Абзац-питч на два-три предложения:</b> что за место, какие годы, почему тут все держатся друг за друга. Пока рыба — но длину держу примерно рабочую.</p>
-        <p>Вторая мысль поменьше: формат отыгрыша, как попасть, чего тут не будет. Пока хз.</p>
+        <!-- Свет из-за пирамиды -->
+        <ellipse cx="1185" cy="310" rx="440" ry="400" fill="url(#sun-halo)"/>
+        <circle cx="1195" cy="302" r="99" fill="url(#sun-face)" opacity=".95"/>
+        <path d="M911 273q190 13 470-15M1024 306q185-19 370 7M979 342q204 12 398-8"
+              fill="none" stroke="var(--sky-mid)" stroke-width="9" opacity=".16"/>
+
+        <!-- Воздушная перспектива -->
+        <path d="M0 596q180-83 346-20t259-23q170-51 323 3t280-5q214-97 392-38v487H0Z"
+              fill="var(--far)" opacity=".24"/>
+        <path d="M0 653q197-63 394-27t396-30q215-55 407-1t403-25v430H0Z"
+              fill="var(--far)" opacity=".42"/>
+
+        <!-- Дальние пирамиды -->
+        <g opacity=".64">
+          <path d="m315 697 216-243 218 243Z" fill="var(--pyramid-mid)"/>
+          <path d="m531 454 45 243h173Z" fill="var(--pyramid-shadow)"/>
+          <path d="m1134 689 177-220 194 220Z" fill="var(--pyramid-mid)"/>
+          <path d="m1311 469 37 220h157Z" fill="var(--pyramid-shadow)"/>
+        </g>
+
+        <!-- Главная пирамида: разные плоскости, кладка, зерно, освещённое ребро -->
+        <g filter="url(#stone-texture)">
+          <path d="m625 744 468-505 388 505Z" fill="url(#pyramid-face)"/>
+          <path d="m1093 239 88 505h300Z" fill="url(#pyramid-side)"/>
+          <g clip-path="url(#main-pyramid-clip)">
+            <rect x="600" y="225" width="900" height="540" fill="url(#masonry)"/>
+            <path d="m625 744 468-505" stroke="var(--sun)" stroke-width="3" opacity=".45"/>
+            <path d="m1093 239 88 505" stroke="var(--pyramid-lit)" stroke-width="2" opacity=".65"/>
+            <path d="M705 642h88M784 553h50M879 449h73M929 399h84M1030 594h43M972 670h111"
+                  stroke="#1a100a" stroke-opacity=".13" stroke-width="5"/>
+          </g>
+        </g>
+
+        <!-- Шлейф песчаной дымки у основания -->
+        <ellipse cx="1110" cy="731" rx="720" ry="94" fill="url(#mist)"/>
+        <path d="M0 748q309-100 605-20t545 16q241-28 450-8v264H0Z" fill="var(--near)" opacity=".6"/>
+
+        <!-- Живой древний город -->
+        <g class="ancient-world">
+          <g filter="url(#stone-texture)">
+            <path d="M1050 815v-152h80v152M1160 814V649h94v165" fill="var(--stone-light)"/>
+            <path d="M1042 663h96v-13h-96M1151 649h112v-13h-112" fill="var(--pyramid-lit)"/>
+            <path d="M1080 815v-92h30v92M1187 814v-100h36v100" fill="var(--stone-dark)"/>
+            <path d="M1060 682h10v65h-10M1232 674h10v72h-10" fill="var(--pyramid-mid)"/>
+            <path d="M1256 817h217v-76h-217Z" fill="var(--pyramid-mid)"/>
+            <path d="M1272 743v-67h17v67M1316 743v-67h17v67M1360 743v-67h17v67M1404 743v-67h17v67" fill="var(--stone-light)"/>
+            <path d="M1264 674h169v-12h-169Z" fill="var(--pyramid-lit)"/>
+            <path d="M440 827v-66h77v66M528 829v-102h82v102M622 836v-58h91v58M724 838v-85h83v85" fill="var(--stone-light)"/>
+            <path d="M435 759h87v-8h-87M523 727h91v-9h-91M617 778h101v-8H617M719 753h92v-8h-92" fill="var(--pyramid-mid)"/>
+            <path d="M470 827v-40h19v40M557 829v-55h23v55M650 836v-37h21v37M753 838v-53h22v53" fill="var(--stone-dark)"/>
+          </g>
+
+          <path d="m814 827 56-31 62 31M818 827v27M928 827v27" fill="var(--pyramid-mid)" stroke="var(--stone-dark)" stroke-width="3"/>
+          <path d="m910 844 48-25 55 25M913 844v21M1009 844v21" fill="var(--pyramid-shadow)" stroke="var(--stone-dark)" stroke-width="3"/>
+          <use href="#palm-tree" transform="translate(1000 829) scale(.75)"/>
+          <use href="#palm-tree" transform="translate(1470 827) scale(1.2)"/>
+          <use href="#palm-tree" transform="translate(421 834) scale(.8)"/>
+          <use href="#palm-tree" transform="translate(385 834) scale(.6)"/>
+          <g fill="var(--stone-dark)">
+            <circle cx="966" cy="845" r="4"/>
+            <path d="m966 848-5 19h10ZM963 866v12h2v-12M969 866v12h2v-12"/>
+            <circle cx="991" cy="856" r="3"/>
+            <path d="m991 859-4 16h8Z"/>
+            <circle cx="1300" cy="820" r="3"/>
+            <path d="m1300 823-4 17h8Z"/>
+          </g>
+
+          <!-- Факел у ворот -->
+          <path d="M1138 787v-28" stroke="#2a190e" stroke-width="3"/>
+          <ellipse cx="1138" cy="753" rx="27" ry="35" fill="var(--sun-edge)" opacity=".09"/>
+          <path d="M1138 761q-9-8 2-20-2 12 4 13-1 7-6 7Z" fill="#ffc170"/>
+        </g>
+
+        <!-- Экспедиционный лагерь -->
+        <g class="modern-world">
+          <path d="m995 842 83-110 123 110Z" fill="#d4c9a6"/>
+          <path d="m1078 732 37 110h86Z" fill="#90876d"/>
+          <path d="m1051 842 27-72 37 72Z" fill="#514e40"/>
+          <path d="M984 849l94-117 135 117M1078 732v-18" stroke="#71634e" stroke-width="2" fill="none"/>
+          <path d="m1240 843 51-68 83 68Z" fill="#dfd3b1"/>
+          <path d="m1291 775 22 68h61Z" fill="#a49472"/>
+          <path d="M1232 849l59-74 93 74" stroke="#71634e" fill="none"/>
+          <path d="M809 821v-77M949 821v-77" stroke="#685d4c" stroke-width="4"/>
+          <path d="M795 746q79 20 169 0l-16-19H811Z" fill="#cec6ad"/>
+          <path d="M846 800h72M853 800v26M909 800v26" stroke="#675b48" stroke-width="4"/>
+          <path d="M863 787h35v13h-35Z" fill="#9e8f6f"/>
+          <g fill="#927e5c" stroke="#61553f" stroke-width="1">
+            <path d="M1197 820h32v29h-32ZM1228 829h28v20h-28Z"/>
+            <path d="m1198 821 30 27m0-27-30 27" fill="none"/>
+          </g>
+          <path d="M742 843v-40M741 805l-20 40M741 805l21 40" stroke="#555345" stroke-width="3"/>
+          <circle cx="742" cy="802" r="6" fill="#555345"/>
+          <g fill="#494b41">
+            <circle cx="969" cy="813" r="4"/>
+            <path d="M963 818h11l3 20h-16ZM963 837l-3 15h4l3-15M972 837l3 15h4l-3-15M960 811h17v3h-17Z"/>
+          </g>
+        </g>
+
+        <!-- Ветер и песок на среднем плане -->
+        <path d="M470 826q414-20 795 24M594 857q452-24 785 14"
+              stroke="var(--haze)" stroke-width="8" fill="none" opacity=".055"/>
+        <ellipse cx="1100" cy="827" rx="510" ry="38" fill="url(#mist)"/>
+
+        <!-- Передний план: тяжёлые колонны, рельеф, тени -->
+        <g filter="url(#stone-texture)">
+          <path d="M-60-20h202l-11 84-20 24v680l24 24 18 50H-45Z" fill="url(#column-shade)"/>
+          <path d="M-56 72h190v20H-56M-44 766h180v24H-44" fill="var(--stone-dark)"/>
+          <path d="M111 107v643" stroke="var(--pyramid-lit)" stroke-opacity=".21" stroke-width="2"/>
+          <use href="#wall-glyphs" transform="translate(65 187) scale(1.5)"/>
+          <use href="#wall-glyphs" transform="translate(65 500) scale(1.5)"/>
+
+          <path d="M1510-20h170v959h-184l22-72V167l-24-31-17-73Z" fill="url(#column-shade)"/>
+          <path d="M1494 128h174v25h-174M1497 836h173v23h-173" fill="var(--stone-dark)"/>
+          <path d="M1519 164v654" stroke="var(--pyramid-lit)" stroke-opacity=".25" stroke-width="2"/>
+          <use href="#wall-glyphs" transform="translate(1539 245) scale(1.7)"/>
+          <use href="#wall-glyphs" transform="translate(1539 580) scale(1.1)"/>
+        </g>
+
+        <path d="M0 913q260-91 548-32t543 19q297-91 509-12v112H0Z" fill="url(#sand-front)"/>
+        <path d="M0 964q259-37 490-9t432-7q413-45 678 8v44H0Z" fill="var(--foreground)"/>
+        <path d="m1393 909 39-46 50 14 32 31Z" fill="var(--stone-dark)"/>
+        <path d="m1387 916 47-39 47 11 37 24Z" fill="var(--near)"/>
+        <path d="m204 932 34-25 51 13 23 15Z" fill="var(--stone-dark)"/>
+        <path d="M739 923q143-17 242 1M1070 956q162-14 252-5" stroke="var(--pyramid-lit)" opacity=".1" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="hero-rays" aria-hidden="true"></div>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-vignette" aria-hidden="true"></div>
+    <canvas class="dust-canvas" id="dust" aria-hidden="true"></canvas>
+
+    <div class="container hero-coordinate">
+      <span>29°58′45″ N &nbsp; 31°08′03″ E<br>ОДНА ЗЕМЛЯ / ДВА ВРЕМЕНИ</span>
+      <span class="right" id="era-coordinate"></span>
+    </div>
+
+    <div class="container hero-content">
+      <div class="hero-kicker eyebrow" id="hero-kicker"></div>
+      <h1 id="hero-title">По ту сторону<br><em>песков.</em></h1>
+      <p class="hero-description" id="hero-description"></p>
+      <div class="hero-actions">
+        <a href="#story" class="button">Войти в историю <span aria-hidden="true">↗</span></a>
+        <button class="quiet-link" id="chronicle-button">Читать хронику <span aria-hidden="true">→</span></button>
       </div>
     </div>
 
-    <div class="signpost">вывеска · заглушка</div>
-  </div>
-</div>
-<div class="hero-foot">
-  <span>кв. [номер] · заглушка</span>
-  <span>дождь / +4</span>
-  <span class="dim">место под мелкий текст, который никто не читает</span>
-</div>
-
-<!-- ================= РАЙОН ================= -->
-<section id="district">
-  <div class="head reveal">
-    <span class="no">01</span>
-    <h2 data-scramble>Район</h2>
-    <p>Три колонки под факты о месте. Цифры — то, что хочется показать первым; значения от балды, потом подтянуть из статистики.</p>
-  </div>
-  <div class="cols reveal">
-    <div class="col">
-      <span class="fig" data-count="147">0</span>
-      <h3>Людей на районе</h3>
-      <p>Строчка-пояснение к цифре. Тут же можно сказать, сколько из них активны, если такое считается.</p>
-      <span class="stub">данные-заглушка</span>
-    </div>
-    <div class="col">
-      <span class="fig" data-count="5">0</span>
-      <h3>Крю</h3>
-      <p>Сколько группировок доступно для вступления. Добавишь шестую — не забудь блок ниже и цвет в стилях.</p>
-      <span class="stub">пока 5</span>
-    </div>
-    <div class="col">
-      <span class="fig" data-count="12">0<em>кв</em></span>
-      <h3>Кварталов размечено</h3>
-      <p>Абзац про карту: что открыто, что закрыто, куда лучше не соваться. Здесь рыба.</p>
-      <span class="stub on">текст сюда</span>
-    </div>
-  </div>
-</section>
-
-<!-- ================= КРЮ =================
-     лист-досье: слева вывеска с эхом имени, справа деятельность,
-     роль, сетка данных и текст в колонки.
-     листается кнопками, стрелками ← → и свайпом.
-     всё содержимое — в массиве CREWS в скрипте. -->
-<section id="crews">
-  <div class="shell">
-    <div class="head reveal">
-      <span class="no">02</span>
-      <h2 data-scramble>Крю</h2>
-      <p>Пять группировок, у каждой свой лист. Цвет, вывеска, характер света и род деятельности меняются целиком.</p>
-    </div>
-  </div>
-
-  <div class="controls reveal">
-    <button class="arrow" id="prev" aria-label="Предыдущее крю">←</button>
-    <span id="d-idx">01 / 05</span>
-    <button class="arrow" id="next" aria-label="Следующее крю">→</button>
-    <span class="sp"></span>
-    <span id="d-tag">—</span>
-  </div>
-
-  <div class="picker" role="tablist" aria-label="Выбор крю" id="picker"></div>
-
-  <div class="stage" id="stage">
-    <canvas id="crewfx" aria-hidden="true"></canvas>
-    <div class="guides" aria-hidden="true"></div>
-
-    <div class="poster">
-      <span class="mk tl" aria-hidden="true"></span><span class="mk tr" aria-hidden="true"></span>
-      <span class="mk bl" aria-hidden="true"></span><span class="mk br" aria-hidden="true"></span>
-      <span class="xh" style="left:-6px;top:44%" aria-hidden="true"></span>
-      <span class="xh" style="right:-6px;top:62%" aria-hidden="true"></span>
-
-      <div class="pmeta fade" style="--i:0">
-        <svg class="mark-sign" id="d-mark" viewBox="0 0 100 100" aria-hidden="true"></svg>
-        <span id="p-code">крю 01 / 05</span>
-        <span class="sp"></span>
-        <span>досье · внутреннее</span>
-        <span class="dim">шапка листа — заглушка</span>
+    <div class="scene-caption" aria-hidden="true">
+      <span class="caption-line"></span>
+      <div>
+        <small id="scene-caption-label"></small>
+        <p id="scene-caption-text"></p>
       </div>
+    </div>
 
-      <div class="pgrid">
-        <div class="pleft fade" style="--i:1">
-          <div class="vname" id="d-vname">—</div>
-          <div class="figwrap ph" id="d-figwrap">
-            <div class="echo" id="d-echo" aria-hidden="true"></div>
-            <!-- сюда подставляется картинка персонажа, см. поле figure в CREWS -->
-          </div>
-          <div class="pcap">png с прозрачным фоном, ~900×1200, персонаж по пояс или в рост</div>
+    <div class="container hero-bottom">
+      <div class="hero-chapter">
+        <span class="chapter-roman">I</span>
+        <div>
+          <small>ТЕКУЩАЯ ГЛАВА</small>
+          <strong id="chapter-name"></strong>
         </div>
+      </div>
+      <a href="#story" class="scroll-cue"><i aria-hidden="true"></i> Спуститься к истории</a>
+      <button class="motion-toggle" id="motion-toggle" aria-pressed="true" aria-label="Анимация атмосферы">
+        <span class="motion-dot" aria-hidden="true"></span>
+        <span id="motion-label">Пыль · вкл.</span>
+      </button>
+    </div>
+  </section>
 
-        <div class="pright">
-          <div class="abil fade" id="d-abil" style="--i:2"></div>
-          <h3 class="role fade" style="--i:3"><span id="d-role">—</span><em>род деятельности</em></h3>
-          <dl class="datagrid fade" id="d-data" style="--i:4"></dl>
-          <div class="bio fade" style="--i:5">
-            <p id="d-lead">—</p>
-            <p id="d-desc">—</p>
+  <!-- ЗАВЯЗКА -->
+  <section class="section story-section" id="story">
+    <div class="container">
+      <div class="section-kicker">
+        <span class="index">01</span><span class="rule"></span>
+        <span class="eyebrow">Не всё погребённое мертво</span>
+      </div>
+      <div class="story-layout">
+        <div class="story-lead">
+          <h2 class="section-title" id="story-title"></h2>
+          <div class="chapter-stamp">
+            <div class="stamp-ring" aria-hidden="true">𓂀</div>
+            <p id="story-stamp"></p>
           </div>
         </div>
+        <div class="story-right">
+          <div class="prose" id="story-text"></div>
+          <blockquote class="story-quote">
+            <span id="story-quote"></span>
+            <cite id="story-cite"></cite>
+          </blockquote>
+        </div>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </section>
+
+  <!-- ГЕОГРАФИЯ -->
+  <section class="section map-section" id="locations">
+    <div class="container">
+      <div class="section-kicker">
+        <span class="index">02</span><span class="rule"></span>
+        <span class="eyebrow">География тайны</span>
+      </div>
+      <div class="section-head">
+        <h2 class="section-title" id="map-title"></h2>
+        <p class="section-summary">Одни и те же дороги ведут<br>к разным судьбам. Выберите отметку.</p>
       </div>
 
-      <div class="pfoot fade" style="--i:6">
-        <i></i><span>полоса под мелочи</span>
-        <i></i><span id="p-foot">—</span>
-        <span class="sp"></span>
-        <span>стрелки ← → листают</span>
+      <div class="map-frame">
+        <div class="map-grid">
+          <div class="map" role="group" aria-label="Интерактивная карта мест действия">
+            <div class="map-top-label" id="map-top-label"></div>
+            <svg class="map-art" viewBox="0 0 760 425" preserveAspectRatio="none" fill="none" aria-hidden="true">
+              <defs>
+                <pattern id="map-grid-pattern" width="48" height="48" patternUnits="userSpaceOnUse">
+                  <path d="M48 0H0v48" stroke="currentColor" opacity=".07"/>
+                </pattern>
+              </defs>
+              <rect width="760" height="425" fill="url(#map-grid-pattern)"/>
+              <g stroke="currentColor" opacity=".13">
+                <path d="M-20 75Q160 2 314 70T780 38M-20 89Q160 16 314 84T780 52M-20 103Q160 30 314 98T780 66"/>
+                <path d="M-30 282q149-72 260-15t240-16 320-32M-30 298q149-72 260-15t240-16 320-32M-30 314q149-72 260-15t240-16 320-32M-30 330q149-72 260-15t240-16 320-32"/>
+                <path d="M45 420q97-116 204-55t218-24 285-14M45 432q97-116 204-55t218-24 285-14"/>
+              </g>
+              <path d="M666-20q-89 113-32 202t7 263" stroke="var(--river)" stroke-width="26" opacity=".19"/>
+              <path d="M666-20q-89 113-32 202t7 263" stroke="var(--river)" opacity=".5"/>
+              <g stroke="currentColor">
+                <g opacity=".55">
+                  <path d="m250 90 102 8-8 104-102-8Z"/>
+                  <path d="m250 90 47 56 55-48M242 194l55-48 47 56"/>
+                  <path d="m383 172 73 6-6 73-73-6Z"/>
+                  <path d="m383 172 33 40 40-34M377 245l39-33 34 39"/>
+                  <path d="m188 215 44 4-4 44-44-4Z"/>
+                  <path d="m188 215 20 24 24-20M184 259l24-20 20 24"/>
+                </g>
+                <path d="M141 306q60-88 149-70t126 48q71 17 137-31" stroke-dasharray="3 7" opacity=".45"/>
+                <path d="M457 180q46-38 77-58" stroke-dasharray="3 7" opacity=".3"/>
+                <g class="ancient-world" opacity=".55">
+                  <path d="M104 260h30v31h-30ZM139 277h29v24h-29ZM114 309h28v29h-28ZM153 316h26v29h-26Z"/>
+                  <path d="M505 95h66v70h-66ZM515 105h46v49h-46ZM526 106v47M550 106v47"/>
+                  <path d="M517 254h64v35h-64M528 254v35M569 254v35M517 265h64"/>
+                </g>
+                <g class="modern-world" opacity=".7">
+                  <path d="m105 278 19-27 22 27h-41ZM154 307l19-27 22 27h-41ZM105 330l19-27 22 27h-41Z"/>
+                  <path d="M510 106h56v36h-56ZM518 114h39M529 106v36"/>
+                </g>
+              </g>
+              <g fill="currentColor" opacity=".22">
+                <circle cx="360" cy="319" r="2"/><circle cx="369" cy="327" r="1.5"/>
+                <circle cx="349" cy="332" r="1.5"/><circle cx="468" cy="98" r="1.5"/>
+              </g>
+            </svg>
+
+            <svg class="compass" viewBox="0 0 50 80" fill="none" aria-hidden="true">
+              <path d="m25 16 10 35-10-7-10 7 10-35Z" stroke="currentColor"/>
+              <path d="M25 16v48M13 65h24" stroke="currentColor"/>
+              <path d="m25 16 10 35-10-7V16Z" fill="currentColor" opacity=".3"/>
+              <text x="25" y="9" fill="currentColor" stroke="none" text-anchor="middle" font-family="Georgia" font-size="9">N</text>
+            </svg>
+            <div class="map-scale" aria-hidden="true">0 — 500 шагов</div>
+            <div id="map-markers"></div>
+          </div>
+
+          <div class="location-panel" id="location-panel" aria-live="polite" aria-atomic="true"></div>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="shell">
-    <div class="rule fade" style="--i:7" aria-hidden="true"></div>
+  <!-- СВИДЕТЕЛЬСТВА -->
+  <section class="section archive-section" id="archive">
+    <div class="container">
+      <div class="section-kicker">
+        <span class="index">03</span><span class="rule"></span>
+        <span class="eyebrow">То, что не должно было сохраниться</span>
+      </div>
+      <div class="section-head">
+        <h2 class="section-title" id="archive-title"></h2>
+        <p class="section-summary" id="archive-summary"></p>
+      </div>
+      <div class="archive-grid" id="archive-grid"></div>
+    </div>
+  </section>
 
-    <div class="why fade" style="--i:8">
-      <h3>Почему<br>и как</h3>
-      <div class="why-text">
-        <p id="d-desc2">—</p>
-        <div class="trait"><s></s><span id="d-trait">—</span></div>
+  <!-- СВЯЗЬ ВРЕМЁН -->
+  <section class="artifact-section" id="artifact">
+    <div class="container artifact-grid">
+      <div class="artifact-visual" role="img" id="artifact-image" aria-label="Целая древняя печать">
+        <div class="artifact-halo"></div>
+        <svg class="seal-svg" viewBox="0 0 300 300" aria-hidden="true">
+          <use href="#seal-symbol"/>
+          <g class="seal-crack" fill="none">
+            <path d="m188 20-22 45 9 28-23 32 11 40-19 32 2 33-30 53" stroke="#24190f" stroke-width="5"/>
+            <path d="m191 20-22 45 9 29-22 31 11 41-19 32 2 33-30 52" stroke="#ddb37a" stroke-width="1.5" opacity=".7"/>
+            <path d="m163 165 37 5 19 26M145 228l-31-13" stroke="#2e2014" stroke-width="2"/>
+          </g>
+        </svg>
+        <div class="artifact-label" id="artifact-label"></div>
+        <div class="artifact-label right">ПРЕДМЕТ № 017<br>ОДИН И ТОТ ЖЕ КАМЕНЬ</div>
+      </div>
+      <div class="artifact-copy">
+        <div class="section-kicker">
+          <span class="index">04</span><span class="rule"></span>
+          <span class="eyebrow">Нить сквозь века</span>
+        </div>
+        <h2 class="section-title" id="artifact-title"></h2>
+        <p class="prose" id="artifact-text"></p>
+        <button class="artifact-switch" id="artifact-switch"></button>
+        <p class="artifact-footnote">Переключите эпоху. Место останется прежним.<br>Изменится всё, что вы о нём знали.</p>
       </div>
     </div>
+  </section>
 
-    <div class="dos-more">
-      <div class="blk fade" style="--i:9">
-        <h4>Кто есть кто</h4>
-        <div id="d-people"></div>
-        <span class="stub" style="margin-top:1.2rem">состав дописать</span>
-      </div>
-      <div class="blk fade" style="--i:10">
-        <h4>С кем и как</h4>
-        <div id="d-ties"></div>
-        <p class="dim" style="font-size:11.5px;margin:1rem 0 0">строки кликабельные — перекинет на то крю</p>
-      </div>
-      <div class="blk fade" style="--i:11">
-        <h4>Показатели</h4>
-        <div class="rows" id="d-rows"></div>
-      </div>
-      <div class="blk fade" style="--i:12">
-        <h4>Слухи</h4>
-        <blockquote class="quote"><span id="d-quote">—</span><div class="by">— источник, заглушка</div></blockquote>
-      </div>
-      <div class="blk fade" style="--i:13">
-        <h4>Как попасть</h4>
-        <p id="d-entry" style="font-size:13.5px;color:var(--text-dim);margin:0 0 1.2rem">—</p>
-        <span class="stub on">условия входа</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= ТОЧКИ ================= -->
-<section id="spots">
-  <div class="head reveal">
-    <span class="no">03</span>
-    <h2 data-scramble>Точки</h2>
-    <p>Места, вокруг которых крутится отыгрыш. На месте фото — тёмные заглушки с подписью, какой файл туда нужен.</p>
-  </div>
-  <div class="spots reveal" id="spot-grid"></div>
-</section>
-
-<!-- ================= СВОДКИ ================= -->
-<section id="logs">
-  <div class="head reveal">
-    <span class="no">04</span>
-    <h2 data-scramble>Сводки</h2>
-    <p>Лента событий: что было, что будет, кого ищут. Статусы «открыто» подсвечиваются цветом крю.</p>
-  </div>
-  <div class="logs reveal">
-    <div class="log">
-      <div class="when">04:12 · чт</div>
-      <div class="what">Заголовок события<small>строка описания: что случилось, кто участвовал. пока рыба</small></div>
-      <div class="who">крю: заглушка</div>
-      <div class="st hot">ОТКРЫТО</div>
-    </div>
-    <div class="log">
-      <div class="when">23:40 · ср</div>
-      <div class="what">Второе событие<small>сюда одну строку: место, ставка, чем закончилось</small></div>
-      <div class="who">без крю</div>
-      <div class="st hot">ОТКРЫТО</div>
-    </div>
-    <div class="log">
-      <div class="when">хз</div>
-      <div class="what">Что-то закрытое, только для своих<small>видно всем, участвовать нельзя — так и задумано</small></div>
-      <div class="who">крю: заглушка</div>
-      <div class="st">ПО ЗАЯВКЕ</div>
-    </div>
-    <div class="log">
-      <div class="when">—</div>
-      <div class="what">Пустой слот<small>дублируй блок .log, если событий больше</small></div>
-      <div class="who">—</div>
-      <div class="st">ЧЕРНОВИК</div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= КАДРЫ ================= -->
-<section id="shots">
-  <div class="head reveal">
-    <span class="no">05</span>
-    <h2 data-scramble>Кадры</h2>
-    <p>Плитка под скрины. Заглушки специально тёмные и приглушённые — если вставить сюда яркие фото, вся страница поедет в мультик.</p>
-  </div>
-  <div class="shots reveal">
-    <div class="shot">главный кадр · 16:10 · тёмный, с одним источником света</div>
-    <div class="shot">широкий · 21:9</div>
-    <div class="shot">1:1</div>
-    <div class="shot">пока хз</div>
-    <div class="shot">интерьер / бар</div>
-    <div class="shot">баннер под событие</div>
-  </div>
-</section>
-
-<!-- ================= ВХОД ================= -->
-<section id="faq">
-  <div class="head reveal">
-    <span class="no">06</span>
-    <h2 data-scramble>Вход</h2>
-    <p>Ответы — рыба, но длину держала примерно ту, что будет по факту.</p>
-  </div>
-  <div class="faq reveal">
-    <div class="q open">
-      <button type="button" aria-expanded="true">Нужна ли анкета<s>+</s></button>
-      <div class="ans"><div><p>Ответ сюда. Пара предложений: обязательна ли заявка, куда её кидать, сколько ждать. Ссылку на форму вставим отдельно.</p></div></div>
-    </div>
-    <div class="q">
-      <button type="button" aria-expanded="false">Можно ли перейти в другое крю<s>+</s></button>
-      <div class="ans"><div><p>Про переходы, кулдаун и согласие лидеров. Формулировку не придумала — оставила место.</p></div></div>
-    </div>
-    <div class="q">
-      <button type="button" aria-expanded="false">Возрастной рейтинг и что запрещено<s>+</s></button>
-      <div class="ans"><div><p>Заглушка. Написать про 16+/18+, список запретов и куда жаловаться. Если будет длинно — вынести на отдельную страницу.</p></div></div>
-    </div>
-    <div class="q">
-      <button type="button" aria-expanded="false">Ещё вопрос, пока хз какой<s>+</s></button>
-      <div class="ans"><div><p>Дублируй блок .q под новые вопросы. Открытым по умолчанию оставляй только первый.</p></div></div>
-    </div>
-  </div>
-</section>
+  <section class="closing container">
+    <svg class="closing-symbol" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <path d="m20 2 4 14 14 4-14 4-4 14-4-14-14-4 14-4Z" stroke="currentColor"/>
+      <circle cx="20" cy="20" r="4" fill="currentColor"/>
+    </svg>
+    <blockquote id="closing-quote"></blockquote>
+    <p class="eyebrow" id="closing-source"></p>
+  </section>
+</main>
 
 <footer>
-  <div class="foot-in">
-    <div>
-      <h4>о проекте</h4>
-      <p class="dim" style="font-size:12.5px;max-width:40ch;margin:0 0 1rem">Короткий текст и дисклеймер: это ролевая игра, всё выдумано, совпадения случайны. Плюс копирайт.</p>
-      <span class="stub">дисклеймер</span>
-    </div>
-    <div>
-      <h4>разделы</h4>
-      <ul>
-        <li><a href="#district">Район</a></li>
-        <li><a href="#crews">Крю</a></li>
-        <li><a href="#spots">Точки</a></li>
-        <li><a href="#logs">Сводки</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>связь</h4>
-      <ul>
-        <li><a href="#">дискорд — ссылка сюда</a></li>
-        <li><a href="#">тг-канал — сюда</a></li>
-        <li><a href="#">почта, если нужна</a></li>
-        <li class="dim">ещё контакт (пока хз)</li>
-      </ul>
-    </div>
-  </div>
-  <div class="foot-bar">
-    <span>© год · [название] · всё выдумано</span>
-    <span id="readout">крю: НОКТЮРН</span>
+  <div class="container footer-inner">
+    <span>ПО ТУ СТОРОНУ ПЕСКОВ<br>Литературная ролевая игра</span>
+    <span class="footer-center">ПРОШЛОЕ НЕ ПРОШЛО.</span>
+    <a href="#top">Вернуться к порогу ↑</a>
   </div>
 </footer>
 
-</div><!-- /.page -->
+<div class="time-flash" id="time-flash" aria-hidden="true"></div>
+<div class="sr-only" id="announcement" role="status"></div>
+
+<dialog id="document-dialog" aria-labelledby="modal-title">
+  <div class="modal-inner">
+    <div class="modal-top">
+      <span class="eyebrow" id="modal-category"></span>
+      <button class="modal-close" id="modal-close" aria-label="Закрыть документ" autofocus>×</button>
+    </div>
+    <h2 class="modal-title" id="modal-title"></h2>
+    <div class="modal-meta" id="modal-meta"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-foot">ПО ТУ СТОРОНУ ПЕСКОВ / СВИДЕТЕЛЬСТВА ИГРОВОГО МИРА</div>
+  </div>
+</dialog>
+
+<noscript>
+  <p style="padding:30px;text-align:center">Включите JavaScript для загрузки сюжета, переключения эпох и просмотра документов.</p>
+</noscript>
 
 <script>
-(() => {
-"use strict";
-const $  = (s, r=document) => r.querySelector(s);
-const $$ = (s, r=document) => [...r.querySelectorAll(s)];
-const slow = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const lerp = (a,b,t) => a + (b-a)*t;
-
-/* ============================================================
-   КРЮ. id должен совпадать с data-crew в стилях.
-   всё, что ниже — заглушки. правь тут, вёрстку трогать не надо.
-   если добавляешь шестое крю: сюда объект + блок html[data-crew=...] в стилях.
-   ============================================================ */
-const CREWS = [
-  {
-    id:"noct", name:"Ноктюрн", short:"крыши, ночь", tag:"НОЧЬ · КРЫШИ", neon:"#8f2bd0", tube:"#f4d4ff",
-    sign:["M64 16 A34 34 0 1 0 64 84", "M78 50 L90 50"],
-    figure:"FIOL.png",                                  // путь к png, напр. "img/noct.png". пусто — будет силуэт
-    light:"steady",
-    trait:"фишка: вывеска старая. свет ровный, но иногда проваливается в темноту",
-    facts:[
-      ["род деятельности","заглушка: в двух словах, чем живут"],
-      ["территория","пока хз"],
-      ["численность","~21 человек"],
-      ["набор","открыт"]
+/* =====================================================
+   СОДЕРЖАНИЕ ДВУХ ЭПОХ
+   ===================================================== */
+const worlds = {
+  ancient: {
+    name: "Древний Египет",
+    theme: "#160e09",
+    coordinate: "ГИЗА / НОВОЕ ЦАРСТВО<br>ОКОЛО 1290 ГОДА ДО Н. Э.",
+    kicker: "Земля живых. Обитель забытых богов.",
+    hero: "Камень ещё хранит дневной жар. Из храмов тянется дым благовоний. За запечатанной дверью слышны шаги людей, которые родятся через три тысячи лет.",
+    captionLabel: "ЗАПАДНЫЙ КРАЙ НЕКРОПОЛЯ",
+    caption: "После заката<br>здесь не зовут по имени.",
+    chapter: "Солнце помнит имена",
+    storyTitle: "Они ещё не знают,<br>что станут <em>прошлым.</em>",
+    stamp: "НОВОЕ ЦАРСТВО / XIX ДИНАСТИЯ<br>СВЯТИЛИЩЕ ПОРОГА",
+    story: `
+      <p>По утрам у пристани торгуются из-за зерна. В мастерских
+      обжигают глину, во дворах сушат лён, писцы считают чужие долги.
+      <strong>Этот мир не ждёт, когда его откроют. Он живёт.</strong></p>
+      <p>Но три ночи назад священная печать покрылась трещинами.
+      Из закрытой галереи донёсся чужой язык. А на рассвете стража
+      нашла людей, которые смотрели на храм так, будто видели
+      восставшего из мёртвых.</p>
+      <p>Хранители требуют молчания. Слухи уже вышли за ворота.
+      <strong>И теперь каждому придётся выбрать, что страшнее:
+      неизвестные чужаки или те, кто пытается скрыть их появление.</strong></p>`,
+    quote: "Не открывайте дверь, если с той стороны называют ваше имя.",
+    cite: "Наставление младшим хранителям",
+    timeline: [
+      ["ТРИ НОЧИ НАЗАД", "Камень состарился", "На целой печати проступили трещины. Утром они исчезли, оставив в ларце песок."],
+      ["НАКАНУНЕ", "Стена ответила", "В запечатанной галерее раздался стук. Кто-то работал по другую сторону камня."],
+      ["СЕЙЧАС", "Чужие у порога", "Люди без рода и понятного языка просят воды. Храмовая стража перекрывает дорогу."]
     ],
-    notes:[
-      ["на чём поднялись","одна строка, коротко"],
-      ["чего не делают","тоже строка — важно для отыгрыша"],
-      ["метка","описание знака или тату"],
-      ["где искать","точка на карте, заглушка"]
+    mapTitle: "Там, где камень<br><em>ещё тёплый.</em>",
+    mapLabel: "ЗЕМЛИ СВЯТИЛИЩА<br>КАРТА УСЛОВНАЯ",
+    locations: [
+      {
+        name: "Квартал мастеров",
+        description: "Запах горячего хлеба, медная пыль и стук резцов. Вечером сюда возвращаются люди, которые знают храм не по молитвам, а по каждому уложенному камню. И замечают, когда камень меняется.",
+        tags: ["Повседневная жизнь", "Слухи", "Ремёсла"],
+        x: 20, y: 71
+      },
+      {
+        name: "Святилище порога",
+        description: "Прохладные залы за тяжёлыми пилонами. Сажа на потолке. Дверь без ручки в глубине галереи. Внутрь допускают немногих, но после заката голоса слышны даже снаружи.",
+        tags: ["Переход", "Храмовая тайна", "Опасность"],
+        x: 43, y: 39
+      },
+      {
+        name: "Дорога приношений",
+        description: "Тканевые навесы хлопают на ветру. Паломники идут к некрополю, торговцы зовут покупателей. Здесь чужое лицо заметят раньше стражи — и за монету расскажут, куда оно ушло.",
+        tags: ["Торговля", "Встречи", "Свидетели"],
+        x: 56, y: 64
+      },
+      {
+        name: "Дом писцов",
+        description: "Тростниковые перья, запах чернил и вода в запечатанных кувшинах. Среди храмовых счетов хранится свиток с описанием людей, которых видели только сегодня утром.",
+        tags: ["Знания", "Документы", "Предсказание"],
+        x: 71, y: 31
+      }
     ],
-    lead:"Первый абзац — самое важное про крю, три-четыре строки. Его читают все, остальное почти никто.",
-    desc:"Второй абзац: как они появились, за что их знают, почему с ними считаются. Пока рыба, но длину держу рабочую.",
-    desc2:"Третий — необязательный. Если писать нечего, удали, вёрстка не поедет.",
-    role:"КОНТРОЛЬ",
-    work:[["eye","ночной обход"], ["roof","крыши"], ["wave","связь"]],   // [иконка, подпись] — иконки в ICONS
-    people:[["лидер","имя — заглушка"],["правая рука","пока хз"],["набор ведёт","—"]],
-    ties:[["carmine","натянуто"],["cryo","работают вместе"],["amber","должны"]],
-    quote:"Сюда уличную присказку или фразу лидера. Одна строка, максимум две.",
-    entry:"Условия входа: что нужно, к кому идти, сколько ждать ответа. Заглушка.",
-    rows:[["влияние",72],["связи",64],["чистота дел",30],["сколько народу",21]]
+    archiveTitle: "Не все голоса<br><em>принадлежат живым.</em>",
+    archiveSummary: "Храмовые записи, свидетельства<br>и знаки, о которых велели молчать.",
+    documents: [
+      {
+        art: "art-paper",
+        type: "ХРАМОВАЯ ЗАПИСЬ",
+        title: "Камень, переживший себя",
+        meta: "СВИДЕТЕЛЬСТВО 001 / ЛАРЕЦ ХРАНИТЕЛЯ",
+        preview: "За одну ночь печать стала старше на тысячи лет. Прикасавшийся к ней увидел храм без крыши.",
+        body: `
+          <p>Записано по распоряжению старшего хранителя.
+          Не выносить за пределы внутреннего двора.</p>
+          <p>На закате печать извлекли из ларца. Камень был цел.
+          После второй смены стражи поверхность потемнела.
+          По лицевой стороне прошла глубокая трещина.</p>
+          <blockquote>Она выглядела так, словно нас всех давно
+          похоронили, а её только что нашли.</blockquote>
+          <p>Младший служитель коснулся края и потерял сознание.
+          Очнувшись, он спросил, кто разрушил колонны.
+          Колонны стояли на своих местах.</p>
+          <p>К утру трещина исчезла. На дне закрытого ларца остался
+          мелкий сухой песок. До этого песка там не было.</p>`
+      },
+      {
+        art: "art-door",
+        type: "ДОНЕСЕНИЕ СТРАЖИ",
+        title: "Дверь, которой не было",
+        meta: "СВИДЕТЕЛЬСТВО 002 / ВОСТОЧНАЯ ГАЛЕРЕЯ",
+        preview: "За глухой стеной горит белый свет. Оттуда пахнет чужим огнём и сухим железом.",
+        body: `
+          <p>Из доклада ночной стражи.</p>
+          <p>В третью смену из восточной стены донёсся ровный стук.
+          Сначала редкий. Затем частый, как работа каменщика.
+          На штукатурке появились сколы.</p>
+          <blockquote>Они не пытались войти в храм.
+          Они пытались его откопать.</blockquote>
+          <p>На несколько мгновений стена стала проёмом.
+          За ним не было следующего зала. Был низкий коридор,
+          до половины заполненный песком.</p>
+          <p>Стражник увидел человека с белым огнём в руке.
+          Человек закричал первым. Затем проём исчез.</p>`
+      },
+      {
+        art: "art-stars",
+        type: "НЕБЕСНЫЕ ЗНАМЕНИЯ",
+        title: "Лишняя звезда",
+        meta: "СВИДЕТЕЛЬСТВО 003 / ЗАПИСЬ НА КРЫШЕ ХРАМА",
+        preview: "Наблюдатель отмечает звезду, которой не должно быть. Она движется против неба.",
+        body: `
+          <p>Из записей храмового наблюдателя.</p>
+          <p>Над западным краем некрополя появился слабый свет.
+          Не падал, не мерцал и не шёл вместе с остальными звёздами.</p>
+          <blockquote>Он двигался так, будто небо принадлежало
+          другому времени.</blockquote>
+          <p>Внизу, в закрытой галерее, одновременно запели.
+          Слов не удалось разобрать. Старший хранитель приказал
+          погасить светильники и не отвечать.</p>
+          <p><strong>Сюжетная зацепка:</strong> изменения неба сопровождают
+          приближение перехода. Но ещё никто не установил,
+          предупреждают они об открытии или о чьём-то возвращении.</p>`
+      }
+    ],
+    artifactTitle: "Он держал её<br><em>этим утром.</em>",
+    artifactText: "Для хранителя это целая храмовая печать. Знакомая тяжесть в ладони. Для людей из будущего — расколотая находка, извлечённая из песка. Оба держат один и тот же камень.",
+    artifactLabel: "СОСТОЯНИЕ: ЦЕЛАЯ<br>МЕСТО: ВНУТРЕННИЙ ДВОР ХРАМА",
+    artifactButton: "Увидеть, что оставит время",
+    artifactAlt: "Целая бронзово-коричневая храмовая печать",
+    closing: "«Пустыня не возвращает. Она выбирает время».",
+    closingSource: "Из предания хранителей порога",
+    chronicle: {
+      title: "Солнце помнит имена",
+      meta: "ГЛАВА I / ДРЕВНИЙ ЕГИПЕТ",
+      body: `
+        <p>Мир ещё не знает, что граница между эпохами нарушена.
+        Для жителей храмового поселения происходящее пока складывается
+        из слухов, дурных знамений и приказов, которым не дают объяснений.</p>
+        <h3>Что произошло</h3>
+        <ul>
+          <li>Печать на одну ночь состарилась и раскололась.</li>
+          <li>За запечатанной стеной появились голоса.</li>
+          <li>На рассвете стража встретила чужаков.</li>
+          <li>Дорога к святилищу закрыта. Люди требуют объяснений.</li>
+        </ul>
+        <h3>Настоящий момент</h3>
+        <p>Утро после первого перехода. Хранители пытаются оставить
+        случившееся внутри храмовых стен, но у каждого чужака
+        уже есть свидетели.</p>
+        <blockquote>Если это воля богов, почему хранители боятся
+        произнести её вслух?</blockquote>
+        <p><strong>Для жителей Египта:</strong> вы не декорации чужого
+        приключения. У вас есть семьи, обязательства, знания
+        и собственные причины открыть дверь — или замуровать её.</p>`
+    }
   },
-  {
-    id:"venom", name:"Гадюка", short:"химия, промзона", tag:"ХИМИЯ · ПРОМЗОНА", neon:"#2fa63c", tube:"#e0ffd6",
-    sign:["M14 32 C44 20, 56 80, 86 68", "M74 64 L78 78", "M84 60 L88 74"],
-    figure:"",                                  // путь к png, напр. "img/noct.png". пусто — будет силуэт
-    dead:[2],                                   // перегоревшие сегменты
-    light:"unstable",
-    trait:"фишка: один сегмент перегорел, остальное дребезжит и срывается",
-    facts:[
-      ["род деятельности","всё, что варится и продаётся"],
-      ["территория","промзона (?)"],
-      ["численность","~34 человека"],
-      ["набор","открыт, но с проверкой"]
+
+  modern: {
+    name: "Экспедиция",
+    theme: "#ece8dd",
+    coordinate: "ГИЗА / ПОЛЕВОЙ ЛАГЕРЬ<br>ИЮНЬ 1912 ГОДА",
+    kicker: "Последние дни привычного мира.",
+    hero: "Рассвет пахнет остывшим песком и крепким чаем. В лагере ещё спят. Только часы во всех палатках показывают одно и то же время — уже третьи сутки.",
+    captionLabel: "ВОСТОЧНЫЙ УЧАСТОК РАСКОПОК",
+    caption: "Вчера под этой стеной<br>не было лестницы.",
+    chapter: "Там, где молчит песок",
+    storyTitle: "Они искали историю.<br>История <em>нашла их.</em>",
+    stamp: "ЭКСПЕДИЦИЯ / ИЮНЬ 1912<br>ВОСТОЧНЫЙ УЧАСТОК, ГИЗА",
+    story: `
+      <p>Несколько палаток, разрешение на раскопки и деньги до конца
+      сезона. Экспедиция прибыла к плато Гиза ради небольшого
+      святилища, следы которого теряются на старых планах.</p>
+      <p>Под обвалившимся коридором нашли печать. За ней — дверь.
+      После её вскрытия <strong>часы остановились, на негативах
+      проступили чужие лица, а из глубины скалы потянуло дымом благовоний.</strong></p>
+      <p>Теперь один и тот же порог иногда ведёт в живой Египет.
+      Иногда — обратно в темноту. <strong>Никто не умеет вызывать переход.
+      И никто не знает, что случится с теми, кто не успеет вернуться.</strong></p>`,
+    quote: "Мы вскрыли не гробницу. Гробницы не смотрят в ответ.",
+    cite: "Неотправленное письмо руководителя экспедиции",
+    timeline: [
+      ["12 ИЮНЯ 1912", "Начало сезона", "В лагерь доставлены припасы. На старой карте отмечен проход, которого нет на местности."],
+      ["17 ИЮНЯ 1912", "Находка № 017", "Из галереи поднята расколотая печать. В 01:17 останавливаются все часы."],
+      ["СЕЙЧАС", "По ту сторону", "Часть экспедиции не вернулась из коридора. Из-за стены доносится шум живого города."]
     ],
-    notes:[
-      ["на чём поднялись","заглушка на строку"],
-      ["чего не делают","не лезут в чужие дела первыми"],
-      ["метка","зелёная метка на дверях — придумать"],
-      ["где искать","старые цеха, точное место хз"]
+    mapTitle: "У каждого раскопа<br><em>есть другая сторона.</em>",
+    mapLabel: "ПОЛЕВОЙ ПЛАН / ВОСТОЧНЫЙ УЧАСТОК<br>МАСШТАБ УСЛОВНЫЙ",
+    locations: [
+      {
+        name: "Лагерь экспедиции",
+        description: "Выцветшие палатки, керосиновая лампа под навесом и карты, прижатые камнями. Здесь ещё можно выпить чаю и сделать вид, что происходящему найдётся научное объяснение.",
+        tags: ["Сбор экспедиции", "Припасы", "Относительно безопасно"],
+        x: 20, y: 71
+      },
+      {
+        name: "Восточная галерея",
+        description: "Пыль лежит на ступенях ровным слоем — кроме свежих босых следов. В конце прохода находится дверь. Иногда воздух за ней горячее полуденной пустыни.",
+        tags: ["Переход", "Аномалия", "Вход ограничен"],
+        x: 43, y: 39
+      },
+      {
+        name: "Южный раскоп",
+        description: "Расчищенные фундаменты исчезнувшего святилища. На зарисовке вчерашнего дня колонн четыре. Сегодня их пять. Никто не хочет первым сказать об этом вслух.",
+        tags: ["Раскопки", "Изменения пространства", "Улики"],
+        x: 56, y: 64
+      },
+      {
+        name: "Архивный дом",
+        description: "Снятый у дороги дом с тёмной комнатой для проявки. На одном из негативов виден человек, стоявший за спиной фотографа. В момент съёмки фотограф был один.",
+        tags: ["Документы", "Фотографии", "Телеграф"],
+        x: 71, y: 31
+      }
     ],
-    lead:"Держат то, что остальные брезгуют трогать. Абзац-заглушка — почему к ним всё равно идут.",
-    desc:"Второй абзац: репутация, слухи, чем берут. Тут можно про их отношение к чужакам.",
-    desc2:"Строчка про фишку в отыгрыше — например, чинят чужое за долю.",
-    role:"ХИМИЯ",
-    work:[["flask","варка"], ["box","склад"], ["note","заказы"]],   // [иконка, подпись] — иконки в ICONS
-    people:[["лидер","имя — заглушка"],["химик","пока хз"],["набор ведёт","—"]],
-    ties:[["noct","терпят друг друга"],["carmine","открытая вражда"],["amber","возят их груз"]],
-    quote:"Фраза, по которой их узнают. Заглушка.",
-    entry:"Испытательный срок и поручитель. Расписать позже.",
-    rows:[["влияние",58],["связи",41],["чистота дел",8],["сколько народу",34]]
-  },
-  {
-    id:"carmine", name:"Кармин", short:"улица, сила", tag:"УЛИЦА · СИЛА", neon:"#c2192a", tube:"#ffd8ce",
-    sign:["M50 14 L50 42", "M50 58 L50 86", "M14 50 L42 50", "M58 50 L86 50"],
-    figure:"",                                  // путь к png, напр. "img/noct.png". пусто — будет силуэт
-    light:"overdrive",
-    trait:"фишка: горит слишком ярко, пересвечивает стену и дышит",
-    facts:[
-      ["род деятельности","силовые решения, крыша"],
-      ["территория","старый центр"],
-      ["численность","~29 человек"],
-      ["набор","закрыт"]
+    archiveTitle: "Бумага стерпит.<br><em>Память — не всегда.</em>",
+    archiveSummary: "Полевые записи, проявленные снимки<br>и сообщения, которых никто не отправлял.",
+    documents: [
+      {
+        art: "art-paper",
+        type: "ПОЛЕВОЙ ДНЕВНИК",
+        title: "Час семнадцать",
+        meta: "ДОКУМЕНТ 001 / 18.06.1912",
+        preview: "Все часы в лагере остановились одновременно. Один механизм продолжает идти — в обратную сторону.",
+        body: `
+          <p>18 июня. До рассвета.</p>
+          <p>Часы замерли в час семнадцать. Сначала решили,
+          что дело в песке. Потом проверили остальные.
+          Карманные. Настольные. Закрытые в ящике.</p>
+          <blockquote>Все показывали одно время.
+          Кроме часов человека, который ещё не вернулся.</blockquote>
+          <p>Его часы остались на столе. Секундная стрелка двигалась
+          против хода. Мы наблюдали за ней около получаса,
+          пока она тоже не остановилась.</p>
+          <p>Из галереи ночью доносился плеск воды.
+          Здесь не было воды по меньшей мере несколько тысяч лет.</p>`
+      },
+      {
+        art: "art-door",
+        type: "СНИМОК № 12",
+        title: "Лишний человек",
+        meta: "ДОКУМЕНТ 002 / ФОТОЛАБОРАТОРИЯ",
+        preview: "На проявленной пластинке в пустой галерее стоит человек. Он смотрит не на фотографа, а на нас.",
+        body: `
+          <p>Снимок сделан при магниевой вспышке.
+          В кадре — дверь восточной галереи и масштабная рейка.</p>
+          <p>При первом осмотре негатив был чист. Через несколько часов
+          в тёмной части проёма проступила человеческая фигура.</p>
+          <blockquote>Он не мог стоять там.
+          За дверью оставалась сплошная кладка.</blockquote>
+          <p>На следующем отпечатке фигура оказалась ближе.
+          Исходная пластинка не менялась.</p>
+          <p><strong>Пометка на конверте:</strong>
+          «Не печатать третий экземпляр до возвращения руководителя».</p>`
+      },
+      {
+        art: "art-stars",
+        type: "СРОЧНОЕ СООБЩЕНИЕ",
+        title: "Завтрашняя телеграмма",
+        meta: "ДОКУМЕНТ 003 / КАИР — ГИЗА",
+        preview: "Предупреждение пришло до того, как его отправили. Подпись принадлежит пропавшему участнику экспедиции.",
+        body: `
+          <p>Входящая телеграмма. Принята 19 июня.<br>
+          Дата отправления: 20 июня 1912 года.</p>
+          <blockquote>ПЕЧАТЬ НЕ СОЕДИНЯТЬ · ВТОРУЮ ДВЕРЬ НЕ ВСКРЫВАТЬ ·
+          ЕСЛИ УСЛЫШИТЕ СВОЁ ИМЯ НЕ ОТВЕЧАЙТЕ</blockquote>
+          <p>Подпись разобрана уверенно. Отправитель числится
+          пропавшим после вчерашнего спуска в галерею.</p>
+          <p>На станции в Каире утверждают, что такого сообщения
+          не принимали. Проверку обещали повторить завтра.</p>`
+      }
     ],
-    notes:[
-      ["на чём поднялись","строка-заглушка"],
-      ["чего не делают","не работают с теми, кто сдал своих"],
-      ["метка","красное на рукаве — уточнить"],
-      ["где искать","сами найдут"]
-    ],
-    lead:"Самые злые на районе, если верить слухам. Разговор с ними обычно короткий.",
-    desc:"Абзац про то, как они решают вопросы и почему с ними не спорят. Пока рыба.",
-    desc2:"Можно добавить, что внутри у них жёстче, чем снаружи.",
-    role:"СИЛА",
-    work:[["shield","крыша"], ["press","разбор"], ["split","давление"]],   // [иконка, подпись] — иконки в ICONS
-    people:[["лидер","имя — заглушка"],["кто говорит за крю","пока хз"],["набор ведёт","закрыт"]],
-    ties:[["venom","открытая вражда"],["noct","натянуто"],["cryo","покупают у них"]],
-    quote:"Короткая фраза с угрозой. Заглушка.",
-    entry:"Набора нет. Пишем, что берут только по личной рекомендации.",
-    rows:[["влияние",81],["связи",55],["чистота дел",5],["сколько народу",29]]
-  },
-  {
-    id:"cryo", name:"Криотех", short:"железо, сети", tag:"ЖЕЛЕЗО · СЕТИ", neon:"#1a7fb5", tube:"#dcf7ff",
-    sign:["M28 22 L28 78", "M50 12 L50 88", "M72 22 L72 78", "M28 50 L72 50"],
-    figure:"",                                  // путь к png, напр. "img/noct.png". пусто — будет силуэт
-    light:"cold",
-    trait:"фишка: холодный ровный свет, по стене сверху вниз идут помехи",
-    facts:[
-      ["род деятельности","железо, доступы, детали"],
-      ["территория","верхние уровни"],
-      ["численность","~18 человек"],
-      ["набор","по собеседованию"]
-    ],
-    notes:[
-      ["на чём поднялись","заглушка"],
-      ["чего не делают","формально ни с кем не воюют"],
-      ["метка","знак на технике — придумать"],
-      ["где искать","мастерская, адрес хз"]
-    ],
-    lead:"Технари. Собирают, ломают, продают. К ним идут, когда своими руками уже не получается.",
-    desc:"Абзац про то, что через них проходит половина чужих секретов. И что они это знают.",
-    desc2:"Строчка про цены. Или про то, что деньгами с ними расплачиваются не всегда.",
-    role:"ТЕХНИКА",
-    work:[["gear","железо"], ["key","доступы"], ["net","сеть"]],   // [иконка, подпись] — иконки в ICONS
-    people:[["лидер","имя — заглушка"],["кто на связи","пока хз"],["набор ведёт","—"]],
-    ties:[["noct","работают вместе"],["carmine","продают им"],["venom","осторожно"]],
-    quote:"Что-то сухое и техничное. Заглушка.",
-    entry:"Нужно показать, что умеешь. Как именно — придумать.",
-    rows:[["влияние",66],["связи",91],["чистота дел",58],["сколько народу",18]]
-  },
-  {
-    id:"amber", name:"Янтарь", short:"грузы, выезды", tag:"ГРУЗЫ · ВЫЕЗДЫ", neon:"#c9761a", tube:"#ffe8c2",
-    sign:["M12 68 L42 68 L60 32 L92 32", "M92 32 L84 26", "M92 32 L84 40"],
-    figure:"",                                  // путь к png, напр. "img/noct.png". пусто — будет силуэт
-    light:"hum",
-    trait:"фишка: гудит на низкой частоте, свет мелко дрожит",
-    facts:[
-      ["род деятельности","перевозки, всё что просят"],
-      ["территория","выезды из города"],
-      ["численность","~40 человек"],
-      ["набор","открыт"]
-    ],
-    notes:[
-      ["на чём поднялись","старые долги — расписать"],
-      ["чего не делают","не открывают чужие ящики"],
-      ["метка","жёлтая полоса — уточнить"],
-      ["где искать","стоянка на выезде"]
-    ],
-    lead:"Возят всё, что просят, и не задают вопросов. Ночные перегоны, длинные маршруты.",
-    desc:"Абзац про то, что их знают все, но мало кто знает лично. Пока заглушка.",
-    desc2:"Берут почти всех, но с испытательным. Условия — ниже.",
-    role:"ЛОГИСТИКА",
-    work:[["truck","перевоз"], ["route","объезды"], ["radio","связные"]],   // [иконка, подпись] — иконки в ICONS
-    people:[["лидер","имя — заглушка"],["диспетчер","пока хз"],["набор ведёт","—"]],
-    ties:[["venom","возят их груз"],["noct","должны им"],["cryo","меняются деталями"]],
-    quote:"Что-то усталое и спокойное. Заглушка.",
-    entry:"Пара рейсов на пробу. Детали дописать.",
-    rows:[["влияние",49],["связи",66],["чистота дел",44],["сколько народу",40]]
-  }
-];
-
-/* ============================================================
-   ВХОД
-   ============================================================ */
-const LOG = ["связь...", "район <b>найден</b>", "крю: <b>5</b>", "свет включён", "готово"];
-const logEl = $("#log"), bar = $("#bar"), go = $("#go"), boot = $("#boot");
-let li = 0;
-(function step(){
-  if (li < LOG.length){
-    logEl.insertAdjacentHTML("beforeend", `<div>· ${LOG[li]}</div>`);
-    li++;
-    bar.style.inset = `0 ${100 - Math.round(li/LOG.length*100)}% 0 0`;
-    setTimeout(step, slow ? 60 : 320 + Math.random()*260);
-  } else { go.classList.add("on"); go.focus({preventScroll:true}); }
-})();
-go.addEventListener("click", () => {
-  boot.classList.add("gone");
-  document.body.classList.remove("locked");
-  setTimeout(() => boot.remove(), 1000);
-});
-
-/* ============================================================
-   НОЧЬ: дождь, дымка, отражения в мокром асфальте
-   ============================================================ */
-const cv = $("#night"), ctx = cv.getContext("2d", {alpha:false});
-let W=0, H=0, dpr=1, wet=0;
-const DROPS=[], FOG=[], REFL=[];
-
-function resize(){
-  dpr = Math.min(devicePixelRatio || 1, 2);
-  W = cv.width = innerWidth*dpr; H = cv.height = innerHeight*dpr;
-  cv.style.width = innerWidth+"px"; cv.style.height = innerHeight+"px";
-  wet = H*0.72;                                  // линия, ниже которой «мокро»
-  REFL.length = 0;
-  for (let i=0;i<14;i++) REFL.push({ x:Math.random()*W, w:(20+Math.random()*90)*dpr, a:.05+Math.random()*.12, p:Math.random()*6 });
-}
-addEventListener("resize", resize); resize();
-
-for (let i=0;i<260;i++) DROPS.push({ x:Math.random(), y:Math.random(), l:.01+Math.random()*.035, v:.006+Math.random()*.014, a:.05+Math.random()*.22 });
-for (let i=0;i<5;i++) FOG.push({ x:Math.random(), y:.3+Math.random()*.5, r:.25+Math.random()*.35, vx:(Math.random()-.5)*.00012, t:Math.random() });
-
-const hex2rgb = h => { h=h.trim().replace("#",""); if(h.length===3) h=h.split("").map(c=>c+c).join("");
-  return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; };
-const rgba = (c,a) => `rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
-const mixArr = (a,b,t) => a.map((v,i)=>lerp(v,b[i],t));
-
-let PAL, PAL_T;
-function readPalette(){
-  const cs = getComputedStyle(document.documentElement);
-  PAL_T = { neon:hex2rgb(cs.getPropertyValue("--neon")), neon2:hex2rgb(cs.getPropertyValue("--neon-2")),
-            tube:hex2rgb(cs.getPropertyValue("--tube")), lamp:hex2rgb(cs.getPropertyValue("--lamp")) };
-  if (!PAL) PAL = JSON.parse(JSON.stringify(PAL_T));
-}
-readPalette();
-
-let flick = 1, blend = .04;
-function frame(){
-  for (const k in PAL) PAL[k] = mixArr(PAL[k], PAL_T[k], blend);
-  blend = lerp(blend, .04, .05);
-
-  // вывеска иногда моргает — вместе с ней темнеет вся сцена
-  if (Math.random() < .012) flick = .35 + Math.random()*.4;
-  flick = lerp(flick, 1, .12);
-
-  ctx.fillStyle = "#040405"; ctx.fillRect(0,0,W,H);
-
-  // дымка
-  ctx.globalCompositeOperation = "lighter";
-  for (const f of FOG){
-    f.x += f.vx; if (f.x < -.4) f.x = 1.4; if (f.x > 1.4) f.x = -.4;
-    f.t += .002;
-    const cx=f.x*W, cy=f.y*H, r=f.r*W*(1+Math.sin(f.t)*.06);
-    const col = f.t % 2 > 1 ? PAL.neon : PAL.lamp;
-    const g = ctx.createRadialGradient(cx,cy,0,cx,cy,r);
-    g.addColorStop(0, rgba(col, .055*flick)); g.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx,cy,r,0,6.284); ctx.fill();
-  }
-
-  // отражения на мокром асфальте
-  for (const r of REFL){
-    r.p += .012;
-    const x = r.x + Math.sin(r.p)*3*dpr;
-    const g = ctx.createLinearGradient(0, wet, 0, H);
-    const col = r.a > .1 ? PAL.neon2 : PAL.lamp;
-    g.addColorStop(0, rgba(col, r.a*flick)); g.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = g; ctx.fillRect(x - r.w/2, wet, r.w, H-wet);
-  }
-  ctx.globalCompositeOperation = "source-over";
-
-  // дождь
-  ctx.lineWidth = 1*dpr;
-  for (const d of DROPS){
-    d.y += d.v; d.x += d.v*.16;
-    if (d.y > 1.05){ d.y = -.05; d.x = Math.random(); }
-    if (d.x > 1.05) d.x = -.05;
-    const x=d.x*W, y=d.y*H;
-    ctx.strokeStyle = `rgba(190,195,215,${d.a*flick})`;
-    ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x - d.l*W*.16, y - d.l*H); ctx.stroke();
-  }
-
-  // мокрая полоса внизу
-  const wg = ctx.createLinearGradient(0, wet, 0, H);
-  wg.addColorStop(0,"rgba(0,0,0,0)"); wg.addColorStop(1,"rgba(0,0,0,.55)");
-  ctx.fillStyle = wg; ctx.fillRect(0, wet, W, H-wet);
-
-  requestAnimationFrame(frame);
-}
-if (!slow) requestAnimationFrame(frame);
-else { ctx.fillStyle="#040405"; ctx.fillRect(0,0,W,H); }
-
-/* ============================================================
-   ПЕРЕЛИСТЫВАНИЕ КРЮ + СВЕТ
-   свет: один источник — вывеска. скрипт каждый кадр считает,
-   насколько она горит (--lit), от этого зависят трубка, иконки,
-   отсвет на стене и капли, попавшие в свет.
-   характер мигания у каждого крю свой — поле light в CREWS.
-   ============================================================ */
-const picker = $("#picker"), cut = $("#cut"), crews = $("#crews"), stage = $("#stage");
-let active = null, idx = 0, crewsInView = false;
-const pad = n => String(n).padStart(2,"0");
-
-/* иконки деятельности. добавляй свои — просто path'ы в сетке 24×24 */
-const ICONS = {
-  eye:   '<path d="M2 12c4-6.5 16-6.5 20 0-4 6.5-16 6.5-20 0Z"/><circle cx="12" cy="12" r="3"/>',
-  roof:  '<path d="M2 15 12 7l10 8"/><path d="M6 15v6M18 15v6"/>',
-  wave:  '<path d="M2 14c3-6 6 6 9 0s6 6 9 0"/><path d="M12 3v3"/>',
-  flask: '<path d="M9 3v7L4 20h16l-5-10V3"/><path d="M8 3h8M7.5 15h9"/>',
-  box:   '<path d="M12 3 21 8v8l-9 5-9-5V8Z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
-  note:  '<path d="M5 5h14M5 12h14M5 19h9"/>',
-  shield:'<path d="M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z"/><path d="M9 12l2 2 4-4"/>',
-  press: '<path d="M3 5h18M3 19h18"/><path d="M8 9l4 4 4-4"/>',
-  split: '<path d="M3 12h6M15 12h6M12 3v6M12 15v6"/>',
-  gear:  '<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
-  key:   '<circle cx="15" cy="9" r="4"/><path d="M12 12 3 21M3 21h3M3 21v-3"/>',
-  net:   '<path d="M3 8h18M3 16h18M8 3v18M16 3v18"/>',
-  truck: '<path d="M2 16V7h12v9M14 10h4l3 3v3H2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
-  route: '<path d="M3 19h6L15 5h6"/><path d="M21 5l-3-2M21 5l-3 2"/>',
-  radio: '<circle cx="12" cy="12" r="2"/><path d="M8 8a6 6 0 0 0 0 8M16 8a6 6 0 0 1 0 8M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/>'
-};
-
-/* характеры вывесок. s — память между кадрами, t — секунды */
-const LIGHT = {
-  steady   (s,t){ if (s.d>0){ s.d--; return .16 + Math.random()*.1 }
-                  if (Math.random() < .0016) s.d = 8 + Math.random()*22;
-                  return .96 + Math.sin(t*1.7)*.03 },
-  unstable (s,t){ if (s.d>0){ s.d--; return .08 + Math.random()*.16 }
-                  if (Math.random() < .022) s.d = 2 + Math.random()*7;
-                  return .8 + Math.random()*.2 },
-  overdrive(s,t){ if (s.d>0){ s.d--; return .35 }
-                  if (Math.random() < .004) s.d = 2;
-                  return 1.04 + Math.sin(t*3.1)*.08 },
-  cold     (s,t){ if (s.d>0){ s.d--; return .04 }
-                  if (Math.random() < .0022) s.d = 1 + Math.random()*2;
-                  return .93 },
-  hum      (s,t){ return .9 + Math.sin(t*38)*.035 + Math.sin(t*.9)*.05 }
-};
-let profile = "steady", lstate = {d:0}, lit = 1;
-
-/* ---- канвас листа: отсвет от вывески и капли в её свете ---- */
-const fx = $("#crewfx"), fxc = fx.getContext("2d");
-const signBox = () => $("#stage .figwrap");
-let fw = 0, fh = 0;
-const WET = [];
-for (let i=0;i<70;i++) WET.push({ x:Math.random(), y:Math.random(), v:.004+Math.random()*.01, l:.02+Math.random()*.05 });
-
-function fxResize(){
-  const r = fx.getBoundingClientRect();
-  fw = fx.width = Math.max(1, Math.round(r.width * dpr));
-  fh = fx.height = Math.max(1, Math.round(r.height * dpr));
-}
-addEventListener("resize", fxResize);
-addEventListener("load", fxResize);
-
-function drawFx(){
-  requestAnimationFrame(drawFx);
-  if (!fw) return;
-  const t = performance.now()/1000;
-  lit = slow ? 1 : LIGHT[profile](lstate, t);
-  stage.style.setProperty("--lit", Math.min(lit, 1).toFixed(3));
-  if (!crewsInView || slow) return;
-
-  fxc.clearRect(0,0,fw,fh);
-  const er = signBox().getBoundingClientRect(), cr = fx.getBoundingClientRect();
-  const cx = (er.left - cr.left + er.width/2) * dpr;
-  const cy = (er.top  - cr.top  + er.height/2) * dpr;
-  const R  = Math.max(60, er.width * dpr * .5);
-
-  fxc.globalCompositeOperation = "lighter";
-
-  const hot = fxc.createRadialGradient(cx,cy,0, cx,cy,R*1.6);
-  hot.addColorStop(0, rgba(PAL.neon, .26*lit));
-  hot.addColorStop(.45, rgba(PAL.neon, .08*lit));
-  hot.addColorStop(1, "rgba(0,0,0,0)");
-  fxc.fillStyle = hot; fxc.fillRect(0,0,fw,fh);
-
-  const wide = fxc.createRadialGradient(cx,cy,R, cx,cy,R*5);
-  wide.addColorStop(0, rgba(PAL.neon, .06*lit));
-  wide.addColorStop(1, "rgba(0,0,0,0)");
-  fxc.fillStyle = wide; fxc.fillRect(0,0,fw,fh);
-
-  fxc.lineWidth = 1*dpr;
-  for (const d of WET){
-    d.y += d.v; if (d.y > 1.04){ d.y = -.04; d.x = Math.random(); }
-    const x = d.x*fw, y = d.y*fh;
-    const a = Math.max(0, 1 - Math.hypot(x-cx, y-cy)/(R*3.4)) * .45 * lit;
-    if (a < .02) continue;
-    fxc.strokeStyle = rgba(PAL.tube, a);
-    fxc.beginPath(); fxc.moveTo(x, y); fxc.lineTo(x - d.l*fw*.05, y - d.l*fh); fxc.stroke();
-  }
-
-  if (profile === "cold"){                       // помехи по листу
-    const band = ((t*.35) % 1.4 - .2) * fh;
-    for (let i=0;i<4;i++){
-      fxc.fillStyle = rgba(PAL.neon, .05*lit);
-      fxc.fillRect(0, band + i*3*dpr, fw, 1*dpr);
+    artifactTitle: "Они найдут её<br><em>через три тысячи лет.</em>",
+    artifactText: "Камень потемнел, рельеф стёрся, через глаз прошла трещина. Для экспедиции это находка № 017. Для кого-то по ту сторону двери — вещь, которую он только что убрал в ларец.",
+    artifactLabel: "СОСТОЯНИЕ: РАСКОЛОТА<br>МЕСТО: ПОЛЕВОЙ АРХИВ",
+    artifactButton: "Увидеть её до разрушения",
+    artifactAlt: "Древняя храмовая печать с глубокой трещиной",
+    closing: "«Мы искали прошлое. Оно нашло нас первым».",
+    closingSource: "Из неопубликованного дневника экспедиции",
+    chronicle: {
+      title: "Там, где молчит песок",
+      meta: "ГЛАВА I / ЭКСПЕДИЦИЯ / ИЮНЬ 1912",
+      body: `
+        <p>Сезон начинался как обычные раскопки. Мало денег,
+        слишком много песка, неясные перспективы. Никто не ожидал,
+        что главным вопросом станет не ценность находки,
+        а возможность вернуться из следующего коридора.</p>
+        <h3>Что произошло</h3>
+        <ul>
+          <li>Открыта галерея под руинами святилища.</li>
+          <li>Найдена расколотая печать с необычными знаками.</li>
+          <li>В лагере начались временные аномалии.</li>
+          <li>Первый переход разделил экспедицию между эпохами.</li>
+        </ul>
+        <h3>Настоящий момент</h3>
+        <p>Вечер после исчезновения первой группы. Оставшиеся
+        у входа слышат живой город. За порогом не видно ничего,
+        кроме старой кладки.</p>
+        <blockquote>Самое страшное — не то, что дверь открылась.
+        А то, что с другой стороны её уже ждали.</blockquote>
+        <p><strong>Правило истории:</strong> переходы нельзя вызвать
+        по желанию. Их появление согласуется в общем сюжете.
+        Знание истории не даёт власти над живущими в ней людьми.</p>`
     }
   }
-  fxc.globalCompositeOperation = "source-over";
-}
-requestAnimationFrame(drawFx);
+};
 
-/* ---- кнопки ---- */
-CREWS.forEach((c,i) => {
-  const b = document.createElement("button");
-  b.className = "pick"; b.type = "button"; b.role = "tab";
-  b.style.setProperty("--tube", c.tube);
-  b.setAttribute("aria-selected", i === 0 ? "true" : "false");
-  b.innerHTML = `${c.name}<small>${c.short}</small>`;
-  b.addEventListener("click", () => setCrew(c.id));
-  picker.append(b);
+const $ = id => document.getElementById(id);
+const tabs = [...document.querySelectorAll(".era-tab")];
+const dialog = $("document-dialog");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+let currentEra = "ancient";
+let selectedLocation = 1;
+let motionEnabled = !reduceMotion.matches;
+
+/* =====================================================
+   СМЕНА ЭПОХ
+   ===================================================== */
+function renderLocation(index) {
+  selectedLocation = index;
+  const place = worlds[currentEra].locations[index];
+  const number = String(index + 1).padStart(2, "0");
+
+  $("location-panel").dataset.number = number;
+  $("location-panel").innerHTML = `
+    <div class="location-top">МЕСТО ${number} / 04</div>
+    <h3>${place.name}</h3>
+    <p>${place.description}</p>
+    <div class="tags">${place.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+  `;
+
+  document.querySelectorAll(".map-marker").forEach((marker, i) => {
+    marker.setAttribute("aria-pressed", String(i === index));
+  });
+}
+
+function renderMap() {
+  $("map-markers").innerHTML = worlds[currentEra].locations.map((place, index) => `
+    <button class="map-marker" style="left:${place.x}%;top:${place.y}%"
+      data-location="${index}" aria-pressed="false"
+      aria-controls="location-panel"
+      aria-label="${index + 1}. ${place.name}" title="${place.name}">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+    </button>
+  `).join("");
+
+  renderLocation(selectedLocation);
+}
+
+function renderArchive() {
+  $("archive-grid").innerHTML = worlds[currentEra].documents.map((doc, index) => `
+    <button class="archive-card" data-document="${index}"
+      aria-haspopup="dialog" aria-label="Открыть документ: ${doc.title}">
+      <span class="archive-art">
+        <span class="archive-id">АРХИВ / ${String(index + 1).padStart(3, "0")}</span>
+        <svg viewBox="0 0 380 220" aria-hidden="true">
+          <use href="#${doc.art}"></use>
+        </svg>
+        <span class="archive-art-label">${doc.type}</span>
+      </span>
+      <span class="archive-content">
+        <span class="archive-meta">${doc.meta}</span>
+        <span class="archive-title">${doc.title}</span>
+        <span class="archive-preview">${doc.preview}</span>
+        <span class="archive-bottom"><span>Открыть свидетельство</span><b aria-hidden="true">↗</b></span>
+      </span>
+    </button>
+  `).join("");
+}
+
+function setEra(era, announce = true) {
+  if (!worlds[era]) return;
+
+  currentEra = era;
+  const world = worlds[era];
+
+  document.body.dataset.era = era;
+  document.querySelector('meta[name="theme-color"]').content = world.theme;
+  $("world").setAttribute("aria-labelledby", `tab-${era}`);
+
+  tabs.forEach(tab => {
+    const selected = tab.dataset.era === era;
+    tab.setAttribute("aria-selected", String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+  });
+
+  const text = {
+    "hero-kicker": world.kicker,
+    "hero-description": world.hero,
+    "scene-caption-label": world.captionLabel,
+    "chapter-name": world.chapter,
+    "story-quote": world.quote,
+    "story-cite": world.cite,
+    "artifact-text": world.artifactText,
+    "closing-quote": world.closing,
+    "closing-source": world.closingSource
+  };
+
+  const html = {
+    "era-coordinate": world.coordinate,
+    "scene-caption-text": world.caption,
+    "story-title": world.storyTitle,
+    "story-stamp": world.stamp,
+    "story-text": world.story,
+    "map-title": world.mapTitle,
+    "map-top-label": world.mapLabel,
+    "archive-title": world.archiveTitle,
+    "archive-summary": world.archiveSummary,
+    "artifact-title": world.artifactTitle,
+    "artifact-label": world.artifactLabel
+  };
+
+  Object.entries(text).forEach(([id, value]) => $(id).textContent = value);
+  Object.entries(html).forEach(([id, value]) => $(id).innerHTML = value);
+
+  $("artifact-switch").innerHTML = `<span>${world.artifactButton}</span><span aria-hidden="true">⇄</span>`;
+  $("artifact-image").setAttribute("aria-label", world.artifactAlt);
+
+  $("timeline").innerHTML = world.timeline.map(([date, title, description]) => `
+    <div class="timeline-item">
+      <div class="date">${date}</div>
+      <h3>${title}</h3>
+      <p>${description}</p>
+    </div>
+  `).join("");
+
+  renderMap();
+  renderArchive();
+  updateParticleColor();
+
+  if (announce) {
+    $("announcement").textContent = `Открыта эпоха: ${world.name}. Сюжет, карта и документы обновлены.`;
+    if (motionEnabled && !reduceMotion.matches) {
+      $("time-flash").animate(
+        [{ opacity: 0 }, { opacity: .34, offset: .18 }, { opacity: 0 }],
+        { duration: 850, easing: "ease-out" }
+      );
+    }
+  }
+
+  try { localStorage.setItem("sands-cinematic-era", era); } catch (_) {}
+}
+
+tabs.forEach((tab, index) => {
+  tab.addEventListener("click", () => {
+    if (tab.dataset.era !== currentEra) setEra(tab.dataset.era);
+  });
+
+  tab.addEventListener("keydown", event => {
+    let next;
+    if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+    if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+    if (event.key === "Home") next = 0;
+    if (event.key === "End") next = tabs.length - 1;
+
+    if (next !== undefined) {
+      event.preventDefault();
+      tabs[next].focus();
+      if (tabs[next].dataset.era !== currentEra) setEra(tabs[next].dataset.era);
+    }
+  });
 });
 
-/* силуэт-заглушка, пока картинки нет */
-const FIG_PH = `<svg class="figure" viewBox="0 0 120 240" preserveAspectRatio="xMidYMax meet">
-  <circle cx="60" cy="27" r="17"/>
-  <rect x="38" y="50" width="44" height="82" rx="15"/>
-  <rect x="19" y="55" width="14" height="70" rx="7"/>
-  <rect x="87" y="55" width="14" height="70" rx="7"/>
-  <rect x="43" y="136" width="16" height="96" rx="8"/>
-  <rect x="61" y="136" width="16" height="96" rx="8"/>
-</svg>`;
+$("map-markers").addEventListener("click", event => {
+  const marker = event.target.closest("[data-location]");
+  if (marker) renderLocation(Number(marker.dataset.location));
+});
 
-function setFigure(c){
-  const wrap = $("#d-figwrap");
-  wrap.querySelectorAll(".figure, .fig-rim, .fig-tint, .fig-note").forEach(el => el.remove());
+$("artifact-switch").addEventListener("click", () => {
+  const previousTop = $("artifact").getBoundingClientRect().top;
+  setEra(currentEra === "ancient" ? "modern" : "ancient");
+  const difference = $("artifact").getBoundingClientRect().top - previousTop;
+  window.scrollBy({ top: difference, behavior: "instant" });
+});
 
-  if (!c.figure){                                    // картинки ещё нет — рисуем силуэт
-    wrap.classList.add("ph");
-    wrap.insertAdjacentHTML("beforeend", FIG_PH +
-      '<span class="fig-note">сюда png персонажа<br>с прозрачным фоном</span>');
+/* =====================================================
+   ДОКУМЕНТЫ
+   ===================================================== */
+function openDocument(document, category = "Свидетельства") {
+  $("modal-category").textContent = category;
+  $("modal-title").textContent = document.title;
+  $("modal-meta").textContent = document.meta;
+  $("modal-body").innerHTML = document.body;
+
+  dialog.showModal();
+  dialog.scrollTop = 0;
+}
+
+$("archive-grid").addEventListener("click", event => {
+  const card = event.target.closest("[data-document]");
+  if (!card) return;
+  const doc = worlds[currentEra].documents[Number(card.dataset.document)];
+  openDocument(doc, doc.type);
+});
+
+$("chronicle-button").addEventListener("click", () => {
+  openDocument(worlds[currentEra].chronicle, "Хроника текущей главы");
+});
+
+$("about-button").addEventListener("click", () => {
+  openDocument({
+    title: "Две эпохи. Одна трещина.",
+    meta: "ЛИТЕРАТУРНАЯ РОЛЕВАЯ / ИСТОРИЧЕСКАЯ МИСТИКА",
+    body: `
+      <p><strong>«По ту сторону песков»</strong> — история об одном месте
+      в двух временах. В 1912 году здесь работают исследователи.
+      В Древнем Египте — живут люди, для которых храмы ещё не руины,
+      а история ещё не написана.</p>
+      <h3>Две равноправные стороны</h3>
+      <p>Экспедиция пытается понять происходящее и вернуть пропавших.
+      Жители Египта защищают собственный мир — или видят в пришельцах
+      возможность изменить свою судьбу.</p>
+      <h3>Переход</h3>
+      <p>Восточная галерея связывает эпохи, но не подчиняется людям.
+      Предвестники перехода повторяются, однако не дают надёжного
+      способа открыть дверь. Общие события согласуются участниками игры.</p>
+      <h3>Историческая основа</h3>
+      <p>Древняя линия условно относится к началу XIX династии,
+      около 1290 года до н. э. Пирамиды к этому времени уже древние.
+      Святилище, экспедиция, документы и временные аномалии вымышлены.</p>
+      <h3>Как читать этот сайт</h3>
+      <p>Вверху выберите эпоху. На карте откройте места действия.
+      В архиве прочитайте свидетельства. У печати переключитесь
+      на другую сторону времени, не покидая самого предмета.</p>
+      <p>Это сюжетный сайт: здесь нет анкет персонажей,
+      регистрации или встроенного форума.</p>`
+  }, "О ролевой игре");
+});
+
+$("modal-close").addEventListener("click", () => dialog.close());
+
+dialog.addEventListener("click", event => {
+  if (event.target !== dialog) return;
+  const rect = dialog.getBoundingClientRect();
+  const outside =
+    event.clientX < rect.left || event.clientX > rect.right ||
+    event.clientY < rect.top || event.clientY > rect.bottom;
+  if (outside) dialog.close();
+});
+
+/* =====================================================
+   АТМОСФЕРНАЯ ПЫЛЬ
+   Два слоя: мелкая дальняя и крупная размытая ближняя.
+   Анимация останавливается вне первого экрана.
+   ===================================================== */
+const canvas = $("dust");
+const ctx = canvas.getContext("2d");
+const hero = $("top");
+
+let particles = [];
+let width = 0;
+let height = 0;
+let particleColor = "242, 175, 96";
+let heroVisible = true;
+let frameId = null;
+let lastTime = 0;
+
+function updateParticleColor() {
+  particleColor = currentEra === "ancient" ? "242, 175, 96" : "255, 248, 223";
+  if (!motionEnabled) drawParticles(0);
+}
+
+function newParticle(randomPosition = true) {
+  const near = Math.random() > .82;
+  return {
+    x: randomPosition ? Math.random() * width : -25,
+    y: Math.random() * height,
+    radius: near ? 1.8 + Math.random() * 2.2 : .35 + Math.random() * 1.1,
+    speed: near ? 12 + Math.random() * 15 : 4 + Math.random() * 10,
+    drift: Math.random() * Math.PI * 2,
+    alpha: near ? .08 + Math.random() * .12 : .1 + Math.random() * .28,
+    near
+  };
+}
+
+function resizeCanvas() {
+  const rect = hero.getBoundingClientRect();
+  const ratio = Math.min(window.devicePixelRatio || 1, 2);
+  width = rect.width;
+  height = rect.height;
+  canvas.width = Math.round(width * ratio);
+  canvas.height = Math.round(height * ratio);
+  if (!ctx) return;
+  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+  const count = Math.min(115, Math.max(40, Math.round(width / 12)));
+  particles = Array.from({ length: count }, () => newParticle());
+  drawParticles(0);
+}
+
+function drawParticles(delta) {
+  if (!ctx || !width || !height) return;
+  ctx.clearRect(0, 0, width, height);
+
+  for (let i = 0; i < particles.length; i++) {
+    const p = particles[i];
+
+    if (delta) {
+      p.x += p.speed * delta;
+      p.drift += delta * .22;
+      p.y += Math.sin(p.drift) * delta * 5 - delta * 1.6;
+
+      if (p.x > width + 25 || p.y < -25) {
+        particles[i] = newParticle(false);
+        continue;
+      }
+    }
+
+    const glowZone = .4 + .6 * Math.max(0, 1 - Math.abs(p.x / width - .7));
+    ctx.beginPath();
+    ctx.fillStyle = `rgba(${particleColor}, ${p.alpha * glowZone})`;
+    ctx.shadowColor = `rgba(${particleColor}, .3)`;
+    ctx.shadowBlur = p.near ? 9 : 0;
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.shadowBlur = 0;
+}
+
+function tick(time) {
+  if (!motionEnabled || !heroVisible || document.hidden) {
+    frameId = null;
     return;
   }
 
-  wrap.classList.remove("ph");
-  wrap.style.setProperty("--fig", `url("${c.figure}")`);
-  wrap.insertAdjacentHTML("beforeend", '<span class="fig-rim"></span>');   // свечение по силуэту
-  const img = new Image();
-  img.className = "figure"; img.alt = c.name; img.decoding = "async";
-  img.onerror = () => { c.figure = ""; setFigure(c); };                    // файла нет — назад к силуэту
-  img.src = c.figure;
-  wrap.append(img);
-  wrap.insertAdjacentHTML("beforeend", '<span class="fig-tint"></span>');  // цветной налив поверх
+  const delta = lastTime ? Math.min((time - lastTime) / 1000, .05) : 0;
+  lastTime = time;
+  drawParticles(delta);
+  frameId = requestAnimationFrame(tick);
 }
 
-function paint(c, quiet){
-  const i = CREWS.indexOf(c), num = pad(i+1) + " / " + pad(CREWS.length);
-  document.documentElement.dataset.crew = c.id;
-  readPalette();
-  profile = c.light; lstate = {d:0};
-
-  // метка крю в шапке листа
-  const dead = c.dead || [];
-  $("#d-mark").innerHTML = c.sign.map((d,k) => `<path d="${d}"${dead.includes(k) ? ' class="dead"' : ''}/>`).join("");
-
-  // эхо имени — уходит за спину персонажа
-  $("#d-echo").innerHTML = Array.from({length:5}, () => `<span>${c.name}</span>`).join("");
-
-  // персонаж
-  setFigure(c);
-
-  $$(".pick").forEach((b,k) => b.setAttribute("aria-selected", CREWS[k].id === c.id));
-  const sel = $$(".pick")[i];
-  if (sel && !quiet) sel.scrollIntoView({behavior: slow ? "auto" : "smooth", inline:"center", block:"nearest"});
-
-  $("#d-vname").textContent = c.name;
-  $("#d-role").textContent = c.role;
-  $("#d-tag").textContent = c.tag;
-  $("#d-idx").textContent = num;
-  $("#p-code").textContent = "крю " + num;
-  $("#p-foot").textContent = c.facts[1][1];        // территория в подвал листа
-  $("#d-lead").innerHTML = "<b>" + c.lead + "</b>";
-  $("#d-desc").textContent = c.desc;
-  $("#d-desc2").textContent = c.desc2;
-  $("#d-trait").textContent = c.trait;
-  $("#d-quote").textContent = c.quote;
-  $("#d-entry").textContent = c.entry;
-  $("#readout").textContent = "крю: " + c.name.toUpperCase();
-
-  // деятельность: подпись слева, иконка справа
-  $("#d-abil").innerHTML = c.work.map(([ic,label]) =>
-    `<div class="ab"><s></s><span>${label}</span><svg viewBox="0 0 24 24">${ICONS[ic] || ICONS.split}</svg></div>`).join("");
-
-  // сетка данных: факты и уточнения вперемешку, парами
-  const pairs = [];
-  for (let k=0;k<Math.max(c.facts.length, c.notes.length);k++){
-    if (c.facts[k]) pairs.push(c.facts[k]);
-    if (c.notes[k]) pairs.push(c.notes[k]);
+function syncAnimation() {
+  if (frameId !== null) {
+    cancelAnimationFrame(frameId);
+    frameId = null;
   }
-  $("#d-data").innerHTML = pairs.map(([k,v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
 
-  $("#d-people").innerHTML = c.people.map(([k,v]) => `<div class="pair"><span>${k}</span><b>${v}</b></div>`).join("");
-  $("#d-rows").innerHTML = c.rows.map(([k,v]) => `<div class="row"><span>${k}</span><u><i data-v="${v}"></i></u><b>${v}</b></div>`).join("");
-  $("#d-ties").innerHTML = c.ties.map(([id,st]) => {
-    const o = CREWS.find(x => x.id === id); if (!o) return "";
-    return `<button class="tie" type="button" data-go="${o.id}" style="--c:${o.neon}"><i></i><span>${o.name}</span><b>${st}</b></button>`;
-  }).join("");
-  $$("#d-ties .tie").forEach(b => b.addEventListener("click", () => setCrew(b.dataset.go)));
+  document.body.classList.toggle("motion-off", !motionEnabled);
+  $("motion-toggle").setAttribute("aria-pressed", String(motionEnabled));
+  $("motion-label").textContent = motionEnabled ? "Пыль · вкл." : "Пыль · пауза";
 
-  requestAnimationFrame(() => $$("#d-rows .row u i").forEach(el => el.style.right = (100 - el.dataset.v) + "%"));
+  lastTime = 0;
+  if (ctx && motionEnabled && heroVisible && !document.hidden) {
+    frameId = requestAnimationFrame(tick);
+  } else {
+    drawParticles(0);
+  }
 }
 
-function setCrew(id, quiet){
-  if (id === active) return;
-  const c = CREWS.find(x => x.id === id); if (!c) return;
-  active = id; idx = CREWS.indexOf(c);
-  if (quiet || slow){ paint(c, true); return; }
-  cut.classList.remove("go"); void cut.offsetWidth; cut.classList.add("go");
-  crews.classList.add("swapping");
-  blend = .5;
-  setTimeout(() => { paint(c); crews.classList.remove("swapping"); }, 170);
-}
-
-const step = d => setCrew(CREWS[(idx + d + CREWS.length) % CREWS.length].id);
-$("#prev").addEventListener("click", () => step(-1));
-$("#next").addEventListener("click", () => step(1));
-
-new IntersectionObserver(([e]) => crewsInView = e.isIntersecting, {threshold:.05}).observe(crews);
-addEventListener("keydown", e => {
-  if (!crewsInView || /INPUT|TEXTAREA/.test(document.activeElement?.tagName || "")) return;
-  if (e.key === "ArrowLeft"){ e.preventDefault(); step(-1); }
-  if (e.key === "ArrowRight"){ e.preventDefault(); step(1); }
+$("motion-toggle").addEventListener("click", () => {
+  motionEnabled = !motionEnabled;
+  syncAnimation();
 });
 
-let sx = null;
-stage.addEventListener("touchstart", e => sx = e.touches[0].clientX, {passive:true});
-stage.addEventListener("touchend", e => {
-  if (sx === null) return;
-  const dx = e.changedTouches[0].clientX - sx; sx = null;
-  if (Math.abs(dx) > 60) step(dx < 0 ? 1 : -1);
-}, {passive:true});
+reduceMotion.addEventListener("change", event => {
+  motionEnabled = !event.matches;
+  syncAnimation();
+});
 
-setCrew("noct", true);
-fxResize();
+document.addEventListener("visibilitychange", syncAnimation);
 
-/* ============================================================
-   ТОЧКИ
-   ============================================================ */
-const SPOTS = [
-  ["Бар / притон", "кто держит, кто ходит, что бывает по ночам. две-три строки рыбы.", "фото 4:3 · интерьер, тёмный", "круглосуточно"],
-  ["Мастерская", "чинят, перебирают, не задают вопросов. описание сюда.", "фото 4:3 · гараж", "по ночам"],
-  ["Лестница у [улицы]", "проходное место, где решают дела. заглушка.", "фото 4:3 · вывеска, ступени", "всегда"],
-  ["Крыша", "смотровая точка, отсюда видно весь квартал. текст потом.", "фото 4:3 · крыши, дождь", "хз"],
-  ["Ринг / подвал", "если такое будет в отыгрыше. если нет — удалить блок.", "место под картинку", "по событиям"],
-  ["Пустой слот", "дублируй карточку или удали лишние — сетка перестроится сама.", "—", "—"]
-];
-$("#spot-grid").innerHTML = SPOTS.map(([t,d,ph,h],i) => `
-  <article class="spot" tabindex="0">
-    <div class="ph">${ph}</div>
-    <h3>${t}</h3>
-    <p>${d}</p>
-    <div class="meta"><span>${h}</span><b>${String(i+1).padStart(2,"0")}</b></div>
-  </article>`).join("");
-
-/* ============================================================
-   МЕЛОЧИ
-   ============================================================ */
-// появление секций + счётчики + разовый скрэмбл заголовков
-const GLYPH = "АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЭЮЯ#%*/\\";
-function scramble(el){
-  const real = el.dataset.txt ?? (el.dataset.txt = el.firstChild.nodeValue ?? el.textContent);
-  const node = el.firstChild && el.firstChild.nodeType === 3 ? el.firstChild : el;
-  let i = 0;
-  const t = setInterval(() => {
-    i += 1;
-    const out = real.split("").map((ch,k) => {
-      if (ch === " " || k < i) return ch;
-      return GLYPH[Math.floor(Math.random()*GLYPH.length)];
-    }).join("");
-    if (node.nodeType === 3) node.nodeValue = out; else node.textContent = out;
-    if (i >= real.length) clearInterval(t);
-  }, 45);
+if ("IntersectionObserver" in window) {
+  new IntersectionObserver(entries => {
+    heroVisible = entries[0].isIntersecting;
+    syncAnimation();
+  }, { threshold: .01 }).observe(hero);
 }
 
-const io = new IntersectionObserver(es => {
-  es.forEach(e => {
-    if (!e.isIntersecting) return;
-    e.target.classList.add("in");
-    $$("[data-count]", e.target).forEach(countUp);
-    const h = e.target.querySelector("[data-scramble]");
-    if (h && !slow) scramble(h);
-    io.unobserve(e.target);
-  });
-}, {threshold:.2});
-$$(".reveal").forEach(el => io.observe(el));
-
-function countUp(el){
-  const end = +el.dataset.count, first = el.firstChild;
-  let t0 = null;
-  const step = t => {
-    t0 ??= t;
-    const k = Math.min((t - t0)/1400, 1);
-    first.nodeValue = Math.round(end * (1 - Math.pow(1-k,3)));
-    if (k < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-}
-if (!slow) setTimeout(() => $$(".title [data-scramble]").forEach(scramble), 400);
-// эхо повторяет первое слово заголовка
-{
-  const word = $(".title span")?.textContent || "";
-  $("#title-echo").innerHTML = Array.from({length:4}, () => `<span>${word}</span>`).join("");
+if ("ResizeObserver" in window) {
+  new ResizeObserver(resizeCanvas).observe(hero);
+} else {
+  window.addEventListener("resize", resizeCanvas);
 }
 
-// шапка и меню
-const top = $("#top"), menu = $("#menu");
-addEventListener("scroll", () => top.classList.toggle("stuck", scrollY > 40), {passive:true});
-$("#burger").addEventListener("click", () => menu.classList.toggle("open"));
-$$("nav.links a").forEach(a => a.addEventListener("click", () => menu.classList.remove("open")));
-const navIO = new IntersectionObserver(es => es.forEach(e => {
-  if (!e.isIntersecting) return;
-  $$("nav.links a").forEach(a => a.classList.toggle("here", a.getAttribute("href") === "#"+e.target.id));
-}), {rootMargin:"-45% 0px -50% 0px"});
-$$("section[id]").forEach(s => navIO.observe(s));
+/* =====================================================
+   ЗАПУСК
+   ===================================================== */
+let initialEra = "ancient";
+try {
+  const saved = localStorage.getItem("sands-cinematic-era");
+  if (worlds[saved]) initialEra = saved;
+} catch (_) {}
 
-// аккордеон
-$$(".q > button").forEach(b => b.addEventListener("click", () => {
-  const q = b.parentElement, was = q.classList.contains("open");
-  q.classList.toggle("open", !was);
-  b.setAttribute("aria-expanded", String(!was));
-}));
-
-// фонарь за курсором
-const torch = $("#torch");
-let tx = innerWidth/2, ty = innerHeight/2, cx = tx, cy = ty;
-addEventListener("mousemove", e => { tx = e.clientX; ty = e.clientY; }, {passive:true});
-(function follow(){
-  cx = lerp(cx, tx, .08); cy = lerp(cy, ty, .08);
-  torch.style.setProperty("--mx", cx+"px");
-  torch.style.setProperty("--my", cy+"px");
-  requestAnimationFrame(follow);
-})();
-})();
+setEra(initialEra, false);
+resizeCanvas();
+syncAnimation();
 </script>
 </body>
 </html>
