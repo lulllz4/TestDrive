@@ -2,2063 +2,2214 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#160e09">
-<title>По ту сторону песков</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#e7deca">
+<title>Мария Вельская / свидетельство</title>
 
 <style>
-/* =====================================================
-   ПАЛИТРА: ДРЕВНИЙ ЕГИПЕТ
-   ===================================================== */
-:root {
-  color-scheme: dark;
-  --bg: #160e09;
-  --surface: #20150e;
-  --surface-2: #2b1c12;
-  --surface-3: #382316;
-  --text: #ead7b8;
-  --muted: #b29b7e;
-  --faint: #877058;
-  --accent: #eda05a;
-  --accent-bright: #ffbd78;
-  --line: rgba(219, 168, 105, .2);
-  --line-strong: rgba(219, 168, 105, .4);
-  --glow: rgba(232, 116, 39, .12);
-  --header: rgba(22, 14, 9, .88);
-  --button-text: #211209;
-  --sky-top: #21130e;
-  --sky-mid: #60361e;
-  --sky-bottom: #b56932;
-  --sun: #ffd499;
-  --sun-edge: #ed8134;
-  --haze: #ee9445;
-  --far: #8c542e;
-  --pyramid-lit: #bc793f;
-  --pyramid-mid: #865029;
-  --pyramid-shadow: #452719;
-  --stone-light: #684127;
-  --stone-dark: #24170f;
-  --near: #1c120c;
-  --foreground: #100b08;
-  --hero-veil: #160e09;
-  --river: #9d704c;
-  --paper: #bb935f;
-  --paper-ink: #47311f;
-  --particle: 242, 175, 96;
-  --serif: Georgia, "Times New Roman", serif;
-  --sans: "Segoe UI", Arial, sans-serif;
-  --mono: "Courier New", monospace;
-}
+  :root {
+    --ground: #e7deca;
+    --paper: #f5eedb;
+    --paper-alt: #eee3c9;
+    --void: #f5eedb;
+    --ui: #6e5a3e;
+    --ui-line: #c7b99c;
+    --loss-ink: #413020;
 
-/* =====================================================
-   ПАЛИТРА: ЭКСПЕДИЦИЯ
-   ===================================================== */
-body[data-era="modern"] {
-  color-scheme: light;
-  --bg: #ece8dd;
-  --surface: #f4f0e6;
-  --surface-2: #e2ddd0;
-  --surface-3: #d4cbbc;
-  --text: #283d42;
-  --muted: #5f716f;
-  --faint: #778582;
-  --accent: #936237;
-  --accent-bright: #744726;
-  --line: rgba(49, 75, 77, .19);
-  --line-strong: rgba(49, 75, 77, .37);
-  --glow: rgba(178, 201, 202, .3);
-  --header: rgba(236, 232, 221, .9);
-  --button-text: #fff7e7;
-  --sky-top: #afcbd5;
-  --sky-mid: #d1dfe0;
-  --sky-bottom: #eee0b9;
-  --sun: #fffbea;
-  --sun-edge: #f6e8bd;
-  --haze: #f1e3be;
-  --far: #bea779;
-  --pyramid-lit: #e9d5a6;
-  --pyramid-mid: #c5ae82;
-  --pyramid-shadow: #958365;
-  --stone-light: #b4a184;
-  --stone-dark: #716451;
-  --near: #c1b291;
-  --foreground: #8c826a;
-  --hero-veil: #dce6e4;
-  --river: #7b9a9d;
-  --paper: #e0cda5;
-  --paper-ink: #5b4933;
-  --particle: 255, 246, 217;
-}
+    --ink: #35291b;
+    --muted: #66523b;
+    --line: rgba(91, 65, 34, .25);
+    --damage: 0;
+    --read: 0;
+    --shift: 18px;
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 105px; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  -webkit-font-smoothing: antialiased;
-  transition: background .8s, color .6s;
-}
-body:has(dialog[open]) { overflow: hidden; }
-button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-button { font: inherit; color: inherit; cursor: pointer; }
-a { color: inherit; text-decoration: none; }
-button, a, input { outline-offset: 6px; }
-:focus-visible { outline: 2px solid var(--accent); }
-::selection { background: var(--accent); color: var(--bg); }
-h1, h2, h3, p { margin: 0; }
-svg { display: block; }
-button { border-radius: 0; }
-.container { width: min(1240px, calc(100% - 88px)); margin-inline: auto; }
-.sr-only {
-  position: absolute;
-  width: 1px; height: 1px;
-  margin: -1px; padding: 0; border: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-}
-.skip {
-  position: fixed; top: 10px; left: 10px; z-index: 100;
-  padding: 15px 20px; background: var(--surface);
-  transform: translateY(-150%);
-}
-.skip:focus { transform: translateY(0); }
-.svg-library { position: absolute; width: 0; height: 0; overflow: hidden; }
-.eyebrow {
-  font: 10px/1.7 var(--mono);
-  letter-spacing: .18em;
-  text-transform: uppercase;
-}
-.accent { color: var(--accent); }
-.muted { color: var(--muted); }
-
-/* Единая фактура вместо чистых цифровых заливок */
-body::after {
-  content: "";
-  position: fixed; inset: 0; z-index: 60;
-  pointer-events: none; opacity: .065;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.93' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath d='M0 0h180v180H0z' fill='%23fff' filter='url(%23g)' opacity='.7'/%3E%3C/svg%3E");
-}
-body[data-era="modern"]::after { opacity: .045; }
-
-/* =====================================================
-   ШАПКА
-   ===================================================== */
-.site-header {
-  position: sticky; top: 0; z-index: 30;
-  background: var(--header);
-  border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(20px);
-}
-.header-inner {
-  min-height: 86px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center; gap: 25px;
-}
-.brand { display: flex; align-items: center; gap: 13px; width: fit-content; }
-.brand svg { width: 36px; height: 45px; color: var(--accent); }
-.brand span {
-  font: 10px/1.8 var(--sans);
-  font-weight: 600; letter-spacing: .22em;
-  text-transform: uppercase;
-}
-.era-tabs {
-  display: flex;
-  padding: 4px;
-  border: 1px solid var(--line);
-  background: rgba(0,0,0,.07);
-}
-.era-tab {
-  position: relative; display: flex; align-items: center; gap: 12px;
-  min-width: 173px; padding: 11px 18px;
-  background: transparent; border: 1px solid transparent;
-  color: var(--faint); text-align: left;
-  transition: all .35s;
-}
-.era-tab svg { width: 19px; height: 19px; }
-.era-tab strong { display: block; font-size: 11px; font-weight: 500; }
-.era-tab small { display: block; margin-top: 4px; font: 9px var(--mono); opacity: .75; }
-.era-tab[aria-selected="true"] {
-  color: var(--text);
-  border-color: var(--line);
-  background: linear-gradient(130deg, var(--surface-3), var(--surface));
-  box-shadow: inset 0 1px 0 var(--line);
-}
-.era-tab[aria-selected="true"] svg { color: var(--accent); }
-.header-nav {
-  display: flex; justify-content: flex-end; align-items: center; gap: 25px;
-  font-size: 11px;
-}
-.link-button {
-  padding: 6px 0;
-  background: none; border: 0;
-  border-bottom: 1px solid var(--line-strong);
-  color: var(--text); font-size: 11px;
-}
-.header-nav a:hover, .link-button:hover { color: var(--accent); }
-
-/* =====================================================
-   КИНЕМАТОГРАФИЧНЫЙ ПЕРВЫЙ ЭКРАН
-   ===================================================== */
-.hero {
-  position: relative; isolation: isolate;
-  min-height: min(900px, calc(100svh - 86px));
-  min-height: max(770px, calc(100svh - 86px));
-  overflow: hidden;
-  background: var(--sky-top);
-}
-.landscape {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  z-index: -5;
-}
-.landscape svg { width: 100%; height: 100%; }
-.hero-shade {
-  position: absolute; inset: 0; z-index: -3;
-  background:
-    linear-gradient(90deg, var(--hero-veil) 0%, transparent 76%),
-    linear-gradient(0deg, var(--bg) 0%, transparent 37%),
-    linear-gradient(180deg, rgba(0,0,0,.12), transparent 35%);
-  opacity: .98;
-}
-.hero-vignette {
-  position: absolute; inset: 0; z-index: -2;
-  background: radial-gradient(ellipse at 66% 42%, transparent 15%, rgba(0,0,0,.37) 100%);
-  pointer-events: none;
-}
-body[data-era="modern"] .hero-vignette { opacity: .3; }
-.hero-rays {
-  position: absolute;
-  inset: -40% -20% -30% 20%;
-  z-index: -4;
-  transform-origin: 70% 25%;
-  background: conic-gradient(
-    from 136deg at 70% 25%,
-    transparent 0deg,
-    rgba(255,199,121,.12) 9deg,
-    transparent 17deg,
-    rgba(255,199,121,.035) 24deg,
-    transparent 35deg,
-    rgba(255,199,121,.08) 47deg,
-    transparent 55deg
-  );
-  mix-blend-mode: screen;
-  filter: blur(9px);
-  animation: rays 24s ease-in-out infinite alternate;
-}
-@keyframes rays {
-  from { transform: rotate(-5deg); opacity: .45; }
-  to { transform: rotate(4deg); opacity: .9; }
-}
-.dust-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-.hero-content {
-  position: relative;
-  padding-top: clamp(100px, 13vh, 160px);
-  padding-bottom: 215px;
-}
-.hero-kicker { display: flex; gap: 17px; align-items: center; color: var(--accent); margin-bottom: 30px; }
-.hero-kicker::before { content: ""; width: 33px; height: 1px; background: currentColor; }
-.hero h1 {
-  font: 400 clamp(64px, 6.7vw, 104px)/.99 var(--serif);
-  letter-spacing: -.05em;
-  max-width: 740px;
-  text-shadow: 0 3px 40px rgba(0,0,0,.16);
-}
-.hero h1 em {
-  display: inline-block;
-  font-weight: 400;
-  color: var(--accent-bright);
-  padding-bottom: .1em;
-}
-body[data-era="ancient"] .hero h1 em { text-shadow: 0 0 65px rgba(240,141,65,.17); }
-.hero-description {
-  max-width: 355px; margin-top: 29px;
-  font-size: 13px; line-height: 1.95;
-  color: var(--muted);
-}
-.hero-actions { display: flex; gap: 27px; align-items: center; margin-top: 32px; }
-.button {
-  display: inline-flex; justify-content: center; align-items: center; gap: 30px;
-  min-height: 48px; padding: 15px 23px;
-  border: 1px solid var(--accent);
-  color: var(--button-text); background: var(--accent);
-  font-size: 11px; font-weight: 600;
-  box-shadow: 0 5px 35px rgba(0,0,0,.1);
-  transition: transform .2s, box-shadow .2s;
-}
-.button:hover { transform: translateY(-3px); box-shadow: 0 8px 35px var(--glow); }
-.quiet-link {
-  display: inline-flex; gap: 12px; align-items: center;
-  padding: 8px 0; border: 0; background: none;
-  font-size: 11px; color: var(--text);
-}
-.quiet-link span:last-child { color: var(--accent); }
-.quiet-link:hover { color: var(--accent); }
-.hero-coordinate {
-  position: absolute; top: 35px; left: 0; right: 0;
-  display: flex; justify-content: space-between;
-  color: var(--muted); font: 9px/1.6 var(--mono); letter-spacing: .14em;
-}
-.hero-coordinate .right { text-align: right; }
-.scene-caption {
-  position: absolute; right: 7%; bottom: 215px;
-  display: flex; align-items: center; gap: 20px;
-  color: var(--text);
-}
-.caption-line { width: 65px; height: 1px; background: var(--line-strong); }
-.caption-line::after {
-  content: ""; display: block; width: 5px; height: 5px;
-  border: 1px solid var(--accent); border-radius: 50%;
-  transform: translate(-5px, -3px);
-}
-.scene-caption p { font: italic 20px/1.45 var(--serif); }
-.scene-caption small { display: block; font: 8px/1.5 var(--mono); letter-spacing: .18em; margin-bottom: 8px; color: var(--accent); }
-.hero-bottom {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  border-top: 1px solid var(--line);
-  min-height: 108px;
-  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 30px;
-}
-.hero-chapter { display: flex; align-items: center; gap: 20px; }
-.chapter-roman { font: 42px/1 var(--serif); color: var(--accent); opacity: .7; }
-.hero-chapter small { display: block; color: var(--faint); font: 8px var(--mono); letter-spacing: .15em; margin-bottom: 7px; }
-.hero-chapter strong { font: 13px var(--serif); font-weight: 400; }
-.scroll-cue {
-  display: flex; gap: 13px; align-items: center;
-  font-size: 10px; color: var(--muted);
-}
-.scroll-cue i { display: block; width: 1px; height: 28px; background: linear-gradient(var(--accent), transparent); }
-.motion-toggle {
-  justify-self: end;
-  border: 0; background: none; padding: 12px 0;
-  display: flex; align-items: center; gap: 9px;
-  font: 9px var(--mono); color: var(--muted);
-}
-.motion-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 9px var(--accent); }
-.motion-toggle[aria-pressed="false"] .motion-dot { box-shadow: none; opacity: .3; }
-.time-flash {
-  position: fixed; inset: 0; z-index: 55;
-  background: radial-gradient(ellipse at 70% 30%, #e7b473, #29190e);
-  opacity: 0; pointer-events: none;
-}
-
-.modern-world { opacity: 0; transition: opacity 1s; }
-.ancient-world { opacity: 1; transition: opacity 1s; }
-body[data-era="modern"] .modern-world { opacity: 1; }
-body[data-era="modern"] .ancient-world { opacity: 0; }
-
-/* =====================================================
-   ОБЩИЕ РАЗДЕЛЫ
-   ===================================================== */
-.section { position: relative; padding: 100px 0; }
-.section-kicker {
-  display: flex; align-items: center; gap: 16px;
-  margin-bottom: 27px;
-}
-.section-kicker .index { color: var(--accent); font: italic 15px var(--serif); }
-.section-kicker .rule { width: 44px; height: 1px; background: var(--line-strong); }
-.section-kicker .eyebrow { color: var(--muted); font-size: 9px; }
-.section-title { font: 400 clamp(36px, 4vw, 55px)/1.12 var(--serif); letter-spacing: -.035em; }
-.section-title em { font-weight: 400; color: var(--accent); }
-.section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 35px; }
-.section-summary { max-width: 270px; font-size: 12px; line-height: 1.9; color: var(--muted); }
-.prose { color: var(--muted); font-size: 13px; line-height: 2; }
-.prose p + p { margin-top: 18px; }
-.prose strong { color: var(--text); font-weight: 500; }
-
-/* =====================================================
-   ЗАВЯЗКА: СТРАНИЦА ИЗ СЕКРЕТНОГО АРХИВА
-   ===================================================== */
-.story-section {
-  background:
-    radial-gradient(ellipse at 10% 75%, var(--glow), transparent 55%),
-    var(--bg);
-}
-.story-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 85px; }
-.story-lead .section-title { max-width: 500px; }
-.chapter-stamp {
-  display: flex; align-items: center; gap: 18px;
-  margin-top: 35px; color: var(--faint);
-}
-.stamp-ring {
-  width: 57px; height: 57px; flex-shrink: 0;
-  border: 1px solid var(--line-strong); border-radius: 50%;
-  display: grid; place-items: center;
-  outline: 1px solid var(--line);
-  outline-offset: -7px;
-  font: 24px var(--serif); color: var(--accent);
-  transform: rotate(-12deg);
-}
-.chapter-stamp p { font: 9px/1.9 var(--mono); letter-spacing: .08em; }
-.story-right { padding-top: 10px; }
-.story-quote {
-  position: relative;
-  margin-top: 30px; padding: 23px 0 0 27px;
-  border-top: 1px solid var(--line);
-  font: italic 24px/1.5 var(--serif);
-}
-.story-quote::before {
-  content: "“"; position: absolute; left: -3px; top: 11px;
-  font: 47px var(--serif); color: var(--accent);
-}
-.story-quote cite {
-  display: block; margin-top: 13px;
-  font: 8px/1.8 var(--mono); letter-spacing: .12em;
-  color: var(--faint); text-transform: uppercase;
-}
-.timeline {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  margin-top: 65px; border-top: 1px solid var(--line);
-}
-.timeline-item {
-  position: relative; padding: 28px 32px 0 0;
-}
-.timeline-item::before {
-  content: ""; position: absolute; left: 0; top: -4px;
-  width: 7px; height: 7px; background: var(--bg);
-  border: 1px solid var(--accent); transform: rotate(45deg);
-}
-.timeline-item:last-child::before { background: var(--accent); box-shadow: 0 0 16px var(--glow); }
-.timeline-item .date { font: 9px var(--mono); letter-spacing: .08em; color: var(--accent); }
-.timeline-item h3 { margin-top: 14px; font: 23px var(--serif); }
-.timeline-item p { margin-top: 11px; max-width: 300px; font-size: 12px; line-height: 1.9; color: var(--muted); }
-
-/* =====================================================
-   КАРТА
-   ===================================================== */
-.map-section { padding-top: 10px; }
-.map-frame {
-  position: relative; margin-top: 37px;
-  padding: 7px; border: 1px solid var(--line);
-  background: var(--surface);
-}
-.map-frame::before, .map-frame::after {
-  content: ""; position: absolute;
-  width: 19px; height: 19px; pointer-events: none; z-index: 3;
-}
-.map-frame::before { left: -1px; top: -1px; border-top: 1px solid var(--accent); border-left: 1px solid var(--accent); }
-.map-frame::after { right: -1px; bottom: -1px; border-bottom: 1px solid var(--accent); border-right: 1px solid var(--accent); }
-.map-grid { display: grid; grid-template-columns: 1.65fr 1fr; }
-.map {
-  min-height: 425px; position: relative; overflow: hidden;
-  background:
-    radial-gradient(ellipse at 45% 45%, var(--surface-3), var(--surface) 75%);
-}
-.map::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  box-shadow: inset 0 0 65px var(--surface);
-}
-.map-art { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--accent); }
-.map-top-label {
-  position: absolute; left: 22px; top: 20px; z-index: 2;
-  font: 8px/1.7 var(--mono); letter-spacing: .1em; color: var(--muted);
-}
-.compass { position: absolute; right: 22px; top: 20px; width: 42px; color: var(--accent); opacity: .65; z-index: 2; }
-.map-scale { position: absolute; left: 23px; bottom: 22px; z-index: 2; color: var(--faint); font: 8px var(--mono); }
-.map-scale::before {
-  content: ""; display: block; width: 75px; height: 5px;
-  border: 1px solid var(--faint); border-top: 0; margin-bottom: 8px;
-}
-.map-marker {
-  position: absolute; z-index: 3;
-  width: 37px; height: 37px;
-  display: grid; place-items: center;
-  transform: translate(-50%, -50%) rotate(45deg);
-  background: var(--surface); border: 1px solid var(--line-strong);
-  color: var(--accent);
-  box-shadow: 0 5px 22px rgba(0,0,0,.2);
-  transition: background .25s, box-shadow .25s;
-}
-.map-marker span { transform: rotate(-45deg); font: 10px var(--mono); }
-.map-marker:hover { border-color: var(--accent); box-shadow: 0 0 25px var(--glow); }
-.map-marker[aria-pressed="true"] {
-  background: var(--accent); color: var(--button-text);
-  border-color: var(--accent);
-  box-shadow: 0 0 0 6px var(--glow), 0 0 38px var(--glow);
-}
-.location-panel {
-  position: relative;
-  padding: 38px 34px;
-  border-left: 1px solid var(--line);
-  background: linear-gradient(135deg, var(--surface-2), var(--surface));
-  display: flex; flex-direction: column; align-items: flex-start;
-}
-.location-panel::after {
-  content: attr(data-number);
-  position: absolute; right: 18px; top: 14px;
-  font: 120px/.9 var(--serif); color: var(--accent); opacity: .055;
-  pointer-events: none;
-}
-.location-top { display: flex; align-items: center; gap: 10px; font: 8px var(--mono); letter-spacing: .13em; color: var(--accent); }
-.location-top::before { content: ""; width: 5px; height: 5px; background: currentColor; transform: rotate(45deg); }
-.location-panel h3 { margin-top: 38px; font: 32px/1.13 var(--serif); letter-spacing: -.02em; }
-.location-panel p { margin-top: 20px; font-size: 12px; line-height: 1.95; color: var(--muted); }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 24px; margin-top: auto; }
-.tag { padding: 7px 8px; font: 8px/1.3 var(--mono); border: 1px solid var(--line); color: var(--muted); }
-
-/* =====================================================
-   АРХИВ: ВЕЩИ, А НЕ ПЛОСКИЕ КАРТОЧКИ
-   ===================================================== */
-.archive-section {
-  padding-top: 0;
-  background: radial-gradient(ellipse at 95% 70%, var(--glow), transparent 50%);
-}
-.archive-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 38px; }
-.archive-card {
-  position: relative; display: flex; flex-direction: column;
-  width: 100%; padding: 0; text-align: left;
-  color: var(--text); border: 1px solid var(--line);
-  background: linear-gradient(155deg, var(--surface-2), var(--surface) 65%);
-  overflow: hidden;
-  transition: transform .35s, border-color .35s, box-shadow .35s;
-}
-.archive-card:hover {
-  transform: translateY(-7px);
-  border-color: var(--line-strong);
-  box-shadow: 0 20px 45px rgba(0,0,0,.14);
-}
-.archive-art {
-  position: relative; display: block; height: 205px; width: 100%;
-  background:
-    radial-gradient(ellipse at 50% 28%, var(--surface-3), transparent 70%),
-    var(--surface);
-  overflow: hidden;
-  border-bottom: 1px solid var(--line);
-}
-.archive-art::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(0deg, var(--surface), transparent 35%);
-  pointer-events: none;
-}
-.archive-art svg { width: 100%; height: 100%; color: var(--accent); transition: transform .7s; }
-.archive-card:hover .archive-art svg { transform: scale(1.055) rotate(-1deg); }
-.archive-id {
-  position: absolute; top: 16px; left: 18px;
-  font: 8px var(--mono); letter-spacing: .13em;
-  color: var(--faint); z-index: 1;
-}
-.archive-art-label {
-  position: absolute; bottom: 17px; right: 19px;
-  font: 8px var(--mono); letter-spacing: .12em;
-  color: var(--muted); z-index: 1;
-}
-.archive-content { display: flex; flex-direction: column; flex: 1; padding: 25px; }
-.archive-meta { font: 8px/1.8 var(--mono); letter-spacing: .1em; color: var(--accent); }
-.archive-title { margin-top: 13px; font: 26px/1.17 var(--serif); }
-.archive-preview { margin-top: 14px; font-size: 12px; line-height: 1.9; color: var(--muted); margin-bottom: 27px; }
-.archive-bottom {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-top: auto; padding-top: 17px; border-top: 1px solid var(--line);
-  font-size: 10px;
-}
-.archive-bottom b { font-size: 20px; font-weight: 400; color: var(--accent); }
-
-/* =====================================================
-   АРТЕФАКТ
-   ===================================================== */
-.artifact-section {
-  position: relative; overflow: hidden;
-  padding: 90px 0;
-  border-block: 1px solid var(--line);
-  background:
-    radial-gradient(ellipse at 26% 48%, var(--glow), transparent 50%),
-    linear-gradient(120deg, var(--surface), var(--bg));
-}
-.artifact-section::before {
-  content: "ВРЕМЯ";
-  position: absolute; left: -30px; bottom: -60px;
-  font: 230px var(--serif); letter-spacing: -.07em;
-  color: var(--accent); opacity: .025; pointer-events: none;
-}
-.artifact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 75px; align-items: center; }
-.artifact-visual { position: relative; min-height: 410px; display: grid; place-items: center; }
-.artifact-halo {
-  position: absolute; width: 345px; height: 345px;
-  border: 1px solid var(--line); border-radius: 50%;
-  box-shadow: 0 0 90px var(--glow), inset 0 0 80px var(--glow);
-}
-.artifact-halo::before {
-  content: ""; position: absolute; inset: 19px;
-  border: 1px dashed var(--line-strong); border-radius: 50%;
-}
-.artifact-halo::after {
-  content: ""; position: absolute; inset: -29px;
-  border: 1px solid var(--line); border-radius: 50%; opacity: .4;
-}
-.seal-svg {
-  width: 265px; height: 265px;
-  transform: rotate(-8deg);
-  filter: drop-shadow(18px 25px 15px rgba(0,0,0,.4));
-  transition: transform 1.2s, filter 1.2s;
-  z-index: 1;
-}
-body[data-era="modern"] .seal-svg { transform: rotate(12deg); filter: drop-shadow(15px 20px 15px rgba(40,30,15,.25)); }
-.seal-crack { opacity: 0; transition: opacity .8s; }
-body[data-era="modern"] .seal-crack { opacity: 1; }
-.artifact-label {
-  position: absolute; bottom: 0; left: 0;
-  color: var(--faint); font: 8px/1.9 var(--mono); letter-spacing: .12em;
-}
-.artifact-label.right { left: auto; right: 0; top: 0; bottom: auto; text-align: right; }
-.artifact-copy .prose { margin-top: 25px; max-width: 415px; }
-.artifact-switch {
-  margin-top: 27px;
-  display: inline-flex; align-items: center; gap: 24px;
-  padding: 13px 0; background: none;
-  border: 0; border-bottom: 1px solid var(--accent);
-  font-size: 11px;
-}
-.artifact-switch span:last-child { font-size: 22px; color: var(--accent); }
-.artifact-switch:hover { color: var(--accent); }
-.artifact-footnote { margin-top: 18px; font: 8px/1.8 var(--mono); color: var(--faint); max-width: 350px; }
-
-/* =====================================================
-   ФИНАЛ
-   ===================================================== */
-.closing { padding: 77px 0 60px; text-align: center; }
-.closing-symbol { width: 35px; height: 35px; margin: 0 auto 25px; color: var(--accent); }
-.closing blockquote { margin: 0; font: italic 28px/1.5 var(--serif); }
-.closing .eyebrow { margin-top: 17px; font-size: 8px; color: var(--faint); }
-.footer-inner {
-  display: flex; justify-content: space-between; gap: 20px; align-items: center;
-  border-top: 1px solid var(--line); padding: 25px 0;
-  color: var(--faint); font: 8px/1.9 var(--mono); letter-spacing: .07em;
-}
-.footer-inner a:hover { color: var(--accent); }
-
-/* =====================================================
-   ДОКУМЕНТЫ
-   ===================================================== */
-dialog {
-  width: min(720px, calc(100% - 32px));
-  max-height: 86svh;
-  border: 1px solid var(--line-strong);
-  padding: 0; color: var(--text);
-  background:
-    radial-gradient(ellipse at top right, var(--glow), transparent 55%),
-    var(--surface);
-  box-shadow: 0 35px 120px rgba(0,0,0,.5);
-}
-dialog::backdrop { background: rgba(8,6,4,.77); backdrop-filter: blur(9px); }
-.modal-inner { padding: 40px 48px 45px; }
-.modal-top { display: flex; justify-content: space-between; align-items: center; gap: 25px; padding-bottom: 25px; border-bottom: 1px solid var(--line); }
-.modal-top .eyebrow { color: var(--accent); font-size: 9px; }
-.modal-close { width: 35px; height: 35px; border: 1px solid var(--line); background: none; font-size: 24px; }
-.modal-close:hover { border-color: var(--accent); color: var(--accent); }
-.modal-title { margin-top: 32px; font: 40px/1.15 var(--serif); letter-spacing: -.03em; }
-.modal-meta { margin-top: 15px; color: var(--faint); font: 9px/1.8 var(--mono); }
-.modal-body { margin-top: 27px; font-size: 13px; line-height: 2; color: var(--muted); }
-.modal-body p + p { margin-top: 17px; }
-.modal-body strong { color: var(--text); font-weight: 500; }
-.modal-body h3 { font: 25px var(--serif); color: var(--text); margin: 28px 0 13px; }
-.modal-body blockquote {
-  margin: 25px 0; padding: 5px 0 5px 24px;
-  border-left: 1px solid var(--accent);
-  color: var(--text); font: italic 23px/1.6 var(--serif);
-}
-.modal-body ul { padding-left: 20px; }
-.modal-foot { margin-top: 33px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--faint); font: 8px/1.8 var(--mono); letter-spacing: .12em; }
-
-body.motion-off .hero-rays { animation-play-state: paused; }
-
-/* =====================================================
-   АДАПТИВНОСТЬ
-   ===================================================== */
-@media (min-width: 1800px) {
-  .hero { min-height: 940px; }
-  .hero-content { padding-top: 165px; }
-}
-@media (max-width: 1100px) {
-  .container { width: calc(100% - 56px); }
-  .header-nav a { display: none; }
-  .era-tab { min-width: 151px; padding-inline: 12px; }
-  .brand span { font-size: 9px; }
-  .hero h1 { font-size: 85px; }
-  .scene-caption { right: 4%; bottom: 185px; }
-  .scene-caption p { font-size: 17px; }
-  .story-layout { gap: 50px; }
-  .location-panel { padding: 32px 26px; }
-  .artifact-grid { gap: 45px; }
-}
-@media (max-width: 800px) {
-  html { scroll-padding-top: 155px; }
-  .container { width: calc(100% - 40px); }
-  .header-inner { grid-template-columns: 1fr auto; padding: 14px 0 12px; gap: 12px; }
-  .brand svg { width: 26px; height: 33px; }
-  .brand span { font-size: 8px; }
-  .era-tabs { grid-column: 1 / -1; grid-row: 2; }
-  .era-tab { flex: 1; min-width: 0; padding: 9px 12px; }
-  .era-tab strong { font-size: 10px; }
-  .era-tab small { font-size: 8px; }
-  .header-nav { grid-column: 2; grid-row: 1; }
-  .hero { min-height: 735px; }
-  .hero-content { padding-top: 110px; padding-bottom: 205px; }
-  .hero h1 { font-size: clamp(60px, 10vw, 82px); }
-  .hero-description { max-width: 325px; }
-  .landscape { left: -20%; width: 130%; }
-  .hero-shade { background: linear-gradient(90deg, var(--hero-veil), transparent 100%), linear-gradient(0deg, var(--bg), transparent 45%); }
-  .scene-caption { display: none; }
-  .hero-coordinate { top: 25px; font-size: 8px; }
-  .hero-bottom { grid-template-columns: 1fr auto; min-height: 90px; gap: 18px; }
-  .scroll-cue { display: none; }
-  .hero-chapter { gap: 13px; }
-  .hero-chapter strong { font-size: 12px; }
-  .section { padding: 65px 0; }
-  .story-layout { grid-template-columns: 1fr; gap: 33px; }
-  .story-lead .section-title { max-width: none; }
-  .chapter-stamp { margin-top: 24px; }
-  .story-right { padding-top: 0; }
-  .timeline { margin-top: 40px; }
-  .timeline-item { padding-right: 20px; }
-  .timeline-item h3 { font-size: 20px; }
-  .map-section { padding-top: 5px; }
-  .map-grid { grid-template-columns: 1fr; }
-  .map { min-height: 390px; }
-  .location-panel { min-height: 280px; border-left: 0; border-top: 1px solid var(--line); }
-  .location-panel h3 { margin-top: 24px; }
-  .location-panel p { max-width: 560px; }
-  .archive-section { padding-top: 0; }
-  .archive-grid { gap: 14px; }
-  .archive-art { height: 160px; }
-  .archive-content { padding: 20px 17px; }
-  .archive-title { font-size: 22px; }
-  .archive-preview { font-size: 11px; }
-  .archive-meta { font-size: 7px; }
-  .artifact-section { padding: 65px 0; }
-  .artifact-grid { gap: 35px; }
-  .artifact-visual { min-height: 330px; }
-  .artifact-halo { width: 245px; height: 245px; }
-  .seal-svg { width: 205px; height: 205px; }
-  .artifact-label { font-size: 7px; }
-  .artifact-copy .section-title { font-size: 37px; }
-}
-@media (max-width: 540px) {
-  .hero { min-height: 730px; }
-  .hero h1 { font-size: clamp(56px, 13.2vw, 73px); }
-  .hero-kicker { font-size: 8px; gap: 10px; margin-bottom: 25px; }
-  .hero-content { padding-top: 112px; }
-  .hero-description { max-width: 295px; font-size: 12px; }
-  .hero-coordinate .right { max-width: 128px; }
-  .landscape { width: 195%; left: -65%; }
-  .hero-shade {
-    background:
-      linear-gradient(90deg, var(--hero-veil), transparent 145%),
-      linear-gradient(0deg, var(--bg), transparent 40%);
+    --serif: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    --mono: "Courier New", Courier, monospace;
+    --sans: Arial, sans-serif;
   }
-  .hero-actions { gap: 19px; }
-  .button { padding: 14px 17px; gap: 19px; font-size: 10px; }
-  .quiet-link { font-size: 10px; gap: 8px; }
-  .hero-chapter strong { max-width: 170px; display: block; line-height: 1.4; }
-  .hero-chapter small { font-size: 7px; }
-  .chapter-roman { font-size: 35px; }
-  .motion-toggle { font-size: 8px; gap: 7px; }
-  .section-title { font-size: 38px; }
-  .section-head { display: block; }
-  .section-summary { margin-top: 20px; max-width: 300px; }
-  .timeline { grid-template-columns: 1fr; border-top: 0; gap: 25px; }
-  .timeline-item { padding: 0 0 0 21px; border-left: 1px solid var(--line); }
-  .timeline-item::before { left: -4px; top: 2px; }
-  .timeline-item h3 { margin-top: 9px; }
-  .timeline-item p { margin-top: 7px; max-width: none; }
-  .map { min-height: 315px; }
-  .map-marker { width: 31px; height: 31px; }
-  .map-top-label { max-width: 190px; font-size: 7px; left: 16px; }
-  .compass { width: 32px; right: 15px; }
-  .location-panel { padding: 28px 23px; }
-  .location-panel h3 { font-size: 30px; }
-  .archive-grid { grid-template-columns: 1fr; gap: 22px; }
-  .archive-art { height: 205px; }
-  .archive-content { padding: 25px; }
-  .archive-title { font-size: 28px; }
-  .archive-preview { font-size: 12px; }
-  .archive-meta { font-size: 8px; }
-  .artifact-grid { grid-template-columns: 1fr; gap: 40px; }
-  .artifact-visual { min-height: 365px; }
-  .artifact-halo { width: 290px; height: 290px; }
-  .seal-svg { width: 233px; height: 233px; }
-  .artifact-label { font-size: 7px; }
-  .closing { padding: 55px 0 45px; }
-  .closing blockquote { font-size: 23px; }
-  .footer-center { display: none; }
-  .footer-inner { align-items: flex-start; font-size: 7px; }
-  .modal-inner { padding: 25px; }
-  .modal-title { font-size: 33px; }
-  .modal-body blockquote { font-size: 21px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-}
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+
+  html {
+    scroll-padding-top: 90px;
+    scrollbar-color: #806947 var(--ground);
+  }
+
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--serif);
+    line-height: 1.8;
+  }
+
+  button, a { -webkit-tap-highlight-color: transparent; }
+  button { font: inherit; }
+  a { color: inherit; }
+
+  button:focus-visible, a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 5px;
+  }
+
+  ::selection {
+    background: #675035;
+    color: #fff2d7;
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    pointer-events: none;
+    opacity: .065;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' filter='url(%23n)' opacity='.7' d='M0 0h160v160H0z'/%3E%3C/svg%3E");
+  }
+
+  .vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 79;
+    pointer-events: none;
+    opacity: calc(var(--damage) * .65);
+    background: radial-gradient(
+      ellipse at 55% 45%,
+      transparent 35%,
+      rgba(12, 8, 3, .65)
+    );
+  }
+
+  .skip {
+    position: fixed;
+    top: -100px;
+    left: 16px;
+    padding: 8px 16px;
+    z-index: 110;
+    background: var(--paper);
+  }
+
+  .skip:focus { top: 12px; }
+
+  .micro {
+    font-family: var(--sans);
+    font-size: 9px;
+    font-weight: normal;
+    line-height: 1.6;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+
+  /* Верхняя панель */
+
+  .topbar {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    height: 62px;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    color: var(--ui);
+    background: var(--ground);
+    border-bottom: 1px solid var(--ui-line);
+  }
+
+  .brand {
+    display: flex;
+    gap: 13px;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .brand-cross {
+    font-size: 25px;
+    line-height: 1;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .control {
+    min-height: 34px;
+    padding: 6px 11px;
+    background: transparent;
+    border: 1px solid var(--ui-line);
+    color: inherit;
+    font-family: var(--sans);
+    font-size: 10px;
+    cursor: pointer;
+  }
+
+  .control:hover {
+    background: rgba(128, 104, 66, .1);
+  }
+
+  .control[aria-pressed="true"]::before {
+    content: "●";
+    margin-right: 6px;
+    font-size: 7px;
+  }
+
+  .progress {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--ui);
+    transform: scaleX(var(--read));
+    transform-origin: left;
+  }
+
+  /* Общая компоновка */
+
+  .layout {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 830px);
+    gap: 62px;
+    width: min(1110px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 112px 0 60px;
+    align-items: start;
+  }
+
+  .index {
+    position: sticky;
+    top: 103px;
+    color: var(--ui);
+  }
+
+  .index-title {
+    margin: 0 0 23px;
+    opacity: .75;
+  }
+
+  .index nav {
+    display: grid;
+    gap: 3px;
+  }
+
+  .index a {
+    display: flex;
+    align-items: baseline;
+    gap: 13px;
+    padding: 7px 0;
+    text-decoration: none;
+    font-size: 12px;
+    opacity: .65;
+  }
+
+  .index a b {
+    width: 27px;
+    font-size: 11px;
+    font-weight: normal;
+  }
+
+  .index a[aria-current="location"] {
+    opacity: 1;
+  }
+
+  .index a[aria-current="location"] span {
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
+
+  .preservation {
+    margin-top: 29px;
+    padding-top: 20px;
+    border-top: 1px solid var(--ui-line);
+  }
+
+  .preservation-line {
+    height: 2px;
+    margin: 13px 0;
+    background: var(--ui-line);
+  }
+
+  .preservation-line i {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--ui);
+    transform: scaleX(calc(1 - var(--damage) * .94));
+    transform-origin: left;
+  }
+
+  .condition {
+    font-family: var(--mono);
+    font-size: 10px;
+  }
+
+  .aside-quote {
+    margin: 31px 0 0;
+    max-width: 145px;
+    font-size: 13px;
+    line-height: 1.7;
+    font-style: italic;
+    opacity: .7;
+  }
+
+  main { min-width: 0; }
+
+  .manuscript {
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* Материал */
+
+  .leaf, .fragment, .note, .contact-sheet {
+    position: relative;
+    background-color: var(--paper);
+    background-image:
+      radial-gradient(
+        ellipse at 0 0,
+        rgba(114, 80, 35, .07),
+        transparent 55%
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 3px,
+        rgba(80, 55, 23, .012) 3px 4px
+      );
+  }
+
+  .leaf {
+    border: 1px solid var(--line);
+    box-shadow:
+      0 14px 65px rgba(42, 29, 11, .1),
+      6px 6px 0 -1px var(--ground),
+      6px 6px 0 0 var(--ui-line);
+  }
+
+  .leaf::before {
+    content: "";
+    position: absolute;
+    inset: 11px;
+    pointer-events: none;
+    border: 1px solid var(--line);
+    opacity: .6;
+  }
+
+  /* Откусанный край: проявляется по мере разрушения. */
+
+  .leaf::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: -1px;
+    right: -1px;
+    height: calc(var(--damage) * 26px);
+    background: var(--void);
+    pointer-events: none;
+    clip-path: polygon(
+      0 35%, 3% 49%, 7% 13%, 11% 61%, 15% 35%,
+      20% 74%, 23% 19%, 28% 54%, 33% 36%, 37% 78%,
+      42% 31%, 47% 47%, 52% 4%, 56% 56%, 60% 29%,
+      66% 69%, 71% 27%, 76% 53%, 82% 18%, 86% 65%,
+      91% 36%, 95% 59%, 100% 20%, 100% 100%, 0 100%
+    );
+  }
+
+  /* Обложка */
+
+  .cover {
+    position: relative;
+    padding: 40px 50px 35px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .archive-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 21px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 170px;
+    gap: 28px;
+    align-items: center;
+    margin: 37px 0 30px;
+  }
+
+  .eyebrow {
+    margin: 0 0 21px;
+    color: var(--muted);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(46px, 6vw, 78px);
+    font-weight: normal;
+    line-height: 1.03;
+    letter-spacing: -.06em;
+  }
+
+  h1 em {
+    display: block;
+    padding-top: 7px;
+    font-weight: normal;
+  }
+
+  .subtitle {
+    max-width: 290px;
+    margin: 24px 0 0;
+    font-size: 15px;
+    line-height: 1.7;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  .icon {
+    width: 100%;
+    color: #80653f;
+    transform: rotate(calc(var(--damage) * 3deg));
+  }
+
+  .icon .halo {
+    transform-origin: 100px 111px;
+    transform: translateY(calc(var(--damage) * -9px));
+  }
+
+  .cover-quote {
+    margin: 0;
+    padding-top: 23px;
+    text-align: center;
+    border-top: 1px solid var(--line);
+  }
+
+  .cover-quote p {
+    margin: 0 0 7px;
+    font-size: 19px;
+    font-style: italic;
+  }
+
+  cite {
+    display: block;
+    font-family: var(--sans);
+    font-size: 9px;
+    font-style: normal;
+    line-height: 1.6;
+    letter-spacing: .08em;
+    color: var(--muted);
+  }
+
+  .warning {
+    margin: 21px 0 0;
+    font-family: var(--sans);
+    font-size: 9px;
+    line-height: 1.8;
+    text-align: center;
+    color: var(--muted);
+  }
+
+  .cover-stamp {
+    position: absolute;
+    top: 99px;
+    right: 31px;
+    z-index: 2;
+    padding: 7px 12px;
+    border: 2px double #5b4226;
+    color: #5b4226;
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    transform: rotate(-13deg);
+    opacity: calc(var(--damage) * .65);
+    pointer-events: none;
+  }
+
+  /* Поля анкеты */
+
+  .entry {
+    position: relative;
+    padding: 33px 50px;
+    scroll-margin-top: 88px;
+  }
+
+  .entry + .entry {
+    border-top: 1px solid var(--line);
+  }
+
+  .entry-head {
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+    margin-bottom: 19px;
+  }
+
+  .roman {
+    min-width: 29px;
+    color: var(--muted);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: normal;
+    line-height: 1.25;
+    letter-spacing: -.025em;
+  }
+
+  p { margin: 0 0 16px; }
+  p:last-child { margin-bottom: 0; }
+
+  .entry p, .fragment p {
+    font-size: 16px;
+    line-height: 1.85;
+  }
+
+  .lead {
+    font-size: 22px !important;
+    line-height: 1.5 !important;
+  }
+
+  .small {
+    color: var(--muted);
+    font-size: 13px !important;
+  }
+
+  .verse {
+    margin: 23px 0 0;
+    padding: 2px 0 2px 16px;
+    border-left: 1px solid #9c835b;
+  }
+
+  .verse p {
+    margin: 0 0 7px;
+    color: var(--muted);
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pair .entry + .entry {
+    border-top: 0;
+    border-left: 1px solid var(--line);
+  }
+
+  .pair h2 { font-size: 25px; }
+
+  .field-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: .06em;
+  }
+
+  .displaced .entry-content {
+    transform:
+      translateX(calc(var(--damage) * 4px))
+      rotate(calc(var(--damage) * -.35deg));
+  }
+
+  .personality .entry-content {
+    transform:
+      translateX(calc(var(--damage) * -5px))
+      rotate(calc(var(--damage) * .55deg));
+  }
+
+  .hand {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: normal;
+  }
+
+  .intrusion {
+    opacity: var(--damage);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .margin-order {
+    position: absolute;
+    top: 65px;
+    right: 9px;
+    writing-mode: vertical-rl;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .14em;
+    color: #695031;
+  }
+
+  .correction {
+    position: relative;
+    display: inline-block;
+  }
+
+  .correction::after {
+    content: "";
+    position: absolute;
+    left: -3px;
+    right: -3px;
+    top: 54%;
+    height: 2px;
+    background: #4b351d;
+    transform: rotate(-5deg) scaleX(var(--damage));
+    transform-origin: left;
+  }
+
+  .written-over {
+    margin: 19px 0 22px;
+    padding-left: 24%;
+    font-size: 21px;
+    line-height: 1.4;
+    transform: rotate(calc(var(--damage) * -3deg));
+    color: #5e4325;
+  }
+
+  .trait-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 19px;
+    margin: 0 0 20px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 10px;
+  }
+
+  .trait-line span::before {
+    content: "+";
+    margin-right: 6px;
+  }
+
+  .double-rule {
+    position: relative;
+    height: 20px;
+    margin: 18px 0;
+  }
+
+  .double-rule::before, .double-rule::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .double-rule::after {
+    transform:
+      translateY(calc(var(--damage) * 5px))
+      rotate(calc(var(--damage) * -1.5deg));
+    transform-origin: left;
+  }
+
+  .proof {
+    position: relative;
+    padding: 15px 18px;
+    border: 1px solid var(--line);
+    margin: 21px 0;
+  }
+
+  .proof-label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+  }
+
+  .proof del {
+    text-decoration-thickness: 1px;
+    color: var(--muted);
+  }
+
+  .proof ins {
+    display: block;
+    margin-top: 5px;
+    text-decoration: none;
+    font-style: italic;
+    font-size: 20px;
+    transform: rotate(calc(var(--damage) * -.9deg));
+  }
+
+  /* VII. Здесь кончается целый лист */
+
+  .rupture {
+    position: relative;
+    isolation: isolate;
+    padding: 45px 32px 35px;
+    background: var(--void);
+    color: var(--loss-ink);
+    scroll-margin-top: 85px;
+  }
+
+  .rupture::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--damage);
+    background:
+      radial-gradient(
+        ellipse at 48% 30%,
+        rgba(123, 90, 46, .08),
+        transparent 58%
+      ),
+      linear-gradient(
+        93deg,
+        transparent 49.7%,
+        rgba(222, 193, 145, .06) 49.9%,
+        transparent 50.2%
+      );
+  }
+
+  .rupture-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 0 18px;
+  }
+
+  .rupture .roman {
+    color: inherit;
+    transform: rotate(calc(var(--damage) * -9deg));
+  }
+
+  .rupture h2 {
+    font-size: clamp(33px, 5vw, 50px);
+    line-height: 1.25;
+  }
+
+  .split-word {
+    display: inline-block;
+    transform:
+      translate(
+        calc(var(--damage) * 7px),
+        calc(var(--damage) * 9px)
+      )
+      rotate(calc(var(--damage) * 3deg));
+  }
+
+  .loss-caption {
+    margin: 18px 18px 35px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    opacity: .75;
+  }
+
+  .fracture-line {
+    position: absolute;
+    inset: 95px 0 25px auto;
+    width: 100px;
+    height: calc(100% - 120px);
+    opacity: calc(var(--damage) * .4);
+    pointer-events: none;
+    color: #aa8650;
+  }
+
+  .fragment {
+    z-index: 1;
+    margin: 0 0 34px;
+    padding: 31px 33px 39px;
+    color: var(--ink);
+    border: 1px solid rgba(82, 58, 27, .2);
+    box-shadow:
+      0 calc(var(--damage) * 12px)
+      calc(var(--damage) * 22px)
+      rgba(0, 0, 0, .28);
+  }
+
+  .fragment::after, .note::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: -1px;
+    right: -1px;
+    height: calc(var(--damage) * 12px);
+    background: var(--void);
+    clip-path: polygon(
+      0 48%, 4% 21%, 9% 60%, 15% 35%, 21% 75%,
+      28% 20%, 35% 55%, 41% 33%, 48% 74%, 55% 38%,
+      61% 66%, 68% 19%, 74% 52%, 81% 31%, 88% 72%,
+      94% 25%, 100% 50%, 100% 100%, 0 100%
+    );
+    pointer-events: none;
+  }
+
+  .fragment-one {
+    width: 93%;
+    transform:
+      translateX(calc(var(--damage) * var(--shift) * -1))
+      rotate(calc(var(--damage) * -1.7deg));
+  }
+
+  .fragment-two {
+    width: 93%;
+    margin-left: auto;
+    background-color: var(--paper-alt);
+    transform:
+      translateX(calc(var(--damage) * var(--shift)))
+      rotate(calc(var(--damage) * 1.4deg));
+  }
+
+  .fragment-three {
+    width: 95%;
+    transform:
+      translateX(calc(var(--damage) * -5px))
+      rotate(calc(var(--damage) * -.8deg));
+  }
+
+  .fragment-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 15px;
+    padding-bottom: 13px;
+    margin-bottom: 19px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 1.6;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .paper-number {
+    flex-shrink: 0;
+    font-family: var(--serif);
+    font-size: 20px;
+    font-style: italic;
+  }
+
+  .foreign-voice {
+    margin: 21px 0;
+    padding: 14px 0 14px 17px;
+    border-left: 3px solid #765735;
+  }
+
+  .foreign-voice .micro {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 8px;
+    color: var(--muted);
+  }
+
+  .foreign-voice p {
+    font-size: 20px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .fragment .verse { margin-top: 20px; }
+
+  .staple {
+    position: absolute;
+    width: 40px;
+    height: 8px;
+    top: -4px;
+    right: 42px;
+    border: 1px solid #6e5b3c;
+    border-radius: 6px;
+    background: rgba(115, 91, 54, .12);
+    transform: rotate(-8deg);
+    box-shadow: 0 2px 3px rgba(36, 24, 9, .2);
+  }
+
+  .blank-space {
+    position: relative;
+    margin: 18px 0 37px;
+    padding: 29px 16px 34px;
+    border-top: 1px solid rgba(157, 125, 77, .25);
+    border-bottom: 1px solid rgba(157, 125, 77, .25);
+  }
+
+  .blank-space > .micro {
+    margin-bottom: 25px;
+    opacity: .6;
+  }
+
+  .abyss-quote {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+  }
+
+  .abyss-quote p {
+    font-size: clamp(28px, 4.8vw, 45px);
+    font-style: italic;
+    letter-spacing: -.03em;
+    line-height: 1.35;
+  }
+
+  .abyss-quote .line {
+    display: block;
+  }
+
+  .abyss-quote .line:nth-child(2) {
+    padding-left: 9%;
+    transform: rotate(calc(var(--damage) * -1deg));
+  }
+
+  .abyss-quote .line:nth-child(3) {
+    padding-left: 21%;
+    transform:
+      translateY(calc(var(--damage) * 7px))
+      rotate(calc(var(--damage) * 1.8deg));
+  }
+
+  .abyss-quote cite {
+    margin-top: 23px;
+    color: inherit;
+    opacity: .65;
+  }
+
+  .prayer-ghost {
+    position: absolute;
+    right: 8px;
+    bottom: 48px;
+    z-index: 0;
+    font-size: clamp(38px, 8vw, 85px);
+    line-height: 1;
+    letter-spacing: -.06em;
+    font-style: italic;
+    opacity: calc(var(--damage) * .06);
+    transform: rotate(-6deg);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .confession {
+    margin: 29px 9px 13px;
+    padding-left: 19px;
+    border-left: 1px solid #8e7047;
+    font-size: 23px;
+    line-height: 1.5;
+    font-style: italic;
+    transform: rotate(calc(var(--damage) * -.6deg));
+  }
+
+  .confession small {
+    display: block;
+    margin-top: 13px;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-style: normal;
+    letter-spacing: .06em;
+    opacity: .65;
+  }
+
+  /* VIII. От анкеты остаются отдельные полосы */
+
+  .remains {
+    position: relative;
+    padding: 25px 32px 38px;
+    background: var(--void);
+    color: var(--loss-ink);
+    scroll-margin-top: 88px;
+  }
+
+  .remains .entry-head {
+    padding: 0 18px;
+    margin-bottom: 27px;
+  }
+
+  .remains .roman { color: inherit; }
+
+  .notes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: notes;
+  }
+
+  .note {
+    margin: 0 0 17px;
+    padding: 19px 27px 22px 57px;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.8;
+    counter-increment: notes;
+    transform:
+      translateX(calc(var(--damage) * -8px))
+      rotate(calc(var(--damage) * -.7deg));
+  }
+
+  .note::before {
+    content: "0" counter(notes);
+    position: absolute;
+    left: 22px;
+    top: 23px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .note:nth-child(even) {
+    margin-left: 17px;
+    background-color: var(--paper-alt);
+    transform:
+      translateX(calc(var(--damage) * 7px))
+      rotate(calc(var(--damage) * 1deg));
+  }
+
+  .note:last-child {
+    width: 89%;
+    margin: 25px auto 0;
+    font-style: italic;
+  }
+
+  /* IX. Последний сохранившийся угол */
+
+  .contact-area {
+    padding: 9px 32px 35px;
+    background: var(--void);
+    scroll-margin-top: 88px;
+  }
+
+  .contact-sheet {
+    padding: 29px 32px;
+    border: 1px solid var(--line);
+    transform:
+      translateX(calc(var(--damage) * 7px))
+      rotate(calc(var(--damage) * -.9deg));
+  }
+
+  .contact-sheet::after {
+    content: "";
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: calc(var(--damage) * 47px);
+    height: calc(var(--damage) * 47px);
+    background: linear-gradient(
+      135deg,
+      #ad9368 0 49%,
+      var(--void) 51% 100%
+    );
+  }
+
+  .username {
+    font-size: 25px;
+    font-style: italic;
+    text-underline-offset: 7px;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+
+  .ending {
+    padding: 17px 35px 42px;
+    background: var(--void);
+    color: var(--loss-ink);
+    text-align: center;
+  }
+
+  .ending-cross {
+    display: block;
+    margin-bottom: 16px;
+    font-size: 29px;
+    opacity: .7;
+    transform: rotate(calc(var(--damage) * 7deg));
+  }
+
+  .ending blockquote { margin: 0; }
+
+  .ending blockquote p {
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .ending cite {
+    margin-top: 12px;
+    color: inherit;
+    opacity: .6;
+  }
+
+  .last-line {
+    margin-top: 35px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .08em;
+    opacity: .65;
+  }
+
+  .outside-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 23px 2px 0;
+    color: var(--ui);
+    font-family: var(--sans);
+    font-size: 9px;
+    line-height: 1.7;
+  }
+
+  .outside-footer a { text-underline-offset: 4px; }
+
+  /* Режим чтения без визуального разрушения */
+
+  body.calm .intrusion,
+  body.calm .vignette,
+  body.calm .cover-stamp,
+  body.calm .prayer-ghost,
+  body.calm .fracture-line {
+    display: none;
+  }
+
+  /* Планшеты и телефоны */
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 125px minmax(0, 1fr);
+      gap: 30px;
+      width: calc(100% - 40px);
+    }
+
+    .cover, .entry { padding-left: 35px; padding-right: 35px; }
+    .hero-grid { grid-template-columns: minmax(0, 1fr) 125px; }
+    h1 { font-size: 57px; }
+  }
+
+  @media (max-width: 700px) {
+    :root { --shift: 8px; }
+
+    html { scroll-padding-top: 130px; }
+
+    .topbar { padding: 0 15px; }
+    .brand .micro { font-size: 8px; letter-spacing: .1em; }
+    .brand-cross { font-size: 22px; }
+    .brand { gap: 8px; }
+    .controls { gap: 5px; }
+    .control { padding: 6px 8px; font-size: 9px; }
+
+    .layout {
+      display: block;
+      width: calc(100% - 28px);
+      padding-top: 82px;
+    }
+
+    .index {
+      position: sticky;
+      top: 62px;
+      z-index: 70;
+      margin: -20px -14px 22px;
+      padding: 8px 14px;
+      background: var(--ground);
+      border-bottom: 1px solid var(--ui-line);
+    }
+
+    .index nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+    }
+
+    .index a {
+      min-width: 28px;
+      min-height: 36px;
+      justify-content: center;
+      padding: 5px 3px;
+    }
+
+    .index a b { width: auto; }
+    .index a span { display: none; }
+
+    .index a[aria-current="location"] {
+      border-bottom: 1px solid currentColor;
+    }
+
+    .index-title, .preservation, .aside-quote { display: none; }
+
+    .entry, .rupture, .remains, .contact-area {
+      scroll-margin-top: 126px;
+    }
+
+    .cover, .entry { padding-left: 28px; padding-right: 28px; }
+    .hero-grid { grid-template-columns: minmax(0, 1fr) 130px; }
+    h1 { font-size: 62px; }
+
+    .rupture, .remains { padding-left: 22px; padding-right: 22px; }
+    .contact-area { padding-left: 22px; padding-right: 22px; }
+
+    .fragment { padding-left: 25px; padding-right: 25px; }
+  }
+
+  @media (max-width: 440px) {
+    .brand .micro span { display: none; }
+
+    .cover { padding: 29px 24px; }
+    .archive-line { font-size: 8px; letter-spacing: .08em; }
+    .hero-grid {
+      grid-template-columns: minmax(0, 1fr) 76px;
+      gap: 12px;
+      margin-top: 29px;
+    }
+
+    h1 { font-size: 42px; }
+    .eyebrow { font-size: 8px; letter-spacing: .12em; }
+    .subtitle { font-size: 13px; }
+    .cover-quote p { font-size: 17px; }
+    .cover-stamp { top: 84px; right: 19px; font-size: 7px; }
+
+    .entry { padding: 28px 25px; }
+    .entry-head { gap: 8px; }
+    h2 { font-size: 25px; }
+
+    .pair { grid-template-columns: 1fr; }
+    .pair .entry + .entry {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .entry p, .fragment p { font-size: 15px; }
+    .entry .verse p, .fragment .verse p { font-size: 13px; }
+
+    .margin-order { right: 4px; font-size: 8px; }
+    .written-over { padding-left: 10%; font-size: 19px; }
+
+    .rupture { padding-top: 35px; }
+    .rupture-head { padding: 0 2px; gap: 8px; }
+    .rupture h2 { font-size: 32px; }
+    .loss-caption { margin-left: 3px; font-size: 8px; }
+
+    .fragment {
+      padding: 23px 20px 31px;
+      width: 97%;
+    }
+
+    .fragment-top { font-size: 8px; gap: 9px; }
+    .foreign-voice p { font-size: 18px; }
+
+    .blank-space { padding-left: 3px; padding-right: 3px; }
+    .abyss-quote p { font-size: 29px; }
+
+    .confession { margin-left: 0; font-size: 20px; }
+
+    .remains .entry-head { padding: 0 3px; }
+    .note {
+      padding: 17px 17px 23px 43px;
+      font-size: 13px;
+    }
+
+    .note::before { left: 16px; top: 20px; }
+    .note:nth-child(even) { margin-left: 6px; }
+    .note:last-child { width: 96%; }
+
+    .contact-sheet { padding: 25px 22px; }
+    .username { font-size: 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .icon, .icon .halo,
+    .entry-content, .written-over, .proof ins,
+    .rupture .roman, .split-word,
+    .fragment, .abyss-quote .line,
+    .confession, .note, .contact-sheet, .ending-cross {
+      transform: none !important;
+    }
+  }
+
+  @media print {
+    :root {
+      --ground: white !important;
+      --paper: white !important;
+      --paper-alt: white !important;
+      --void: white !important;
+      --ink: #222 !important;
+      --muted: #555 !important;
+      --loss-ink: #222 !important;
+      --damage: 0 !important;
+    }
+
+    .topbar, .index, .grain, .vignette,
+    .intrusion, .fracture-line, .cover-stamp,
+    .prayer-ghost, .outside-footer {
+      display: none !important;
+    }
+
+    .layout {
+      display: block;
+      width: 100%;
+      padding: 0;
+    }
+
+    .leaf, .fragment { box-shadow: none; }
+    .entry, .fragment, .note { break-inside: avoid; }
+  }
 </style>
 </head>
 
-<body data-era="ancient">
-<a class="skip" href="#story">Перейти к сюжету</a>
+<body id="top">
+<a class="skip" href="#name">Перейти к анкете</a>
 
-<!-- Общие векторные материалы -->
-<svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <defs>
-    <radialGradient id="seal-metal" cx=".32" cy=".23" r=".83">
-      <stop offset="0" stop-color="#d6a365"/>
-      <stop offset=".36" stop-color="#ad783e"/>
-      <stop offset=".73" stop-color="#75502d"/>
-      <stop offset="1" stop-color="#3c291b"/>
-    </radialGradient>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
 
-    <linearGradient id="seal-rim" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#f0c389"/>
-      <stop offset=".45" stop-color="#987044"/>
-      <stop offset="1" stop-color="#35241a"/>
-    </linearGradient>
+<header class="topbar">
+  <a class="brand" href="#top" aria-label="В начало">
+    <span class="brand-cross" aria-hidden="true">✝</span>
+    <span class="micro">Личное свидетельство <span>/ № 017</span></span>
+  </a>
 
-    <filter id="stone-texture" x="-5%" y="-5%" width="110%" height="110%">
-      <feTurbulence type="fractalNoise" baseFrequency=".12" numOctaves="3" seed="8" result="noise"/>
-      <feColorMatrix in="noise" type="saturate" values="0" result="gray"/>
-      <feComponentTransfer in="gray" result="soft-noise">
-        <feFuncA type="linear" slope=".24"/>
-      </feComponentTransfer>
-      <feBlend in="SourceGraphic" in2="soft-noise" mode="soft-light" result="textured"/>
-      <feComposite in="textured" in2="SourceGraphic" operator="in"/>
-    </filter>
+  <div class="controls" id="controls" hidden>
+    <button
+      class="control"
+      id="effects"
+      type="button"
+      aria-label="Визуальное разрушение"
+      aria-pressed="true"
+    >Искажения</button>
 
-    <symbol id="seal-symbol" viewBox="0 0 300 300">
-      <g filter="url(#stone-texture)">
-        <path d="M150 13C225 11 285 73 287 148C289 225 231 285 153 288C78 289 13 231 12 153C10 77 72 15 150 13Z"
-              fill="url(#seal-metal)" stroke="url(#seal-rim)" stroke-width="5"/>
-        <circle cx="150" cy="150" r="120" fill="none" stroke="#3c2818" stroke-width="3"/>
-        <circle cx="149" cy="148" r="116" fill="none" stroke="#e4b879" stroke-opacity=".43"/>
-        <circle cx="150" cy="150" r="105" fill="none" stroke="#332317" stroke-width="1.5"/>
-        <circle cx="149" cy="148" r="103" fill="none" stroke="#e0b174" stroke-opacity=".26"/>
-        <g fill="none" stroke="#392719" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="150" cy="87" r="20" stroke-width="3"/>
-          <path d="M150 55v-8M124 66l-7-7M176 66l7-7M116 87h-8M184 87h8" stroke-width="2"/>
-          <path d="M84 147q64-57 132 0-67 45-132 0Z" stroke-width="5"/>
-          <path d="M84 134q38-39 78-18M216 147l17-8" stroke-width="3"/>
-          <ellipse cx="151" cy="146" rx="13" ry="18" fill="#392719" stroke="none"/>
-          <path d="M133 168v34l-19 17M167 165q8 31 34 24-5 26-24 18" stroke-width="4"/>
-          <path d="M112 239h74M124 247h48" stroke-width="3"/>
-          <path d="M57 108l10 4M53 143h11M58 178l10-4M72 207l9-7M233 108l10-4M238 143h10M232 178l10 4M220 207l9 7" stroke-width="2"/>
-        </g>
-        <g stroke="#e9bd7f" fill="none" opacity=".27" stroke-width="1.3">
-          <path d="M85 143q64-55 130 0M134 169v32l-18 17M168 167q9 30 33 21"/>
-          <circle cx="149" cy="85" r="20"/>
-        </g>
-        <g fill="#352318" opacity=".3">
-          <circle cx="94" cy="84" r="3"/><circle cx="219" cy="212" r="4"/>
-          <circle cx="97" cy="210" r="2"/><circle cx="204" cy="70" r="2"/>
-          <circle cx="245" cy="164" r="3"/><circle cx="73" cy="239" r="3"/>
-          <circle cx="114" cy="54" r="2"/><circle cx="184" cy="257" r="2"/>
-        </g>
-      </g>
-    </symbol>
-
-    <symbol id="art-paper" viewBox="0 0 380 220">
-      <ellipse cx="199" cy="180" rx="100" ry="13" fill="#000" opacity=".18"/>
-      <g transform="rotate(-9 190 110)">
-        <path d="M119 29h149v169H119Z" fill="#000" opacity=".18" transform="translate(7 9)"/>
-        <path d="m116 24 146 3-2 164-143 4-4-64 4-65Z" fill="var(--paper)" filter="url(#stone-texture)"/>
-        <g stroke="var(--paper-ink)" opacity=".62">
-          <path d="M133 49h58M133 56h39" stroke-width="1.5"/>
-          <path d="M133 78h107M133 88h95M133 98h109M133 108h88M133 118h103M133 128h62" stroke-width="1"/>
-          <path d="m181 162 9-11 4 13 10-20 4 18 11-11 9 3"/>
-          <circle cx="145" cy="157" r="12"/>
-          <circle cx="145" cy="157" r="9"/>
-        </g>
-        <path d="M193 29v158" stroke="#fff" opacity=".1"/>
-        <path d="M117 135h144" stroke="#563d25" opacity=".15"/>
-      </g>
-      <path d="m288 59-42 132" stroke="#201710" stroke-width="5"/>
-      <path d="m289 58-42 131" stroke="#ba8c51" stroke-width="2"/>
-    </symbol>
-
-    <symbol id="art-door" viewBox="0 0 380 220">
-      <path d="M64 210V15h252v195" fill="var(--stone-dark)"/>
-      <path d="M97 210V39h186v171" fill="#16100c"/>
-      <path d="M118 210V58h144v152" fill="var(--stone-light)" opacity=".55"/>
-      <path d="M139 210V80h102v130" fill="#1a120d"/>
-      <path d="M155 210V96h70v114" fill="var(--haze)" opacity=".48"/>
-      <path d="M168 210V111h45v99" fill="var(--sun)" opacity=".65"/>
-      <path d="m168 210-41 10h136l-50-10" fill="var(--haze)" opacity=".35"/>
-      <g stroke="#dca469" opacity=".18">
-        <path d="M64 41h33M64 72h33M64 103h33M64 134h33M64 165h33M283 41h33M283 72h33M283 103h33M283 134h33M283 165h33"/>
-        <path d="M118 85h21M118 117h21M118 149h21M241 85h21M241 117h21M241 149h21"/>
-      </g>
-      <path d="m169 113-86 107h211l-83-107" fill="var(--sun)" opacity=".045"/>
-      <path d="M190 165v21m-4 0 4-17 4 17M187 186l-2 13M193 186l2 13" stroke="#24180f" stroke-width="3"/>
-      <circle cx="190" cy="161" r="4" fill="#24180f"/>
-    </symbol>
-
-    <symbol id="art-stars" viewBox="0 0 380 220">
-      <g transform="translate(190 110)" fill="none" stroke="currentColor">
-        <circle r="77" opacity=".3"/>
-        <circle r="68" opacity=".2"/>
-        <circle r="53" opacity=".18" stroke-dasharray="2 7"/>
-        <path d="M-92 0H92M0-92V92" opacity=".2"/>
-        <path d="m-53 36 26-64 43 48 39-62-4 73-42 24-62-19Z" opacity=".5"/>
-        <path d="m-27-28 78 59M16 20l-7 35" opacity=".25"/>
-        <g fill="currentColor" stroke="none">
-          <circle cx="-53" cy="36" r="3"/><circle cx="-27" cy="-28" r="4"/>
-          <circle cx="16" cy="20" r="3"/><circle cx="55" cy="-42" r="4"/>
-          <circle cx="51" cy="31" r="3"/><circle cx="9" cy="55" r="3"/>
-        </g>
-        <path d="m55-52 2 8 8 2-8 2-2 8-2-8-8-2 8-2Z" fill="currentColor" opacity=".5"/>
-      </g>
-      <g fill="currentColor" opacity=".35">
-        <circle cx="65" cy="56" r="1"/><circle cx="310" cy="71" r="1.5"/>
-        <circle cx="95" cy="172" r="1"/><circle cx="294" cy="172" r="1"/>
-        <circle cx="273" cy="35" r="1"/><circle cx="116" cy="29" r="1"/>
-      </g>
-    </symbol>
-  </defs>
-</svg>
-
-<header class="site-header">
-  <div class="container header-inner">
-    <a href="#top" class="brand" aria-label="По ту сторону песков — к началу">
-      <svg viewBox="0 0 40 48" fill="none" aria-hidden="true">
-        <circle cx="20" cy="13" r="8" stroke="currentColor"/>
-        <circle cx="20" cy="13" r="3" fill="currentColor"/>
-        <path d="M20 0v3M5 7l5 2M35 7l-5 2M5 21l5-2M35 21l-5-2M20 24v18M9 31h22M13 46h14" stroke="currentColor"/>
-      </svg>
-      <span>По ту сторону<br>песков</span>
-    </a>
-
-    <div class="era-tabs" role="tablist" aria-label="Эпоха">
-      <button class="era-tab" role="tab" id="tab-modern"
-              aria-controls="world" aria-selected="false"
-              tabindex="-1" data-era="modern">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="12" cy="12" r="9" stroke="currentColor"/>
-          <path d="m16 8-3 5-5 3 3-5 5-3ZM12 1v3M12 20v3M1 12h3M20 12h3" stroke="currentColor"/>
-        </svg>
-        <span><strong>Экспедиция</strong><small>1912 год</small></span>
-      </button>
-      <button class="era-tab" role="tab" id="tab-ancient"
-              aria-controls="world" aria-selected="true"
-              tabindex="0" data-era="ancient">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="12" cy="12" r="5" stroke="currentColor"/>
-          <path d="M12 0v4M12 20v4M0 12h4M20 12h4M3 3l3 3M18 18l3 3M3 21l3-3M18 6l3-3" stroke="currentColor"/>
-        </svg>
-        <span><strong>Древний Египет</strong><small>Эпоха фараонов</small></span>
-      </button>
-    </div>
-
-    <nav class="header-nav" aria-label="Навигация">
-      <a href="#archive">Свидетельства</a>
-      <button class="link-button" id="about-button">Об игре ↗</button>
-    </nav>
+    <button
+      class="control"
+      id="restore"
+      type="button"
+      title="В начало, без накопленных повреждений"
+    >Собрать ↺</button>
   </div>
+
+  <div class="progress" aria-hidden="true"></div>
 </header>
 
-<main id="world" role="tabpanel" aria-labelledby="tab-ancient" tabindex="0">
-  <section class="hero" id="top" aria-labelledby="hero-title">
-    <!-- ПЕЙЗАЖ: НЕБО / СВЕТ / ГОРИЗОНТ / ПИРАМИДЫ / ГОРОД / ПЕРЕДНИЙ ПЛАН -->
-    <div class="landscape" aria-hidden="true">
-      <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-            <stop stop-color="var(--sky-top)"/>
-            <stop offset=".55" stop-color="var(--sky-mid)"/>
-            <stop offset="1" stop-color="var(--sky-bottom)"/>
-          </linearGradient>
-          <radialGradient id="sun-halo">
-            <stop stop-color="var(--sun-edge)" stop-opacity=".7"/>
-            <stop offset=".27" stop-color="var(--sun-edge)" stop-opacity=".3"/>
-            <stop offset="1" stop-color="var(--sun-edge)" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="sun-face">
-            <stop stop-color="var(--sun)"/>
-            <stop offset="1" stop-color="var(--sun-edge)"/>
-          </radialGradient>
-          <linearGradient id="pyramid-face" x1="0" y1="0" x2=".75" y2="1">
-            <stop stop-color="var(--pyramid-lit)"/>
-            <stop offset=".55" stop-color="var(--pyramid-mid)"/>
-            <stop offset="1" stop-color="var(--pyramid-shadow)"/>
-          </linearGradient>
-          <linearGradient id="pyramid-side" x1="0" y1="0" x2="1" y2=".8">
-            <stop stop-color="var(--pyramid-shadow)"/>
-            <stop offset="1" stop-color="var(--stone-dark)"/>
-          </linearGradient>
-          <linearGradient id="sand-front" x1="0" y1="0" x2="0" y2="1">
-            <stop stop-color="var(--near)"/>
-            <stop offset="1" stop-color="var(--foreground)"/>
-          </linearGradient>
-          <linearGradient id="column-shade" x1="0" y1="0" x2="1" y2="0">
-            <stop stop-color="var(--foreground)"/>
-            <stop offset=".62" stop-color="var(--stone-dark)"/>
-            <stop offset=".88" stop-color="var(--stone-light)"/>
-            <stop offset="1" stop-color="var(--stone-dark)"/>
-          </linearGradient>
-          <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
-            <stop stop-color="var(--haze)" stop-opacity="0"/>
-            <stop offset=".52" stop-color="var(--haze)" stop-opacity=".21"/>
-            <stop offset="1" stop-color="var(--haze)" stop-opacity="0"/>
-          </linearGradient>
-          <pattern id="masonry" width="68" height="30" patternUnits="userSpaceOnUse">
-            <path d="M0 0h68M0 15h68M17 0v15M51 15v15"
-                  fill="none" stroke="#24170e" stroke-opacity=".2" stroke-width="1"/>
-            <path d="M0 1h68M0 16h68" stroke="#ffdc9c" stroke-opacity=".055"/>
-          </pattern>
-          <clipPath id="main-pyramid-clip">
-            <path d="m625 744 468-505 388 505Z"/>
-          </clipPath>
-          <g id="palm-tree">
-            <path d="M0 0q-8-52 3-113" fill="none" stroke="var(--stone-dark)" stroke-width="7"/>
-            <path d="M3-112q-31-37-65-11 37-9 65 11M3-112q-2-50 32-55-23 25-32 55M3-112q35-41 66-21-33 0-66 21M3-112q40-13 54 18-25-20-54-18M3-112q-42-15-55 16 27-19 55-16"
-                  fill="var(--stone-dark)"/>
-          </g>
-          <g id="wall-glyphs" fill="none" stroke="var(--pyramid-lit)" stroke-opacity=".25" stroke-width="2">
-            <path d="M0 0q14-13 28 0-14 10-28 0ZM14 0v14l-7 7M6 31h17M14 27v19M4 55l10-8 10 8-10 8-10-8ZM5 78h18M14 67v22"/>
-            <circle cx="14" cy="108" r="8"/>
-            <path d="M14 118v22M5 128h18M4 153l10-9 10 9M5 158h18M14 158v15M3 190h23M7 183v15M21 183v15"/>
-          </g>
-        </defs>
+<div class="layout">
+  <aside class="index" aria-label="Оглавление">
+    <p class="micro index-title">Опись содержимого</p>
 
-        <rect width="1600" height="1000" fill="url(#sky)"/>
+    <nav>
+      <a href="#name" aria-label="I. Имя, фамилия">
+        <b>I</b><span>Имя</span>
+      </a>
+      <a href="#age" aria-label="II. Возраст">
+        <b>II</b><span>Возраст</span>
+      </a>
+      <a href="#nature" aria-label="III. Сущность">
+        <b>III</b><span>Сущность</span>
+      </a>
+      <a href="#status" aria-label="IV. Статус">
+        <b>IV</b><span>Статус</span>
+      </a>
+      <a href="#appearance" aria-label="V. Внешность">
+        <b>V</b><span>Внешность</span>
+      </a>
+      <a href="#personality" aria-label="VI. Характер">
+        <b>VI</b><span>Характер</span>
+      </a>
+      <a href="#history" aria-label="VII. Предыстория">
+        <b>VII</b><span>Предыстория</span>
+      </a>
+      <a href="#headcanons" aria-label="VIII. Хэдканоны">
+        <b>VIII</b><span>Хэдканоны</span>
+      </a>
+      <a href="#user" aria-label="IX. Ваш юз">
+        <b>IX</b><span>Связь</span>
+      </a>
+    </nav>
 
-        <!-- Свет из-за пирамиды -->
-        <ellipse cx="1185" cy="310" rx="440" ry="400" fill="url(#sun-halo)"/>
-        <circle cx="1195" cy="302" r="99" fill="url(#sun-face)" opacity=".95"/>
-        <path d="M911 273q190 13 470-15M1024 306q185-19 370 7M979 342q204 12 398-8"
-              fill="none" stroke="var(--sky-mid)" stroke-width="9" opacity=".16"/>
-
-        <!-- Воздушная перспектива -->
-        <path d="M0 596q180-83 346-20t259-23q170-51 323 3t280-5q214-97 392-38v487H0Z"
-              fill="var(--far)" opacity=".24"/>
-        <path d="M0 653q197-63 394-27t396-30q215-55 407-1t403-25v430H0Z"
-              fill="var(--far)" opacity=".42"/>
-
-        <!-- Дальние пирамиды -->
-        <g opacity=".64">
-          <path d="m315 697 216-243 218 243Z" fill="var(--pyramid-mid)"/>
-          <path d="m531 454 45 243h173Z" fill="var(--pyramid-shadow)"/>
-          <path d="m1134 689 177-220 194 220Z" fill="var(--pyramid-mid)"/>
-          <path d="m1311 469 37 220h157Z" fill="var(--pyramid-shadow)"/>
-        </g>
-
-        <!-- Главная пирамида: разные плоскости, кладка, зерно, освещённое ребро -->
-        <g filter="url(#stone-texture)">
-          <path d="m625 744 468-505 388 505Z" fill="url(#pyramid-face)"/>
-          <path d="m1093 239 88 505h300Z" fill="url(#pyramid-side)"/>
-          <g clip-path="url(#main-pyramid-clip)">
-            <rect x="600" y="225" width="900" height="540" fill="url(#masonry)"/>
-            <path d="m625 744 468-505" stroke="var(--sun)" stroke-width="3" opacity=".45"/>
-            <path d="m1093 239 88 505" stroke="var(--pyramid-lit)" stroke-width="2" opacity=".65"/>
-            <path d="M705 642h88M784 553h50M879 449h73M929 399h84M1030 594h43M972 670h111"
-                  stroke="#1a100a" stroke-opacity=".13" stroke-width="5"/>
-          </g>
-        </g>
-
-        <!-- Шлейф песчаной дымки у основания -->
-        <ellipse cx="1110" cy="731" rx="720" ry="94" fill="url(#mist)"/>
-        <path d="M0 748q309-100 605-20t545 16q241-28 450-8v264H0Z" fill="var(--near)" opacity=".6"/>
-
-        <!-- Живой древний город -->
-        <g class="ancient-world">
-          <g filter="url(#stone-texture)">
-            <path d="M1050 815v-152h80v152M1160 814V649h94v165" fill="var(--stone-light)"/>
-            <path d="M1042 663h96v-13h-96M1151 649h112v-13h-112" fill="var(--pyramid-lit)"/>
-            <path d="M1080 815v-92h30v92M1187 814v-100h36v100" fill="var(--stone-dark)"/>
-            <path d="M1060 682h10v65h-10M1232 674h10v72h-10" fill="var(--pyramid-mid)"/>
-            <path d="M1256 817h217v-76h-217Z" fill="var(--pyramid-mid)"/>
-            <path d="M1272 743v-67h17v67M1316 743v-67h17v67M1360 743v-67h17v67M1404 743v-67h17v67" fill="var(--stone-light)"/>
-            <path d="M1264 674h169v-12h-169Z" fill="var(--pyramid-lit)"/>
-            <path d="M440 827v-66h77v66M528 829v-102h82v102M622 836v-58h91v58M724 838v-85h83v85" fill="var(--stone-light)"/>
-            <path d="M435 759h87v-8h-87M523 727h91v-9h-91M617 778h101v-8H617M719 753h92v-8h-92" fill="var(--pyramid-mid)"/>
-            <path d="M470 827v-40h19v40M557 829v-55h23v55M650 836v-37h21v37M753 838v-53h22v53" fill="var(--stone-dark)"/>
-          </g>
-
-          <path d="m814 827 56-31 62 31M818 827v27M928 827v27" fill="var(--pyramid-mid)" stroke="var(--stone-dark)" stroke-width="3"/>
-          <path d="m910 844 48-25 55 25M913 844v21M1009 844v21" fill="var(--pyramid-shadow)" stroke="var(--stone-dark)" stroke-width="3"/>
-          <use href="#palm-tree" transform="translate(1000 829) scale(.75)"/>
-          <use href="#palm-tree" transform="translate(1470 827) scale(1.2)"/>
-          <use href="#palm-tree" transform="translate(421 834) scale(.8)"/>
-          <use href="#palm-tree" transform="translate(385 834) scale(.6)"/>
-          <g fill="var(--stone-dark)">
-            <circle cx="966" cy="845" r="4"/>
-            <path d="m966 848-5 19h10ZM963 866v12h2v-12M969 866v12h2v-12"/>
-            <circle cx="991" cy="856" r="3"/>
-            <path d="m991 859-4 16h8Z"/>
-            <circle cx="1300" cy="820" r="3"/>
-            <path d="m1300 823-4 17h8Z"/>
-          </g>
-
-          <!-- Факел у ворот -->
-          <path d="M1138 787v-28" stroke="#2a190e" stroke-width="3"/>
-          <ellipse cx="1138" cy="753" rx="27" ry="35" fill="var(--sun-edge)" opacity=".09"/>
-          <path d="M1138 761q-9-8 2-20-2 12 4 13-1 7-6 7Z" fill="#ffc170"/>
-        </g>
-
-        <!-- Экспедиционный лагерь -->
-        <g class="modern-world">
-          <path d="m995 842 83-110 123 110Z" fill="#d4c9a6"/>
-          <path d="m1078 732 37 110h86Z" fill="#90876d"/>
-          <path d="m1051 842 27-72 37 72Z" fill="#514e40"/>
-          <path d="M984 849l94-117 135 117M1078 732v-18" stroke="#71634e" stroke-width="2" fill="none"/>
-          <path d="m1240 843 51-68 83 68Z" fill="#dfd3b1"/>
-          <path d="m1291 775 22 68h61Z" fill="#a49472"/>
-          <path d="M1232 849l59-74 93 74" stroke="#71634e" fill="none"/>
-          <path d="M809 821v-77M949 821v-77" stroke="#685d4c" stroke-width="4"/>
-          <path d="M795 746q79 20 169 0l-16-19H811Z" fill="#cec6ad"/>
-          <path d="M846 800h72M853 800v26M909 800v26" stroke="#675b48" stroke-width="4"/>
-          <path d="M863 787h35v13h-35Z" fill="#9e8f6f"/>
-          <g fill="#927e5c" stroke="#61553f" stroke-width="1">
-            <path d="M1197 820h32v29h-32ZM1228 829h28v20h-28Z"/>
-            <path d="m1198 821 30 27m0-27-30 27" fill="none"/>
-          </g>
-          <path d="M742 843v-40M741 805l-20 40M741 805l21 40" stroke="#555345" stroke-width="3"/>
-          <circle cx="742" cy="802" r="6" fill="#555345"/>
-          <g fill="#494b41">
-            <circle cx="969" cy="813" r="4"/>
-            <path d="M963 818h11l3 20h-16ZM963 837l-3 15h4l3-15M972 837l3 15h4l-3-15M960 811h17v3h-17Z"/>
-          </g>
-        </g>
-
-        <!-- Ветер и песок на среднем плане -->
-        <path d="M470 826q414-20 795 24M594 857q452-24 785 14"
-              stroke="var(--haze)" stroke-width="8" fill="none" opacity=".055"/>
-        <ellipse cx="1100" cy="827" rx="510" ry="38" fill="url(#mist)"/>
-
-        <!-- Передний план: тяжёлые колонны, рельеф, тени -->
-        <g filter="url(#stone-texture)">
-          <path d="M-60-20h202l-11 84-20 24v680l24 24 18 50H-45Z" fill="url(#column-shade)"/>
-          <path d="M-56 72h190v20H-56M-44 766h180v24H-44" fill="var(--stone-dark)"/>
-          <path d="M111 107v643" stroke="var(--pyramid-lit)" stroke-opacity=".21" stroke-width="2"/>
-          <use href="#wall-glyphs" transform="translate(65 187) scale(1.5)"/>
-          <use href="#wall-glyphs" transform="translate(65 500) scale(1.5)"/>
-
-          <path d="M1510-20h170v959h-184l22-72V167l-24-31-17-73Z" fill="url(#column-shade)"/>
-          <path d="M1494 128h174v25h-174M1497 836h173v23h-173" fill="var(--stone-dark)"/>
-          <path d="M1519 164v654" stroke="var(--pyramid-lit)" stroke-opacity=".25" stroke-width="2"/>
-          <use href="#wall-glyphs" transform="translate(1539 245) scale(1.7)"/>
-          <use href="#wall-glyphs" transform="translate(1539 580) scale(1.1)"/>
-        </g>
-
-        <path d="M0 913q260-91 548-32t543 19q297-91 509-12v112H0Z" fill="url(#sand-front)"/>
-        <path d="M0 964q259-37 490-9t432-7q413-45 678 8v44H0Z" fill="var(--foreground)"/>
-        <path d="m1393 909 39-46 50 14 32 31Z" fill="var(--stone-dark)"/>
-        <path d="m1387 916 47-39 47 11 37 24Z" fill="var(--near)"/>
-        <path d="m204 932 34-25 51 13 23 15Z" fill="var(--stone-dark)"/>
-        <path d="M739 923q143-17 242 1M1070 956q162-14 252-5" stroke="var(--pyramid-lit)" opacity=".1" fill="none"/>
-      </svg>
+    <div class="preservation">
+      <span class="micro">Сохранность документа</span>
+      <div class="preservation-line" aria-hidden="true"><i></i></div>
+      <div class="condition" id="condition">повреждений нет</div>
     </div>
 
-    <div class="hero-rays" aria-hidden="true"></div>
-    <div class="hero-shade" aria-hidden="true"></div>
-    <div class="hero-vignette" aria-hidden="true"></div>
-    <canvas class="dust-canvas" id="dust" aria-hidden="true"></canvas>
+    <p class="aside-quote">
+      «Сердце чистое сотвори во мне, Боже».
+      <br><br>
+      <span class="micro">Псалом 50:12</span>
+    </p>
+  </aside>
 
-    <div class="container hero-coordinate">
-      <span>29°58′45″ N &nbsp; 31°08′03″ E<br>ОДНА ЗЕМЛЯ / ДВА ВРЕМЕНИ</span>
-      <span class="right" id="era-coordinate"></span>
-    </div>
+  <main>
+    <article class="manuscript" aria-label="Анкета Марии Вельской">
 
-    <div class="container hero-content">
-      <div class="hero-kicker eyebrow" id="hero-kicker"></div>
-      <h1 id="hero-title">По ту сторону<br><em>песков.</em></h1>
-      <p class="hero-description" id="hero-description"></p>
-      <div class="hero-actions">
-        <a href="#story" class="button">Войти в историю <span aria-hidden="true">↗</span></a>
-        <button class="quiet-link" id="chronicle-button">Читать хронику <span aria-hidden="true">→</span></button>
-      </div>
-    </div>
-
-    <div class="scene-caption" aria-hidden="true">
-      <span class="caption-line"></span>
-      <div>
-        <small id="scene-caption-label"></small>
-        <p id="scene-caption-text"></p>
-      </div>
-    </div>
-
-    <div class="container hero-bottom">
-      <div class="hero-chapter">
-        <span class="chapter-roman">I</span>
-        <div>
-          <small>ТЕКУЩАЯ ГЛАВА</small>
-          <strong id="chapter-name"></strong>
-        </div>
-      </div>
-      <a href="#story" class="scroll-cue"><i aria-hidden="true"></i> Спуститься к истории</a>
-      <button class="motion-toggle" id="motion-toggle" aria-pressed="true" aria-label="Анимация атмосферы">
-        <span class="motion-dot" aria-hidden="true"></span>
-        <span id="motion-label">Пыль · вкл.</span>
-      </button>
-    </div>
-  </section>
-
-  <!-- ЗАВЯЗКА -->
-  <section class="section story-section" id="story">
-    <div class="container">
-      <div class="section-kicker">
-        <span class="index">01</span><span class="rule"></span>
-        <span class="eyebrow">Не всё погребённое мертво</span>
-      </div>
-      <div class="story-layout">
-        <div class="story-lead">
-          <h2 class="section-title" id="story-title"></h2>
-          <div class="chapter-stamp">
-            <div class="stamp-ring" aria-hidden="true">𓂀</div>
-            <p id="story-stamp"></p>
+      <div class="leaf">
+        <!-- ОБЛОЖКА -->
+        <header class="cover">
+          <div class="archive-line micro">
+            <span>Приходской архив / личное</span>
+            <span>Экземпляр один</span>
           </div>
+
+          <div class="cover-stamp" aria-hidden="true">
+            Оригинал не найден
+          </div>
+
+          <div class="hero-grid">
+            <div>
+              <p class="eyebrow micro">Составлено со слов дочери</p>
+              <h1>Мария <em>Вельская</em></h1>
+              <p class="subtitle">
+                Её учили называть страх<br>
+                благоговением.
+              </p>
+            </div>
+
+            <!-- Встроенная иллюстрация, внешние файлы не нужны -->
+            <svg
+              class="icon"
+              viewBox="0 0 200 310"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M15 290V111C15 65 48 28 100 9
+                   C152 28 185 65 185 111V290Z"
+                stroke="currentColor"
+              />
+              <path
+                d="M25 280V112C25 72 55 39 100 20
+                   C145 39 175 72 175 112V280Z"
+                stroke="currentColor"
+                opacity=".5"
+              />
+              <path
+                d="M100 21V64M25 157H175M25 245H175
+                   M55 53V80M145 53V80"
+                stroke="currentColor"
+                opacity=".35"
+              />
+
+              <g class="halo">
+                <circle cx="100" cy="111" r="45" stroke="currentColor"/>
+                <circle
+                  cx="100" cy="111" r="38"
+                  stroke="currentColor" opacity=".4"
+                />
+                <path
+                  d="M100 58V65M100 157V164M47 111H54M146 111H153
+                     M63 74L68 79M132 143L137 148
+                     M63 148L68 143M132 79L137 74"
+                  stroke="currentColor"
+                  opacity=".65"
+                />
+              </g>
+
+              <path
+                d="M100 82V143M78 104H122"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+
+              <path
+                d="M72 246C61 221 59 195 73 166
+                   M128 246C139 221 141 195 127 166"
+                stroke="currentColor"
+              />
+              <path
+                d="M65 225C39 223 37 205 61 212
+                   M64 206C88 199 90 182 68 190
+                   M69 187C45 177 50 162 74 173
+                   M135 225C161 223 163 205 139 212
+                   M136 206C112 199 110 182 132 190
+                   M131 187C155 177 150 162 126 173"
+                stroke="currentColor"
+                opacity=".65"
+              />
+              <path
+                d="M71 168C56 153 62 141 75 154
+                   C73 133 88 134 82 153
+                   C101 144 106 158 85 164Z
+                   M129 168C144 153 138 141 125 154
+                   C127 133 112 134 118 153
+                   C99 144 94 158 115 164Z"
+                stroke="currentColor"
+              />
+
+              <path d="M9 297H191M43 304H157" stroke="currentColor"/>
+              <path d="M92 264H108M100 256V274" stroke="currentColor"/>
+            </svg>
+          </div>
+
+          <blockquote class="cover-quote">
+            <p>«Блаженны чистые сердцем, ибо они Бога узрят».</p>
+            <cite>Евангелие от Матфея 5:8</cite>
+          </blockquote>
+
+          <p class="warning">
+            Религиозная травма · семейный контроль · тревожные состояния.<br>
+            Повреждения накапливаются при чтении. Их можно отключить.
+          </p>
+        </header>
+
+        <!-- I. ИМЯ -->
+        <section class="entry" id="name">
+          <div class="entry-head">
+            <span class="roman">I.</span>
+            <h2>Имя, фамилия</h2>
+          </div>
+
+          <p class="lead">Мария Анна Вельская.</p>
+          <p>
+            Для прихожан — Мария. Для матери — полное имя,
+            произнесённое так, будто за ним уже следует обвинение.
+            «Маша» ей нравится, но самой представляться так
+            почему-то неловко.
+          </p>
+
+          <blockquote class="verse">
+            <p>«Назвал тебя по имени твоему; ты Мой».</p>
+            <cite>Исаия 43:1</cite>
+          </blockquote>
+        </section>
+
+        <div class="pair">
+          <!-- II. ВОЗРАСТ -->
+          <section class="entry" id="age">
+            <div class="entry-head">
+              <span class="roman">II.</span>
+              <h2>Возраст</h2>
+            </div>
+
+            <p class="lead">Двадцать три.</p>
+            <p class="small">
+              14 февраля.<br>
+              Свечи на торте задувает с чувством,
+              что делает что-то неуместное.
+            </p>
+          </section>
+
+          <!-- III. СУЩНОСТЬ -->
+          <section class="entry" id="nature">
+            <div class="entry-head">
+              <span class="roman">III.</span>
+              <h2>Сущность</h2>
+            </div>
+
+            <p class="lead">Человек.</p>
+            <p class="small">
+              Не святая. Не сосуд.<br>
+              Не чьё-то испытание.<br>
+              Просто человек.
+            </p>
+          </section>
         </div>
-        <div class="story-right">
-          <div class="prose" id="story-text"></div>
-          <blockquote class="story-quote">
-            <span id="story-quote"></span>
-            <cite id="story-cite"></cite>
+
+        <!-- IV. СТАТУС -->
+        <section class="entry" id="status">
+          <div class="entry-head">
+            <span class="roman">IV.</span>
+            <h2>Статус</h2>
+          </div>
+
+          <p class="lead">Хранительница приходского архива.</p>
+          <p>
+            Бывшая певчая. Переписывает метрические книги,
+            восстанавливает переплёты, вклеивает выпавшие страницы.
+            Живёт в комнате над закрытой воскресной школой.
+            У неё есть ключи почти от всех дверей в здании.
+          </p>
+
+          <span class="field-tag">Хранить. Не исправлять. Не выносить.</span>
+
+          <blockquote class="verse">
+            <p>
+              «Придите ко Мне все труждающиеся и обремененные,
+              и Я успокою вас».
+            </p>
+            <cite>Евангелие от Матфея 11:28</cite>
+          </blockquote>
+        </section>
+
+        <!-- V. ВНЕШНОСТЬ -->
+        <section class="entry displaced" id="appearance">
+          <div class="margin-order intrusion" aria-hidden="true">
+            смотреть вниз / ворот застегнуть
+          </div>
+
+          <div class="entry-content">
+            <div class="entry-head">
+              <span class="roman">V.</span>
+              <h2>Внешность</h2>
+            </div>
+
+            <p>
+              Рост — 167 сантиметров. Светло-русые волосы,
+              убранные в тугую косу. Серо-зелёные глаза,
+              длинная шея, чуть сутулые плечи. На пальцах —
+              переплётный клей и крошечные порезы от бумаги.
+            </p>
+            <p>
+              Молочные блузы. Коричневые юбки ниже колен.
+              Старый шерстяной кардиган, аккуратно заштопанный
+              на локте. Серебряный крест под одеждой:
+              она слишком часто проверяет, на месте ли он.
+            </p>
+            <p>
+              Первое впечатление —
+              <span class="correction">спокойная, благонравная девушка</span>.
+              Говорит негромко. Улыбается прежде, чем понимает,
+              хочет ли улыбаться.
+            </p>
+
+            <div class="written-over hand intrusion" aria-hidden="true">
+              это не спокойствие.<br>
+              она прислушивается к шагам.
+            </div>
+
+            <blockquote class="verse">
+              <p>
+                «Человек смотрит на лице, а Господь смотрит на сердце».
+              </p>
+              <cite>Первая книга Царств 16:7</cite>
+            </blockquote>
+          </div>
+        </section>
+
+        <!-- VI. ХАРАКТЕР -->
+        <section class="entry personality" id="personality">
+          <div class="entry-content">
+            <div class="entry-head">
+              <span class="roman">VI.</span>
+              <h2>Характер</h2>
+            </div>
+
+            <div class="trait-line">
+              <span>бережная</span>
+              <span>внимательная</span>
+              <span>настороженная</span>
+            </div>
+
+            <p>
+              Мария умеет замечать чужую усталость. Подвинет стул,
+              принесёт воды, запомнит, какие слова причиняют боль.
+              Любит сухой юмор, старые ботанические атласы
+              и людей, рядом с которыми можно молчать.
+            </p>
+            <p>
+              Но чужое недовольство для неё почти физически громкое.
+              Если собеседник замолчал, она ищет ошибку в последней
+              фразе. Если кто-то повысил голос в соседней комнате,
+              она уже думает, как всё исправить.
+            </p>
+
+            <div class="proof">
+              <span class="proof-label">Предыдущая формулировка</span>
+              <del>Послушная. Не склонна к конфликтам.</del>
+              <ins>Не верит, что после отказа её продолжат любить.</ins>
+            </div>
+
+            <p>
+              Иногда повторяет молитву, пока та не покажется
+              произнесённой «правильно». Обычная нежелательная мысль
+              может испугать её сильнее реальной ссоры.
+              Она понимает, что устала. Но отдых всё ещё ощущается
+              как нарушение какого-то невыносимо важного правила.
+            </p>
+
+            <div class="double-rule" aria-hidden="true"></div>
+
+            <blockquote class="verse">
+              <p>
+                «В любви нет страха, но совершенная любовь изгоняет страх».
+              </p>
+              <cite>Первое послание Иоанна 4:18</cite>
+            </blockquote>
+
+            <div class="written-over hand intrusion" aria-hidden="true">
+              тогда почему я всё время боюсь?
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- VII. ПРЕДЫСТОРИЯ: ФОРМА БОЛЬШЕ НЕ ДЕРЖИТСЯ -->
+      <section class="rupture" id="history">
+        <svg
+          class="fracture-line"
+          viewBox="0 0 100 1000"
+          preserveAspectRatio="none"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M72 0L49 86L65 134L29 217L47 302
+               L16 383L45 464L25 531L61 630
+               L39 721L68 813L44 903L57 1000"
+            stroke="currentColor"
+          />
+          <path
+            d="M65 134L91 173L79 229
+               M16 383L2 426L17 458
+               M61 630L89 672L76 728
+               M44 903L14 943L26 1000"
+            stroke="currentColor"
+            opacity=".5"
+          />
+        </svg>
+
+        <div class="rupture-head">
+          <span class="roman">VII.</span>
+          <h2>Преды<span class="split-word">стория</span></h2>
+        </div>
+
+        <p class="loss-caption">
+          Далее — отдельные листы. Порядок восстановлен приблизительно.
+        </p>
+
+        <div class="fragment fragment-one">
+          <div class="fragment-top">
+            <span>Дом / восемь лет</span>
+            <span class="paper-number">01</span>
+          </div>
+
+          <p>
+            В детстве Мария любила церковь. Не потому, что боялась.
+            Ей нравились пение, тёплый воск, золотые пылинки
+            в полосах света. Нравилась пожилая певчая,
+            которая приносила ей варежки и никогда не спрашивала,
+            заслужила ли она их.
+          </p>
+          <p>
+            Дома Бог звучал иначе.
+          </p>
+
+          <div class="foreign-voice">
+            <span class="micro">Запомнившиеся слова матери</span>
+            <p>«Ты думаешь, я не вижу? Он-то видит».</p>
+          </div>
+
+          <p>
+            Так у девочки не осталось места, где можно было
+            побыть одной. Даже внутри собственной головы.
+            Она начала извиняться за мысли раньше,
+            чем научилась отличать мысль от намерения.
+          </p>
+
+          <blockquote class="verse">
+            <p>
+              «Господи! Ты испытал меня и знаешь».
+            </p>
+            <cite>Псалом 138:1</cite>
           </blockquote>
         </div>
-      </div>
-      <div class="timeline" id="timeline"></div>
-    </div>
-  </section>
 
-  <!-- ГЕОГРАФИЯ -->
-  <section class="section map-section" id="locations">
-    <div class="container">
-      <div class="section-kicker">
-        <span class="index">02</span><span class="rule"></span>
-        <span class="eyebrow">География тайны</span>
-      </div>
-      <div class="section-head">
-        <h2 class="section-title" id="map-title"></h2>
-        <p class="section-summary">Одни и те же дороги ведут<br>к разным судьбам. Выберите отметку.</p>
-      </div>
-
-      <div class="map-frame">
-        <div class="map-grid">
-          <div class="map" role="group" aria-label="Интерактивная карта мест действия">
-            <div class="map-top-label" id="map-top-label"></div>
-            <svg class="map-art" viewBox="0 0 760 425" preserveAspectRatio="none" fill="none" aria-hidden="true">
-              <defs>
-                <pattern id="map-grid-pattern" width="48" height="48" patternUnits="userSpaceOnUse">
-                  <path d="M48 0H0v48" stroke="currentColor" opacity=".07"/>
-                </pattern>
-              </defs>
-              <rect width="760" height="425" fill="url(#map-grid-pattern)"/>
-              <g stroke="currentColor" opacity=".13">
-                <path d="M-20 75Q160 2 314 70T780 38M-20 89Q160 16 314 84T780 52M-20 103Q160 30 314 98T780 66"/>
-                <path d="M-30 282q149-72 260-15t240-16 320-32M-30 298q149-72 260-15t240-16 320-32M-30 314q149-72 260-15t240-16 320-32M-30 330q149-72 260-15t240-16 320-32"/>
-                <path d="M45 420q97-116 204-55t218-24 285-14M45 432q97-116 204-55t218-24 285-14"/>
-              </g>
-              <path d="M666-20q-89 113-32 202t7 263" stroke="var(--river)" stroke-width="26" opacity=".19"/>
-              <path d="M666-20q-89 113-32 202t7 263" stroke="var(--river)" opacity=".5"/>
-              <g stroke="currentColor">
-                <g opacity=".55">
-                  <path d="m250 90 102 8-8 104-102-8Z"/>
-                  <path d="m250 90 47 56 55-48M242 194l55-48 47 56"/>
-                  <path d="m383 172 73 6-6 73-73-6Z"/>
-                  <path d="m383 172 33 40 40-34M377 245l39-33 34 39"/>
-                  <path d="m188 215 44 4-4 44-44-4Z"/>
-                  <path d="m188 215 20 24 24-20M184 259l24-20 20 24"/>
-                </g>
-                <path d="M141 306q60-88 149-70t126 48q71 17 137-31" stroke-dasharray="3 7" opacity=".45"/>
-                <path d="M457 180q46-38 77-58" stroke-dasharray="3 7" opacity=".3"/>
-                <g class="ancient-world" opacity=".55">
-                  <path d="M104 260h30v31h-30ZM139 277h29v24h-29ZM114 309h28v29h-28ZM153 316h26v29h-26Z"/>
-                  <path d="M505 95h66v70h-66ZM515 105h46v49h-46ZM526 106v47M550 106v47"/>
-                  <path d="M517 254h64v35h-64M528 254v35M569 254v35M517 265h64"/>
-                </g>
-                <g class="modern-world" opacity=".7">
-                  <path d="m105 278 19-27 22 27h-41ZM154 307l19-27 22 27h-41ZM105 330l19-27 22 27h-41Z"/>
-                  <path d="M510 106h56v36h-56ZM518 114h39M529 106v36"/>
-                </g>
-              </g>
-              <g fill="currentColor" opacity=".22">
-                <circle cx="360" cy="319" r="2"/><circle cx="369" cy="327" r="1.5"/>
-                <circle cx="349" cy="332" r="1.5"/><circle cx="468" cy="98" r="1.5"/>
-              </g>
-            </svg>
-
-            <svg class="compass" viewBox="0 0 50 80" fill="none" aria-hidden="true">
-              <path d="m25 16 10 35-10-7-10 7 10-35Z" stroke="currentColor"/>
-              <path d="M25 16v48M13 65h24" stroke="currentColor"/>
-              <path d="m25 16 10 35-10-7V16Z" fill="currentColor" opacity=".3"/>
-              <text x="25" y="9" fill="currentColor" stroke="none" text-anchor="middle" font-family="Georgia" font-size="9">N</text>
-            </svg>
-            <div class="map-scale" aria-hidden="true">0 — 500 шагов</div>
-            <div id="map-markers"></div>
+        <div class="fragment fragment-two">
+          <div class="fragment-top">
+            <span>Дом / тринадцать — девятнадцать</span>
+            <span class="paper-number">02</span>
           </div>
 
-          <div class="location-panel" id="location-panel" aria-live="polite" aria-atomic="true"></div>
+          <p>
+            Если она плакала, это называли жалостью к себе.
+            Если злилась — гордыней. Если пыталась объяснить,
+            почему ей больно, говорили, что она ищет оправдания.
+          </p>
+          <p>
+            Наказание не всегда имело голос.
+            Иногда мать просто переставала отвечать.
+            Мария ходила за ней из комнаты в комнату
+            и перебирала свои проступки, как бусины.
+            Правильный проступок должен был вернуть ей мать.
+          </p>
+          <p>
+            На исповеди она рассказывала о раздражении,
+            зависти, недостаточном усердии.
+            О доме молчала. Рассказать означало выставить семью
+            в дурном свете. А хорошая дочь так не делает.
+          </p>
+
+          <div class="proof">
+            <span class="proof-label">Запись на обороте</span>
+            <del>Я была трудным ребёнком.</del>
+            <ins>Я была ребёнком.</ins>
+          </div>
+
+          <p>
+            В девятнадцать лет посреди службы она не смогла вдохнуть.
+            Хор продолжал петь. Пол казался далёким,
+            ладони онемели, собственное имя перестало быть знакомым.
+          </p>
+          <p>
+            Позже это можно было назвать панической атакой.
+            Тогда дома назвали недостатком веры.
+          </p>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- СВИДЕТЕЛЬСТВА -->
-  <section class="section archive-section" id="archive">
-    <div class="container">
-      <div class="section-kicker">
-        <span class="index">03</span><span class="rule"></span>
-        <span class="eyebrow">То, что не должно было сохраниться</span>
-      </div>
-      <div class="section-head">
-        <h2 class="section-title" id="archive-title"></h2>
-        <p class="section-summary" id="archive-summary"></p>
-      </div>
-      <div class="archive-grid" id="archive-grid"></div>
-    </div>
-  </section>
+        <div class="blank-space">
+          <p class="micro">Между этими листами ничего не сохранилось</p>
 
-  <!-- СВЯЗЬ ВРЕМЁН -->
-  <section class="artifact-section" id="artifact">
-    <div class="container artifact-grid">
-      <div class="artifact-visual" role="img" id="artifact-image" aria-label="Целая древняя печать">
-        <div class="artifact-halo"></div>
-        <svg class="seal-svg" viewBox="0 0 300 300" aria-hidden="true">
-          <use href="#seal-symbol"/>
-          <g class="seal-crack" fill="none">
-            <path d="m188 20-22 45 9 28-23 32 11 40-19 32 2 33-30 53" stroke="#24190f" stroke-width="5"/>
-            <path d="m191 20-22 45 9 29-22 31 11 41-19 32 2 33-30 52" stroke="#ddb37a" stroke-width="1.5" opacity=".7"/>
-            <path d="m163 165 37 5 19 26M145 228l-31-13" stroke="#2e2014" stroke-width="2"/>
-          </g>
-        </svg>
-        <div class="artifact-label" id="artifact-label"></div>
-        <div class="artifact-label right">ПРЕДМЕТ № 017<br>ОДИН И ТОТ ЖЕ КАМЕНЬ</div>
-      </div>
-      <div class="artifact-copy">
-        <div class="section-kicker">
-          <span class="index">04</span><span class="rule"></span>
-          <span class="eyebrow">Нить сквозь века</span>
+          <div class="prayer-ghost" aria-hidden="true">
+            я старалась<br>я старалась
+          </div>
+
+          <blockquote class="abyss-quote">
+            <p>
+              <span class="line">«Боже мой! Боже мой!</span>
+              <span class="line">для чего Ты</span>
+              <span class="line">оставил меня?»</span>
+            </p>
+            <cite>Псалом 21:2</cite>
+          </blockquote>
         </div>
-        <h2 class="section-title" id="artifact-title"></h2>
-        <p class="prose" id="artifact-text"></p>
-        <button class="artifact-switch" id="artifact-switch"></button>
-        <p class="artifact-footnote">Переключите эпоху. Место останется прежним.<br>Изменится всё, что вы о нём знали.</p>
-      </div>
-    </div>
-  </section>
 
-  <section class="closing container">
-    <svg class="closing-symbol" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-      <path d="m20 2 4 14 14 4-14 4-4 14-4-14-14-4 14-4Z" stroke="currentColor"/>
-      <circle cx="20" cy="20" r="4" fill="currentColor"/>
-    </svg>
-    <blockquote id="closing-quote"></blockquote>
-    <p class="eyebrow" id="closing-source"></p>
-  </section>
-</main>
+        <div class="fragment fragment-three">
+          <span class="staple intrusion" aria-hidden="true"></span>
 
-<footer>
-  <div class="container footer-inner">
-    <span>ПО ТУ СТОРОНУ ПЕСКОВ<br>Литературная ролевая игра</span>
-    <span class="footer-center">ПРОШЛОЕ НЕ ПРОШЛО.</span>
-    <a href="#top">Вернуться к порогу ↑</a>
-  </div>
-</footer>
+          <div class="fragment-top">
+            <span>Архив / настоящее время</span>
+            <span class="paper-number">03</span>
+          </div>
 
-<div class="time-flash" id="time-flash" aria-hidden="true"></div>
-<div class="sr-only" id="announcement" role="status"></div>
+          <p>
+            После того случая она перестала петь.
+            Начала спать при свете и долго проверять дверной замок.
+            Потом просила прощения за то, что замок
+            успокаивал её лучше молитвы.
+          </p>
+          <p>
+            Комнату при архиве ей помогла найти та самая женщина
+            из хора. Она сказала: «Ключ останется у тебя».
+            Мария переспросила дважды.
+          </p>
+          <p>
+            Теперь она живёт отдельно. Ходит к психологу,
+            когда хватает денег и решимости.
+            Иногда не отвечает на звонок матери.
+            Потом весь вечер ждёт беды.
+          </p>
+          <p>
+            Бывают хорошие дни: суп на плите, тёплая кошка,
+            законченный переплёт. Но стоит услышать за стеной
+            знакомую интонацию — и комната снова становится
+            детской, а ей снова нужно угадать,
+            за что сегодня просят прощения.
+          </p>
+          <p>
+            Она всё ещё верит. Или очень хочет верить.
+            Только теперь не понимает, где заканчивается
+            Божий голос и начинается голос человека,
+            который слишком долго говорил от Его имени.
+          </p>
 
-<dialog id="document-dialog" aria-labelledby="modal-title">
-  <div class="modal-inner">
-    <div class="modal-top">
-      <span class="eyebrow" id="modal-category"></span>
-      <button class="modal-close" id="modal-close" aria-label="Закрыть документ" autofocus>×</button>
-    </div>
-    <h2 class="modal-title" id="modal-title"></h2>
-    <div class="modal-meta" id="modal-meta"></div>
-    <div class="modal-body" id="modal-body"></div>
-    <div class="modal-foot">ПО ТУ СТОРОНУ ПЕСКОВ / СВИДЕТЕЛЬСТВА ИГРОВОГО МИРА</div>
-  </div>
-</dialog>
+          <blockquote class="verse">
+            <p>«Из глубины взываю к Тебе, Господи».</p>
+            <cite>Псалом 129:1</cite>
+          </blockquote>
+        </div>
 
-<noscript>
-  <p style="padding:30px;text-align:center">Включите JavaScript для загрузки сюжета, переключения эпох и просмотра документов.</p>
-</noscript>
+        <p class="confession">
+          Я не хотела перестать быть хорошей.<br>
+          Я хотела перестать бояться.
+          <small>Приписано от руки. Подписи нет.</small>
+        </p>
+      </section>
+
+      <!-- VIII. ХЭДКАНОНЫ -->
+      <section class="remains" id="headcanons">
+        <div class="entry-head">
+          <span class="roman">VIII.</span>
+          <h2>Хэдканоны</h2>
+        </div>
+
+        <ol class="notes">
+          <li class="note">
+            Обожает груши. Покупает их редко: всякий раз
+            сначала придумывает уважительную причину.
+          </li>
+          <li class="note">
+            Чинит книги уверенно, почти властно.
+            В работе её руки никогда не выглядят беспомощными.
+          </li>
+          <li class="note">
+            Вздрагивает от звона связки ключей.
+            Свои обернула маленьким лоскутом ткани.
+          </li>
+          <li class="note">
+            Кормит дворовую кошку по имени Ева.
+            Считает это имя смешным. Никому не объясняет почему.
+          </li>
+          <li class="note">
+            Может часами говорить о растениях на полях старых рукописей.
+            В такие минуты забывает следить за громкостью голоса.
+          </li>
+          <li class="note">
+            В книге лежит записка: «Ты можешь уйти».
+            Она не помнит, когда написала её.
+            Но каждый раз аккуратно перекладывает на новую страницу.
+          </li>
+        </ol>
+      </section>
+
+      <!-- IX. ВАШ ЮЗ -->
+      <section class="contact-area" id="user">
+        <div class="contact-sheet">
+          <div class="entry-head">
+            <span class="roman">IX.</span>
+            <h2>Ваш юз</h2>
+          </div>
+
+          <!-- Замените на свой контакт -->
+          <p class="username">@your_username</p>
+          <p class="small">
+            Для связи и обсуждения сюжета.<br>
+            Не всё личное должно становиться исповедью.
+          </p>
+        </div>
+      </section>
+
+      <footer class="ending">
+        <span class="ending-cross" aria-hidden="true">✝</span>
+
+        <blockquote>
+          <p>
+            «Трости надломленной не переломит,<br>
+            и льна курящегося не угасит».
+          </p>
+          <cite>Исаия 42:3</cite>
+        </blockquote>
+
+        <p class="last-line">Конец документа. Не приговор.</p>
+      </footer>
+    </article>
+
+    <footer class="outside-footer">
+      <span>Библейские цитаты — Синодальный перевод, фрагменты.</span>
+      <a href="#top">К началу ↑</a>
+    </footer>
+  </main>
+</div>
 
 <script>
-/* =====================================================
-   СОДЕРЖАНИЕ ДВУХ ЭПОХ
-   ===================================================== */
-const worlds = {
-  ancient: {
-    name: "Древний Египет",
-    theme: "#160e09",
-    coordinate: "ГИЗА / НОВОЕ ЦАРСТВО<br>ОКОЛО 1290 ГОДА ДО Н. Э.",
-    kicker: "Земля живых. Обитель забытых богов.",
-    hero: "Камень ещё хранит дневной жар. Из храмов тянется дым благовоний. За запечатанной дверью слышны шаги людей, которые родятся через три тысячи лет.",
-    captionLabel: "ЗАПАДНЫЙ КРАЙ НЕКРОПОЛЯ",
-    caption: "После заката<br>здесь не зовут по имени.",
-    chapter: "Солнце помнит имена",
-    storyTitle: "Они ещё не знают,<br>что станут <em>прошлым.</em>",
-    stamp: "НОВОЕ ЦАРСТВО / XIX ДИНАСТИЯ<br>СВЯТИЛИЩЕ ПОРОГА",
-    story: `
-      <p>По утрам у пристани торгуются из-за зерна. В мастерских
-      обжигают глину, во дворах сушат лён, писцы считают чужие долги.
-      <strong>Этот мир не ждёт, когда его откроют. Он живёт.</strong></p>
-      <p>Но три ночи назад священная печать покрылась трещинами.
-      Из закрытой галереи донёсся чужой язык. А на рассвете стража
-      нашла людей, которые смотрели на храм так, будто видели
-      восставшего из мёртвых.</p>
-      <p>Хранители требуют молчания. Слухи уже вышли за ворота.
-      <strong>И теперь каждому придётся выбрать, что страшнее:
-      неизвестные чужаки или те, кто пытается скрыть их появление.</strong></p>`,
-    quote: "Не открывайте дверь, если с той стороны называют ваше имя.",
-    cite: "Наставление младшим хранителям",
-    timeline: [
-      ["ТРИ НОЧИ НАЗАД", "Камень состарился", "На целой печати проступили трещины. Утром они исчезли, оставив в ларце песок."],
-      ["НАКАНУНЕ", "Стена ответила", "В запечатанной галерее раздался стук. Кто-то работал по другую сторону камня."],
-      ["СЕЙЧАС", "Чужие у порога", "Люди без рода и понятного языка просят воды. Храмовая стража перекрывает дорогу."]
-    ],
-    mapTitle: "Там, где камень<br><em>ещё тёплый.</em>",
-    mapLabel: "ЗЕМЛИ СВЯТИЛИЩА<br>КАРТА УСЛОВНАЯ",
-    locations: [
-      {
-        name: "Квартал мастеров",
-        description: "Запах горячего хлеба, медная пыль и стук резцов. Вечером сюда возвращаются люди, которые знают храм не по молитвам, а по каждому уложенному камню. И замечают, когда камень меняется.",
-        tags: ["Повседневная жизнь", "Слухи", "Ремёсла"],
-        x: 20, y: 71
-      },
-      {
-        name: "Святилище порога",
-        description: "Прохладные залы за тяжёлыми пилонами. Сажа на потолке. Дверь без ручки в глубине галереи. Внутрь допускают немногих, но после заката голоса слышны даже снаружи.",
-        tags: ["Переход", "Храмовая тайна", "Опасность"],
-        x: 43, y: 39
-      },
-      {
-        name: "Дорога приношений",
-        description: "Тканевые навесы хлопают на ветру. Паломники идут к некрополю, торговцы зовут покупателей. Здесь чужое лицо заметят раньше стражи — и за монету расскажут, куда оно ушло.",
-        tags: ["Торговля", "Встречи", "Свидетели"],
-        x: 56, y: 64
-      },
-      {
-        name: "Дом писцов",
-        description: "Тростниковые перья, запах чернил и вода в запечатанных кувшинах. Среди храмовых счетов хранится свиток с описанием людей, которых видели только сегодня утром.",
-        tags: ["Знания", "Документы", "Предсказание"],
-        x: 71, y: 31
-      }
-    ],
-    archiveTitle: "Не все голоса<br><em>принадлежат живым.</em>",
-    archiveSummary: "Храмовые записи, свидетельства<br>и знаки, о которых велели молчать.",
-    documents: [
-      {
-        art: "art-paper",
-        type: "ХРАМОВАЯ ЗАПИСЬ",
-        title: "Камень, переживший себя",
-        meta: "СВИДЕТЕЛЬСТВО 001 / ЛАРЕЦ ХРАНИТЕЛЯ",
-        preview: "За одну ночь печать стала старше на тысячи лет. Прикасавшийся к ней увидел храм без крыши.",
-        body: `
-          <p>Записано по распоряжению старшего хранителя.
-          Не выносить за пределы внутреннего двора.</p>
-          <p>На закате печать извлекли из ларца. Камень был цел.
-          После второй смены стражи поверхность потемнела.
-          По лицевой стороне прошла глубокая трещина.</p>
-          <blockquote>Она выглядела так, словно нас всех давно
-          похоронили, а её только что нашли.</blockquote>
-          <p>Младший служитель коснулся края и потерял сознание.
-          Очнувшись, он спросил, кто разрушил колонны.
-          Колонны стояли на своих местах.</p>
-          <p>К утру трещина исчезла. На дне закрытого ларца остался
-          мелкий сухой песок. До этого песка там не было.</p>`
-      },
-      {
-        art: "art-door",
-        type: "ДОНЕСЕНИЕ СТРАЖИ",
-        title: "Дверь, которой не было",
-        meta: "СВИДЕТЕЛЬСТВО 002 / ВОСТОЧНАЯ ГАЛЕРЕЯ",
-        preview: "За глухой стеной горит белый свет. Оттуда пахнет чужим огнём и сухим железом.",
-        body: `
-          <p>Из доклада ночной стражи.</p>
-          <p>В третью смену из восточной стены донёсся ровный стук.
-          Сначала редкий. Затем частый, как работа каменщика.
-          На штукатурке появились сколы.</p>
-          <blockquote>Они не пытались войти в храм.
-          Они пытались его откопать.</blockquote>
-          <p>На несколько мгновений стена стала проёмом.
-          За ним не было следующего зала. Был низкий коридор,
-          до половины заполненный песком.</p>
-          <p>Стражник увидел человека с белым огнём в руке.
-          Человек закричал первым. Затем проём исчез.</p>`
-      },
-      {
-        art: "art-stars",
-        type: "НЕБЕСНЫЕ ЗНАМЕНИЯ",
-        title: "Лишняя звезда",
-        meta: "СВИДЕТЕЛЬСТВО 003 / ЗАПИСЬ НА КРЫШЕ ХРАМА",
-        preview: "Наблюдатель отмечает звезду, которой не должно быть. Она движется против неба.",
-        body: `
-          <p>Из записей храмового наблюдателя.</p>
-          <p>Над западным краем некрополя появился слабый свет.
-          Не падал, не мерцал и не шёл вместе с остальными звёздами.</p>
-          <blockquote>Он двигался так, будто небо принадлежало
-          другому времени.</blockquote>
-          <p>Внизу, в закрытой галерее, одновременно запели.
-          Слов не удалось разобрать. Старший хранитель приказал
-          погасить светильники и не отвечать.</p>
-          <p><strong>Сюжетная зацепка:</strong> изменения неба сопровождают
-          приближение перехода. Но ещё никто не установил,
-          предупреждают они об открытии или о чьём-то возвращении.</p>`
-      }
-    ],
-    artifactTitle: "Он держал её<br><em>этим утром.</em>",
-    artifactText: "Для хранителя это целая храмовая печать. Знакомая тяжесть в ладони. Для людей из будущего — расколотая находка, извлечённая из песка. Оба держат один и тот же камень.",
-    artifactLabel: "СОСТОЯНИЕ: ЦЕЛАЯ<br>МЕСТО: ВНУТРЕННИЙ ДВОР ХРАМА",
-    artifactButton: "Увидеть, что оставит время",
-    artifactAlt: "Целая бронзово-коричневая храмовая печать",
-    closing: "«Пустыня не возвращает. Она выбирает время».",
-    closingSource: "Из предания хранителей порога",
-    chronicle: {
-      title: "Солнце помнит имена",
-      meta: "ГЛАВА I / ДРЕВНИЙ ЕГИПЕТ",
-      body: `
-        <p>Мир ещё не знает, что граница между эпохами нарушена.
-        Для жителей храмового поселения происходящее пока складывается
-        из слухов, дурных знамений и приказов, которым не дают объяснений.</p>
-        <h3>Что произошло</h3>
-        <ul>
-          <li>Печать на одну ночь состарилась и раскололась.</li>
-          <li>За запечатанной стеной появились голоса.</li>
-          <li>На рассвете стража встретила чужаков.</li>
-          <li>Дорога к святилищу закрыта. Люди требуют объяснений.</li>
-        </ul>
-        <h3>Настоящий момент</h3>
-        <p>Утро после первого перехода. Хранители пытаются оставить
-        случившееся внутри храмовых стен, но у каждого чужака
-        уже есть свидетели.</p>
-        <blockquote>Если это воля богов, почему хранители боятся
-        произнести её вслух?</blockquote>
-        <p><strong>Для жителей Египта:</strong> вы не декорации чужого
-        приключения. У вас есть семьи, обязательства, знания
-        и собственные причины открыть дверь — или замуровать её.</p>`
-    }
-  },
+(() => {
+  const root = document.documentElement;
+  const body = document.body;
 
-  modern: {
-    name: "Экспедиция",
-    theme: "#ece8dd",
-    coordinate: "ГИЗА / ПОЛЕВОЙ ЛАГЕРЬ<br>ИЮНЬ 1912 ГОДА",
-    kicker: "Последние дни привычного мира.",
-    hero: "Рассвет пахнет остывшим песком и крепким чаем. В лагере ещё спят. Только часы во всех палатках показывают одно и то же время — уже третьи сутки.",
-    captionLabel: "ВОСТОЧНЫЙ УЧАСТОК РАСКОПОК",
-    caption: "Вчера под этой стеной<br>не было лестницы.",
-    chapter: "Там, где молчит песок",
-    storyTitle: "Они искали историю.<br>История <em>нашла их.</em>",
-    stamp: "ЭКСПЕДИЦИЯ / ИЮНЬ 1912<br>ВОСТОЧНЫЙ УЧАСТОК, ГИЗА",
-    story: `
-      <p>Несколько палаток, разрешение на раскопки и деньги до конца
-      сезона. Экспедиция прибыла к плато Гиза ради небольшого
-      святилища, следы которого теряются на старых планах.</p>
-      <p>Под обвалившимся коридором нашли печать. За ней — дверь.
-      После её вскрытия <strong>часы остановились, на негативах
-      проступили чужие лица, а из глубины скалы потянуло дымом благовоний.</strong></p>
-      <p>Теперь один и тот же порог иногда ведёт в живой Египет.
-      Иногда — обратно в темноту. <strong>Никто не умеет вызывать переход.
-      И никто не знает, что случится с теми, кто не успеет вернуться.</strong></p>`,
-    quote: "Мы вскрыли не гробницу. Гробницы не смотрят в ответ.",
-    cite: "Неотправленное письмо руководителя экспедиции",
-    timeline: [
-      ["12 ИЮНЯ 1912", "Начало сезона", "В лагерь доставлены припасы. На старой карте отмечен проход, которого нет на местности."],
-      ["17 ИЮНЯ 1912", "Находка № 017", "Из галереи поднята расколотая печать. В 01:17 останавливаются все часы."],
-      ["СЕЙЧАС", "По ту сторону", "Часть экспедиции не вернулась из коридора. Из-за стены доносится шум живого города."]
+  const controls = document.getElementById("controls");
+  const effectsButton = document.getElementById("effects");
+  const restoreButton = document.getElementById("restore");
+  const condition = document.getElementById("condition");
+  const theme = document.querySelector('meta[name="theme-color"]');
+
+  const navLinks = [...document.querySelectorAll(".index nav a")];
+  const sections = navLinks.map(link =>
+    document.querySelector(link.getAttribute("href"))
+  );
+
+  const appearance = document.getElementById("appearance");
+  const personality = document.getElementById("personality");
+  const history = document.getElementById("history");
+
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  );
+
+  const STORAGE_KEY = "maria-witness-effects";
+
+  let effectsEnabled = !reducedMotion.matches;
+  let explicitPreference = false;
+
+  // Повреждения накапливаются и не исчезают при прокрутке вверх.
+  let accumulatedDamage = 0;
+
+  let pending = false;
+  let needsMeasurement = true;
+  let positions = [];
+  let damageStops = [];
+  let lastPaintedDamage = -1;
+  let lastActive = "";
+  let lastCondition = "";
+
+  // Только тёплые земляные оттенки:
+  // пергамент → старый табак, фон → копоть.
+  const palette = {
+    "--ground": [
+      [231, 222, 202],
+      [25, 20, 14]
     ],
-    mapTitle: "У каждого раскопа<br><em>есть другая сторона.</em>",
-    mapLabel: "ПОЛЕВОЙ ПЛАН / ВОСТОЧНЫЙ УЧАСТОК<br>МАСШТАБ УСЛОВНЫЙ",
-    locations: [
-      {
-        name: "Лагерь экспедиции",
-        description: "Выцветшие палатки, керосиновая лампа под навесом и карты, прижатые камнями. Здесь ещё можно выпить чаю и сделать вид, что происходящему найдётся научное объяснение.",
-        tags: ["Сбор экспедиции", "Припасы", "Относительно безопасно"],
-        x: 20, y: 71
-      },
-      {
-        name: "Восточная галерея",
-        description: "Пыль лежит на ступенях ровным слоем — кроме свежих босых следов. В конце прохода находится дверь. Иногда воздух за ней горячее полуденной пустыни.",
-        tags: ["Переход", "Аномалия", "Вход ограничен"],
-        x: 43, y: 39
-      },
-      {
-        name: "Южный раскоп",
-        description: "Расчищенные фундаменты исчезнувшего святилища. На зарисовке вчерашнего дня колонн четыре. Сегодня их пять. Никто не хочет первым сказать об этом вслух.",
-        tags: ["Раскопки", "Изменения пространства", "Улики"],
-        x: 56, y: 64
-      },
-      {
-        name: "Архивный дом",
-        description: "Снятый у дороги дом с тёмной комнатой для проявки. На одном из негативов виден человек, стоявший за спиной фотографа. В момент съёмки фотограф был один.",
-        tags: ["Документы", "Фотографии", "Телеграф"],
-        x: 71, y: 31
-      }
+    "--paper": [
+      [245, 238, 219],
+      [205, 184, 144]
     ],
-    archiveTitle: "Бумага стерпит.<br><em>Память — не всегда.</em>",
-    archiveSummary: "Полевые записи, проявленные снимки<br>и сообщения, которых никто не отправлял.",
-    documents: [
-      {
-        art: "art-paper",
-        type: "ПОЛЕВОЙ ДНЕВНИК",
-        title: "Час семнадцать",
-        meta: "ДОКУМЕНТ 001 / 18.06.1912",
-        preview: "Все часы в лагере остановились одновременно. Один механизм продолжает идти — в обратную сторону.",
-        body: `
-          <p>18 июня. До рассвета.</p>
-          <p>Часы замерли в час семнадцать. Сначала решили,
-          что дело в песке. Потом проверили остальные.
-          Карманные. Настольные. Закрытые в ящике.</p>
-          <blockquote>Все показывали одно время.
-          Кроме часов человека, который ещё не вернулся.</blockquote>
-          <p>Его часы остались на столе. Секундная стрелка двигалась
-          против хода. Мы наблюдали за ней около получаса,
-          пока она тоже не остановилась.</p>
-          <p>Из галереи ночью доносился плеск воды.
-          Здесь не было воды по меньшей мере несколько тысяч лет.</p>`
-      },
-      {
-        art: "art-door",
-        type: "СНИМОК № 12",
-        title: "Лишний человек",
-        meta: "ДОКУМЕНТ 002 / ФОТОЛАБОРАТОРИЯ",
-        preview: "На проявленной пластинке в пустой галерее стоит человек. Он смотрит не на фотографа, а на нас.",
-        body: `
-          <p>Снимок сделан при магниевой вспышке.
-          В кадре — дверь восточной галереи и масштабная рейка.</p>
-          <p>При первом осмотре негатив был чист. Через несколько часов
-          в тёмной части проёма проступила человеческая фигура.</p>
-          <blockquote>Он не мог стоять там.
-          За дверью оставалась сплошная кладка.</blockquote>
-          <p>На следующем отпечатке фигура оказалась ближе.
-          Исходная пластинка не менялась.</p>
-          <p><strong>Пометка на конверте:</strong>
-          «Не печатать третий экземпляр до возвращения руководителя».</p>`
-      },
-      {
-        art: "art-stars",
-        type: "СРОЧНОЕ СООБЩЕНИЕ",
-        title: "Завтрашняя телеграмма",
-        meta: "ДОКУМЕНТ 003 / КАИР — ГИЗА",
-        preview: "Предупреждение пришло до того, как его отправили. Подпись принадлежит пропавшему участнику экспедиции.",
-        body: `
-          <p>Входящая телеграмма. Принята 19 июня.<br>
-          Дата отправления: 20 июня 1912 года.</p>
-          <blockquote>ПЕЧАТЬ НЕ СОЕДИНЯТЬ · ВТОРУЮ ДВЕРЬ НЕ ВСКРЫВАТЬ ·
-          ЕСЛИ УСЛЫШИТЕ СВОЁ ИМЯ НЕ ОТВЕЧАЙТЕ</blockquote>
-          <p>Подпись разобрана уверенно. Отправитель числится
-          пропавшим после вчерашнего спуска в галерею.</p>
-          <p>На станции в Каире утверждают, что такого сообщения
-          не принимали. Проверку обещали повторить завтра.</p>`
-      }
+    "--paper-alt": [
+      [238, 227, 201],
+      [194, 169, 126]
     ],
-    artifactTitle: "Они найдут её<br><em>через три тысячи лет.</em>",
-    artifactText: "Камень потемнел, рельеф стёрся, через глаз прошла трещина. Для экспедиции это находка № 017. Для кого-то по ту сторону двери — вещь, которую он только что убрал в ларец.",
-    artifactLabel: "СОСТОЯНИЕ: РАСКОЛОТА<br>МЕСТО: ПОЛЕВОЙ АРХИВ",
-    artifactButton: "Увидеть её до разрушения",
-    artifactAlt: "Древняя храмовая печать с глубокой трещиной",
-    closing: "«Мы искали прошлое. Оно нашло нас первым».",
-    closingSource: "Из неопубликованного дневника экспедиции",
-    chronicle: {
-      title: "Там, где молчит песок",
-      meta: "ГЛАВА I / ЭКСПЕДИЦИЯ / ИЮНЬ 1912",
-      body: `
-        <p>Сезон начинался как обычные раскопки. Мало денег,
-        слишком много песка, неясные перспективы. Никто не ожидал,
-        что главным вопросом станет не ценность находки,
-        а возможность вернуться из следующего коридора.</p>
-        <h3>Что произошло</h3>
-        <ul>
-          <li>Открыта галерея под руинами святилища.</li>
-          <li>Найдена расколотая печать с необычными знаками.</li>
-          <li>В лагере начались временные аномалии.</li>
-          <li>Первый переход разделил экспедицию между эпохами.</li>
-        </ul>
-        <h3>Настоящий момент</h3>
-        <p>Вечер после исчезновения первой группы. Оставшиеся
-        у входа слышат живой город. За порогом не видно ничего,
-        кроме старой кладки.</p>
-        <blockquote>Самое страшное — не то, что дверь открылась.
-        А то, что с другой стороны её уже ждали.</blockquote>
-        <p><strong>Правило истории:</strong> переходы нельзя вызвать
-        по желанию. Их появление согласуется в общем сюжете.
-        Знание истории не даёт власти над живущими в ней людьми.</p>`
-    }
+    "--void": [
+      [245, 238, 219],
+      [25, 20, 14]
+    ],
+    "--ui": [
+      [110, 90, 62],
+      [207, 188, 151]
+    ],
+    "--ui-line": [
+      [199, 185, 156],
+      [85, 70, 50]
+    ],
+    "--loss-ink": [
+      [65, 48, 32],
+      [220, 197, 160]
+    ]
+  };
+
+  function clamp(value, min = 0, max = 1) {
+    return Math.min(max, Math.max(min, value));
   }
-};
 
-const $ = id => document.getElementById(id);
-const tabs = [...document.querySelectorAll(".era-tab")];
-const dialog = $("document-dialog");
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  function ease(value) {
+    return value * value * (3 - 2 * value);
+  }
 
-let currentEra = "ancient";
-let selectedLocation = 1;
-let motionEnabled = !reduceMotion.matches;
+  function mixColor(a, b, amount) {
+    return `rgb(${a.map((value, index) =>
+      Math.round(value + (b[index] - value) * amount)
+    ).join(", ")})`;
+  }
 
-/* =====================================================
-   СМЕНА ЭПОХ
-   ===================================================== */
-function renderLocation(index) {
-  selectedLocation = index;
-  const place = worlds[currentEra].locations[index];
-  const number = String(index + 1).padStart(2, "0");
+  function topOf(element) {
+    return element.getBoundingClientRect().top + window.scrollY;
+  }
 
-  $("location-panel").dataset.number = number;
-  $("location-panel").innerHTML = `
-    <div class="location-top">МЕСТО ${number} / 04</div>
-    <h3>${place.name}</h3>
-    <p>${place.description}</p>
-    <div class="tags">${place.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
-  `;
+  function measure() {
+    const height = window.innerHeight;
 
-  document.querySelectorAll(".map-marker").forEach((marker, i) => {
-    marker.setAttribute("aria-pressed", String(i === index));
-  });
-}
+    positions = sections.map(section => ({
+      id: section.id,
+      top: topOf(section)
+    }));
 
-function renderMap() {
-  $("map-markers").innerHTML = worlds[currentEra].locations.map((place, index) => `
-    <button class="map-marker" style="left:${place.x}%;top:${place.y}%"
-      data-location="${index}" aria-pressed="false"
-      aria-controls="location-panel"
-      aria-label="${index + 1}. ${place.name}" title="${place.name}">
-      <span>${String(index + 1).padStart(2, "0")}</span>
-    </button>
-  `).join("");
+    // Контрольные точки привязаны к разделам, а не длине текста.
+    // Поэтому анкету можно переписывать без пересчёта процентов.
+    damageStops = [
+      { y: 0, value: 0 },
+      { y: Math.max(1, topOf(appearance) - height * .9), value: 0 },
+      { y: topOf(appearance) - height * .25, value: .22 },
+      { y: topOf(personality) - height * .35, value: .58 },
+      { y: topOf(history) - height * .45, value: 1 }
+    ];
 
-  renderLocation(selectedLocation);
-}
-
-function renderArchive() {
-  $("archive-grid").innerHTML = worlds[currentEra].documents.map((doc, index) => `
-    <button class="archive-card" data-document="${index}"
-      aria-haspopup="dialog" aria-label="Открыть документ: ${doc.title}">
-      <span class="archive-art">
-        <span class="archive-id">АРХИВ / ${String(index + 1).padStart(3, "0")}</span>
-        <svg viewBox="0 0 380 220" aria-hidden="true">
-          <use href="#${doc.art}"></use>
-        </svg>
-        <span class="archive-art-label">${doc.type}</span>
-      </span>
-      <span class="archive-content">
-        <span class="archive-meta">${doc.meta}</span>
-        <span class="archive-title">${doc.title}</span>
-        <span class="archive-preview">${doc.preview}</span>
-        <span class="archive-bottom"><span>Открыть свидетельство</span><b aria-hidden="true">↗</b></span>
-      </span>
-    </button>
-  `).join("");
-}
-
-function setEra(era, announce = true) {
-  if (!worlds[era]) return;
-
-  currentEra = era;
-  const world = worlds[era];
-
-  document.body.dataset.era = era;
-  document.querySelector('meta[name="theme-color"]').content = world.theme;
-  $("world").setAttribute("aria-labelledby", `tab-${era}`);
-
-  tabs.forEach(tab => {
-    const selected = tab.dataset.era === era;
-    tab.setAttribute("aria-selected", String(selected));
-    tab.tabIndex = selected ? 0 : -1;
-  });
-
-  const text = {
-    "hero-kicker": world.kicker,
-    "hero-description": world.hero,
-    "scene-caption-label": world.captionLabel,
-    "chapter-name": world.chapter,
-    "story-quote": world.quote,
-    "story-cite": world.cite,
-    "artifact-text": world.artifactText,
-    "closing-quote": world.closing,
-    "closing-source": world.closingSource
-  };
-
-  const html = {
-    "era-coordinate": world.coordinate,
-    "scene-caption-text": world.caption,
-    "story-title": world.storyTitle,
-    "story-stamp": world.stamp,
-    "story-text": world.story,
-    "map-title": world.mapTitle,
-    "map-top-label": world.mapLabel,
-    "archive-title": world.archiveTitle,
-    "archive-summary": world.archiveSummary,
-    "artifact-title": world.artifactTitle,
-    "artifact-label": world.artifactLabel
-  };
-
-  Object.entries(text).forEach(([id, value]) => $(id).textContent = value);
-  Object.entries(html).forEach(([id, value]) => $(id).innerHTML = value);
-
-  $("artifact-switch").innerHTML = `<span>${world.artifactButton}</span><span aria-hidden="true">⇄</span>`;
-  $("artifact-image").setAttribute("aria-label", world.artifactAlt);
-
-  $("timeline").innerHTML = world.timeline.map(([date, title, description]) => `
-    <div class="timeline-item">
-      <div class="date">${date}</div>
-      <h3>${title}</h3>
-      <p>${description}</p>
-    </div>
-  `).join("");
-
-  renderMap();
-  renderArchive();
-  updateParticleColor();
-
-  if (announce) {
-    $("announcement").textContent = `Открыта эпоха: ${world.name}. Сюжет, карта и документы обновлены.`;
-    if (motionEnabled && !reduceMotion.matches) {
-      $("time-flash").animate(
-        [{ opacity: 0 }, { opacity: .34, offset: .18 }, { opacity: 0 }],
-        { duration: 850, easing: "ease-out" }
+    // Защита для очень короткого текста или очень высокого окна.
+    for (let i = 1; i < damageStops.length; i++) {
+      damageStops[i].y = Math.max(
+        damageStops[i].y,
+        damageStops[i - 1].y + 1
       );
     }
+
+    needsMeasurement = false;
   }
 
-  try { localStorage.setItem("sands-cinematic-era", era); } catch (_) {}
-}
+  function damageAt(scroll) {
+    for (let i = 1; i < damageStops.length; i++) {
+      const from = damageStops[i - 1];
+      const to = damageStops[i];
 
-tabs.forEach((tab, index) => {
-  tab.addEventListener("click", () => {
-    if (tab.dataset.era !== currentEra) setEra(tab.dataset.era);
-  });
+      if (scroll <= to.y) {
+        const progress = ease(
+          clamp((scroll - from.y) / (to.y - from.y))
+        );
 
-  tab.addEventListener("keydown", event => {
-    let next;
-    if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
-    if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
-    if (event.key === "Home") next = 0;
-    if (event.key === "End") next = tabs.length - 1;
-
-    if (next !== undefined) {
-      event.preventDefault();
-      tabs[next].focus();
-      if (tabs[next].dataset.era !== currentEra) setEra(tabs[next].dataset.era);
-    }
-  });
-});
-
-$("map-markers").addEventListener("click", event => {
-  const marker = event.target.closest("[data-location]");
-  if (marker) renderLocation(Number(marker.dataset.location));
-});
-
-$("artifact-switch").addEventListener("click", () => {
-  const previousTop = $("artifact").getBoundingClientRect().top;
-  setEra(currentEra === "ancient" ? "modern" : "ancient");
-  const difference = $("artifact").getBoundingClientRect().top - previousTop;
-  window.scrollBy({ top: difference, behavior: "instant" });
-});
-
-/* =====================================================
-   ДОКУМЕНТЫ
-   ===================================================== */
-function openDocument(document, category = "Свидетельства") {
-  $("modal-category").textContent = category;
-  $("modal-title").textContent = document.title;
-  $("modal-meta").textContent = document.meta;
-  $("modal-body").innerHTML = document.body;
-
-  dialog.showModal();
-  dialog.scrollTop = 0;
-}
-
-$("archive-grid").addEventListener("click", event => {
-  const card = event.target.closest("[data-document]");
-  if (!card) return;
-  const doc = worlds[currentEra].documents[Number(card.dataset.document)];
-  openDocument(doc, doc.type);
-});
-
-$("chronicle-button").addEventListener("click", () => {
-  openDocument(worlds[currentEra].chronicle, "Хроника текущей главы");
-});
-
-$("about-button").addEventListener("click", () => {
-  openDocument({
-    title: "Две эпохи. Одна трещина.",
-    meta: "ЛИТЕРАТУРНАЯ РОЛЕВАЯ / ИСТОРИЧЕСКАЯ МИСТИКА",
-    body: `
-      <p><strong>«По ту сторону песков»</strong> — история об одном месте
-      в двух временах. В 1912 году здесь работают исследователи.
-      В Древнем Египте — живут люди, для которых храмы ещё не руины,
-      а история ещё не написана.</p>
-      <h3>Две равноправные стороны</h3>
-      <p>Экспедиция пытается понять происходящее и вернуть пропавших.
-      Жители Египта защищают собственный мир — или видят в пришельцах
-      возможность изменить свою судьбу.</p>
-      <h3>Переход</h3>
-      <p>Восточная галерея связывает эпохи, но не подчиняется людям.
-      Предвестники перехода повторяются, однако не дают надёжного
-      способа открыть дверь. Общие события согласуются участниками игры.</p>
-      <h3>Историческая основа</h3>
-      <p>Древняя линия условно относится к началу XIX династии,
-      около 1290 года до н. э. Пирамиды к этому времени уже древние.
-      Святилище, экспедиция, документы и временные аномалии вымышлены.</p>
-      <h3>Как читать этот сайт</h3>
-      <p>Вверху выберите эпоху. На карте откройте места действия.
-      В архиве прочитайте свидетельства. У печати переключитесь
-      на другую сторону времени, не покидая самого предмета.</p>
-      <p>Это сюжетный сайт: здесь нет анкет персонажей,
-      регистрации или встроенного форума.</p>`
-  }, "О ролевой игре");
-});
-
-$("modal-close").addEventListener("click", () => dialog.close());
-
-dialog.addEventListener("click", event => {
-  if (event.target !== dialog) return;
-  const rect = dialog.getBoundingClientRect();
-  const outside =
-    event.clientX < rect.left || event.clientX > rect.right ||
-    event.clientY < rect.top || event.clientY > rect.bottom;
-  if (outside) dialog.close();
-});
-
-/* =====================================================
-   АТМОСФЕРНАЯ ПЫЛЬ
-   Два слоя: мелкая дальняя и крупная размытая ближняя.
-   Анимация останавливается вне первого экрана.
-   ===================================================== */
-const canvas = $("dust");
-const ctx = canvas.getContext("2d");
-const hero = $("top");
-
-let particles = [];
-let width = 0;
-let height = 0;
-let particleColor = "242, 175, 96";
-let heroVisible = true;
-let frameId = null;
-let lastTime = 0;
-
-function updateParticleColor() {
-  particleColor = currentEra === "ancient" ? "242, 175, 96" : "255, 248, 223";
-  if (!motionEnabled) drawParticles(0);
-}
-
-function newParticle(randomPosition = true) {
-  const near = Math.random() > .82;
-  return {
-    x: randomPosition ? Math.random() * width : -25,
-    y: Math.random() * height,
-    radius: near ? 1.8 + Math.random() * 2.2 : .35 + Math.random() * 1.1,
-    speed: near ? 12 + Math.random() * 15 : 4 + Math.random() * 10,
-    drift: Math.random() * Math.PI * 2,
-    alpha: near ? .08 + Math.random() * .12 : .1 + Math.random() * .28,
-    near
-  };
-}
-
-function resizeCanvas() {
-  const rect = hero.getBoundingClientRect();
-  const ratio = Math.min(window.devicePixelRatio || 1, 2);
-  width = rect.width;
-  height = rect.height;
-  canvas.width = Math.round(width * ratio);
-  canvas.height = Math.round(height * ratio);
-  if (!ctx) return;
-  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-
-  const count = Math.min(115, Math.max(40, Math.round(width / 12)));
-  particles = Array.from({ length: count }, () => newParticle());
-  drawParticles(0);
-}
-
-function drawParticles(delta) {
-  if (!ctx || !width || !height) return;
-  ctx.clearRect(0, 0, width, height);
-
-  for (let i = 0; i < particles.length; i++) {
-    const p = particles[i];
-
-    if (delta) {
-      p.x += p.speed * delta;
-      p.drift += delta * .22;
-      p.y += Math.sin(p.drift) * delta * 5 - delta * 1.6;
-
-      if (p.x > width + 25 || p.y < -25) {
-        particles[i] = newParticle(false);
-        continue;
+        return from.value + (to.value - from.value) * progress;
       }
     }
 
-    const glowZone = .4 + .6 * Math.max(0, 1 - Math.abs(p.x / width - .7));
-    ctx.beginPath();
-    ctx.fillStyle = `rgba(${particleColor}, ${p.alpha * glowZone})`;
-    ctx.shadowColor = `rgba(${particleColor}, .3)`;
-    ctx.shadowBlur = p.near ? 9 : 0;
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-    ctx.fill();
+    return 1;
   }
 
-  ctx.shadowBlur = 0;
-}
+  function paintDamage(damage) {
+    if (Math.abs(lastPaintedDamage - damage) < .0005) return;
 
-function tick(time) {
-  if (!motionEnabled || !heroVisible || document.hidden) {
-    frameId = null;
-    return;
+    lastPaintedDamage = damage;
+    root.style.setProperty("--damage", damage.toFixed(4));
+
+    for (const [property, colors] of Object.entries(palette)) {
+      root.style.setProperty(
+        property,
+        mixColor(colors[0], colors[1], damage)
+      );
+    }
+
+    theme.setAttribute(
+      "content",
+      mixColor(
+        palette["--ground"][0],
+        palette["--ground"][1],
+        damage
+      )
+    );
   }
 
-  const delta = lastTime ? Math.min((time - lastTime) / 1000, .05) : 0;
-  lastTime = time;
-  drawParticles(delta);
-  frameId = requestAnimationFrame(tick);
-}
+  function update() {
+    pending = false;
 
-function syncAnimation() {
-  if (frameId !== null) {
-    cancelAnimationFrame(frameId);
-    frameId = null;
+    if (needsMeasurement) measure();
+
+    const scroll = window.scrollY;
+    const maxScroll = Math.max(
+      1,
+      root.scrollHeight - window.innerHeight
+    );
+
+    const reading = clamp(scroll / maxScroll);
+    root.style.setProperty("--read", reading.toFixed(4));
+
+    if (effectsEnabled) {
+      accumulatedDamage = Math.max(
+        accumulatedDamage,
+        damageAt(scroll)
+      );
+    }
+
+    const visibleDamage = effectsEnabled ? accumulatedDamage : 0;
+    paintDamage(visibleDamage);
+
+    let state = "повреждений нет";
+
+    if (!effectsEnabled) {
+      state = "режим чтения";
+    } else if (visibleDamage > .93) {
+      state = "сохранились фрагменты";
+    } else if (visibleDamage > .62) {
+      state = "нарушена целостность";
+    } else if (visibleDamage > .3) {
+      state = "текст не совпадает";
+    } else if (visibleDamage > .04) {
+      state = "следы чужого нажима";
+    }
+
+    if (state !== lastCondition) {
+      condition.textContent = state;
+      lastCondition = state;
+    }
+
+    const readingLine = scroll + window.innerHeight * .33;
+    let active = positions[0]?.id || "";
+
+    for (const section of positions) {
+      if (section.top <= readingLine) active = section.id;
+    }
+
+    if (reading > .985) {
+      active = positions[positions.length - 1]?.id || active;
+    }
+
+    if (active !== lastActive) {
+      lastActive = active;
+
+      navLinks.forEach(link => {
+        if (link.getAttribute("href") === `#${active}`) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    }
   }
 
-  document.body.classList.toggle("motion-off", !motionEnabled);
-  $("motion-toggle").setAttribute("aria-pressed", String(motionEnabled));
-  $("motion-label").textContent = motionEnabled ? "Пыль · вкл." : "Пыль · пауза";
+  function schedule(measureAgain = false) {
+    if (measureAgain) needsMeasurement = true;
+    if (pending) return;
 
-  lastTime = 0;
-  if (ctx && motionEnabled && heroVisible && !document.hidden) {
-    frameId = requestAnimationFrame(tick);
+    pending = true;
+    requestAnimationFrame(update);
+  }
+
+  function syncEffects() {
+    body.classList.toggle("calm", !effectsEnabled);
+    effectsButton.setAttribute(
+      "aria-pressed",
+      String(effectsEnabled)
+    );
+    effectsButton.textContent = effectsEnabled
+      ? "Искажения"
+      : "Без искажений";
+
+    schedule(true);
+  }
+
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (saved === "on" || saved === "off") {
+      effectsEnabled = saved === "on";
+      explicitPreference = true;
+    }
+  } catch (_) {
+    // Сайт продолжит работать, если хранилище недоступно.
+  }
+
+  controls.hidden = false;
+  syncEffects();
+
+  effectsButton.addEventListener("click", () => {
+    effectsEnabled = !effectsEnabled;
+    explicitPreference = true;
+
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        effectsEnabled ? "on" : "off"
+      );
+    } catch (_) {}
+
+    syncEffects();
+  });
+
+  restoreButton.addEventListener("click", () => {
+    accumulatedDamage = 0;
+    lastPaintedDamage = -1;
+
+    // Мгновенный возврат: без длинной прокрутки через повреждения.
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    paintDamage(0);
+    schedule(true);
+  });
+
+  function onMotionPreferenceChange(event) {
+    if (!explicitPreference) {
+      effectsEnabled = !event.matches;
+      syncEffects();
+    }
+  }
+
+  if (reducedMotion.addEventListener) {
+    reducedMotion.addEventListener(
+      "change",
+      onMotionPreferenceChange
+    );
   } else {
-    drawParticles(0);
+    reducedMotion.addListener(onMotionPreferenceChange);
   }
-}
 
-$("motion-toggle").addEventListener("click", () => {
-  motionEnabled = !motionEnabled;
-  syncAnimation();
-});
+  window.addEventListener("scroll", () => schedule(), {
+    passive: true
+  });
 
-reduceMotion.addEventListener("change", event => {
-  motionEnabled = !event.matches;
-  syncAnimation();
-});
+  window.addEventListener("resize", () => schedule(true), {
+    passive: true
+  });
 
-document.addEventListener("visibilitychange", syncAnimation);
+  window.addEventListener("load", () => schedule(true));
+  window.addEventListener("pageshow", () => schedule(true));
 
-if ("IntersectionObserver" in window) {
-  new IntersectionObserver(entries => {
-    heroVisible = entries[0].isIntersecting;
-    syncAnimation();
-  }, { threshold: .01 }).observe(hero);
-}
+  if ("ResizeObserver" in window) {
+    const observer = new ResizeObserver(() => schedule(true));
+    observer.observe(document.querySelector(".manuscript"));
+  }
 
-if ("ResizeObserver" in window) {
-  new ResizeObserver(resizeCanvas).observe(hero);
-} else {
-  window.addEventListener("resize", resizeCanvas);
-}
-
-/* =====================================================
-   ЗАПУСК
-   ===================================================== */
-let initialEra = "ancient";
-try {
-  const saved = localStorage.getItem("sands-cinematic-era");
-  if (worlds[saved]) initialEra = saved;
-} catch (_) {}
-
-setEra(initialEra, false);
-resizeCanvas();
-syncAnimation();
+  schedule(true);
+})();
 </script>
 </body>
 </html>
