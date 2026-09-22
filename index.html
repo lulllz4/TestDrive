@@ -3,1456 +3,1940 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#e7deca">
-<title>Мария Вельская / свидетельство</title>
+<meta name="theme-color" content="#e8dfcc">
+<title>Мария Вельская — я правда стараюсь</title>
 
 <style>
-  :root {
-    --ground: #e7deca;
-    --paper: #f5eedb;
-    --paper-alt: #eee3c9;
-    --void: #f5eedb;
-    --ui: #6e5a3e;
-    --ui-line: #c7b99c;
-    --loss-ink: #413020;
+/* =========================================================
+   ОСНОВА
+   ========================================================= */
 
-    --ink: #35291b;
-    --muted: #66523b;
-    --line: rgba(91, 65, 34, .25);
-    --damage: 0;
-    --read: 0;
-    --shift: 18px;
+:root {
+  --bg: #e8dfcc;
+  --sheet: #f7f0de;
+  --ui: #655139;
+  --ui-line: #c7b699;
+  --scene: #f7f0de;
+  --scene-ink: #392b1c;
 
-    --serif: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
-    --mono: "Courier New", Courier, monospace;
-    --sans: Arial, sans-serif;
-  }
+  --ink: #392b1c;
+  --muted: #746048;
+  --line: rgba(94, 65, 29, .25);
 
-  * { box-sizing: border-box; }
-  [hidden] { display: none !important; }
+  --damage: 0;
+  --psy: 0;
+  --reading: 0;
+  --float: 0px;
 
-  html {
-    scroll-padding-top: 90px;
-    scrollbar-color: #806947 var(--ground);
-  }
+  --green: #b8ef31;
+  --pink: #ed176e;
+  --blue: #283ee0;
+  --yellow: #f8d949;
 
-  body {
-    margin: 0;
-    overflow-x: hidden;
-    background: var(--ground);
-    color: var(--ink);
-    font-family: var(--serif);
-    line-height: 1.8;
-  }
+  --serif: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  --sans: Arial, sans-serif;
+  --mono: "Courier New", Courier, monospace;
+}
 
-  button, a { -webkit-tap-highlight-color: transparent; }
-  button { font: inherit; }
-  a { color: inherit; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
-  button:focus-visible, a:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 5px;
-  }
+html {
+  scroll-padding-top: 95px;
+  scrollbar-color: #8e7048 var(--bg);
+}
 
-  ::selection {
-    background: #675035;
-    color: #fff2d7;
-  }
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  line-height: 1.8;
+}
 
-  .grain {
-    position: fixed;
-    inset: 0;
-    z-index: 80;
-    pointer-events: none;
-    opacity: .065;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' filter='url(%23n)' opacity='.7' d='M0 0h160v160H0z'/%3E%3C/svg%3E");
-  }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; }
+a { color: inherit; }
 
-  .vignette {
-    position: fixed;
-    inset: 0;
-    z-index: 79;
-    pointer-events: none;
-    opacity: calc(var(--damage) * .65);
-    background: radial-gradient(
-      ellipse at 55% 45%,
-      transparent 35%,
-      rgba(12, 8, 3, .65)
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
+}
+
+::selection {
+  background: #b8ef31;
+  color: #20192a;
+}
+
+p { margin: 0 0 17px; }
+p:last-child { margin-bottom: 0; }
+
+h1, h2, h3 { font-weight: normal; }
+svg { display: block; }
+
+.symbol-library {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: .065;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath d='M0 0h180v180H0z' fill='%23000' opacity='.75' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+.skip {
+  position: fixed;
+  left: 15px;
+  top: -100px;
+  z-index: 120;
+  padding: 8px 15px;
+  background: #f7f0de;
+  color: #392b1c;
+}
+
+.skip:focus { top: 10px; }
+
+.micro {
+  font-family: var(--sans);
+  font-size: 9px;
+  line-height: 1.6;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+
+.hand {
+  font-family: "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+}
+
+/* =========================================================
+   ПАНЕЛЬ И ОГЛАВЛЕНИЕ
+   ========================================================= */
+
+.topbar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  height: 62px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 0 25px;
+  background: var(--bg);
+  color: var(--ui);
+  border-bottom: 1px solid var(--ui-line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-decoration: none;
+}
+
+.brand-cross {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.controls {
+  display: flex;
+  gap: 7px;
+}
+
+.control {
+  min-height: 34px;
+  padding: 6px 11px;
+  border: 1px solid var(--ui-line);
+  color: inherit;
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.control:hover { background: rgba(130, 105, 70, .12); }
+
+.top-progress {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--ui);
+  transform: scaleX(var(--reading));
+  transform-origin: left;
+}
+
+.layout {
+  width: min(1160px, calc(100% - 52px));
+  margin: 0 auto;
+  padding: 110px 0 55px;
+  display: grid;
+  grid-template-columns: 145px minmax(0, 860px);
+  gap: 55px;
+  justify-content: center;
+  align-items: start;
+}
+
+.index {
+  position: sticky;
+  top: 103px;
+  color: var(--ui);
+}
+
+.index-title { margin-bottom: 24px; }
+
+.index nav {
+  display: grid;
+  gap: 3px;
+}
+
+.index a {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 7px 0;
+  font-size: 12px;
+  text-decoration: none;
+  opacity: .65;
+}
+
+.index b {
+  width: 27px;
+  font-size: 11px;
+  font-weight: normal;
+}
+
+.index a[aria-current="location"] { opacity: 1; }
+
+.index a[aria-current="location"] span {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.preservation {
+  margin-top: 25px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ui-line);
+}
+
+.preservation-meter {
+  height: 2px;
+  margin: 12px 0;
+  background: var(--ui-line);
+}
+
+.preservation-meter i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--ui);
+  transform: scaleX(calc(1 - var(--damage) * .96));
+  transform-origin: left;
+}
+
+#condition {
+  font-family: var(--mono);
+  font-size: 9px;
+  line-height: 1.7;
+}
+
+.aside-quote {
+  margin-top: 30px;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.7;
+  opacity: .75;
+}
+
+.aside-quote cite {
+  margin-top: 12px;
+  color: inherit;
+}
+
+main { min-width: 0; }
+
+.paper {
+  position: relative;
+  isolation: isolate;
+}
+
+/* =========================================================
+   ПЕРВАЯ ЧАСТЬ: БЛАГОЧЕСТИВАЯ АККУРАТНОСТЬ
+   ========================================================= */
+
+.document {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 0 0, #ad8b4720, transparent 60%),
+    var(--sheet);
+  border: 1px solid var(--line);
+  box-shadow:
+    0 18px 70px #30210f15,
+    6px 6px 0 -1px var(--bg),
+    6px 6px 0 0 var(--ui-line);
+}
+
+.document::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid var(--line);
+  pointer-events: none;
+}
+
+.hero {
+  position: relative;
+  padding: 34px 55px 38px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.archive-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.emblem {
+  position: relative;
+  width: 225px;
+  margin: 33px auto 22px;
+  color: #82663b;
+}
+
+.emblem > svg { width: 100%; }
+
+.emblem-flower {
+  position: absolute;
+  width: 39px;
+  height: 39px;
+  opacity: .7;
+}
+
+.emblem-flower.a { left: -27px; top: 92px; }
+.emblem-flower.b { right: -27px; top: 92px; }
+
+.eyebrow {
+  margin-bottom: 15px;
+  color: var(--muted);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(43px, 6.6vw, 77px);
+  line-height: 1.08;
+  letter-spacing: -.055em;
+}
+
+.hero-subtitle {
+  max-width: 340px;
+  margin: 22px auto 0;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.hero-quote {
+  margin: 29px 0 0;
+  padding-top: 25px;
+  border-top: 1px solid var(--line);
+}
+
+.hero-quote p {
+  font-size: 18px;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+cite {
+  display: block;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 9px;
+  font-style: normal;
+  line-height: 1.6;
+  letter-spacing: .07em;
+}
+
+.content-note {
+  margin-top: 24px;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 9px;
+  line-height: 1.8;
+}
+
+.hero-counterprint {
+  position: absolute;
+  top: 251px;
+  left: 0;
+  right: 0;
+  color: #795a37;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .27em;
+  text-transform: uppercase;
+  transform: rotate(calc(var(--damage) * -5deg));
+  opacity: calc(var(--damage) * .7);
+  pointer-events: none;
+}
+
+.entry {
+  position: relative;
+  padding: 35px 55px;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: 88px;
+}
+
+.entry-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.roman {
+  min-width: 28px;
+  color: var(--muted);
+  font-size: 13px;
+  font-style: italic;
+}
+
+h2 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.3;
+  letter-spacing: -.03em;
+}
+
+.entry p {
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+.entry .lead {
+  font-size: 23px;
+  line-height: 1.5;
+}
+
+.small {
+  font-size: 13px !important;
+  color: var(--muted);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.facts .entry + .entry { border-left: 1px solid var(--line); }
+.facts h2 { font-size: 26px; }
+
+.verse {
+  margin: 23px 0 0;
+  padding: 2px 0 2px 16px;
+  border-left: 1px solid #a3895d;
+}
+
+.verse p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.75;
+}
+
+.stamp {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 9px;
+  line-height: 1.6;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+
+/* =========================================================
+   В ФОРМУ НАЧИНАЕТ ПРОНИКАТЬ ЧТО-ТО ЧУЖОЕ
+   ========================================================= */
+
+.unstable .entry-inner {
+  transform:
+    translateX(calc(var(--damage) * 4px))
+    rotate(calc(var(--damage) * -.35deg));
+}
+
+.unravel .entry-inner {
+  transform:
+    translateX(calc(var(--damage) * -4px))
+    rotate(calc(var(--damage) * .4deg));
+}
+
+.echo-title { position: relative; }
+
+.echo-title::after {
+  content: attr(data-echo);
+  position: absolute;
+  inset: 0;
+  color: var(--blue);
+  opacity: calc(var(--psy) * .65);
+  transform: translate(3px, 3px);
+  clip-path: polygon(0 34%, 100% 34%, 100% 55%, 0 55%);
+  pointer-events: none;
+}
+
+.margin-order {
+  position: absolute;
+  top: 60px;
+  right: 8px;
+  writing-mode: vertical-rl;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .12em;
+  color: #61472d;
+}
+
+.intrusion {
+  opacity: var(--damage);
+  pointer-events: none;
+  user-select: none;
+}
+
+.correction {
+  position: relative;
+  display: inline-block;
+}
+
+.correction::after {
+  content: "";
+  position: absolute;
+  inset: 51% -3px auto;
+  height: 2px;
+  background: #533a25;
+  transform: scaleX(var(--damage)) rotate(-4deg);
+  transform-origin: left;
+}
+
+.hand-note {
+  margin: 24px 0;
+  padding-left: 16%;
+  font-size: 20px;
+  line-height: 1.5;
+  transform: rotate(calc(var(--damage) * -3deg));
+}
+
+.traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 19px;
+  margin-bottom: 22px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.traits span::before {
+  content: "+ ";
+}
+
+.proof {
+  margin: 23px 0;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+}
+
+.proof .micro {
+  display: block;
+  color: var(--muted);
+  margin-bottom: 9px;
+}
+
+.proof del {
+  color: var(--muted);
+  text-decoration-thickness: 1px;
+}
+
+.proof ins {
+  display: block;
+  margin-top: 5px;
+  text-decoration: none;
+  font-style: italic;
+  font-size: 21px;
+  line-height: 1.6;
+}
+
+.first-eye {
+  position: absolute;
+  width: 95px;
+  right: 30px;
+  top: -30px;
+  color: var(--blue);
+  transform: rotate(calc(var(--damage) * 12deg));
+  opacity: var(--psy);
+  pointer-events: none;
+}
+
+.foreign-strip {
+  position: relative;
+  margin: 32px -25px 5px;
+  padding: 10px 12px;
+  background: var(--green);
+  color: #172419;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: .19em;
+  line-height: 1.6;
+  transform: rotate(calc(var(--damage) * -3deg));
+  opacity: var(--psy);
+  border: 2px dashed #172419;
+}
+
+/* =========================================================
+   VII: НЕ ДОКУМЕНТ, А ТЕАТР
+   ========================================================= */
+
+.stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--scene);
+  color: var(--scene-ink);
+  scroll-margin-top: 87px;
+}
+
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: calc(var(--psy) * .26);
+  pointer-events: none;
+  background:
+    repeating-conic-gradient(
+      from 45deg,
+      #2d7892 0 25%,
+      #191322 0 50%
+    ) 0 0 / 62px 92px;
+}
+
+.stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #0c091800,
+    #0c091877 45%,
+    #0c091800
+  );
+  opacity: var(--psy);
+}
+
+.stage-set {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+  opacity: var(--psy);
+  overflow: hidden;
+}
+
+.curtain {
+  position: absolute;
+  top: -5px;
+  left: -8%;
+  width: 116%;
+  height: 155px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #1a101e 0,
+      #542340 22px,
+      #241024 42px,
+      #0e0a15 66px
     );
+  border-bottom: 9px solid #b99a5b;
+  clip-path: polygon(
+    0 0, 100% 0, 100% 78%,
+    94% 94%, 89% 76%, 83% 97%,
+    77% 75%, 71% 91%, 65% 72%,
+    59% 98%, 53% 77%, 47% 94%,
+    41% 73%, 35% 97%, 29% 77%,
+    23% 92%, 17% 74%, 11% 96%,
+    5% 77%, 0 91%
+  );
+  transform: rotate(-2deg);
+  filter: drop-shadow(0 9px 3px #0008);
+}
+
+.portal {
+  position: absolute;
+  width: 610px;
+  height: 610px;
+  right: -210px;
+  top: 430px;
+  border: 11px solid #14101d;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(
+      ellipse at 46% 47%,
+      #e7e5c9 0 25px,
+      #18121e 28px 55px,
+      #8d1445 59px 67px,
+      #e7e5c9 70px 93px
+    );
+  box-shadow: 0 0 0 7px #aebc58;
+  transform: rotate(-21deg) scaleY(.87);
+}
+
+.portal svg {
+  position: absolute;
+  width: 180px;
+  top: 225px;
+  left: 210px;
+  color: var(--green);
+  filter: drop-shadow(5px 6px 0 #0f0d17);
+}
+
+.stairs {
+  position: absolute;
+  right: -4%;
+  top: 740px;
+  width: 66%;
+  color: #e1d9bc;
+  transform: rotate(-11deg);
+  filter: drop-shadow(8px 10px 0 #0009);
+}
+
+.ribbon {
+  position: absolute;
+  left: -16%;
+  width: 135%;
+  padding: 9px 0;
+  border-top: 3px solid #151018;
+  border-bottom: 3px solid #151018;
+  color: #18121a;
+  background: var(--pink);
+  text-align: center;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1.3;
+  letter-spacing: .12em;
+}
+
+.ribbon.one {
+  top: 285px;
+  transform: rotate(13deg);
+}
+
+.ribbon.two {
+  top: 51%;
+  background: var(--green);
+  transform: rotate(-17deg);
+}
+
+.ribbon.three {
+  bottom: 340px;
+  background: var(--yellow);
+  transform: rotate(9deg);
+}
+
+.checker-floor {
+  position: absolute;
+  bottom: 15px;
+  left: -30%;
+  width: 160%;
+  height: 450px;
+  background:
+    repeating-conic-gradient(
+      #ece5c9 0 25%,
+      #191420 0 50%
+    ) 0 0 / 90px 90px;
+  transform: perspective(360px) rotateX(43deg) rotateZ(-9deg);
+  opacity: .8;
+}
+
+.prop {
+  position: absolute;
+  width: var(--size, 130px);
+  color: var(--color, #b8ef31);
+  filter:
+    drop-shadow(3px 0 0 #eee3c8)
+    drop-shadow(-3px 0 0 #eee3c8)
+    drop-shadow(0 3px 0 #eee3c8)
+    drop-shadow(7px 10px 0 #0b07199c);
+  transform:
+    translateY(var(--float))
+    rotate(var(--angle, 0deg));
+}
+
+.prop.scissors-a {
+  --size: 180px;
+  --color: #a8e729;
+  --angle: -26deg;
+  left: -28px;
+  top: 165px;
+}
+
+.prop.berry-a {
+  --size: 115px;
+  --angle: 19deg;
+  right: 4%;
+  top: 340px;
+}
+
+.prop.flower-a {
+  --size: 155px;
+  --color: #ecdba9;
+  --angle: -17deg;
+  left: -35px;
+  top: 43%;
+}
+
+.prop.bow-a {
+  --size: 205px;
+  --color: #f01d70;
+  --angle: 22deg;
+  right: -40px;
+  top: 56%;
+}
+
+.prop.eye-a {
+  --size: 180px;
+  --color: #dcce87;
+  --angle: -25deg;
+  left: -26px;
+  bottom: 420px;
+}
+
+.prop.berry-b {
+  --size: 135px;
+  --angle: -22deg;
+  right: -13px;
+  bottom: 75px;
+}
+
+.stage-content {
+  position: relative;
+  z-index: 2;
+  padding: 80px 55px 45px;
+}
+
+.history-header {
+  position: relative;
+  margin: 0 0 55px;
+  max-width: 100%;
+}
+
+.history-label {
+  display: inline-block;
+  padding: 3px 9px;
+  margin-bottom: 14px;
+  background: #e8ddba;
+  color: #332719;
+  font-family: var(--mono);
+  font-size: 10px;
+  transform: rotate(calc(var(--psy) * -5deg));
+}
+
+.history-header h2 {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px;
+  font-size: clamp(37px, 6.7vw, 69px);
+  letter-spacing: -.055em;
+}
+
+.history-header h2 span {
+  position: relative;
+  display: inline-block;
+  padding: 0 7px 5px;
+  color: #31271e;
+  background: #ede2c6;
+  line-height: 1.1;
+}
+
+.history-header h2 span:nth-child(2) {
+  color: #e7f3c8;
+  background: #2838ad;
+  transform:
+    translateY(calc(var(--psy) * 12px))
+    rotate(calc(var(--psy) * 7deg));
+}
+
+.history-header h2 span:nth-child(3) {
+  color: #251626;
+  background: #d9e98a;
+  transform:
+    translateY(calc(var(--psy) * -5px))
+    rotate(calc(var(--psy) * -6deg));
+}
+
+.history-subtitle {
+  max-width: 340px;
+  margin-top: 28px;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.fragment {
+  position: relative;
+  width: 87%;
+  margin: 0 0 44px;
+  padding: 31px 34px 37px;
+  background: #eee2c5;
+  color: #352819;
+  box-shadow: 7px 10px 0 #0e091a45;
+  transform:
+    translateX(calc(var(--psy) * var(--x, 0px)))
+    rotate(calc(var(--psy) * var(--r, 0deg)));
+}
+
+.fragment::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -9px;
+  height: 10px;
+  background: inherit;
+  clip-path: polygon(
+    0 0, 100% 0, 100% 28%, 95% 56%, 89% 21%,
+    83% 83%, 77% 37%, 70% 70%, 65% 21%, 58% 77%,
+    51% 39%, 45% 96%, 38% 31%, 31% 66%, 24% 34%,
+    16% 89%, 9% 30%, 3% 75%, 0 40%
+  );
+}
+
+.fragment.a {
+  --r: -2.4deg;
+  --x: -8px;
+}
+
+.fragment.b {
+  --r: 2.6deg;
+  --x: 8px;
+  margin-left: auto;
+  background: #e8e5bd;
+}
+
+.fragment.c {
+  --r: -1.5deg;
+  width: 91%;
+  background: #e7dcd0;
+}
+
+.fragment.d {
+  --r: 1.4deg;
+  --x: 6px;
+  width: 88%;
+  margin: 0 0 20px auto;
+  background: #e8e2c9;
+}
+
+.fragment h3 {
+  margin: 0 0 20px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid #7f694b70;
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.7;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+
+.fragment p {
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.fragment .verse p {
+  font-size: 14px;
+}
+
+.tape {
+  position: absolute;
+  top: -11px;
+  left: 35%;
+  width: 100px;
+  height: 25px;
+  background: #b9a17588;
+  border-left: 2px dotted #d3c091;
+  border-right: 2px dotted #d3c091;
+  transform: rotate(-7deg);
+  pointer-events: none;
+}
+
+.foreign-voice {
+  padding: 12px 0 12px 16px;
+  margin: 24px 0;
+  border-left: 4px solid #655637;
+}
+
+.foreign-voice .micro {
+  display: block;
+  margin-bottom: 7px;
+  color: #6f5b47;
+  font-size: 8px;
+}
+
+.foreign-voice p {
+  font-size: 21px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.certificate {
+  margin-top: 22px;
+  padding: 13px 15px;
+  color: #202248;
+  border: 2px solid #35375a;
+  font-family: var(--mono);
+  transform: rotate(calc(var(--psy) * -2deg));
+}
+
+.certificate del {
+  font-size: 12px;
+}
+
+.certificate strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 15px;
+  font-weight: normal;
+}
+
+/* =========================================================
+   ХОР: ДЕКОРАТИВНОЕ ДАВЛЕНИЕ, НЕ ОСНОВНОЙ ТЕКСТ
+   ========================================================= */
+
+.choir {
+  position: relative;
+  min-height: 230px;
+  margin: 20px -32px 39px;
+  padding: 44px 28px 24px;
+}
+
+.choir-noise {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: var(--psy);
+  pointer-events: none;
+  user-select: none;
+}
+
+.choir-noise span {
+  position: absolute;
+  padding: 1px 10px;
+  background: #eee5d4;
+  color: #251b29;
+  font-size: clamp(22px, 4.5vw, 42px);
+  font-weight: bold;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.choir-noise span:nth-child(1) {
+  top: 7px;
+  left: 0;
+  color: #eb2769;
+  background: #171221;
+  transform: rotate(-11deg);
+}
+
+.choir-noise span:nth-child(2) {
+  top: 41px;
+  right: -10px;
+  color: #d9f796;
+  background: #252eb0;
+  transform: rotate(9deg);
+}
+
+.choir-noise span:nth-child(3) {
+  bottom: 19px;
+  left: 9px;
+  color: #222328;
+  background: #b4e933;
+  transform: rotate(5deg);
+}
+
+.choir-noise span:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  color: #eeda70;
+  background: #29192a;
+  transform: rotate(-8deg);
+}
+
+.choir-quote {
+  position: relative;
+  z-index: 1;
+  width: 85%;
+  margin: 18px auto;
+  padding: 19px 22px;
+  background: #211925;
+  color: #f3e8c9;
+  border: 1px solid #d5c296;
+  text-align: center;
+  transform: rotate(calc(var(--psy) * -1deg));
+}
+
+.choir-quote p {
+  margin-bottom: 12px;
+  font-size: 23px;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+.choir-quote cite { color: #c9b996; }
+
+/* =========================================================
+   ДЕТСКОЕ ПИСЬМО — ЦЕНТР КОМПОЗИЦИИ
+   ========================================================= */
+
+.child-letter {
+  position: relative;
+  width: 84%;
+  margin: 56px auto 64px;
+  padding: 32px 30px 36px 45px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 30px,
+      #dd8c9966 30px 31px,
+      transparent 31px
+    ),
+    repeating-linear-gradient(
+      transparent 0 31px,
+      #758bbb42 31px 32px
+    ),
+    #e8eaf1;
+  color: #293853;
+  box-shadow:
+    7px 9px 0 #101323aa,
+    -5px -4px 0 #b5c547;
+  transform: rotate(calc(var(--psy) * -4deg));
+}
+
+.child-letter .micro {
+  display: block;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #7684a9;
+  font-size: 8px;
+  color: #5a6b8c;
+}
+
+.child-letter p {
+  margin-top: 22px;
+  font-size: clamp(23px, 4.5vw, 38px);
+  line-height: 1.65;
+  letter-spacing: -.04em;
+}
+
+.child-letter p span { display: block; }
+.child-letter p span:nth-child(2) { padding-left: 9px; }
+.child-letter p span:nth-child(3) { padding-left: 18px; }
+
+.child-letter .letter-sign {
+  margin-top: 19px;
+  font-size: 12px;
+  letter-spacing: 0;
+  text-align: right;
+}
+
+.letter-flower {
+  position: absolute;
+  right: -25px;
+  top: -35px;
+  width: 80px;
+  color: #c8d44d;
+  transform: rotate(18deg);
+  filter: drop-shadow(3px 4px 0 #171225);
+}
+
+.confession {
+  margin: 35px 0 0;
+  padding: 18px 22px;
+  background: #17121d;
+  border-left: 4px solid var(--green);
+  color: #ede4c7;
+  font-size: 24px;
+  font-style: italic;
+  line-height: 1.55;
+}
+
+.confession small {
+  display: block;
+  margin-top: 14px;
+  color: #baac91;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-style: normal;
+}
+
+/* =========================================================
+   VIII–IX: ВСЁ ЕЩЁ ВНУТРИ КОЛЛАЖА
+   ========================================================= */
+
+.afterworld {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 26px 55px 42px;
+  background: var(--scene);
+  color: var(--scene-ink);
+}
+
+.afterworld::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: var(--psy);
+  background:
+    radial-gradient(
+      circle,
+      #e92b7750 0 8px,
+      transparent 9px
+    ) 0 0 / 44px 44px,
+    repeating-linear-gradient(
+      115deg,
+      #191226 0 45px,
+      #263183 45px 90px,
+      #16111f 90px 135px
+    );
+}
+
+.afterworld::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: var(--psy);
+  background: linear-gradient(
+    transparent,
+    #16101ca6 50%,
+    #16101c
+  );
+}
+
+.remains {
+  position: relative;
+  scroll-margin-top: 88px;
+}
+
+.remains .entry-head {
+  position: relative;
+  display: inline-flex;
+  padding: 10px 15px;
+  color: #292334;
+  background: #d3e49a;
+  transform: rotate(calc(var(--psy) * -3deg));
+}
+
+.remains .roman { color: inherit; }
+
+.notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 23px 22px;
+  margin: 27px 0 50px;
+  padding: 0;
+  list-style: none;
+  counter-reset: notes;
+}
+
+.note {
+  position: relative;
+  padding: 34px 23px 25px;
+  background: #eee5c9;
+  color: #372b21;
+  box-shadow: 5px 7px 0 #0d08185c;
+  font-size: 14px;
+  line-height: 1.8;
+  counter-increment: notes;
+  transform: rotate(calc(var(--psy) * -2deg));
+}
+
+.note::before {
+  content: "0" counter(notes);
+  position: absolute;
+  top: 11px;
+  left: 23px;
+  color: #70684e;
+  font-family: var(--mono);
+  font-size: 9px;
+}
+
+.note:nth-child(even) {
+  background: #dde5bb;
+  transform:
+    translateY(calc(var(--psy) * 13px))
+    rotate(calc(var(--psy) * 3deg));
+}
+
+.note:nth-child(3n) {
+  background: #e8dbe7;
+}
+
+.bottom-props {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: var(--psy);
+  pointer-events: none;
+}
+
+.bottom-eye {
+  position: absolute;
+  right: -58px;
+  bottom: 290px;
+  width: 260px;
+  color: #b8ef31;
+  transform: rotate(-17deg);
+}
+
+.bottom-bow {
+  position: absolute;
+  left: -45px;
+  bottom: 170px;
+  width: 210px;
+  color: #ef226f;
+  transform: rotate(16deg);
+}
+
+.contact-sheet {
+  position: relative;
+  width: 84%;
+  margin: 0 auto;
+  padding: 29px 32px;
+  background: #eee5d2;
+  color: #352b22;
+  box-shadow: 7px 9px 0 #10101c;
+  transform: rotate(calc(var(--psy) * -1.5deg));
+  scroll-margin-top: 125px;
+}
+
+.contact-sheet::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid #8f78584a;
+  pointer-events: none;
+}
+
+.username {
+  font-size: 27px;
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+
+.ending {
+  position: relative;
+  margin-top: 53px;
+  text-align: center;
+}
+
+.ending-cross {
+  display: block;
+  margin-bottom: 17px;
+  font-size: 29px;
+}
+
+.ending blockquote { margin: 0; }
+
+.ending p {
+  font-size: 19px;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.ending cite { color: inherit; opacity: .7; }
+
+.ending .last-line {
+  margin: 35px 0 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-style: normal;
+  opacity: .7;
+}
+
+.outside-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 25px 0 0;
+  color: var(--ui);
+  font-family: var(--sans);
+  font-size: 9px;
+  line-height: 1.8;
+}
+
+.outside-footer a { text-underline-offset: 4px; }
+
+/* =========================================================
+   СПОКОЙНЫЙ РЕЖИМ И МОБИЛЬНАЯ ВЕРСИЯ
+   ========================================================= */
+
+body.calm .intrusion,
+body.calm .stage-set,
+body.calm .choir-noise,
+body.calm .bottom-props,
+body.calm .first-eye,
+body.calm .hero-counterprint,
+body.calm .foreign-strip,
+body.calm .echo-title::after {
+  display: none;
+}
+
+body.calm .stage-content { padding-top: 40px; }
+
+@media (max-width: 1000px) {
+  .layout {
+    grid-template-columns: 115px minmax(0, 1fr);
+    gap: 30px;
+    width: calc(100% - 40px);
   }
 
-  .skip {
-    position: fixed;
-    top: -100px;
-    left: 16px;
-    padding: 8px 16px;
-    z-index: 110;
-    background: var(--paper);
-  }
+  .entry, .hero { padding-left: 38px; padding-right: 38px; }
+  .stage-content { padding-left: 35px; padding-right: 35px; }
+  .afterworld { padding-left: 35px; padding-right: 35px; }
+}
 
-  .skip:focus { top: 12px; }
+@media (max-width: 740px) {
+  html { scroll-padding-top: 132px; }
 
-  .micro {
-    font-family: var(--sans);
-    font-size: 9px;
-    font-weight: normal;
-    line-height: 1.6;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-  }
-
-  /* Верхняя панель */
-
-  .topbar {
-    position: fixed;
-    inset: 0 0 auto;
-    z-index: 100;
-    height: 62px;
-    padding: 0 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    color: var(--ui);
-    background: var(--ground);
-    border-bottom: 1px solid var(--ui-line);
-  }
-
-  .brand {
-    display: flex;
-    gap: 13px;
-    align-items: center;
-    text-decoration: none;
-  }
-
-  .brand-cross {
-    font-size: 25px;
-    line-height: 1;
-  }
-
-  .controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .control {
-    min-height: 34px;
-    padding: 6px 11px;
-    background: transparent;
-    border: 1px solid var(--ui-line);
-    color: inherit;
-    font-family: var(--sans);
-    font-size: 10px;
-    cursor: pointer;
-  }
-
-  .control:hover {
-    background: rgba(128, 104, 66, .1);
-  }
-
-  .control[aria-pressed="true"]::before {
-    content: "●";
-    margin-right: 6px;
-    font-size: 7px;
-  }
-
-  .progress {
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--ui);
-    transform: scaleX(var(--read));
-    transform-origin: left;
-  }
-
-  /* Общая компоновка */
+  .topbar { padding: 0 14px; }
+  .brand { gap: 8px; }
+  .brand .micro { font-size: 8px; letter-spacing: .08em; }
+  .control { font-size: 9px; padding: 6px 8px; }
+  .controls { gap: 5px; }
 
   .layout {
-    display: grid;
-    grid-template-columns: 160px minmax(0, 830px);
-    gap: 62px;
-    width: min(1110px, calc(100% - 48px));
-    margin: 0 auto;
-    padding: 112px 0 60px;
-    align-items: start;
+    display: block;
+    width: calc(100% - 28px);
+    padding-top: 62px;
   }
 
   .index {
     position: sticky;
-    top: 103px;
-    color: var(--ui);
-  }
-
-  .index-title {
-    margin: 0 0 23px;
-    opacity: .75;
+    top: 62px;
+    z-index: 70;
+    margin: 0 -14px 25px;
+    padding: 8px 14px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--ui-line);
   }
 
   .index nav {
-    display: grid;
+    display: flex;
+    justify-content: space-between;
     gap: 3px;
   }
 
   .index a {
-    display: flex;
-    align-items: baseline;
-    gap: 13px;
-    padding: 7px 0;
-    text-decoration: none;
-    font-size: 12px;
-    opacity: .65;
+    min-width: 29px;
+    min-height: 36px;
+    justify-content: center;
+    padding: 6px 2px;
   }
 
-  .index a b {
-    width: 27px;
-    font-size: 11px;
-    font-weight: normal;
-  }
+  .index b { width: auto; }
+  .index a span { display: none; }
 
   .index a[aria-current="location"] {
-    opacity: 1;
+    border-bottom: 1px solid currentColor;
   }
 
-  .index a[aria-current="location"] span {
-    text-decoration: underline;
-    text-underline-offset: 5px;
-  }
-
-  .preservation {
-    margin-top: 29px;
-    padding-top: 20px;
-    border-top: 1px solid var(--ui-line);
-  }
-
-  .preservation-line {
-    height: 2px;
-    margin: 13px 0;
-    background: var(--ui-line);
-  }
-
-  .preservation-line i {
-    display: block;
-    width: 100%;
-    height: 100%;
-    background: var(--ui);
-    transform: scaleX(calc(1 - var(--damage) * .94));
-    transform-origin: left;
-  }
-
-  .condition {
-    font-family: var(--mono);
-    font-size: 10px;
-  }
-
-  .aside-quote {
-    margin: 31px 0 0;
-    max-width: 145px;
-    font-size: 13px;
-    line-height: 1.7;
-    font-style: italic;
-    opacity: .7;
-  }
-
-  main { min-width: 0; }
-
-  .manuscript {
-    position: relative;
-    isolation: isolate;
-  }
-
-  /* Материал */
-
-  .leaf, .fragment, .note, .contact-sheet {
-    position: relative;
-    background-color: var(--paper);
-    background-image:
-      radial-gradient(
-        ellipse at 0 0,
-        rgba(114, 80, 35, .07),
-        transparent 55%
-      ),
-      repeating-linear-gradient(
-        0deg,
-        transparent 0 3px,
-        rgba(80, 55, 23, .012) 3px 4px
-      );
-  }
-
-  .leaf {
-    border: 1px solid var(--line);
-    box-shadow:
-      0 14px 65px rgba(42, 29, 11, .1),
-      6px 6px 0 -1px var(--ground),
-      6px 6px 0 0 var(--ui-line);
-  }
-
-  .leaf::before {
-    content: "";
-    position: absolute;
-    inset: 11px;
-    pointer-events: none;
-    border: 1px solid var(--line);
-    opacity: .6;
-  }
-
-  /* Откусанный край: проявляется по мере разрушения. */
-
-  .leaf::after {
-    content: "";
-    position: absolute;
-    bottom: -1px;
-    left: -1px;
-    right: -1px;
-    height: calc(var(--damage) * 26px);
-    background: var(--void);
-    pointer-events: none;
-    clip-path: polygon(
-      0 35%, 3% 49%, 7% 13%, 11% 61%, 15% 35%,
-      20% 74%, 23% 19%, 28% 54%, 33% 36%, 37% 78%,
-      42% 31%, 47% 47%, 52% 4%, 56% 56%, 60% 29%,
-      66% 69%, 71% 27%, 76% 53%, 82% 18%, 86% 65%,
-      91% 36%, 95% 59%, 100% 20%, 100% 100%, 0 100%
-    );
-  }
-
-  /* Обложка */
-
-  .cover {
-    position: relative;
-    padding: 40px 50px 35px;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .archive-line {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    padding-bottom: 21px;
-    border-bottom: 1px solid var(--line);
-    color: var(--muted);
-  }
-
-  .hero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 170px;
-    gap: 28px;
-    align-items: center;
-    margin: 37px 0 30px;
-  }
-
-  .eyebrow {
-    margin: 0 0 21px;
-    color: var(--muted);
-  }
-
-  h1 {
-    margin: 0;
-    font-size: clamp(46px, 6vw, 78px);
-    font-weight: normal;
-    line-height: 1.03;
-    letter-spacing: -.06em;
-  }
-
-  h1 em {
-    display: block;
-    padding-top: 7px;
-    font-weight: normal;
-  }
-
-  .subtitle {
-    max-width: 290px;
-    margin: 24px 0 0;
-    font-size: 15px;
-    line-height: 1.7;
-    font-style: italic;
-    color: var(--muted);
-  }
-
-  .icon {
-    width: 100%;
-    color: #80653f;
-    transform: rotate(calc(var(--damage) * 3deg));
-  }
-
-  .icon .halo {
-    transform-origin: 100px 111px;
-    transform: translateY(calc(var(--damage) * -9px));
-  }
-
-  .cover-quote {
-    margin: 0;
-    padding-top: 23px;
-    text-align: center;
-    border-top: 1px solid var(--line);
-  }
-
-  .cover-quote p {
-    margin: 0 0 7px;
-    font-size: 19px;
-    font-style: italic;
-  }
-
-  cite {
-    display: block;
-    font-family: var(--sans);
-    font-size: 9px;
-    font-style: normal;
-    line-height: 1.6;
-    letter-spacing: .08em;
-    color: var(--muted);
-  }
-
-  .warning {
-    margin: 21px 0 0;
-    font-family: var(--sans);
-    font-size: 9px;
-    line-height: 1.8;
-    text-align: center;
-    color: var(--muted);
-  }
-
-  .cover-stamp {
-    position: absolute;
-    top: 99px;
-    right: 31px;
-    z-index: 2;
-    padding: 7px 12px;
-    border: 2px double #5b4226;
-    color: #5b4226;
-    font-family: var(--mono);
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: .11em;
-    transform: rotate(-13deg);
-    opacity: calc(var(--damage) * .65);
-    pointer-events: none;
-  }
-
-  /* Поля анкеты */
-
-  .entry {
-    position: relative;
-    padding: 33px 50px;
-    scroll-margin-top: 88px;
-  }
-
-  .entry + .entry {
-    border-top: 1px solid var(--line);
-  }
-
-  .entry-head {
-    display: flex;
-    align-items: baseline;
-    gap: 15px;
-    margin-bottom: 19px;
-  }
-
-  .roman {
-    min-width: 29px;
-    color: var(--muted);
-    font-size: 13px;
-    font-style: italic;
-  }
-
-  h2 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: normal;
-    line-height: 1.25;
-    letter-spacing: -.025em;
-  }
-
-  p { margin: 0 0 16px; }
-  p:last-child { margin-bottom: 0; }
-
-  .entry p, .fragment p {
-    font-size: 16px;
-    line-height: 1.85;
-  }
-
-  .lead {
-    font-size: 22px !important;
-    line-height: 1.5 !important;
-  }
-
-  .small {
-    color: var(--muted);
-    font-size: 13px !important;
-  }
-
-  .verse {
-    margin: 23px 0 0;
-    padding: 2px 0 2px 16px;
-    border-left: 1px solid #9c835b;
-  }
-
-  .verse p {
-    margin: 0 0 7px;
-    color: var(--muted);
-    font-size: 14px;
-    font-style: italic;
-    line-height: 1.7;
-  }
-
-  .pair {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .pair .entry + .entry {
-    border-top: 0;
-    border-left: 1px solid var(--line);
-  }
-
-  .pair h2 { font-size: 25px; }
-
-  .field-tag {
-    display: inline-block;
-    padding: 4px 10px;
-    border: 1px solid var(--line);
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--muted);
-    letter-spacing: .06em;
-  }
-
-  .displaced .entry-content {
-    transform:
-      translateX(calc(var(--damage) * 4px))
-      rotate(calc(var(--damage) * -.35deg));
-  }
-
-  .personality .entry-content {
-    transform:
-      translateX(calc(var(--damage) * -5px))
-      rotate(calc(var(--damage) * .55deg));
-  }
-
-  .hand {
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: normal;
-  }
-
-  .intrusion {
-    opacity: var(--damage);
-    pointer-events: none;
-    user-select: none;
-  }
-
-  .margin-order {
-    position: absolute;
-    top: 65px;
-    right: 9px;
-    writing-mode: vertical-rl;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: .14em;
-    color: #695031;
-  }
-
-  .correction {
-    position: relative;
-    display: inline-block;
-  }
-
-  .correction::after {
-    content: "";
-    position: absolute;
-    left: -3px;
-    right: -3px;
-    top: 54%;
-    height: 2px;
-    background: #4b351d;
-    transform: rotate(-5deg) scaleX(var(--damage));
-    transform-origin: left;
-  }
-
-  .written-over {
-    margin: 19px 0 22px;
-    padding-left: 24%;
-    font-size: 21px;
-    line-height: 1.4;
-    transform: rotate(calc(var(--damage) * -3deg));
-    color: #5e4325;
-  }
-
-  .trait-line {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px 19px;
-    margin: 0 0 20px;
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 10px;
-  }
-
-  .trait-line span::before {
-    content: "+";
-    margin-right: 6px;
-  }
-
-  .double-rule {
-    position: relative;
-    height: 20px;
-    margin: 18px 0;
-  }
-
-  .double-rule::before, .double-rule::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    height: 1px;
-    background: var(--line);
-  }
-
-  .double-rule::after {
-    transform:
-      translateY(calc(var(--damage) * 5px))
-      rotate(calc(var(--damage) * -1.5deg));
-    transform-origin: left;
-  }
-
-  .proof {
-    position: relative;
-    padding: 15px 18px;
-    border: 1px solid var(--line);
-    margin: 21px 0;
-  }
-
-  .proof-label {
-    display: block;
-    margin-bottom: 7px;
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: .12em;
-  }
-
-  .proof del {
-    text-decoration-thickness: 1px;
-    color: var(--muted);
-  }
-
-  .proof ins {
-    display: block;
-    margin-top: 5px;
-    text-decoration: none;
-    font-style: italic;
-    font-size: 20px;
-    transform: rotate(calc(var(--damage) * -.9deg));
-  }
-
-  /* VII. Здесь кончается целый лист */
-
-  .rupture {
-    position: relative;
-    isolation: isolate;
-    padding: 45px 32px 35px;
-    background: var(--void);
-    color: var(--loss-ink);
-    scroll-margin-top: 85px;
-  }
-
-  .rupture::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    pointer-events: none;
-    opacity: var(--damage);
-    background:
-      radial-gradient(
-        ellipse at 48% 30%,
-        rgba(123, 90, 46, .08),
-        transparent 58%
-      ),
-      linear-gradient(
-        93deg,
-        transparent 49.7%,
-        rgba(222, 193, 145, .06) 49.9%,
-        transparent 50.2%
-      );
-  }
-
-  .rupture-head {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    padding: 0 18px;
-  }
-
-  .rupture .roman {
-    color: inherit;
-    transform: rotate(calc(var(--damage) * -9deg));
-  }
+  .index-title, .preservation, .aside-quote { display: none; }
 
-  .rupture h2 {
-    font-size: clamp(33px, 5vw, 50px);
-    line-height: 1.25;
-  }
-
-  .split-word {
-    display: inline-block;
-    transform:
-      translate(
-        calc(var(--damage) * 7px),
-        calc(var(--damage) * 9px)
-      )
-      rotate(calc(var(--damage) * 3deg));
-  }
-
-  .loss-caption {
-    margin: 18px 18px 35px;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: .12em;
-    opacity: .75;
-  }
-
-  .fracture-line {
-    position: absolute;
-    inset: 95px 0 25px auto;
-    width: 100px;
-    height: calc(100% - 120px);
-    opacity: calc(var(--damage) * .4);
-    pointer-events: none;
-    color: #aa8650;
-  }
-
-  .fragment {
-    z-index: 1;
-    margin: 0 0 34px;
-    padding: 31px 33px 39px;
-    color: var(--ink);
-    border: 1px solid rgba(82, 58, 27, .2);
-    box-shadow:
-      0 calc(var(--damage) * 12px)
-      calc(var(--damage) * 22px)
-      rgba(0, 0, 0, .28);
-  }
-
-  .fragment::after, .note::after {
-    content: "";
-    position: absolute;
-    bottom: -1px;
-    left: -1px;
-    right: -1px;
-    height: calc(var(--damage) * 12px);
-    background: var(--void);
-    clip-path: polygon(
-      0 48%, 4% 21%, 9% 60%, 15% 35%, 21% 75%,
-      28% 20%, 35% 55%, 41% 33%, 48% 74%, 55% 38%,
-      61% 66%, 68% 19%, 74% 52%, 81% 31%, 88% 72%,
-      94% 25%, 100% 50%, 100% 100%, 0 100%
-    );
-    pointer-events: none;
-  }
-
-  .fragment-one {
-    width: 93%;
-    transform:
-      translateX(calc(var(--damage) * var(--shift) * -1))
-      rotate(calc(var(--damage) * -1.7deg));
-  }
-
-  .fragment-two {
-    width: 93%;
-    margin-left: auto;
-    background-color: var(--paper-alt);
-    transform:
-      translateX(calc(var(--damage) * var(--shift)))
-      rotate(calc(var(--damage) * 1.4deg));
-  }
-
-  .fragment-three {
-    width: 95%;
-    transform:
-      translateX(calc(var(--damage) * -5px))
-      rotate(calc(var(--damage) * -.8deg));
-  }
-
-  .fragment-top {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 15px;
-    padding-bottom: 13px;
-    margin-bottom: 19px;
-    border-bottom: 1px solid var(--line);
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 9px;
-    line-height: 1.6;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-
-  .paper-number {
-    flex-shrink: 0;
-    font-family: var(--serif);
-    font-size: 20px;
-    font-style: italic;
-  }
+  .entry, .stage, .remains { scroll-margin-top: 125px; }
+}
 
-  .foreign-voice {
-    margin: 21px 0;
-    padding: 14px 0 14px 17px;
-    border-left: 3px solid #765735;
-  }
-
-  .foreign-voice .micro {
-    display: block;
-    margin-bottom: 7px;
-    font-size: 8px;
-    color: var(--muted);
-  }
-
-  .foreign-voice p {
-    font-size: 20px;
-    font-style: italic;
-    line-height: 1.5;
-  }
+@media (max-width: 480px) {
+  .brand-extra { display: none; }
 
-  .fragment .verse { margin-top: 20px; }
+  .hero { padding: 27px 25px 30px; }
+  .archive-line { font-size: 8px; letter-spacing: .08em; }
 
-  .staple {
-    position: absolute;
-    width: 40px;
-    height: 8px;
-    top: -4px;
-    right: 42px;
-    border: 1px solid #6e5b3c;
-    border-radius: 6px;
-    background: rgba(115, 91, 54, .12);
-    transform: rotate(-8deg);
-    box-shadow: 0 2px 3px rgba(36, 24, 9, .2);
-  }
-
-  .blank-space {
-    position: relative;
-    margin: 18px 0 37px;
-    padding: 29px 16px 34px;
-    border-top: 1px solid rgba(157, 125, 77, .25);
-    border-bottom: 1px solid rgba(157, 125, 77, .25);
-  }
+  .emblem { width: 175px; margin-top: 26px; }
+  .emblem-flower { width: 30px; height: 30px; }
+  .emblem-flower.a, .emblem-flower.b { top: 74px; }
 
-  .blank-space > .micro {
-    margin-bottom: 25px;
-    opacity: .6;
-  }
+  h1 { font-size: 44px; }
+  .hero-subtitle { font-size: 14px; }
+  .hero-quote p { font-size: 16px; }
+  .hero-counterprint { top: 214px; font-size: 8px; }
 
-  .abyss-quote {
-    position: relative;
-    z-index: 1;
-    margin: 0;
-  }
+  .entry { padding: 29px 26px; }
+  .entry-head { gap: 8px; }
+  h2 { font-size: 26px; }
+  .entry p { font-size: 15px; }
+  .entry .lead { font-size: 21px; }
 
-  .abyss-quote p {
-    font-size: clamp(28px, 4.8vw, 45px);
-    font-style: italic;
-    letter-spacing: -.03em;
-    line-height: 1.35;
-  }
+  .facts { grid-template-columns: 1fr; }
+  .facts .entry + .entry { border-left: 0; }
 
-  .abyss-quote .line {
-    display: block;
-  }
+  .verse p { font-size: 13px; }
+  .hand-note { padding-left: 5%; font-size: 18px; }
+  .margin-order { right: 4px; font-size: 8px; }
+  .foreign-strip { margin-left: -12px; margin-right: -12px; font-size: 10px; }
 
-  .abyss-quote .line:nth-child(2) {
-    padding-left: 9%;
-    transform: rotate(calc(var(--damage) * -1deg));
-  }
+  .stage-content { padding: 76px 23px 31px; }
+  .history-header { margin-bottom: 38px; }
+  .history-header h2 { font-size: 36px; gap: 2px; }
+  .history-header h2 span { padding: 0 4px 4px; }
+  .history-subtitle { font-size: 11px; }
 
-  .abyss-quote .line:nth-child(3) {
-    padding-left: 21%;
-    transform:
-      translateY(calc(var(--damage) * 7px))
-      rotate(calc(var(--damage) * 1.8deg));
+  .fragment,
+  .fragment.c,
+  .fragment.d {
+    width: 94%;
+    padding: 25px 21px 30px;
   }
 
-  .abyss-quote cite {
-    margin-top: 23px;
-    color: inherit;
-    opacity: .65;
-  }
+  .fragment.a { --x: -2px; --r: -1.7deg; }
+  .fragment.b { --x: 2px; --r: 1.8deg; }
+  .fragment.d { --x: 1px; }
 
-  .prayer-ghost {
-    position: absolute;
-    right: 8px;
-    bottom: 48px;
-    z-index: 0;
-    font-size: clamp(38px, 8vw, 85px);
-    line-height: 1;
-    letter-spacing: -.06em;
-    font-style: italic;
-    opacity: calc(var(--damage) * .06);
-    transform: rotate(-6deg);
-    pointer-events: none;
-    user-select: none;
-  }
+  .fragment p { font-size: 15px; }
+  .fragment h3 { font-size: 9px; }
+  .fragment .verse p { font-size: 13px; }
+  .foreign-voice p { font-size: 19px; }
 
-  .confession {
-    margin: 29px 9px 13px;
-    padding-left: 19px;
-    border-left: 1px solid #8e7047;
-    font-size: 23px;
-    line-height: 1.5;
-    font-style: italic;
-    transform: rotate(calc(var(--damage) * -.6deg));
+  .portal {
+    width: 450px;
+    height: 450px;
+    right: -255px;
+    top: 520px;
   }
 
-  .confession small {
-    display: block;
-    margin-top: 13px;
-    font-family: var(--mono);
-    font-size: 9px;
-    font-style: normal;
-    letter-spacing: .06em;
-    opacity: .65;
-  }
+  .portal svg { top: 150px; left: 137px; }
+  .stairs { width: 95%; top: 900px; }
 
-  /* VIII. От анкеты остаются отдельные полосы */
+  .ribbon { font-size: 17px; }
+  .prop.scissors-a { --size: 125px; }
+  .prop.berry-a { --size: 85px; right: -20px; }
+  .prop.bow-a { --size: 150px; }
 
-  .remains {
-    position: relative;
-    padding: 25px 32px 38px;
-    background: var(--void);
-    color: var(--loss-ink);
-    scroll-margin-top: 88px;
-  }
+  .choir { margin-left: -15px; margin-right: -15px; }
+  .choir-quote { width: 92%; padding: 18px 15px; }
+  .choir-quote p { font-size: 21px; }
 
-  .remains .entry-head {
-    padding: 0 18px;
-    margin-bottom: 27px;
+  .child-letter {
+    width: 90%;
+    padding: 25px 18px 27px 36px;
   }
-
-  .remains .roman { color: inherit; }
 
-  .notes {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    counter-reset: notes;
-  }
+  .child-letter p { font-size: 26px; }
+  .letter-flower { width: 63px; right: -15px; top: -30px; }
 
-  .note {
-    margin: 0 0 17px;
-    padding: 19px 27px 22px 57px;
-    color: var(--ink);
-    font-size: 14px;
-    line-height: 1.8;
-    counter-increment: notes;
-    transform:
-      translateX(calc(var(--damage) * -8px))
-      rotate(calc(var(--damage) * -.7deg));
-  }
+  .confession { font-size: 20px; padding: 16px 17px; }
 
-  .note::before {
-    content: "0" counter(notes);
-    position: absolute;
-    left: 22px;
-    top: 23px;
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--muted);
-  }
+  .afterworld { padding: 25px 26px 35px; }
+  .notes { grid-template-columns: 1fr; gap: 19px; }
+  .note { padding-bottom: 22px; }
 
   .note:nth-child(even) {
-    margin-left: 17px;
-    background-color: var(--paper-alt);
     transform:
-      translateX(calc(var(--damage) * 7px))
-      rotate(calc(var(--damage) * 1deg));
+      translateX(calc(var(--psy) * 5px))
+      rotate(calc(var(--psy) * 2deg));
   }
 
-  .note:last-child {
-    width: 89%;
-    margin: 25px auto 0;
-    font-style: italic;
-  }
+  .contact-sheet { width: 96%; padding: 26px 22px; }
+  .username { font-size: 23px; }
+  .ending p { font-size: 17px; }
+}
 
-  /* IX. Последний сохранившийся угол */
-
-  .contact-area {
-    padding: 9px 32px 35px;
-    background: var(--void);
-    scroll-margin-top: 88px;
-  }
-
+@media (prefers-reduced-motion: reduce) {
+  .entry-inner,
+  .hand-note,
+  .foreign-strip,
+  .history-label,
+  .history-header h2 span,
+  .fragment,
+  .certificate,
+  .choir-quote,
+  .child-letter,
+  .remains .entry-head,
+  .note,
   .contact-sheet {
-    padding: 29px 32px;
-    border: 1px solid var(--line);
-    transform:
-      translateX(calc(var(--damage) * 7px))
-      rotate(calc(var(--damage) * -.9deg));
+    transform: none !important;
   }
 
-  .contact-sheet::after {
-    content: "";
-    position: absolute;
-    right: -1px;
-    bottom: -1px;
-    width: calc(var(--damage) * 47px);
-    height: calc(var(--damage) * 47px);
-    background: linear-gradient(
-      135deg,
-      #ad9368 0 49%,
-      var(--void) 51% 100%
-    );
+  .prop { translate: none; }
+}
+
+@media print {
+  :root {
+    --bg: white !important;
+    --sheet: white !important;
+    --scene: white !important;
+    --scene-ink: #222 !important;
+    --damage: 0 !important;
+    --psy: 0 !important;
   }
 
-  .username {
-    font-size: 25px;
-    font-style: italic;
-    text-underline-offset: 7px;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
+  body { background: white; }
+
+  .topbar, .index, .grain, .skip, .intrusion,
+  .stage-set, .choir-noise, .bottom-props,
+  .first-eye, .foreign-strip, .outside-footer,
+  .hero-counterprint, .letter-flower {
+    display: none !important;
   }
 
-  .ending {
-    padding: 17px 35px 42px;
-    background: var(--void);
-    color: var(--loss-ink);
-    text-align: center;
-  }
-
-  .ending-cross {
+  .layout {
     display: block;
-    margin-bottom: 16px;
-    font-size: 29px;
-    opacity: .7;
-    transform: rotate(calc(var(--damage) * 7deg));
+    width: 100%;
+    padding: 0;
   }
 
-  .ending blockquote { margin: 0; }
-
-  .ending blockquote p {
-    font-size: 18px;
-    font-style: italic;
-    line-height: 1.7;
+  .document, .fragment, .child-letter,
+  .note, .contact-sheet {
+    box-shadow: none;
   }
 
-  .ending cite {
-    margin-top: 12px;
-    color: inherit;
-    opacity: .6;
+  .stage, .afterworld { overflow: visible; }
+  .stage-content { padding-top: 30px; }
+
+  .entry, .fragment, .child-letter,
+  .note, .contact-sheet {
+    break-inside: avoid;
   }
 
-  .last-line {
-    margin-top: 35px;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: .08em;
-    opacity: .65;
+  .choir-quote, .confession {
+    color: #222;
+    background: white;
+    border-color: #888;
   }
 
-  .outside-footer {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 23px 2px 0;
-    color: var(--ui);
-    font-family: var(--sans);
-    font-size: 9px;
-    line-height: 1.7;
-  }
-
-  .outside-footer a { text-underline-offset: 4px; }
-
-  /* Режим чтения без визуального разрушения */
-
-  body.calm .intrusion,
-  body.calm .vignette,
-  body.calm .cover-stamp,
-  body.calm .prayer-ghost,
-  body.calm .fracture-line {
-    display: none;
-  }
-
-  /* Планшеты и телефоны */
-
-  @media (max-width: 900px) {
-    .layout {
-      grid-template-columns: 125px minmax(0, 1fr);
-      gap: 30px;
-      width: calc(100% - 40px);
-    }
-
-    .cover, .entry { padding-left: 35px; padding-right: 35px; }
-    .hero-grid { grid-template-columns: minmax(0, 1fr) 125px; }
-    h1 { font-size: 57px; }
-  }
-
-  @media (max-width: 700px) {
-    :root { --shift: 8px; }
-
-    html { scroll-padding-top: 130px; }
-
-    .topbar { padding: 0 15px; }
-    .brand .micro { font-size: 8px; letter-spacing: .1em; }
-    .brand-cross { font-size: 22px; }
-    .brand { gap: 8px; }
-    .controls { gap: 5px; }
-    .control { padding: 6px 8px; font-size: 9px; }
-
-    .layout {
-      display: block;
-      width: calc(100% - 28px);
-      padding-top: 82px;
-    }
-
-    .index {
-      position: sticky;
-      top: 62px;
-      z-index: 70;
-      margin: -20px -14px 22px;
-      padding: 8px 14px;
-      background: var(--ground);
-      border-bottom: 1px solid var(--ui-line);
-    }
-
-    .index nav {
-      display: flex;
-      justify-content: space-between;
-      gap: 4px;
-    }
-
-    .index a {
-      min-width: 28px;
-      min-height: 36px;
-      justify-content: center;
-      padding: 5px 3px;
-    }
-
-    .index a b { width: auto; }
-    .index a span { display: none; }
-
-    .index a[aria-current="location"] {
-      border-bottom: 1px solid currentColor;
-    }
-
-    .index-title, .preservation, .aside-quote { display: none; }
-
-    .entry, .rupture, .remains, .contact-area {
-      scroll-margin-top: 126px;
-    }
-
-    .cover, .entry { padding-left: 28px; padding-right: 28px; }
-    .hero-grid { grid-template-columns: minmax(0, 1fr) 130px; }
-    h1 { font-size: 62px; }
-
-    .rupture, .remains { padding-left: 22px; padding-right: 22px; }
-    .contact-area { padding-left: 22px; padding-right: 22px; }
-
-    .fragment { padding-left: 25px; padding-right: 25px; }
-  }
-
-  @media (max-width: 440px) {
-    .brand .micro span { display: none; }
-
-    .cover { padding: 29px 24px; }
-    .archive-line { font-size: 8px; letter-spacing: .08em; }
-    .hero-grid {
-      grid-template-columns: minmax(0, 1fr) 76px;
-      gap: 12px;
-      margin-top: 29px;
-    }
-
-    h1 { font-size: 42px; }
-    .eyebrow { font-size: 8px; letter-spacing: .12em; }
-    .subtitle { font-size: 13px; }
-    .cover-quote p { font-size: 17px; }
-    .cover-stamp { top: 84px; right: 19px; font-size: 7px; }
-
-    .entry { padding: 28px 25px; }
-    .entry-head { gap: 8px; }
-    h2 { font-size: 25px; }
-
-    .pair { grid-template-columns: 1fr; }
-    .pair .entry + .entry {
-      border-left: 0;
-      border-top: 1px solid var(--line);
-    }
-
-    .entry p, .fragment p { font-size: 15px; }
-    .entry .verse p, .fragment .verse p { font-size: 13px; }
-
-    .margin-order { right: 4px; font-size: 8px; }
-    .written-over { padding-left: 10%; font-size: 19px; }
-
-    .rupture { padding-top: 35px; }
-    .rupture-head { padding: 0 2px; gap: 8px; }
-    .rupture h2 { font-size: 32px; }
-    .loss-caption { margin-left: 3px; font-size: 8px; }
-
-    .fragment {
-      padding: 23px 20px 31px;
-      width: 97%;
-    }
-
-    .fragment-top { font-size: 8px; gap: 9px; }
-    .foreign-voice p { font-size: 18px; }
-
-    .blank-space { padding-left: 3px; padding-right: 3px; }
-    .abyss-quote p { font-size: 29px; }
-
-    .confession { margin-left: 0; font-size: 20px; }
-
-    .remains .entry-head { padding: 0 3px; }
-    .note {
-      padding: 17px 17px 23px 43px;
-      font-size: 13px;
-    }
-
-    .note::before { left: 16px; top: 20px; }
-    .note:nth-child(even) { margin-left: 6px; }
-    .note:last-child { width: 96%; }
-
-    .contact-sheet { padding: 25px 22px; }
-    .username { font-size: 22px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .icon, .icon .halo,
-    .entry-content, .written-over, .proof ins,
-    .rupture .roman, .split-word,
-    .fragment, .abyss-quote .line,
-    .confession, .note, .contact-sheet, .ending-cross {
-      transform: none !important;
-    }
-  }
-
-  @media print {
-    :root {
-      --ground: white !important;
-      --paper: white !important;
-      --paper-alt: white !important;
-      --void: white !important;
-      --ink: #222 !important;
-      --muted: #555 !important;
-      --loss-ink: #222 !important;
-      --damage: 0 !important;
-    }
-
-    .topbar, .index, .grain, .vignette,
-    .intrusion, .fracture-line, .cover-stamp,
-    .prayer-ghost, .outside-footer {
-      display: none !important;
-    }
-
-    .layout {
-      display: block;
-      width: 100%;
-      padding: 0;
-    }
-
-    .leaf, .fragment { box-shadow: none; }
-    .entry, .fragment, .note { break-inside: avoid; }
-  }
+  .choir-quote cite, .confession small { color: #555; }
+}
 </style>
 </head>
 
 <body id="top">
 <a class="skip" href="#name">Перейти к анкете</a>
-
 <div class="grain" aria-hidden="true"></div>
-<div class="vignette" aria-hidden="true"></div>
+
+<!--
+  ВСТРОЕННАЯ ГРАФИКА.
+  Все элементы ниже переиспользуются через <use>.
+  Никаких внешних изображений или библиотек.
+-->
+<svg class="symbol-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <!-- Цветок: невинный орнамент, который становится частью декораций. -->
+    <symbol id="flower" viewBox="0 0 120 120">
+      <g fill="#eee6c9" stroke="#443421" stroke-width="1.2">
+        <ellipse cx="60" cy="24" rx="9" ry="22"/>
+        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(30 60 60)"/>
+        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(60 60 60)"/>
+        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(90 60 60)"/>
+        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(120 60 60)"/>
+        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(150 60 60)"/>
+        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(180 60 60)"/>
+        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(210 60 60)"/>
+        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(240 60 60)"/>
+        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(270 60 60)"/>
+        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(300 60 60)"/>
+        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(330 60 60)"/>
+      </g>
+      <circle cx="60" cy="60" r="24" fill="currentColor" stroke="#443421" stroke-width="2"/>
+      <circle cx="60" cy="60" r="18" fill="none" stroke="#443421"/>
+      <path d="M60 44V76M44 60H76M49 49L71 71M71 49L49 71"
+        stroke="#443421" stroke-width="1.5"/>
+    </symbol>
+
+    <symbol id="eye" viewBox="0 0 200 120">
+      <path
+        d="M7 60Q100-16 193 60Q100 135 7 60Z"
+        fill="#eee8cd" stroke="#251c29" stroke-width="5"/>
+      <path
+        d="M13 60Q100 1 187 60M13 60Q100 119 187 60"
+        fill="none" stroke="#756f55" stroke-width="2"/>
+      <circle cx="100" cy="60" r="37" fill="currentColor" stroke="#251c29" stroke-width="4"/>
+      <circle cx="100" cy="60" r="24" fill="none" stroke="#251c29" stroke-width="2"/>
+      <ellipse cx="100" cy="60" rx="10" ry="27" fill="#171320"/>
+      <circle cx="91" cy="46" r="6" fill="#f7efd7"/>
+      <path d="M29 39L21 24M54 23L49 7M82 15L81 1M117 15L120 1M147 24L155 8M171 40L181 25"
+        stroke="#251c29" stroke-width="4"/>
+    </symbol>
+
+    <symbol id="scissors" viewBox="0 0 160 270">
+      <path
+        d="M74 122L23 259L82 155L137 255L90 121Z"
+        fill="#b8c2b6" stroke="#28362a" stroke-width="4"/>
+      <path d="M75 124L45 78M88 124L119 76"
+        stroke="currentColor" stroke-width="15"/>
+      <ellipse cx="38" cy="49" rx="27" ry="36"
+        fill="none" stroke="#223828" stroke-width="16"
+        transform="rotate(-18 38 49)"/>
+      <ellipse cx="38" cy="49" rx="27" ry="36"
+        fill="none" stroke="currentColor" stroke-width="10"
+        transform="rotate(-18 38 49)"/>
+      <ellipse cx="123" cy="48" rx="27" ry="36"
+        fill="none" stroke="#223828" stroke-width="16"
+        transform="rotate(18 123 48)"/>
+      <ellipse cx="123" cy="48" rx="27" ry="36"
+        fill="none" stroke="currentColor" stroke-width="10"
+        transform="rotate(18 123 48)"/>
+      <circle cx="82" cy="129" r="10" fill="#ddd8b6" stroke="#28362a" stroke-width="3"/>
+      <path d="M77 129H87" stroke="#28362a" stroke-width="2"/>
+    </symbol>
+
+    <symbol id="berry" viewBox="0 0 130 155">
+      <path
+        d="M65 24C20-6-5 49 16 88Q38 139 65 149Q96 134 116 86C139 28 105-4 65 24Z"
+        fill="#f02473" stroke="#55293c" stroke-width="3"/>
+      <path d="M65 28L26 14L49 37L32 49L65 39L96 49L81 33L105 14Z"
+        fill="#a9d443" stroke="#364324" stroke-width="2"/>
+      <path d="M65 29Q55 8 72 3" fill="none" stroke="#526d2c" stroke-width="5"/>
+      <g fill="#f6e9af" stroke="#763043" stroke-width="1">
+        <ellipse cx="35" cy="58" rx="3.5" ry="7" transform="rotate(-17 35 58)"/>
+        <ellipse cx="64" cy="59" rx="3.5" ry="7"/>
+        <ellipse cx="94" cy="59" rx="3.5" ry="7" transform="rotate(17 94 59)"/>
+        <ellipse cx="26" cy="83" rx="3" ry="6" transform="rotate(-22 26 83)"/>
+        <ellipse cx="51" cy="85" rx="3.5" ry="7"/>
+        <ellipse cx="79" cy="85" rx="3.5" ry="7"/>
+        <ellipse cx="102" cy="83" rx="3" ry="6" transform="rotate(22 102 83)"/>
+        <ellipse cx="43" cy="109" rx="3" ry="6" transform="rotate(-15 43 109)"/>
+        <ellipse cx="67" cy="112" rx="3" ry="6"/>
+        <ellipse cx="86" cy="109" rx="3" ry="6" transform="rotate(15 86 109)"/>
+        <ellipse cx="64" cy="132" rx="2.5" ry="5"/>
+      </g>
+    </symbol>
+
+    <symbol id="bow" viewBox="0 0 230 200">
+      <g fill="currentColor" stroke="#59203d" stroke-width="3">
+        <path d="M111 66Q38-5 11 26Q-7 58 18 95Q47 111 112 79Z"/>
+        <path d="M118 66Q192-5 219 26Q238 58 212 95Q182 111 117 79Z"/>
+        <path d="M105 78Q96 125 40 169L68 172L76 195Q116 145 119 87Z"/>
+        <path d="M125 79Q133 126 189 171L164 175L157 195Q117 146 112 87Z"/>
+        <ellipse cx="114" cy="72" rx="18" ry="22"/>
+      </g>
+      <path
+        d="M23 37L96 64M20 88L96 77M207 38L134 64M209 88L135 77M106 98L76 163M125 102L157 162"
+        fill="none" stroke="#ff9cb8" stroke-width="3" opacity=".65"/>
+    </symbol>
+
+    <symbol id="stairs" viewBox="0 0 360 500">
+      <g fill="#eee7cc" stroke="#292334" stroke-width="3">
+        <path d="M145 0H210V32H145Z"/>
+        <path d="M133 32H220V65H133Z"/>
+        <path d="M119 65H230V99H119Z"/>
+        <path d="M106 99H243V135H106Z"/>
+        <path d="M93 135H255V173H93Z"/>
+        <path d="M79 173H269V214H79Z"/>
+        <path d="M65 214H284V258H65Z"/>
+        <path d="M51 258H299V305H51Z"/>
+        <path d="M35 305H316V357H35Z"/>
+        <path d="M18 357H334V415H18Z"/>
+        <path d="M0 415H355V483H0Z"/>
+      </g>
+      <g fill="#38303f">
+        <path d="M145 20H210V32H145ZM133 51H220V65H133Z"/>
+        <path d="M119 84H230V99H119ZM106 118H243V135H106Z"/>
+        <path d="M93 155H255V173H93ZM79 194H269V214H79Z"/>
+        <path d="M65 235H284V258H65ZM51 279H299V305H51Z"/>
+        <path d="M35 328H316V357H35ZM18 383H334V415H18Z"/>
+        <path d="M0 447H355V483H0Z"/>
+      </g>
+      <path d="M163 2L73 481M193 2L282 481"
+        stroke="#8a7b62" fill="none" stroke-width="2"/>
+    </symbol>
+
+    <!-- Условная гравюра агнца. -->
+    <symbol id="lamb" viewBox="0 0 280 275">
+      <g fill="none" stroke="currentColor">
+        <path d="M22 250V113Q22 41 140 10Q258 41 258 113V250Z"/>
+        <path d="M32 240V115Q32 52 140 22Q248 52 248 115V240Z" opacity=".5"/>
+        <circle cx="140" cy="133" r="91"/>
+        <circle cx="140" cy="133" r="84" opacity=".45"/>
+        <path d="M140 30V49M140 216V235M37 133H55M225 133H243"/>
+        <path d="M65 57L79 74M201 192L215 210M66 209L80 191M201 75L215 58"/>
+      </g>
+
+      <path d="M175 68V214" stroke="currentColor" stroke-width="3"/>
+      <path d="M162 84H188" stroke="currentColor" stroke-width="3"/>
+      <path d="M178 91Q200 81 229 96V128Q205 114 178 125Z"
+        fill="currentColor" opacity=".16"/>
+      <path d="M178 91Q200 81 229 96V128Q205 114 178 125Z"
+        fill="none" stroke="currentColor"/>
+      <path d="M201 91V120M187 105H216" stroke="currentColor" stroke-width="2"/>
+
+      <circle cx="78" cy="117" r="34" fill="none" stroke="currentColor"/>
+      <circle cx="78" cy="117" r="29" fill="none" stroke="currentColor" opacity=".45"/>
+
+      <g fill="#f1e6ca" stroke="currentColor" stroke-width="2">
+        <path d="M109 168L102 213H119L127 174"/>
+        <path d="M168 172L176 214H190L186 162"/>
+        <path d="M127 173L132 207H144L143 175"/>
+        <path d="M178 143Q209 130 214 143Q215 155 199 159"/>
+        <path
+          d="M94 138Q106 112 145 113Q188 110 202 134
+             Q214 158 196 174Q174 190 132 181Q109 181 95 164Z"/>
+        <path
+          d="M91 139Q101 114 89 98Q75 86 61 99
+             L55 125Q58 145 75 152Q88 151 91 139Z"/>
+        <path d="M63 104Q43 94 42 107Q46 118 60 118"/>
+        <path d="M87 103Q105 93 110 105Q105 118 93 116"/>
+      </g>
+
+      <g fill="none" stroke="currentColor" opacity=".7">
+        <path d="M112 130q7-10 15 0q8-10 15 0q8-10 15 0q8-10 15 0q8-10 15 0"/>
+        <path d="M105 145q8-10 16 0q8-10 16 0q8-10 16 0q8-10 16 0q8-10 16 0"/>
+        <path d="M111 161q8-10 16 0q8-10 16 0q8-10 16 0q8-10 16 0"/>
+        <path d="M126 175q8-9 16 0q8-9 16 0q8-9 16 0"/>
+        <path d="M65 102q7-9 13 0q7-9 12 0"/>
+      </g>
+
+      <circle cx="66" cy="122" r="2.5" fill="currentColor"/>
+      <path d="M60 137L69 138M102 213H119M176 214H190M132 207H144"
+        stroke="currentColor" stroke-width="3"/>
+      <path d="M56 224Q140 205 221 225M61 229Q143 216 215 230"
+        fill="none" stroke="currentColor" opacity=".6"/>
+      <path d="M15 257H265M60 265H220" stroke="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
 
 <header class="topbar">
-  <a class="brand" href="#top" aria-label="В начало">
+  <a class="brand" href="#top" aria-label="В начало анкеты">
     <span class="brand-cross" aria-hidden="true">✝</span>
-    <span class="micro">Личное свидетельство <span>/ № 017</span></span>
+    <span class="micro">
+      Личное свидетельство <span class="brand-extra">/ № 017</span>
+    </span>
   </a>
 
   <div class="controls" id="controls" hidden>
     <button
       class="control"
-      id="effects"
+      id="effect-toggle"
       type="button"
-      aria-label="Визуальное разрушение"
+      aria-label="Визуальные искажения"
       aria-pressed="true"
-    >Искажения</button>
+    ><span id="effect-label">Искажения: вкл.</span></button>
 
     <button
       class="control"
       id="restore"
       type="button"
-      title="В начало, без накопленных повреждений"
+      title="Вернуться в начало и убрать накопленные повреждения"
     >Собрать ↺</button>
   </div>
 
-  <div class="progress" aria-hidden="true"></div>
+  <div class="top-progress" aria-hidden="true"></div>
 </header>
 
 <div class="layout">
-  <aside class="index" aria-label="Оглавление">
-    <p class="micro index-title">Опись содержимого</p>
+  <aside class="index" aria-label="Оглавление анкеты">
+    <p class="index-title micro">Опись содержимого</p>
 
     <nav>
-      <a href="#name" aria-label="I. Имя, фамилия">
-        <b>I</b><span>Имя</span>
-      </a>
-      <a href="#age" aria-label="II. Возраст">
-        <b>II</b><span>Возраст</span>
-      </a>
-      <a href="#nature" aria-label="III. Сущность">
-        <b>III</b><span>Сущность</span>
-      </a>
-      <a href="#status" aria-label="IV. Статус">
-        <b>IV</b><span>Статус</span>
-      </a>
-      <a href="#appearance" aria-label="V. Внешность">
-        <b>V</b><span>Внешность</span>
-      </a>
-      <a href="#personality" aria-label="VI. Характер">
-        <b>VI</b><span>Характер</span>
-      </a>
-      <a href="#history" aria-label="VII. Предыстория">
-        <b>VII</b><span>Предыстория</span>
-      </a>
-      <a href="#headcanons" aria-label="VIII. Хэдканоны">
-        <b>VIII</b><span>Хэдканоны</span>
-      </a>
-      <a href="#user" aria-label="IX. Ваш юз">
-        <b>IX</b><span>Связь</span>
-      </a>
+      <a href="#name" aria-label="I. Имя, фамилия"><b>I</b><span>Имя</span></a>
+      <a href="#age" aria-label="II. Возраст"><b>II</b><span>Возраст</span></a>
+      <a href="#nature" aria-label="III. Сущность"><b>III</b><span>Сущность</span></a>
+      <a href="#status" aria-label="IV. Статус"><b>IV</b><span>Статус</span></a>
+      <a href="#appearance" aria-label="V. Внешность"><b>V</b><span>Внешность</span></a>
+      <a href="#personality" aria-label="VI. Характер"><b>VI</b><span>Характер</span></a>
+      <a href="#history" aria-label="VII. Предыстория"><b>VII</b><span>Предыстория</span></a>
+      <a href="#headcanons" aria-label="VIII. Хэдканоны"><b>VIII</b><span>Хэдканоны</span></a>
+      <a href="#user" aria-label="IX. Ваш юз"><b>IX</b><span>Связь</span></a>
     </nav>
 
     <div class="preservation">
-      <span class="micro">Сохранность документа</span>
-      <div class="preservation-line" aria-hidden="true"><i></i></div>
-      <div class="condition" id="condition">повреждений нет</div>
+      <span class="micro">Сохранность формы</span>
+      <div class="preservation-meter" aria-hidden="true"><i></i></div>
+      <div id="condition">порядок соблюдён</div>
     </div>
 
-    <p class="aside-quote">
+    <blockquote class="aside-quote">
       «Сердце чистое сотвори во мне, Боже».
-      <br><br>
-      <span class="micro">Псалом 50:12</span>
-    </p>
+      <cite>Псалом 50:12</cite>
+    </blockquote>
   </aside>
 
   <main>
-    <article class="manuscript" aria-label="Анкета Марии Вельской">
+    <article class="paper" aria-label="Анкета Марии Вельской">
 
-      <div class="leaf">
+      <div class="document">
         <!-- ОБЛОЖКА -->
-        <header class="cover">
+        <header class="hero">
           <div class="archive-line micro">
             <span>Приходской архив / личное</span>
-            <span>Экземпляр один</span>
+            <span>Один экземпляр</span>
           </div>
 
-          <div class="cover-stamp" aria-hidden="true">
-            Оригинал не найден
-          </div>
-
-          <div class="hero-grid">
-            <div>
-              <p class="eyebrow micro">Составлено со слов дочери</p>
-              <h1>Мария <em>Вельская</em></h1>
-              <p class="subtitle">
-                Её учили называть страх<br>
-                благоговением.
-              </p>
-            </div>
-
-            <!-- Встроенная иллюстрация, внешние файлы не нужны -->
-            <svg
-              class="icon"
-              viewBox="0 0 200 310"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M15 290V111C15 65 48 28 100 9
-                   C152 28 185 65 185 111V290Z"
-                stroke="currentColor"
-              />
-              <path
-                d="M25 280V112C25 72 55 39 100 20
-                   C145 39 175 72 175 112V280Z"
-                stroke="currentColor"
-                opacity=".5"
-              />
-              <path
-                d="M100 21V64M25 157H175M25 245H175
-                   M55 53V80M145 53V80"
-                stroke="currentColor"
-                opacity=".35"
-              />
-
-              <g class="halo">
-                <circle cx="100" cy="111" r="45" stroke="currentColor"/>
-                <circle
-                  cx="100" cy="111" r="38"
-                  stroke="currentColor" opacity=".4"
-                />
-                <path
-                  d="M100 58V65M100 157V164M47 111H54M146 111H153
-                     M63 74L68 79M132 143L137 148
-                     M63 148L68 143M132 79L137 74"
-                  stroke="currentColor"
-                  opacity=".65"
-                />
-              </g>
-
-              <path
-                d="M100 82V143M78 104H122"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-
-              <path
-                d="M72 246C61 221 59 195 73 166
-                   M128 246C139 221 141 195 127 166"
-                stroke="currentColor"
-              />
-              <path
-                d="M65 225C39 223 37 205 61 212
-                   M64 206C88 199 90 182 68 190
-                   M69 187C45 177 50 162 74 173
-                   M135 225C161 223 163 205 139 212
-                   M136 206C112 199 110 182 132 190
-                   M131 187C155 177 150 162 126 173"
-                stroke="currentColor"
-                opacity=".65"
-              />
-              <path
-                d="M71 168C56 153 62 141 75 154
-                   C73 133 88 134 82 153
-                   C101 144 106 158 85 164Z
-                   M129 168C144 153 138 141 125 154
-                   C127 133 112 134 118 153
-                   C99 144 94 158 115 164Z"
-                stroke="currentColor"
-              />
-
-              <path d="M9 297H191M43 304H157" stroke="currentColor"/>
-              <path d="M92 264H108M100 256V274" stroke="currentColor"/>
+          <div class="emblem" aria-hidden="true">
+            <svg viewBox="0 0 280 275"><use href="#lamb"/></svg>
+            <svg class="emblem-flower a" viewBox="0 0 120 120">
+              <use href="#flower"/>
+            </svg>
+            <svg class="emblem-flower b" viewBox="0 0 120 120">
+              <use href="#flower"/>
             </svg>
           </div>
 
-          <blockquote class="cover-quote">
+          <div class="hero-counterprint" aria-hidden="true">
+            хорошая девочка / хорошая девочка
+          </div>
+
+          <p class="eyebrow micro">Во имя любви и страха</p>
+          <h1>Мария Вельская</h1>
+
+          <p class="hero-subtitle">
+            Она научилась складывать руки для молитвы<br>
+            раньше, чем защищать ими себя.
+          </p>
+
+          <blockquote class="hero-quote">
             <p>«Блаженны чистые сердцем, ибо они Бога узрят».</p>
             <cite>Евангелие от Матфея 5:8</cite>
           </blockquote>
 
-          <p class="warning">
+          <p class="content-note">
             Религиозная травма · семейный контроль · тревожные состояния.<br>
-            Повреждения накапливаются при чтении. Их можно отключить.
+            При чтении оформление становится насыщенным и хаотичным.
+            Искажения можно отключить.
           </p>
+
+          <noscript>
+            <p class="content-note">
+              JavaScript отключён: анкета доступна без нарастания эффектов.
+            </p>
+          </noscript>
         </header>
 
-        <!-- I. ИМЯ -->
+        <!-- I -->
         <section class="entry" id="name">
           <div class="entry-head">
             <span class="roman">I.</span>
@@ -1461,20 +1945,20 @@
 
           <p class="lead">Мария Анна Вельская.</p>
           <p>
-            Для прихожан — Мария. Для матери — полное имя,
-            произнесённое так, будто за ним уже следует обвинение.
-            «Маша» ей нравится, но самой представляться так
-            почему-то неловко.
+            Для прихожан — Мария. Для матери — Марианна,
+            когда та недовольна. Ей нравится простое «Маша»:
+            в этом имени будто не нужно сразу выпрямлять спину.
+            Но сама она почти никогда так не представляется.
           </p>
 
           <blockquote class="verse">
-            <p>«Назвал тебя по имени твоему; ты Мой».</p>
-            <cite>Исаия 43:1</cite>
+            <p>«Не бойся, ибо Я с тобою».</p>
+            <cite>Исаия 41:10</cite>
           </blockquote>
         </section>
 
-        <div class="pair">
-          <!-- II. ВОЗРАСТ -->
+        <div class="facts">
+          <!-- II -->
           <section class="entry" id="age">
             <div class="entry-head">
               <span class="roman">II.</span>
@@ -1483,13 +1967,13 @@
 
             <p class="lead">Двадцать три.</p>
             <p class="small">
-              14 февраля.<br>
-              Свечи на торте задувает с чувством,
-              что делает что-то неуместное.
+              День рождения — 14 февраля.<br>
+              Поздравления до сих пор немного смущают:
+              за сам факт существования её хвалили редко.
             </p>
           </section>
 
-          <!-- III. СУЩНОСТЬ -->
+          <!-- III -->
           <section class="entry" id="nature">
             <div class="entry-head">
               <span class="roman">III.</span>
@@ -1498,14 +1982,14 @@
 
             <p class="lead">Человек.</p>
             <p class="small">
-              Не святая. Не сосуд.<br>
-              Не чьё-то испытание.<br>
+              Не святая. Не знамение.<br>
+              Не наказание за чужой грех.<br>
               Просто человек.
             </p>
           </section>
         </div>
 
-        <!-- IV. СТАТУС -->
+        <!-- IV -->
         <section class="entry" id="status">
           <div class="entry-head">
             <span class="roman">IV.</span>
@@ -1514,13 +1998,14 @@
 
           <p class="lead">Хранительница приходского архива.</p>
           <p>
-            Бывшая певчая. Переписывает метрические книги,
-            восстанавливает переплёты, вклеивает выпавшие страницы.
+            Бывшая певчая. Переписывает старые записи,
+            реставрирует переплёты, вклеивает выпавшие страницы.
             Живёт в комнате над закрытой воскресной школой.
-            У неё есть ключи почти от всех дверей в здании.
+            Хорошо знает, как обращаться с вещами,
+            которые могут рассыпаться от неосторожного прикосновения.
           </p>
 
-          <span class="field-tag">Хранить. Не исправлять. Не выносить.</span>
+          <span class="stamp">Допущена к хранению. Не к толкованию.</span>
 
           <blockquote class="verse">
             <p>
@@ -1531,40 +2016,39 @@
           </blockquote>
         </section>
 
-        <!-- V. ВНЕШНОСТЬ -->
-        <section class="entry displaced" id="appearance">
+        <!-- V -->
+        <section class="entry unstable" id="appearance">
           <div class="margin-order intrusion" aria-hidden="true">
-            смотреть вниз / ворот застегнуть
+            ворот выше / голос тише / не привлекай внимания
           </div>
 
-          <div class="entry-content">
+          <div class="entry-inner">
             <div class="entry-head">
               <span class="roman">V.</span>
-              <h2>Внешность</h2>
+              <h2 class="echo-title" data-echo="Внешность">Внешность</h2>
             </div>
 
             <p>
               Рост — 167 сантиметров. Светло-русые волосы,
-              убранные в тугую косу. Серо-зелёные глаза,
-              длинная шея, чуть сутулые плечи. На пальцах —
-              переплётный клей и крошечные порезы от бумаги.
+              собранные в тугую косу. Серо-зелёные глаза.
+              Тонкие запястья, чуть сутулые плечи, сухие губы.
+              На пальцах — следы бумаги и переплётного клея.
             </p>
             <p>
-              Молочные блузы. Коричневые юбки ниже колен.
-              Старый шерстяной кардиган, аккуратно заштопанный
-              на локте. Серебряный крест под одеждой:
-              она слишком часто проверяет, на месте ли он.
+              Молочные блузы, коричневые юбки ниже колен,
+              выцветший кардиган. Маленький серебряный крест
+              спрятан под тканью. Цепочка рвалась несколько раз;
+              Мария всякий раз чинила её сама.
             </p>
             <p>
-              Первое впечатление —
-              <span class="correction">спокойная, благонравная девушка</span>.
-              Говорит негромко. Улыбается прежде, чем понимает,
-              хочет ли улыбаться.
+              Кажется <span class="correction">умиротворённой</span>.
+              Улыбается быстро, почти предупредительно.
+              Даже сидя одна, занимает только край стула.
             </p>
 
-            <div class="written-over hand intrusion" aria-hidden="true">
-              это не спокойствие.<br>
-              она прислушивается к шагам.
+            <div class="hand-note hand intrusion" aria-hidden="true">
+              не спокойная.<br>
+              просто очень старается не мешать.
             </div>
 
             <blockquote class="verse">
@@ -1576,284 +2060,371 @@
           </div>
         </section>
 
-        <!-- VI. ХАРАКТЕР -->
-        <section class="entry personality" id="personality">
-          <div class="entry-content">
+        <!-- VI -->
+        <section class="entry unravel" id="personality">
+          <svg class="first-eye" viewBox="0 0 200 120" aria-hidden="true">
+            <use href="#eye"/>
+          </svg>
+
+          <div class="entry-inner">
             <div class="entry-head">
               <span class="roman">VI.</span>
-              <h2>Характер</h2>
+              <h2 class="echo-title" data-echo="Характер">Характер</h2>
             </div>
 
-            <div class="trait-line">
-              <span>бережная</span>
+            <div class="traits">
               <span>внимательная</span>
+              <span>бережная</span>
               <span>настороженная</span>
             </div>
 
             <p>
-              Мария умеет замечать чужую усталость. Подвинет стул,
-              принесёт воды, запомнит, какие слова причиняют боль.
-              Любит сухой юмор, старые ботанические атласы
-              и людей, рядом с которыми можно молчать.
+              Она замечает, кто замёрз, кто давно не ел,
+              кто улыбается из вежливости. Умеет быть рядом
+              без лишних вопросов. Любит сухой юмор,
+              ботанические атласы и людей, с которыми можно
+              молчать, не заслуживая это молчание.
             </p>
             <p>
               Но чужое недовольство для неё почти физически громкое.
-              Если собеседник замолчал, она ищет ошибку в последней
-              фразе. Если кто-то повысил голос в соседней комнате,
-              она уже думает, как всё исправить.
+              Пауза в разговоре становится обвинением.
+              Непрочитанное сообщение — предвестием беды.
+              Собственную злость она так быстро превращает в стыд,
+              что часто не успевает понять, на кого злилась.
             </p>
 
             <div class="proof">
-              <span class="proof-label">Предыдущая формулировка</span>
+              <span class="micro">Прежняя формулировка</span>
               <del>Послушная. Не склонна к конфликтам.</del>
               <ins>Не верит, что после отказа её продолжат любить.</ins>
             </div>
 
             <p>
-              Иногда повторяет молитву, пока та не покажется
-              произнесённой «правильно». Обычная нежелательная мысль
-              может испугать её сильнее реальной ссоры.
-              Она понимает, что устала. Но отдых всё ещё ощущается
-              как нарушение какого-то невыносимо важного правила.
+              Иногда повторяет молитву до ощущения, что всё
+              произнесено правильно. Потом винит себя за то,
+              что думала о правильности, а не о Боге.
+              Начинает сначала. Если устала — значит,
+              недостаточно старалась.
             </p>
-
-            <div class="double-rule" aria-hidden="true"></div>
 
             <blockquote class="verse">
               <p>
-                «В любви нет страха, но совершенная любовь изгоняет страх».
+                «В любви нет страха,
+                но совершенная любовь изгоняет страх».
               </p>
               <cite>Первое послание Иоанна 4:18</cite>
             </blockquote>
 
-            <div class="written-over hand intrusion" aria-hidden="true">
-              тогда почему я всё время боюсь?
+            <div class="hand-note hand intrusion" aria-hidden="true">
+              тогда что это со мной?
+            </div>
+
+            <div class="foreign-strip" aria-hidden="true">
+              ЕЩЁ РАЗ · ТЫ ОТВЛЕКЛАСЬ · ЕЩЁ РАЗ
             </div>
           </div>
         </section>
       </div>
 
-      <!-- VII. ПРЕДЫСТОРИЯ: ФОРМА БОЛЬШЕ НЕ ДЕРЖИТСЯ -->
-      <section class="rupture" id="history">
-        <svg
-          class="fracture-line"
-          viewBox="0 0 100 1000"
-          preserveAspectRatio="none"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M72 0L49 86L65 134L29 217L47 302
-               L16 383L45 464L25 531L61 630
-               L39 721L68 813L44 903L57 1000"
-            stroke="currentColor"
-          />
-          <path
-            d="M65 134L91 173L79 229
-               M16 383L2 426L17 458
-               M61 630L89 672L76 728
-               M44 903L14 943L26 1000"
-            stroke="currentColor"
-            opacity=".5"
-          />
-        </svg>
+      <!-- VII: НАЧИНАЕТСЯ КОЛЛАЖ -->
+      <section class="stage" id="history">
 
-        <div class="rupture-head">
-          <span class="roman">VII.</span>
-          <h2>Преды<span class="split-word">стория</span></h2>
+        <!-- Декорации не попадают в озвучивание экранным диктором. -->
+        <div class="stage-set" aria-hidden="true">
+          <div class="curtain"></div>
+
+          <div class="portal">
+            <svg viewBox="0 0 200 120"><use href="#eye"/></svg>
+          </div>
+
+          <svg class="stairs" viewBox="0 0 360 500">
+            <use href="#stairs"/>
+          </svg>
+
+          <div class="ribbon one">
+            БУДЬ ХОРОШЕЙ · БУДЬ ХОРОШЕЙ · БУДЬ ХОРОШЕЙ
+          </div>
+          <div class="ribbon two">
+            ЭТО ДЛЯ ТВОЕГО БЛАГА · ЭТО ДЛЯ ТВОЕГО БЛАГА
+          </div>
+          <div class="ribbon three">
+            НЕ ПЛАЧЬ · НЕ СПОРЬ · НЕ ЗЛИСЬ · НЕ ПЛАЧЬ
+          </div>
+
+          <div class="checker-floor"></div>
+
+          <svg class="prop scissors-a" viewBox="0 0 160 270">
+            <use href="#scissors"/>
+          </svg>
+          <svg class="prop berry-a" viewBox="0 0 130 155">
+            <use href="#berry"/>
+          </svg>
+          <svg class="prop flower-a" viewBox="0 0 120 120">
+            <use href="#flower"/>
+          </svg>
+          <svg class="prop bow-a" viewBox="0 0 230 200">
+            <use href="#bow"/>
+          </svg>
+          <svg class="prop eye-a" viewBox="0 0 200 120">
+            <use href="#eye"/>
+          </svg>
+          <svg class="prop berry-b" viewBox="0 0 130 155">
+            <use href="#berry"/>
+          </svg>
         </div>
 
-        <p class="loss-caption">
-          Далее — отдельные листы. Порядок восстановлен приблизительно.
-        </p>
+        <div class="stage-content">
+          <header class="history-header">
+            <span class="history-label">VII / порядок изложения утрачен</span>
 
-        <div class="fragment fragment-one">
-          <div class="fragment-top">
-            <span>Дом / восемь лет</span>
-            <span class="paper-number">01</span>
-          </div>
+            <h2 aria-label="Предыстория">
+              <span aria-hidden="true">Пред</span>
+              <span aria-hidden="true">ыст</span>
+              <span aria-hidden="true">ория</span>
+            </h2>
 
-          <p>
-            В детстве Мария любила церковь. Не потому, что боялась.
-            Ей нравились пение, тёплый воск, золотые пылинки
-            в полосах света. Нравилась пожилая певчая,
-            которая приносила ей варежки и никогда не спрашивала,
-            заслужила ли она их.
-          </p>
-          <p>
-            Дома Бог звучал иначе.
-          </p>
-
-          <div class="foreign-voice">
-            <span class="micro">Запомнившиеся слова матери</span>
-            <p>«Ты думаешь, я не вижу? Он-то видит».</p>
-          </div>
-
-          <p>
-            Так у девочки не осталось места, где можно было
-            побыть одной. Даже внутри собственной головы.
-            Она начала извиняться за мысли раньше,
-            чем научилась отличать мысль от намерения.
-          </p>
-
-          <blockquote class="verse">
-            <p>
-              «Господи! Ты испытал меня и знаешь».
+            <p class="history-subtitle">
+              Всё было очень красиво.<br>
+              Это почему-то важно добавить.
             </p>
-            <cite>Псалом 138:1</cite>
-          </blockquote>
-        </div>
+          </header>
 
-        <div class="fragment fragment-two">
-          <div class="fragment-top">
-            <span>Дом / тринадцать — девятнадцать</span>
-            <span class="paper-number">02</span>
-          </div>
+          <div class="fragment a">
+            <span class="tape" aria-hidden="true"></span>
+            <h3>01. Восемь лет / золото на потолке</h3>
 
-          <p>
-            Если она плакала, это называли жалостью к себе.
-            Если злилась — гордыней. Если пыталась объяснить,
-            почему ей больно, говорили, что она ищет оправдания.
-          </p>
-          <p>
-            Наказание не всегда имело голос.
-            Иногда мать просто переставала отвечать.
-            Мария ходила за ней из комнаты в комнату
-            и перебирала свои проступки, как бусины.
-            Правильный проступок должен был вернуть ей мать.
-          </p>
-          <p>
-            На исповеди она рассказывала о раздражении,
-            зависти, недостаточном усердии.
-            О доме молчала. Рассказать означало выставить семью
-            в дурном свете. А хорошая дочь так не делает.
-          </p>
-
-          <div class="proof">
-            <span class="proof-label">Запись на обороте</span>
-            <del>Я была трудным ребёнком.</del>
-            <ins>Я была ребёнком.</ins>
-          </div>
-
-          <p>
-            В девятнадцать лет посреди службы она не смогла вдохнуть.
-            Хор продолжал петь. Пол казался далёким,
-            ладони онемели, собственное имя перестало быть знакомым.
-          </p>
-          <p>
-            Позже это можно было назвать панической атакой.
-            Тогда дома назвали недостатком веры.
-          </p>
-        </div>
-
-        <div class="blank-space">
-          <p class="micro">Между этими листами ничего не сохранилось</p>
-
-          <div class="prayer-ghost" aria-hidden="true">
-            я старалась<br>я старалась
-          </div>
-
-          <blockquote class="abyss-quote">
             <p>
-              <span class="line">«Боже мой! Боже мой!</span>
-              <span class="line">для чего Ты</span>
-              <span class="line">оставил меня?»</span>
+              В детстве Мария любила церковь.
+              Пахло воском и мокрыми пальто.
+              Высоко под куполом пели невидимые люди,
+              и ей казалось, что у света есть голос.
             </p>
-            <cite>Псалом 21:2</cite>
-          </blockquote>
-        </div>
+            <p>
+              Она любила агнца на старом витраже.
+              Цветы вокруг него. Маленькое знамя.
+              Спрашивала, почему ягнёнок такой грустный,
+              если он хороший.
+            </p>
+            <p>
+              Однажды мать объяснила, что Бог видит всё.
+              Не только поступки. Каждую мысль.
+              Даже ту, которую Мария не хотела думать.
+            </p>
 
-        <div class="fragment fragment-three">
-          <span class="staple intrusion" aria-hidden="true"></span>
+            <div class="foreign-voice">
+              <span class="micro">Запомнившиеся слова матери</span>
+              <p>«От меня скроешь. От Него — нет».</p>
+            </div>
 
-          <div class="fragment-top">
-            <span>Архив / настоящее время</span>
-            <span class="paper-number">03</span>
+            <p>
+              После этого у девочки не осталось комнаты,
+              где можно было закрыть дверь.
+            </p>
+
+            <blockquote class="verse">
+              <p>«Господи! Ты испытал меня и знаешь».</p>
+              <cite>Псалом 138:1</cite>
+            </blockquote>
           </div>
 
-          <p>
-            После того случая она перестала петь.
-            Начала спать при свете и долго проверять дверной замок.
-            Потом просила прощения за то, что замок
-            успокаивал её лучше молитвы.
-          </p>
-          <p>
-            Комнату при архиве ей помогла найти та самая женщина
-            из хора. Она сказала: «Ключ останется у тебя».
-            Мария переспросила дважды.
-          </p>
-          <p>
-            Теперь она живёт отдельно. Ходит к психологу,
-            когда хватает денег и решимости.
-            Иногда не отвечает на звонок матери.
-            Потом весь вечер ждёт беды.
-          </p>
-          <p>
-            Бывают хорошие дни: суп на плите, тёплая кошка,
-            законченный переплёт. Но стоит услышать за стеной
-            знакомую интонацию — и комната снова становится
-            детской, а ей снова нужно угадать,
-            за что сегодня просят прощения.
-          </p>
-          <p>
-            Она всё ещё верит. Или очень хочет верить.
-            Только теперь не понимает, где заканчивается
-            Божий голос и начинается голос человека,
-            который слишком долго говорил от Его имени.
-          </p>
+          <div class="fragment b">
+            <h3>02. Тринадцать лет / праздничное платье</h3>
 
-          <blockquote class="verse">
-            <p>«Из глубины взываю к Тебе, Господи».</p>
-            <cite>Псалом 129:1</cite>
-          </blockquote>
+            <p>
+              На фотографиях она нарядная. Белый воротничок,
+              лента в волосах, ладони одна поверх другой.
+              Перед снимком ей сказали перестать портить всем день.
+              На снимке это не видно.
+            </p>
+            <p>
+              Слёзы называли жалостью к себе.
+              Несогласие — неблагодарностью.
+              Злость — гордыней.
+              У каждого чувства находилось имя,
+              после которого Мария должна была извиниться.
+            </p>
+            <p>
+              Иногда мать переставала с ней разговаривать.
+              Мария ходила следом и перечисляла,
+              в чём могла быть виновата.
+              Если угадать правильно, тишина закончится.
+            </p>
+
+            <div class="certificate">
+              <del>Я была трудным ребёнком.</del>
+              <strong>Я была ребёнком.</strong>
+            </div>
+          </div>
+
+          <div class="choir">
+            <div class="choir-noise" aria-hidden="true">
+              <span>ещё раз</span>
+              <span>не отвлекайся</span>
+              <span>ты же хорошая</span>
+              <span>ещё раз</span>
+            </div>
+
+            <blockquote class="choir-quote">
+              <p>«Бог есть любовь».</p>
+              <cite>Первое послание Иоанна 4:8</cite>
+            </blockquote>
+          </div>
+
+          <div class="fragment c">
+            <span class="tape" aria-hidden="true"></span>
+            <h3>03. Девятнадцать лет / хор не остановился</h3>
+
+            <p>
+              Она помнит не всю службу.
+              Помнит ворот, который вдруг стал слишком тесным.
+              Воздух, который никак не доходил до лёгких.
+              Чужое пение, продолжавшееся так спокойно,
+              будто ничего не происходило.
+            </p>
+            <p>
+              Витраж расплылся в цветные пятна.
+              Лица на иконах казались бесконечно далёкими.
+              Мария пыталась прочитать знакомую молитву,
+              но слышала только: не мешай, не мешай, не мешай.
+            </p>
+            <p>
+              Позже это можно было назвать панической атакой.
+              Дома назвали недостатком веры.
+            </p>
+            <p>
+              Она перестала петь. Начала спать при свете,
+              проверять замок, вздрагивать от звонка телефона.
+              Потом просила прощения за то,
+              что замок успокаивает её лучше молитвы.
+            </p>
+
+            <blockquote class="verse">
+              <p>
+                «Боже мой! Боже мой! для чего Ты оставил меня?»
+              </p>
+              <cite>Псалом 21:2</cite>
+            </blockquote>
+          </div>
+
+          <aside class="child-letter" aria-label="Лист из детской тетради">
+            <svg class="letter-flower" viewBox="0 0 120 120" aria-hidden="true">
+              <use href="#flower"/>
+            </svg>
+
+            <span class="micro">Лист из детской тетради / без даты</span>
+
+            <p class="hand">
+              <span>Господи,</span>
+              <span>я правда</span>
+              <span>стараюсь.</span>
+            </p>
+
+            <p class="letter-sign hand">Ты ведь видишь?</p>
+          </aside>
+
+          <div class="fragment d">
+            <h3>04. Двадцать три года / ключ с внутренней стороны</h3>
+
+            <p>
+              Комнату при архиве ей нашла пожилая певчая.
+              Та самая, которая в детстве приносила ей варежки
+              и ни разу не спросила, заслужила ли она их.
+            </p>
+            <p>
+              «Ключ останется у тебя», — сказала она.
+              Мария переспросила.
+            </p>
+            <p>
+              Теперь у Марии есть работа, чайник,
+              два цветка на подоконнике.
+              Она иногда ходит к психологу.
+              Иногда не отвечает матери.
+              Иногда после этого весь вечер ждёт,
+              что случится что-нибудь непоправимое.
+            </p>
+            <p>
+              Снаружи её жизнь стала тише.
+              Внутри всё ещё шумно:
+              материнские фразы, недочитанные молитвы,
+              попытки угадать, как стать достаточно хорошей.
+              Даже отдых порой превращается в проверку,
+              которую можно провалить.
+            </p>
+            <p>
+              Она всё ещё молится.
+              Но теперь пытается понять,
+              кому принадлежит голос,
+              который отвечает ей страхом.
+            </p>
+
+            <blockquote class="verse">
+              <p>«Из глубины взываю к Тебе, Господи».</p>
+              <cite>Псалом 129:1</cite>
+            </blockquote>
+          </div>
+
+          <p class="confession">
+            Если Ты — любовь,<br>
+            почему со мной говорили<br>
+            Твоим именем так жестоко?
+            <small>Приписано от руки. Не библейская цитата.</small>
+          </p>
         </div>
-
-        <p class="confession">
-          Я не хотела перестать быть хорошей.<br>
-          Я хотела перестать бояться.
-          <small>Приписано от руки. Подписи нет.</small>
-        </p>
       </section>
 
-      <!-- VIII. ХЭДКАНОНЫ -->
-      <section class="remains" id="headcanons">
-        <div class="entry-head">
-          <span class="roman">VIII.</span>
-          <h2>Хэдканоны</h2>
+      <div class="afterworld">
+        <div class="bottom-props" aria-hidden="true">
+          <svg class="bottom-eye" viewBox="0 0 200 120">
+            <use href="#eye"/>
+          </svg>
+          <svg class="bottom-bow" viewBox="0 0 230 200">
+            <use href="#bow"/>
+          </svg>
         </div>
 
-        <ol class="notes">
-          <li class="note">
-            Обожает груши. Покупает их редко: всякий раз
-            сначала придумывает уважительную причину.
-          </li>
-          <li class="note">
-            Чинит книги уверенно, почти властно.
-            В работе её руки никогда не выглядят беспомощными.
-          </li>
-          <li class="note">
-            Вздрагивает от звона связки ключей.
-            Свои обернула маленьким лоскутом ткани.
-          </li>
-          <li class="note">
-            Кормит дворовую кошку по имени Ева.
-            Считает это имя смешным. Никому не объясняет почему.
-          </li>
-          <li class="note">
-            Может часами говорить о растениях на полях старых рукописей.
-            В такие минуты забывает следить за громкостью голоса.
-          </li>
-          <li class="note">
-            В книге лежит записка: «Ты можешь уйти».
-            Она не помнит, когда написала её.
-            Но каждый раз аккуратно перекладывает на новую страницу.
-          </li>
-        </ol>
-      </section>
+        <!-- VIII -->
+        <section class="remains" id="headcanons">
+          <div class="entry-head">
+            <span class="roman">VIII.</span>
+            <h2>Хэдканоны</h2>
+          </div>
 
-      <!-- IX. ВАШ ЮЗ -->
-      <section class="contact-area" id="user">
-        <div class="contact-sheet">
+          <ol class="notes">
+            <li class="note">
+              Любит груши, но чаще покупает яблоки:
+              дешевле. За удовольствие ей всё ещё хочется
+              предъявить какую-нибудь уважительную причину.
+            </li>
+            <li class="note">
+              Когда чинит книгу, становится неожиданно уверенной.
+              Может коротко сказать: «Не трогайте, клей ещё не высох».
+              Потом сама удивляется.
+            </li>
+            <li class="note">
+              В детстве вырезала цветы из упаковок и вклеивала
+              в молитвослов. Несколько кривых ромашек
+              до сих пор лежат между страницами.
+            </li>
+            <li class="note">
+              Кормит дворовую кошку по имени Ева.
+              Когда та роняет что-нибудь со стола,
+              Мария говорит: «Да, я тоже так думаю».
+            </li>
+            <li class="note">
+              Во время грозы считает секунды между молнией и громом.
+              Конкретное расстояние успокаивает:
+              не всё невидимое находится прямо за спиной.
+            </li>
+            <li class="note">
+              Носит в книге открытку:
+              «Тебе не нужно заслуживать отдых».
+              Слова уже выучила. Поверить пока труднее.
+            </li>
+          </ol>
+        </section>
+
+        <!-- IX -->
+        <section class="contact-sheet" id="user">
           <div class="entry-head">
             <span class="roman">IX.</span>
             <h2>Ваш юз</h2>
@@ -1863,24 +2434,27 @@
           <p class="username">@your_username</p>
           <p class="small">
             Для связи и обсуждения сюжета.<br>
-            Не всё личное должно становиться исповедью.
+            Здесь можно говорить не шёпотом.
           </p>
-        </div>
-      </section>
+        </section>
 
-      <footer class="ending">
-        <span class="ending-cross" aria-hidden="true">✝</span>
+        <footer class="ending">
+          <span class="ending-cross" aria-hidden="true">✝</span>
 
-        <blockquote>
-          <p>
-            «Трости надломленной не переломит,<br>
-            и льна курящегося не угасит».
+          <blockquote>
+            <p>
+              «Трости надломленной не переломит,<br>
+              и льна курящегося не угасит».
+            </p>
+            <cite>Исаия 42:3</cite>
+          </blockquote>
+
+          <p class="last-line">
+            Это конец анкеты.<br>
+            Она всё ещё здесь.
           </p>
-          <cite>Исаия 42:3</cite>
-        </blockquote>
-
-        <p class="last-line">Конец документа. Не приговор.</p>
-      </footer>
+        </footer>
+      </div>
     </article>
 
     <footer class="outside-footer">
@@ -1896,70 +2470,79 @@
   const body = document.body;
 
   const controls = document.getElementById("controls");
-  const effectsButton = document.getElementById("effects");
-  const restoreButton = document.getElementById("restore");
+  const toggle = document.getElementById("effect-toggle");
+  const toggleLabel = document.getElementById("effect-label");
+  const restore = document.getElementById("restore");
   const condition = document.getElementById("condition");
   const theme = document.querySelector('meta[name="theme-color"]');
 
-  const navLinks = [...document.querySelectorAll(".index nav a")];
-  const sections = navLinks.map(link =>
+  const links = [...document.querySelectorAll(".index nav a")];
+  const sections = links.map(link =>
     document.querySelector(link.getAttribute("href"))
   );
 
-  const appearance = document.getElementById("appearance");
-  const personality = document.getElementById("personality");
-  const history = document.getElementById("history");
+  // Где начинается вторжение и где раскрывается коллаж.
+  const startSection = document.getElementById("appearance");
+  const peakSection = document.getElementById("history");
 
-  const reducedMotion = window.matchMedia(
+  const motionPreference = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   );
 
-  const STORAGE_KEY = "maria-witness-effects";
+  const STORAGE_KEY = "maria-collage-effects";
 
-  let effectsEnabled = !reducedMotion.matches;
+  let effectsEnabled = !motionPreference.matches;
   let explicitPreference = false;
 
-  // Повреждения накапливаются и не исчезают при прокрутке вверх.
   let accumulatedDamage = 0;
-
-  let pending = false;
-  let needsMeasurement = true;
-  let positions = [];
-  let damageStops = [];
-  let lastPaintedDamage = -1;
-  let lastActive = "";
+  let lastDamage = -1;
   let lastCondition = "";
+  let lastActive = "";
 
-  // Только тёплые земляные оттенки:
-  // пергамент → старый табак, фон → копоть.
-  const palette = {
-    "--ground": [
-      [231, 222, 202],
-      [25, 20, 14]
+  let framePending = false;
+  let needsMeasure = true;
+
+  let breakStart = 0;
+  let breakEnd = 1;
+  let historyTop = 0;
+  let historyHeight = 1;
+  let sectionPositions = [];
+
+  // Три состояния:
+  // 1. Тёплая бумага.
+  // 2. Табачный, потемневший документ.
+  // 3. Тёмная театральная сцена.
+  // Яркие вырезки появляются отдельно через --psy.
+  const palettes = {
+    "--bg": [
+      [232, 223, 204],
+      [105, 84, 56],
+      [20, 15, 29]
     ],
-    "--paper": [
-      [245, 238, 219],
-      [205, 184, 144]
-    ],
-    "--paper-alt": [
-      [238, 227, 201],
-      [194, 169, 126]
-    ],
-    "--void": [
-      [245, 238, 219],
-      [25, 20, 14]
+    "--sheet": [
+      [247, 240, 222],
+      [225, 207, 170],
+      [219, 204, 172]
     ],
     "--ui": [
-      [110, 90, 62],
-      [207, 188, 151]
+      [101, 81, 57],
+      [239, 222, 186],
+      [222, 223, 185]
     ],
     "--ui-line": [
-      [199, 185, 156],
-      [85, 70, 50]
+      [199, 182, 153],
+      [157, 134, 91],
+      [81, 78, 92]
     ],
-    "--loss-ink": [
-      [65, 48, 32],
-      [220, 197, 160]
+    "--scene": [
+      [247, 240, 222],
+      [133, 104, 67],
+      [21, 15, 31]
+    ],
+    "--scene-ink": [
+      [57, 43, 28],
+      [248, 237, 207],
+      [242, 232, 203]
     ]
   };
 
@@ -1967,124 +2550,134 @@
     return Math.min(max, Math.max(min, value));
   }
 
-  function ease(value) {
+  function smoothstep(value) {
     return value * value * (3 - 2 * value);
   }
 
-  function mixColor(a, b, amount) {
-    return `rgb(${a.map((value, index) =>
-      Math.round(value + (b[index] - value) * amount)
+  function mixColor(from, to, amount) {
+    return `rgb(${from.map((value, index) =>
+      Math.round(value + (to[index] - value) * amount)
     ).join(", ")})`;
   }
 
-  function topOf(element) {
+  function paletteColor(colors, amount) {
+    const midpoint = .43;
+
+    if (amount <= midpoint) {
+      return mixColor(
+        colors[0],
+        colors[1],
+        smoothstep(amount / midpoint)
+      );
+    }
+
+    return mixColor(
+      colors[1],
+      colors[2],
+      smoothstep((amount - midpoint) / (1 - midpoint))
+    );
+  }
+
+  function documentTop(element) {
     return element.getBoundingClientRect().top + window.scrollY;
   }
 
   function measure() {
     const height = window.innerHeight;
 
-    positions = sections.map(section => ({
+    historyTop = documentTop(peakSection);
+    historyHeight = peakSection.offsetHeight;
+
+    breakStart = documentTop(startSection) - height * .82;
+
+    // Максимум — в начале предыстории, не только в самом низу.
+    breakEnd = historyTop + 180 - height * .36;
+    breakEnd = Math.max(breakStart + 1, breakEnd);
+
+    sectionPositions = sections.map(section => ({
       id: section.id,
-      top: topOf(section)
+      top: documentTop(section)
     }));
 
-    // Контрольные точки привязаны к разделам, а не длине текста.
-    // Поэтому анкету можно переписывать без пересчёта процентов.
-    damageStops = [
-      { y: 0, value: 0 },
-      { y: Math.max(1, topOf(appearance) - height * .9), value: 0 },
-      { y: topOf(appearance) - height * .25, value: .22 },
-      { y: topOf(personality) - height * .35, value: .58 },
-      { y: topOf(history) - height * .45, value: 1 }
-    ];
-
-    // Защита для очень короткого текста или очень высокого окна.
-    for (let i = 1; i < damageStops.length; i++) {
-      damageStops[i].y = Math.max(
-        damageStops[i].y,
-        damageStops[i - 1].y + 1
-      );
-    }
-
-    needsMeasurement = false;
-  }
-
-  function damageAt(scroll) {
-    for (let i = 1; i < damageStops.length; i++) {
-      const from = damageStops[i - 1];
-      const to = damageStops[i];
-
-      if (scroll <= to.y) {
-        const progress = ease(
-          clamp((scroll - from.y) / (to.y - from.y))
-        );
-
-        return from.value + (to.value - from.value) * progress;
-      }
-    }
-
-    return 1;
+    needsMeasure = false;
   }
 
   function paintDamage(damage) {
-    if (Math.abs(lastPaintedDamage - damage) < .0005) return;
+    if (Math.abs(damage - lastDamage) < .0005) return;
+    lastDamage = damage;
 
-    lastPaintedDamage = damage;
+    // Цветной коллаж вторгается позже, чем темнеет бумага.
+    const psychedelic = smoothstep(
+      clamp((damage - .26) / .74)
+    );
+
     root.style.setProperty("--damage", damage.toFixed(4));
+    root.style.setProperty("--psy", psychedelic.toFixed(4));
 
-    for (const [property, colors] of Object.entries(palette)) {
+    for (const [property, colors] of Object.entries(palettes)) {
       root.style.setProperty(
         property,
-        mixColor(colors[0], colors[1], damage)
+        paletteColor(colors, damage)
       );
     }
 
     theme.setAttribute(
       "content",
-      mixColor(
-        palette["--ground"][0],
-        palette["--ground"][1],
-        damage
-      )
+      paletteColor(palettes["--bg"], damage)
     );
   }
 
   function update() {
-    pending = false;
-
-    if (needsMeasurement) measure();
+    framePending = false;
+    if (needsMeasure) measure();
 
     const scroll = window.scrollY;
-    const maxScroll = Math.max(
+    const maximum = Math.max(
       1,
       root.scrollHeight - window.innerHeight
     );
 
-    const reading = clamp(scroll / maxScroll);
-    root.style.setProperty("--read", reading.toFixed(4));
+    const reading = clamp(scroll / maximum);
+    root.style.setProperty("--reading", reading.toFixed(4));
+
+    const rawDamage = clamp(
+      (scroll - breakStart) / (breakEnd - breakStart)
+    );
 
     if (effectsEnabled) {
       accumulatedDamage = Math.max(
         accumulatedDamage,
-        damageAt(scroll)
+        smoothstep(rawDamage)
       );
     }
 
-    const visibleDamage = effectsEnabled ? accumulatedDamage : 0;
-    paintDamage(visibleDamage);
+    const damage = effectsEnabled ? accumulatedDamage : 0;
+    paintDamage(damage);
 
-    let state = "повреждений нет";
+    // Только небольшое движение декораций при прокрутке.
+    // Никакой постоянной тряски или вспышек.
+    const sceneProgress = clamp(
+      (scroll - historyTop + window.innerHeight * .5) /
+      Math.max(1, historyHeight)
+    );
+
+    const float = effectsEnabled && !motionPreference.matches
+      ? sceneProgress * 42
+      : 0;
+
+    root.style.setProperty("--float", `${float.toFixed(2)}px`);
+
+    let state = "порядок соблюдён";
 
     if (!effectsEnabled) {
-      state = "режим чтения";
-    } else if (visibleDamage > .93) {
-      state = "сохранились фрагменты";
-    } else if (visibleDamage > .62) {
-      state = "нарушена целостность";
-    } else if (visibleDamage > .3) {
-      state = "текст не совпадает";
-    } else if (visibleDamage > .04) {
+      state = "режим без искажений";
+    } else if (damage > .92) {
+      state = "форма больше не удерживает";
+    } else if (damage > .66) {
+      state = "слишком много голосов";
+    } else if (damage > .35) {
+      state = "появились чужие строки";
+    } else if (damage > .04) {
       state = "следы чужого нажима";
     }
 
@@ -2093,21 +2686,21 @@
       lastCondition = state;
     }
 
-    const readingLine = scroll + window.innerHeight * .33;
-    let active = positions[0]?.id || "";
+    const readingLine = scroll + window.innerHeight * .34;
+    let active = sectionPositions[0]?.id || "";
 
-    for (const section of positions) {
+    for (const section of sectionPositions) {
       if (section.top <= readingLine) active = section.id;
     }
 
     if (reading > .985) {
-      active = positions[positions.length - 1]?.id || active;
+      active = sectionPositions[sectionPositions.length - 1]?.id || active;
     }
 
     if (active !== lastActive) {
       lastActive = active;
 
-      navLinks.forEach(link => {
+      links.forEach(link => {
         if (link.getAttribute("href") === `#${active}`) {
           link.setAttribute("aria-current", "location");
         } else {
@@ -2117,42 +2710,40 @@
     }
   }
 
-  function schedule(measureAgain = false) {
-    if (measureAgain) needsMeasurement = true;
-    if (pending) return;
+  function requestUpdate(remeasure = false) {
+    if (remeasure) needsMeasure = true;
+    if (framePending) return;
 
-    pending = true;
+    framePending = true;
     requestAnimationFrame(update);
   }
 
-  function syncEffects() {
+  function syncToggle() {
     body.classList.toggle("calm", !effectsEnabled);
-    effectsButton.setAttribute(
-      "aria-pressed",
-      String(effectsEnabled)
-    );
-    effectsButton.textContent = effectsEnabled
-      ? "Искажения"
-      : "Без искажений";
+    toggle.setAttribute("aria-pressed", String(effectsEnabled));
 
-    schedule(true);
+    toggleLabel.textContent = effectsEnabled
+      ? "Искажения: вкл."
+      : "Искажения: выкл.";
+
+    requestUpdate(true);
   }
 
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(STORAGE_KEY);
 
-    if (saved === "on" || saved === "off") {
-      effectsEnabled = saved === "on";
+    if (stored === "on" || stored === "off") {
+      effectsEnabled = stored === "on";
       explicitPreference = true;
     }
   } catch (_) {
-    // Сайт продолжит работать, если хранилище недоступно.
+    // Локальное хранилище необязательно для работы страницы.
   }
 
   controls.hidden = false;
-  syncEffects();
+  syncToggle();
 
-  effectsButton.addEventListener("click", () => {
+  toggle.addEventListener("click", () => {
     effectsEnabled = !effectsEnabled;
     explicitPreference = true;
 
@@ -2163,52 +2754,56 @@
       );
     } catch (_) {}
 
-    syncEffects();
+    syncToggle();
   });
 
-  restoreButton.addEventListener("click", () => {
+  restore.addEventListener("click", () => {
     accumulatedDamage = 0;
-    lastPaintedDamage = -1;
+    lastDamage = -1;
 
-    // Мгновенный возврат: без длинной прокрутки через повреждения.
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant"
+    });
+
     paintDamage(0);
-    schedule(true);
+    root.style.setProperty("--float", "0px");
+    requestUpdate(true);
   });
 
-  function onMotionPreferenceChange(event) {
+  function onMotionChange(event) {
     if (!explicitPreference) {
       effectsEnabled = !event.matches;
-      syncEffects();
+      syncToggle();
+    } else {
+      requestUpdate();
     }
   }
 
-  if (reducedMotion.addEventListener) {
-    reducedMotion.addEventListener(
-      "change",
-      onMotionPreferenceChange
-    );
+  if (motionPreference.addEventListener) {
+    motionPreference.addEventListener("change", onMotionChange);
   } else {
-    reducedMotion.addListener(onMotionPreferenceChange);
+    motionPreference.addListener(onMotionChange);
   }
 
-  window.addEventListener("scroll", () => schedule(), {
+  window.addEventListener("scroll", () => requestUpdate(), {
     passive: true
   });
 
-  window.addEventListener("resize", () => schedule(true), {
+  window.addEventListener("resize", () => requestUpdate(true), {
     passive: true
   });
 
-  window.addEventListener("load", () => schedule(true));
-  window.addEventListener("pageshow", () => schedule(true));
+  window.addEventListener("load", () => requestUpdate(true));
+  window.addEventListener("pageshow", () => requestUpdate(true));
 
   if ("ResizeObserver" in window) {
-    const observer = new ResizeObserver(() => schedule(true));
-    observer.observe(document.querySelector(".manuscript"));
+    const observer = new ResizeObserver(() => requestUpdate(true));
+    observer.observe(document.querySelector(".paper"));
   }
 
-  schedule(true);
+  requestUpdate(true);
 })();
 </script>
 </body>
