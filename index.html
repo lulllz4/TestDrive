@@ -1,2810 +1,4194 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="no-js">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#e8dfcc">
-<title>Мария Вельская — я правда стараюсь</title>
-
-<style>
-/* =========================================================
-   ОСНОВА
-   ========================================================= */
-
-:root {
-  --bg: #e8dfcc;
-  --sheet: #f7f0de;
-  --ui: #655139;
-  --ui-line: #c7b699;
-  --scene: #f7f0de;
-  --scene-ink: #392b1c;
-
-  --ink: #392b1c;
-  --muted: #746048;
-  --line: rgba(94, 65, 29, .25);
-
-  --damage: 0;
-  --psy: 0;
-  --reading: 0;
-  --float: 0px;
-
-  --green: #b8ef31;
-  --pink: #ed176e;
-  --blue: #283ee0;
-  --yellow: #f8d949;
-
-  --serif: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
-  --sans: Arial, sans-serif;
-  --mono: "Courier New", Courier, monospace;
-}
-
-* { box-sizing: border-box; }
-[hidden] { display: none !important; }
-
-html {
-  scroll-padding-top: 95px;
-  scrollbar-color: #8e7048 var(--bg);
-}
-
-body {
-  margin: 0;
-  overflow-x: hidden;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--serif);
-  line-height: 1.8;
-}
-
-button, a { -webkit-tap-highlight-color: transparent; }
-button { font: inherit; }
-a { color: inherit; }
-
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 5px;
-}
-
-::selection {
-  background: #b8ef31;
-  color: #20192a;
-}
-
-p { margin: 0 0 17px; }
-p:last-child { margin-bottom: 0; }
-
-h1, h2, h3 { font-weight: normal; }
-svg { display: block; }
-
-.symbol-library {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-.grain {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  opacity: .065;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath d='M0 0h180v180H0z' fill='%23000' opacity='.75' filter='url(%23noise)'/%3E%3C/svg%3E");
-}
-
-.skip {
-  position: fixed;
-  left: 15px;
-  top: -100px;
-  z-index: 120;
-  padding: 8px 15px;
-  background: #f7f0de;
-  color: #392b1c;
-}
-
-.skip:focus { top: 10px; }
-
-.micro {
-  font-family: var(--sans);
-  font-size: 9px;
-  line-height: 1.6;
-  letter-spacing: .17em;
-  text-transform: uppercase;
-}
-
-.hand {
-  font-family: "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
-}
-
-/* =========================================================
-   ПАНЕЛЬ И ОГЛАВЛЕНИЕ
-   ========================================================= */
-
-.topbar {
-  position: fixed;
-  inset: 0 0 auto;
-  z-index: 100;
-  height: 62px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  padding: 0 25px;
-  background: var(--bg);
-  color: var(--ui);
-  border-bottom: 1px solid var(--ui-line);
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  text-decoration: none;
-}
-
-.brand-cross {
-  font-size: 26px;
-  line-height: 1;
-}
-
-.controls {
-  display: flex;
-  gap: 7px;
-}
-
-.control {
-  min-height: 34px;
-  padding: 6px 11px;
-  border: 1px solid var(--ui-line);
-  color: inherit;
-  background: transparent;
-  font-family: var(--sans);
-  font-size: 10px;
-  cursor: pointer;
-}
-
-.control:hover { background: rgba(130, 105, 70, .12); }
-
-.top-progress {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--ui);
-  transform: scaleX(var(--reading));
-  transform-origin: left;
-}
-
-.layout {
-  width: min(1160px, calc(100% - 52px));
-  margin: 0 auto;
-  padding: 110px 0 55px;
-  display: grid;
-  grid-template-columns: 145px minmax(0, 860px);
-  gap: 55px;
-  justify-content: center;
-  align-items: start;
-}
-
-.index {
-  position: sticky;
-  top: 103px;
-  color: var(--ui);
-}
-
-.index-title { margin-bottom: 24px; }
-
-.index nav {
-  display: grid;
-  gap: 3px;
-}
-
-.index a {
-  display: flex;
-  gap: 12px;
-  align-items: baseline;
-  padding: 7px 0;
-  font-size: 12px;
-  text-decoration: none;
-  opacity: .65;
-}
-
-.index b {
-  width: 27px;
-  font-size: 11px;
-  font-weight: normal;
-}
-
-.index a[aria-current="location"] { opacity: 1; }
-
-.index a[aria-current="location"] span {
-  text-decoration: underline;
-  text-underline-offset: 5px;
-}
-
-.preservation {
-  margin-top: 25px;
-  padding-top: 18px;
-  border-top: 1px solid var(--ui-line);
-}
-
-.preservation-meter {
-  height: 2px;
-  margin: 12px 0;
-  background: var(--ui-line);
-}
-
-.preservation-meter i {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--ui);
-  transform: scaleX(calc(1 - var(--damage) * .96));
-  transform-origin: left;
-}
-
-#condition {
-  font-family: var(--mono);
-  font-size: 9px;
-  line-height: 1.7;
-}
-
-.aside-quote {
-  margin-top: 30px;
-  font-size: 13px;
-  font-style: italic;
-  line-height: 1.7;
-  opacity: .75;
-}
-
-.aside-quote cite {
-  margin-top: 12px;
-  color: inherit;
-}
-
-main { min-width: 0; }
-
-.paper {
-  position: relative;
-  isolation: isolate;
-}
-
-/* =========================================================
-   ПЕРВАЯ ЧАСТЬ: БЛАГОЧЕСТИВАЯ АККУРАТНОСТЬ
-   ========================================================= */
-
-.document {
-  position: relative;
-  background:
-    radial-gradient(ellipse at 0 0, #ad8b4720, transparent 60%),
-    var(--sheet);
-  border: 1px solid var(--line);
-  box-shadow:
-    0 18px 70px #30210f15,
-    6px 6px 0 -1px var(--bg),
-    6px 6px 0 0 var(--ui-line);
-}
-
-.document::before {
-  content: "";
-  position: absolute;
-  inset: 12px;
-  border: 1px solid var(--line);
-  pointer-events: none;
-}
-
-.hero {
-  position: relative;
-  padding: 34px 55px 38px;
-  text-align: center;
-  overflow: hidden;
-}
-
-.archive-line {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  padding-bottom: 17px;
-  border-bottom: 1px solid var(--line);
-  color: var(--muted);
-}
-
-.emblem {
-  position: relative;
-  width: 225px;
-  margin: 33px auto 22px;
-  color: #82663b;
-}
-
-.emblem > svg { width: 100%; }
-
-.emblem-flower {
-  position: absolute;
-  width: 39px;
-  height: 39px;
-  opacity: .7;
-}
-
-.emblem-flower.a { left: -27px; top: 92px; }
-.emblem-flower.b { right: -27px; top: 92px; }
-
-.eyebrow {
-  margin-bottom: 15px;
-  color: var(--muted);
-}
-
-h1 {
-  margin: 0;
-  font-size: clamp(43px, 6.6vw, 77px);
-  line-height: 1.08;
-  letter-spacing: -.055em;
-}
-
-.hero-subtitle {
-  max-width: 340px;
-  margin: 22px auto 0;
-  font-size: 16px;
-  font-style: italic;
-  color: var(--muted);
-  line-height: 1.8;
-}
-
-.hero-quote {
-  margin: 29px 0 0;
-  padding-top: 25px;
-  border-top: 1px solid var(--line);
-}
-
-.hero-quote p {
-  font-size: 18px;
-  font-style: italic;
-  margin-bottom: 8px;
-}
-
-cite {
-  display: block;
-  color: var(--muted);
-  font-family: var(--sans);
-  font-size: 9px;
-  font-style: normal;
-  line-height: 1.6;
-  letter-spacing: .07em;
-}
-
-.content-note {
-  margin-top: 24px;
-  color: var(--muted);
-  font-family: var(--sans);
-  font-size: 9px;
-  line-height: 1.8;
-}
-
-.hero-counterprint {
-  position: absolute;
-  top: 251px;
-  left: 0;
-  right: 0;
-  color: #795a37;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: .27em;
-  text-transform: uppercase;
-  transform: rotate(calc(var(--damage) * -5deg));
-  opacity: calc(var(--damage) * .7);
-  pointer-events: none;
-}
-
-.entry {
-  position: relative;
-  padding: 35px 55px;
-  border-top: 1px solid var(--line);
-  scroll-margin-top: 88px;
-}
-
-.entry-head {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  margin-bottom: 20px;
-}
-
-.roman {
-  min-width: 28px;
-  color: var(--muted);
-  font-size: 13px;
-  font-style: italic;
-}
-
-h2 {
-  margin: 0;
-  font-size: 30px;
-  line-height: 1.3;
-  letter-spacing: -.03em;
-}
-
-.entry p {
-  font-size: 16px;
-  line-height: 1.9;
-}
-
-.entry .lead {
-  font-size: 23px;
-  line-height: 1.5;
-}
-
-.small {
-  font-size: 13px !important;
-  color: var(--muted);
-}
-
-.facts {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.facts .entry + .entry { border-left: 1px solid var(--line); }
-.facts h2 { font-size: 26px; }
-
-.verse {
-  margin: 23px 0 0;
-  padding: 2px 0 2px 16px;
-  border-left: 1px solid #a3895d;
-}
-
-.verse p {
-  margin: 0 0 8px;
-  color: var(--muted);
-  font-size: 14px;
-  font-style: italic;
-  line-height: 1.75;
-}
-
-.stamp {
-  display: inline-block;
-  margin-top: 4px;
-  padding: 5px 10px;
-  border: 1px solid var(--line);
-  font-family: var(--mono);
-  font-size: 9px;
-  line-height: 1.6;
-  text-transform: uppercase;
-  letter-spacing: .07em;
-}
-
-/* =========================================================
-   В ФОРМУ НАЧИНАЕТ ПРОНИКАТЬ ЧТО-ТО ЧУЖОЕ
-   ========================================================= */
-
-.unstable .entry-inner {
-  transform:
-    translateX(calc(var(--damage) * 4px))
-    rotate(calc(var(--damage) * -.35deg));
-}
-
-.unravel .entry-inner {
-  transform:
-    translateX(calc(var(--damage) * -4px))
-    rotate(calc(var(--damage) * .4deg));
-}
-
-.echo-title { position: relative; }
-
-.echo-title::after {
-  content: attr(data-echo);
-  position: absolute;
-  inset: 0;
-  color: var(--blue);
-  opacity: calc(var(--psy) * .65);
-  transform: translate(3px, 3px);
-  clip-path: polygon(0 34%, 100% 34%, 100% 55%, 0 55%);
-  pointer-events: none;
-}
-
-.margin-order {
-  position: absolute;
-  top: 60px;
-  right: 8px;
-  writing-mode: vertical-rl;
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: .12em;
-  color: #61472d;
-}
-
-.intrusion {
-  opacity: var(--damage);
-  pointer-events: none;
-  user-select: none;
-}
-
-.correction {
-  position: relative;
-  display: inline-block;
-}
-
-.correction::after {
-  content: "";
-  position: absolute;
-  inset: 51% -3px auto;
-  height: 2px;
-  background: #533a25;
-  transform: scaleX(var(--damage)) rotate(-4deg);
-  transform-origin: left;
-}
-
-.hand-note {
-  margin: 24px 0;
-  padding-left: 16%;
-  font-size: 20px;
-  line-height: 1.5;
-  transform: rotate(calc(var(--damage) * -3deg));
-}
-
-.traits {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 19px;
-  margin-bottom: 22px;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--muted);
-}
-
-.traits span::before {
-  content: "+ ";
-}
-
-.proof {
-  margin: 23px 0;
-  padding: 16px 18px;
-  border: 1px solid var(--line);
-}
-
-.proof .micro {
-  display: block;
-  color: var(--muted);
-  margin-bottom: 9px;
-}
-
-.proof del {
-  color: var(--muted);
-  text-decoration-thickness: 1px;
-}
-
-.proof ins {
-  display: block;
-  margin-top: 5px;
-  text-decoration: none;
-  font-style: italic;
-  font-size: 21px;
-  line-height: 1.6;
-}
-
-.first-eye {
-  position: absolute;
-  width: 95px;
-  right: 30px;
-  top: -30px;
-  color: var(--blue);
-  transform: rotate(calc(var(--damage) * 12deg));
-  opacity: var(--psy);
-  pointer-events: none;
-}
-
-.foreign-strip {
-  position: relative;
-  margin: 32px -25px 5px;
-  padding: 10px 12px;
-  background: var(--green);
-  color: #172419;
-  text-align: center;
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: bold;
-  letter-spacing: .19em;
-  line-height: 1.6;
-  transform: rotate(calc(var(--damage) * -3deg));
-  opacity: var(--psy);
-  border: 2px dashed #172419;
-}
-
-/* =========================================================
-   VII: НЕ ДОКУМЕНТ, А ТЕАТР
-   ========================================================= */
-
-.stage {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background: var(--scene);
-  color: var(--scene-ink);
-  scroll-margin-top: 87px;
-}
-
-.stage::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  opacity: calc(var(--psy) * .26);
-  pointer-events: none;
-  background:
-    repeating-conic-gradient(
-      from 45deg,
-      #2d7892 0 25%,
-      #191322 0 50%
-    ) 0 0 / 62px 92px;
-}
-
-.stage::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    #0c091800,
-    #0c091877 45%,
-    #0c091800
-  );
-  opacity: var(--psy);
-}
-
-.stage-set {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  user-select: none;
-  opacity: var(--psy);
-  overflow: hidden;
-}
-
-.curtain {
-  position: absolute;
-  top: -5px;
-  left: -8%;
-  width: 116%;
-  height: 155px;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      #1a101e 0,
-      #542340 22px,
-      #241024 42px,
-      #0e0a15 66px
-    );
-  border-bottom: 9px solid #b99a5b;
-  clip-path: polygon(
-    0 0, 100% 0, 100% 78%,
-    94% 94%, 89% 76%, 83% 97%,
-    77% 75%, 71% 91%, 65% 72%,
-    59% 98%, 53% 77%, 47% 94%,
-    41% 73%, 35% 97%, 29% 77%,
-    23% 92%, 17% 74%, 11% 96%,
-    5% 77%, 0 91%
-  );
-  transform: rotate(-2deg);
-  filter: drop-shadow(0 9px 3px #0008);
-}
-
-.portal {
-  position: absolute;
-  width: 610px;
-  height: 610px;
-  right: -210px;
-  top: 430px;
-  border: 11px solid #14101d;
-  border-radius: 50%;
-  background:
-    repeating-radial-gradient(
-      ellipse at 46% 47%,
-      #e7e5c9 0 25px,
-      #18121e 28px 55px,
-      #8d1445 59px 67px,
-      #e7e5c9 70px 93px
-    );
-  box-shadow: 0 0 0 7px #aebc58;
-  transform: rotate(-21deg) scaleY(.87);
-}
-
-.portal svg {
-  position: absolute;
-  width: 180px;
-  top: 225px;
-  left: 210px;
-  color: var(--green);
-  filter: drop-shadow(5px 6px 0 #0f0d17);
-}
-
-.stairs {
-  position: absolute;
-  right: -4%;
-  top: 740px;
-  width: 66%;
-  color: #e1d9bc;
-  transform: rotate(-11deg);
-  filter: drop-shadow(8px 10px 0 #0009);
-}
-
-.ribbon {
-  position: absolute;
-  left: -16%;
-  width: 135%;
-  padding: 9px 0;
-  border-top: 3px solid #151018;
-  border-bottom: 3px solid #151018;
-  color: #18121a;
-  background: var(--pink);
-  text-align: center;
-  white-space: nowrap;
-  font-family: var(--mono);
-  font-size: 22px;
-  font-weight: bold;
-  line-height: 1.3;
-  letter-spacing: .12em;
-}
-
-.ribbon.one {
-  top: 285px;
-  transform: rotate(13deg);
-}
-
-.ribbon.two {
-  top: 51%;
-  background: var(--green);
-  transform: rotate(-17deg);
-}
-
-.ribbon.three {
-  bottom: 340px;
-  background: var(--yellow);
-  transform: rotate(9deg);
-}
-
-.checker-floor {
-  position: absolute;
-  bottom: 15px;
-  left: -30%;
-  width: 160%;
-  height: 450px;
-  background:
-    repeating-conic-gradient(
-      #ece5c9 0 25%,
-      #191420 0 50%
-    ) 0 0 / 90px 90px;
-  transform: perspective(360px) rotateX(43deg) rotateZ(-9deg);
-  opacity: .8;
-}
-
-.prop {
-  position: absolute;
-  width: var(--size, 130px);
-  color: var(--color, #b8ef31);
-  filter:
-    drop-shadow(3px 0 0 #eee3c8)
-    drop-shadow(-3px 0 0 #eee3c8)
-    drop-shadow(0 3px 0 #eee3c8)
-    drop-shadow(7px 10px 0 #0b07199c);
-  transform:
-    translateY(var(--float))
-    rotate(var(--angle, 0deg));
-}
-
-.prop.scissors-a {
-  --size: 180px;
-  --color: #a8e729;
-  --angle: -26deg;
-  left: -28px;
-  top: 165px;
-}
-
-.prop.berry-a {
-  --size: 115px;
-  --angle: 19deg;
-  right: 4%;
-  top: 340px;
-}
-
-.prop.flower-a {
-  --size: 155px;
-  --color: #ecdba9;
-  --angle: -17deg;
-  left: -35px;
-  top: 43%;
-}
-
-.prop.bow-a {
-  --size: 205px;
-  --color: #f01d70;
-  --angle: 22deg;
-  right: -40px;
-  top: 56%;
-}
-
-.prop.eye-a {
-  --size: 180px;
-  --color: #dcce87;
-  --angle: -25deg;
-  left: -26px;
-  bottom: 420px;
-}
-
-.prop.berry-b {
-  --size: 135px;
-  --angle: -22deg;
-  right: -13px;
-  bottom: 75px;
-}
-
-.stage-content {
-  position: relative;
-  z-index: 2;
-  padding: 80px 55px 45px;
-}
-
-.history-header {
-  position: relative;
-  margin: 0 0 55px;
-  max-width: 100%;
-}
-
-.history-label {
-  display: inline-block;
-  padding: 3px 9px;
-  margin-bottom: 14px;
-  background: #e8ddba;
-  color: #332719;
-  font-family: var(--mono);
-  font-size: 10px;
-  transform: rotate(calc(var(--psy) * -5deg));
-}
-
-.history-header h2 {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 3px;
-  font-size: clamp(37px, 6.7vw, 69px);
-  letter-spacing: -.055em;
-}
-
-.history-header h2 span {
-  position: relative;
-  display: inline-block;
-  padding: 0 7px 5px;
-  color: #31271e;
-  background: #ede2c6;
-  line-height: 1.1;
-}
-
-.history-header h2 span:nth-child(2) {
-  color: #e7f3c8;
-  background: #2838ad;
-  transform:
-    translateY(calc(var(--psy) * 12px))
-    rotate(calc(var(--psy) * 7deg));
-}
-
-.history-header h2 span:nth-child(3) {
-  color: #251626;
-  background: #d9e98a;
-  transform:
-    translateY(calc(var(--psy) * -5px))
-    rotate(calc(var(--psy) * -6deg));
-}
-
-.history-subtitle {
-  max-width: 340px;
-  margin-top: 28px;
-  font-size: 12px;
-  font-style: italic;
-  line-height: 1.7;
-}
-
-.fragment {
-  position: relative;
-  width: 87%;
-  margin: 0 0 44px;
-  padding: 31px 34px 37px;
-  background: #eee2c5;
-  color: #352819;
-  box-shadow: 7px 10px 0 #0e091a45;
-  transform:
-    translateX(calc(var(--psy) * var(--x, 0px)))
-    rotate(calc(var(--psy) * var(--r, 0deg)));
-}
-
-.fragment::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -9px;
-  height: 10px;
-  background: inherit;
-  clip-path: polygon(
-    0 0, 100% 0, 100% 28%, 95% 56%, 89% 21%,
-    83% 83%, 77% 37%, 70% 70%, 65% 21%, 58% 77%,
-    51% 39%, 45% 96%, 38% 31%, 31% 66%, 24% 34%,
-    16% 89%, 9% 30%, 3% 75%, 0 40%
-  );
-}
-
-.fragment.a {
-  --r: -2.4deg;
-  --x: -8px;
-}
-
-.fragment.b {
-  --r: 2.6deg;
-  --x: 8px;
-  margin-left: auto;
-  background: #e8e5bd;
-}
-
-.fragment.c {
-  --r: -1.5deg;
-  width: 91%;
-  background: #e7dcd0;
-}
-
-.fragment.d {
-  --r: 1.4deg;
-  --x: 6px;
-  width: 88%;
-  margin: 0 0 20px auto;
-  background: #e8e2c9;
-}
-
-.fragment h3 {
-  margin: 0 0 20px;
-  padding-bottom: 13px;
-  border-bottom: 1px solid #7f694b70;
-  font-family: var(--mono);
-  font-size: 10px;
-  line-height: 1.7;
-  text-transform: uppercase;
-  letter-spacing: .07em;
-}
-
-.fragment p {
-  font-size: 16px;
-  line-height: 1.85;
-}
-
-.fragment .verse p {
-  font-size: 14px;
-}
-
-.tape {
-  position: absolute;
-  top: -11px;
-  left: 35%;
-  width: 100px;
-  height: 25px;
-  background: #b9a17588;
-  border-left: 2px dotted #d3c091;
-  border-right: 2px dotted #d3c091;
-  transform: rotate(-7deg);
-  pointer-events: none;
-}
-
-.foreign-voice {
-  padding: 12px 0 12px 16px;
-  margin: 24px 0;
-  border-left: 4px solid #655637;
-}
-
-.foreign-voice .micro {
-  display: block;
-  margin-bottom: 7px;
-  color: #6f5b47;
-  font-size: 8px;
-}
-
-.foreign-voice p {
-  font-size: 21px;
-  font-style: italic;
-  line-height: 1.5;
-}
-
-.certificate {
-  margin-top: 22px;
-  padding: 13px 15px;
-  color: #202248;
-  border: 2px solid #35375a;
-  font-family: var(--mono);
-  transform: rotate(calc(var(--psy) * -2deg));
-}
-
-.certificate del {
-  font-size: 12px;
-}
-
-.certificate strong {
-  display: block;
-  margin-top: 5px;
-  font-size: 15px;
-  font-weight: normal;
-}
-
-/* =========================================================
-   ХОР: ДЕКОРАТИВНОЕ ДАВЛЕНИЕ, НЕ ОСНОВНОЙ ТЕКСТ
-   ========================================================= */
-
-.choir {
-  position: relative;
-  min-height: 230px;
-  margin: 20px -32px 39px;
-  padding: 44px 28px 24px;
-}
-
-.choir-noise {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  opacity: var(--psy);
-  pointer-events: none;
-  user-select: none;
-}
-
-.choir-noise span {
-  position: absolute;
-  padding: 1px 10px;
-  background: #eee5d4;
-  color: #251b29;
-  font-size: clamp(22px, 4.5vw, 42px);
-  font-weight: bold;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-.choir-noise span:nth-child(1) {
-  top: 7px;
-  left: 0;
-  color: #eb2769;
-  background: #171221;
-  transform: rotate(-11deg);
-}
-
-.choir-noise span:nth-child(2) {
-  top: 41px;
-  right: -10px;
-  color: #d9f796;
-  background: #252eb0;
-  transform: rotate(9deg);
-}
-
-.choir-noise span:nth-child(3) {
-  bottom: 19px;
-  left: 9px;
-  color: #222328;
-  background: #b4e933;
-  transform: rotate(5deg);
-}
-
-.choir-noise span:nth-child(4) {
-  bottom: 0;
-  right: 0;
-  color: #eeda70;
-  background: #29192a;
-  transform: rotate(-8deg);
-}
-
-.choir-quote {
-  position: relative;
-  z-index: 1;
-  width: 85%;
-  margin: 18px auto;
-  padding: 19px 22px;
-  background: #211925;
-  color: #f3e8c9;
-  border: 1px solid #d5c296;
-  text-align: center;
-  transform: rotate(calc(var(--psy) * -1deg));
-}
-
-.choir-quote p {
-  margin-bottom: 12px;
-  font-size: 23px;
-  line-height: 1.45;
-  font-style: italic;
-}
-
-.choir-quote cite { color: #c9b996; }
-
-/* =========================================================
-   ДЕТСКОЕ ПИСЬМО — ЦЕНТР КОМПОЗИЦИИ
-   ========================================================= */
-
-.child-letter {
-  position: relative;
-  width: 84%;
-  margin: 56px auto 64px;
-  padding: 32px 30px 36px 45px;
-  background:
-    linear-gradient(
-      90deg,
-      transparent 30px,
-      #dd8c9966 30px 31px,
-      transparent 31px
-    ),
-    repeating-linear-gradient(
-      transparent 0 31px,
-      #758bbb42 31px 32px
-    ),
-    #e8eaf1;
-  color: #293853;
-  box-shadow:
-    7px 9px 0 #101323aa,
-    -5px -4px 0 #b5c547;
-  transform: rotate(calc(var(--psy) * -4deg));
-}
-
-.child-letter .micro {
-  display: block;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #7684a9;
-  font-size: 8px;
-  color: #5a6b8c;
-}
-
-.child-letter p {
-  margin-top: 22px;
-  font-size: clamp(23px, 4.5vw, 38px);
-  line-height: 1.65;
-  letter-spacing: -.04em;
-}
-
-.child-letter p span { display: block; }
-.child-letter p span:nth-child(2) { padding-left: 9px; }
-.child-letter p span:nth-child(3) { padding-left: 18px; }
-
-.child-letter .letter-sign {
-  margin-top: 19px;
-  font-size: 12px;
-  letter-spacing: 0;
-  text-align: right;
-}
-
-.letter-flower {
-  position: absolute;
-  right: -25px;
-  top: -35px;
-  width: 80px;
-  color: #c8d44d;
-  transform: rotate(18deg);
-  filter: drop-shadow(3px 4px 0 #171225);
-}
-
-.confession {
-  margin: 35px 0 0;
-  padding: 18px 22px;
-  background: #17121d;
-  border-left: 4px solid var(--green);
-  color: #ede4c7;
-  font-size: 24px;
-  font-style: italic;
-  line-height: 1.55;
-}
-
-.confession small {
-  display: block;
-  margin-top: 14px;
-  color: #baac91;
-  font-family: var(--mono);
-  font-size: 9px;
-  font-style: normal;
-}
-
-/* =========================================================
-   VIII–IX: ВСЁ ЕЩЁ ВНУТРИ КОЛЛАЖА
-   ========================================================= */
-
-.afterworld {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  padding: 26px 55px 42px;
-  background: var(--scene);
-  color: var(--scene-ink);
-}
-
-.afterworld::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  opacity: var(--psy);
-  background:
-    radial-gradient(
-      circle,
-      #e92b7750 0 8px,
-      transparent 9px
-    ) 0 0 / 44px 44px,
-    repeating-linear-gradient(
-      115deg,
-      #191226 0 45px,
-      #263183 45px 90px,
-      #16111f 90px 135px
-    );
-}
-
-.afterworld::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  opacity: var(--psy);
-  background: linear-gradient(
-    transparent,
-    #16101ca6 50%,
-    #16101c
-  );
-}
-
-.remains {
-  position: relative;
-  scroll-margin-top: 88px;
-}
-
-.remains .entry-head {
-  position: relative;
-  display: inline-flex;
-  padding: 10px 15px;
-  color: #292334;
-  background: #d3e49a;
-  transform: rotate(calc(var(--psy) * -3deg));
-}
-
-.remains .roman { color: inherit; }
-
-.notes {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 23px 22px;
-  margin: 27px 0 50px;
-  padding: 0;
-  list-style: none;
-  counter-reset: notes;
-}
-
-.note {
-  position: relative;
-  padding: 34px 23px 25px;
-  background: #eee5c9;
-  color: #372b21;
-  box-shadow: 5px 7px 0 #0d08185c;
-  font-size: 14px;
-  line-height: 1.8;
-  counter-increment: notes;
-  transform: rotate(calc(var(--psy) * -2deg));
-}
-
-.note::before {
-  content: "0" counter(notes);
-  position: absolute;
-  top: 11px;
-  left: 23px;
-  color: #70684e;
-  font-family: var(--mono);
-  font-size: 9px;
-}
-
-.note:nth-child(even) {
-  background: #dde5bb;
-  transform:
-    translateY(calc(var(--psy) * 13px))
-    rotate(calc(var(--psy) * 3deg));
-}
-
-.note:nth-child(3n) {
-  background: #e8dbe7;
-}
-
-.bottom-props {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  opacity: var(--psy);
-  pointer-events: none;
-}
-
-.bottom-eye {
-  position: absolute;
-  right: -58px;
-  bottom: 290px;
-  width: 260px;
-  color: #b8ef31;
-  transform: rotate(-17deg);
-}
-
-.bottom-bow {
-  position: absolute;
-  left: -45px;
-  bottom: 170px;
-  width: 210px;
-  color: #ef226f;
-  transform: rotate(16deg);
-}
-
-.contact-sheet {
-  position: relative;
-  width: 84%;
-  margin: 0 auto;
-  padding: 29px 32px;
-  background: #eee5d2;
-  color: #352b22;
-  box-shadow: 7px 9px 0 #10101c;
-  transform: rotate(calc(var(--psy) * -1.5deg));
-  scroll-margin-top: 125px;
-}
-
-.contact-sheet::before {
-  content: "";
-  position: absolute;
-  inset: 7px;
-  border: 1px solid #8f78584a;
-  pointer-events: none;
-}
-
-.username {
-  font-size: 27px;
-  font-style: italic;
-  overflow-wrap: anywhere;
-}
-
-.ending {
-  position: relative;
-  margin-top: 53px;
-  text-align: center;
-}
-
-.ending-cross {
-  display: block;
-  margin-bottom: 17px;
-  font-size: 29px;
-}
-
-.ending blockquote { margin: 0; }
-
-.ending p {
-  font-size: 19px;
-  font-style: italic;
-  line-height: 1.6;
-}
-
-.ending cite { color: inherit; opacity: .7; }
-
-.ending .last-line {
-  margin: 35px 0 0;
-  font-family: var(--mono);
-  font-size: 10px;
-  font-style: normal;
-  opacity: .7;
-}
-
-.outside-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 25px 0 0;
-  color: var(--ui);
-  font-family: var(--sans);
-  font-size: 9px;
-  line-height: 1.8;
-}
-
-.outside-footer a { text-underline-offset: 4px; }
-
-/* =========================================================
-   СПОКОЙНЫЙ РЕЖИМ И МОБИЛЬНАЯ ВЕРСИЯ
-   ========================================================= */
-
-body.calm .intrusion,
-body.calm .stage-set,
-body.calm .choir-noise,
-body.calm .bottom-props,
-body.calm .first-eye,
-body.calm .hero-counterprint,
-body.calm .foreign-strip,
-body.calm .echo-title::after {
-  display: none;
-}
-
-body.calm .stage-content { padding-top: 40px; }
-
-@media (max-width: 1000px) {
-  .layout {
-    grid-template-columns: 115px minmax(0, 1fr);
-    gap: 30px;
-    width: calc(100% - 40px);
-  }
-
-  .entry, .hero { padding-left: 38px; padding-right: 38px; }
-  .stage-content { padding-left: 35px; padding-right: 35px; }
-  .afterworld { padding-left: 35px; padding-right: 35px; }
-}
-
-@media (max-width: 740px) {
-  html { scroll-padding-top: 132px; }
-
-  .topbar { padding: 0 14px; }
-  .brand { gap: 8px; }
-  .brand .micro { font-size: 8px; letter-spacing: .08em; }
-  .control { font-size: 9px; padding: 6px 8px; }
-  .controls { gap: 5px; }
-
-  .layout {
-    display: block;
-    width: calc(100% - 28px);
-    padding-top: 62px;
-  }
-
-  .index {
-    position: sticky;
-    top: 62px;
-    z-index: 70;
-    margin: 0 -14px 25px;
-    padding: 8px 14px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--ui-line);
-  }
-
-  .index nav {
-    display: flex;
-    justify-content: space-between;
-    gap: 3px;
-  }
-
-  .index a {
-    min-width: 29px;
-    min-height: 36px;
-    justify-content: center;
-    padding: 6px 2px;
-  }
-
-  .index b { width: auto; }
-  .index a span { display: none; }
-
-  .index a[aria-current="location"] {
-    border-bottom: 1px solid currentColor;
-  }
-
-  .index-title, .preservation, .aside-quote { display: none; }
-
-  .entry, .stage, .remains { scroll-margin-top: 125px; }
-}
-
-@media (max-width: 480px) {
-  .brand-extra { display: none; }
-
-  .hero { padding: 27px 25px 30px; }
-  .archive-line { font-size: 8px; letter-spacing: .08em; }
-
-  .emblem { width: 175px; margin-top: 26px; }
-  .emblem-flower { width: 30px; height: 30px; }
-  .emblem-flower.a, .emblem-flower.b { top: 74px; }
-
-  h1 { font-size: 44px; }
-  .hero-subtitle { font-size: 14px; }
-  .hero-quote p { font-size: 16px; }
-  .hero-counterprint { top: 214px; font-size: 8px; }
-
-  .entry { padding: 29px 26px; }
-  .entry-head { gap: 8px; }
-  h2 { font-size: 26px; }
-  .entry p { font-size: 15px; }
-  .entry .lead { font-size: 21px; }
-
-  .facts { grid-template-columns: 1fr; }
-  .facts .entry + .entry { border-left: 0; }
-
-  .verse p { font-size: 13px; }
-  .hand-note { padding-left: 5%; font-size: 18px; }
-  .margin-order { right: 4px; font-size: 8px; }
-  .foreign-strip { margin-left: -12px; margin-right: -12px; font-size: 10px; }
-
-  .stage-content { padding: 76px 23px 31px; }
-  .history-header { margin-bottom: 38px; }
-  .history-header h2 { font-size: 36px; gap: 2px; }
-  .history-header h2 span { padding: 0 4px 4px; }
-  .history-subtitle { font-size: 11px; }
-
-  .fragment,
-  .fragment.c,
-  .fragment.d {
-    width: 94%;
-    padding: 25px 21px 30px;
-  }
-
-  .fragment.a { --x: -2px; --r: -1.7deg; }
-  .fragment.b { --x: 2px; --r: 1.8deg; }
-  .fragment.d { --x: 1px; }
-
-  .fragment p { font-size: 15px; }
-  .fragment h3 { font-size: 9px; }
-  .fragment .verse p { font-size: 13px; }
-  .foreign-voice p { font-size: 19px; }
-
-  .portal {
-    width: 450px;
-    height: 450px;
-    right: -255px;
-    top: 520px;
-  }
-
-  .portal svg { top: 150px; left: 137px; }
-  .stairs { width: 95%; top: 900px; }
-
-  .ribbon { font-size: 17px; }
-  .prop.scissors-a { --size: 125px; }
-  .prop.berry-a { --size: 85px; right: -20px; }
-  .prop.bow-a { --size: 150px; }
-
-  .choir { margin-left: -15px; margin-right: -15px; }
-  .choir-quote { width: 92%; padding: 18px 15px; }
-  .choir-quote p { font-size: 21px; }
-
-  .child-letter {
-    width: 90%;
-    padding: 25px 18px 27px 36px;
-  }
-
-  .child-letter p { font-size: 26px; }
-  .letter-flower { width: 63px; right: -15px; top: -30px; }
-
-  .confession { font-size: 20px; padding: 16px 17px; }
-
-  .afterworld { padding: 25px 26px 35px; }
-  .notes { grid-template-columns: 1fr; gap: 19px; }
-  .note { padding-bottom: 22px; }
-
-  .note:nth-child(even) {
-    transform:
-      translateX(calc(var(--psy) * 5px))
-      rotate(calc(var(--psy) * 2deg));
-  }
-
-  .contact-sheet { width: 96%; padding: 26px 22px; }
-  .username { font-size: 23px; }
-  .ending p { font-size: 17px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .entry-inner,
-  .hand-note,
-  .foreign-strip,
-  .history-label,
-  .history-header h2 span,
-  .fragment,
-  .certificate,
-  .choir-quote,
-  .child-letter,
-  .remains .entry-head,
-  .note,
-  .contact-sheet {
-    transform: none !important;
-  }
-
-  .prop { translate: none; }
-}
-
-@media print {
-  :root {
-    --bg: white !important;
-    --sheet: white !important;
-    --scene: white !important;
-    --scene-ink: #222 !important;
-    --damage: 0 !important;
-    --psy: 0 !important;
-  }
-
-  body { background: white; }
-
-  .topbar, .index, .grain, .skip, .intrusion,
-  .stage-set, .choir-noise, .bottom-props,
-  .first-eye, .foreign-strip, .outside-footer,
-  .hero-counterprint, .letter-flower {
-    display: none !important;
-  }
-
-  .layout {
-    display: block;
-    width: 100%;
-    padding: 0;
-  }
-
-  .document, .fragment, .child-letter,
-  .note, .contact-sheet {
-    box-shadow: none;
-  }
-
-  .stage, .afterworld { overflow: visible; }
-  .stage-content { padding-top: 30px; }
-
-  .entry, .fragment, .child-letter,
-  .note, .contact-sheet {
-    break-inside: avoid;
-  }
-
-  .choir-quote, .confession {
-    color: #222;
-    background: white;
-    border-color: #888;
-  }
-
-  .choir-quote cite, .confession small { color: #555; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e6ddc6">
+
+  <title>Мария Вельская — Лондон, 1852</title>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      --bg: #e6ddc6;
+      --sheet: #f4ecd7;
+      --ui: #5d4d38;
+      --ui-line: #bbaa8b;
+      --scene: #f4ecd7;
+      --scene-ink: #34291e;
+
+      --ink: #34291e;
+      --muted: #75664f;
+      --line: rgba(74, 52, 28, .26);
+
+      --red: #942c26;
+      --red-bright: #be3d2c;
+      --green: #a6b844;
+      --gold: #baa05b;
+      --black: #191816;
+
+      --damage: 0;
+      --psy: 0;
+      --reading: 0;
+      --drift: 0px;
+
+      --serif: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+      --display: "Bodoni MT", Didot, "Times New Roman", serif;
+      --sans: Arial, sans-serif;
+      --mono: "Courier New", Courier, monospace;
+      --hand: "Segoe Print", "Bradley Hand", "URW Chancery L", cursive;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    html {
+      scroll-padding-top: 98px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 280px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      color: #fff8e8;
+      background: #7e2923;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    button,
+    a,
+    summary {
+      touch-action: manipulation;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 5px;
+    }
+
+    a {
+      color: inherit;
+      text-underline-offset: .22em;
+    }
+
+    p,
+    figure,
+    blockquote {
+      margin: 0;
+    }
+
+    p + p {
+      margin-top: 1em;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-weight: 400;
+      line-height: 1.15;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .symbol-library {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: none;
+      opacity: .055;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' filter='url(%23n)' opacity='.7' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+    }
+
+    .skip {
+      position: fixed;
+      top: -100px;
+      left: 16px;
+      z-index: 200;
+      padding: 10px 16px;
+      background: #f4ecd7;
+      color: #34291e;
+      font-family: var(--sans);
+      font-size: 14px;
+    }
+
+    .skip:focus {
+      top: 12px;
+    }
+
+    /* Внешний интерфейс */
+
+    .topbar {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 50;
+      height: 64px;
+      color: var(--ui);
+      background: var(--bg);
+      border-bottom: 1px solid var(--ui-line);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      width: min(1230px, calc(100% - 44px));
+      height: 100%;
+      margin: auto;
+    }
+
+    .brand {
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.4;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .brand span {
+      opacity: .75;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .control {
+      min-height: 35px;
+      padding: 7px 10px;
+      border: 1px solid var(--ui-line);
+      border-radius: 0;
+      color: inherit;
+      background: transparent;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    .control:hover {
+      border-color: currentColor;
+    }
+
+    .top-progress {
+      position: absolute;
+      inset: auto 0 -1px;
+      height: 2px;
+      background: var(--ui);
+      transform: scaleX(var(--reading));
+      transform-origin: left;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 138px minmax(0, 930px);
+      align-items: start;
+      gap: 42px;
+      width: min(1150px, calc(100% - 52px));
+      margin: auto;
+      padding: 112px 0 48px;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .index {
+      position: sticky;
+      top: 105px;
+      color: var(--ui);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .index-caption {
+      margin-bottom: 19px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .index nav {
+      display: grid;
+      gap: 3px;
+    }
+
+    .index nav a {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 7px;
+      padding: 7px 0 7px 9px;
+      border-left: 1px solid transparent;
+      text-decoration: none;
+      opacity: .72;
+    }
+
+    .index nav a:hover,
+    .index nav a[aria-current="location"] {
+      opacity: 1;
+      border-left-color: currentColor;
+    }
+
+    .index nav b {
+      font-weight: 400;
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+
+    .preservation {
+      margin-top: 31px;
+      padding-top: 17px;
+      border-top: 1px solid var(--ui-line);
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .preservation-label {
+      display: block;
+      margin-bottom: 9px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .preservation-track {
+      height: 3px;
+      margin-bottom: 10px;
+      background: var(--ui-line);
+    }
+
+    .preservation-meter {
+      height: 100%;
+      background: currentColor;
+      transform-origin: left;
+      transform: scaleX(calc(1 - var(--damage) * .96));
+    }
+
+    #condition {
+      display: block;
+      min-height: 34px;
+    }
+
+    .index-motto {
+      margin-top: 27px;
+      font-size: 15px;
+      font-style: italic;
+      opacity: .8;
+    }
+
+    /* Первая, аккуратная бумага */
+
+    .paper {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .13);
+    }
+
+    .document {
+      position: relative;
+      background:
+        linear-gradient(90deg, rgba(76, 47, 20, .035), transparent 12%, transparent 88%, rgba(76, 47, 20, .035)),
+        var(--sheet);
+      border: 1px solid rgba(89, 63, 31, .35);
+    }
+
+    .document::before {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      z-index: 0;
+      border: 1px solid rgba(96, 68, 32, .18);
+      pointer-events: none;
+    }
+
+    .hero {
+      position: relative;
+      padding: 28px 58px 53px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .archive-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 19px;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 9px;
+      line-height: 1.5;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .hero-kicker {
+      margin-top: 37px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .24em;
+    }
+
+    .emblem {
+      position: relative;
+      width: 186px;
+      margin: 23px auto 13px;
+      color: #665331;
+    }
+
+    .emblem::before {
+      content: "";
+      position: absolute;
+      inset: 9px -16px 0;
+      border: 1px solid rgba(107, 84, 43, .26);
+      border-radius: 50% 50% 3px 3px;
+    }
+
+    .hero h1 {
+      position: relative;
+      z-index: 1;
+      margin: 21px 0 15px;
+      font-family: var(--display);
+      font-size: clamp(66px, 8.3vw, 102px);
+      line-height: .87;
+      letter-spacing: -.055em;
+    }
+
+    .hero h1 span {
+      display: block;
+      margin-bottom: 13px;
+      font-family: var(--serif);
+      font-size: .37em;
+      font-style: italic;
+      letter-spacing: .015em;
+    }
+
+    .hero-subtitle {
+      position: relative;
+      z-index: 1;
+      max-width: 37ch;
+      margin: 28px auto 0;
+      font-size: 19px;
+      line-height: 1.65;
+    }
+
+    .place {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 17px;
+      margin: 29px auto 0;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .place::before,
+    .place::after {
+      content: "";
+      width: 49px;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .hero-counterprint {
+      position: absolute;
+      top: 42%;
+      left: -5%;
+      width: 110%;
+      color: var(--red);
+      font-family: var(--display);
+      font-size: clamp(74px, 12vw, 151px);
+      line-height: .8;
+      letter-spacing: -.055em;
+      text-transform: uppercase;
+      opacity: calc(var(--psy) * .17);
+      transform: rotate(-13deg);
+      pointer-events: none;
+    }
+
+    .scripture {
+      margin: 25px 0 0;
+      padding-left: 19px;
+      border-left: 1px solid #a28a55;
+    }
+
+    .scripture blockquote {
+      font-size: 17px;
+      font-style: italic;
+      line-height: 1.7;
+    }
+
+    .scripture figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-style: normal;
+      line-height: 1.6;
+    }
+
+    .hero-quote {
+      max-width: 400px;
+      margin: 30px auto 0;
+      padding: 20px 0 0;
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .content-note {
+      max-width: 420px;
+      margin: 24px auto 0;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    .entry {
+      position: relative;
+      padding: 35px 56px;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 96px;
+    }
+
+    .entry-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .entry h2,
+    .remains h2,
+    .contact-sheet h2 {
+      margin-bottom: 23px;
+      font-size: 25px;
+    }
+
+    .roman {
+      color: var(--muted);
+      font-family: var(--display);
+    }
+
+    .full-name {
+      font-size: 27px;
+      line-height: 1.4;
+    }
+
+    .small-copy {
+      margin-top: 12px;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .latin-name {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .04em;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+    }
+
+    .facts .entry {
+      padding: 30px 35px;
+    }
+
+    .facts .entry:first-child {
+      padding-left: 56px;
+      border-right: 1px solid var(--line);
+    }
+
+    .facts .entry:last-child {
+      padding-right: 56px;
+    }
+
+    .large-fact {
+      font-family: var(--display);
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    .large-fact small {
+      font-family: var(--serif);
+      font-size: 17px;
+    }
+
+    .stamp {
+      display: inline-block;
+      max-width: 100%;
+      margin-top: 22px;
+      padding: 9px 14px;
+      border: 3px double #80664c;
+      color: #68513a;
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.7;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      transform: rotate(calc(var(--damage) * -2deg));
+    }
+
+    /* Сначала — небольшая ошибка в наборе */
+
+    .unstable .entry-inner {
+      padding-right: 65px;
+      transform:
+        translateX(calc(var(--damage) * 4px))
+        rotate(calc(var(--damage) * -.35deg));
+    }
+
+    .unravel .entry-inner {
+      transform:
+        translateX(calc(var(--damage) * -4px))
+        rotate(calc(var(--damage) * .45deg));
+    }
+
+    .counterprint {
+      position: absolute;
+      top: 35px;
+      left: 58px;
+      color: var(--red);
+      font-family: var(--display);
+      font-size: 37px;
+      line-height: 1;
+      letter-spacing: -.035em;
+      opacity: calc(var(--psy) * .65);
+      transform: translate(6px, -5px) rotate(-2deg);
+      clip-path: polygon(0 31%, 100% 31%, 100% 58%, 0 58%);
+      pointer-events: none;
+    }
+
+    .proof {
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .proof::after {
+      content: "";
+      position: absolute;
+      top: 53%;
+      left: -2%;
+      width: 104%;
+      height: 2px;
+      background: var(--red);
+      transform: scaleX(var(--damage)) rotate(-3deg);
+      transform-origin: left;
+    }
+
+    .margin-order {
+      position: absolute;
+      top: 112px;
+      right: 20px;
+      z-index: 2;
+      width: 100px;
+      color: var(--red);
+      font-family: var(--display);
+      font-size: 22px;
+      line-height: 1.05;
+      font-style: italic;
+      text-align: center;
+      opacity: var(--damage);
+      transform: rotate(9deg);
+      pointer-events: none;
+    }
+
+    .margin-order small {
+      display: block;
+      margin-top: 13px;
+      font-family: var(--mono);
+      font-size: 8px;
+      font-style: normal;
+      line-height: 1.5;
+      letter-spacing: .02em;
+    }
+
+    .annotation {
+      margin: 22px 0 5px 17px;
+      color: #7d2d27;
+      font-family: var(--hand);
+      font-size: 21px;
+      font-style: italic;
+      line-height: 1.6;
+      transform: rotate(calc(var(--damage) * -2deg));
+    }
+
+    .first-eye {
+      position: absolute;
+      right: -32px;
+      bottom: 24px;
+      z-index: 0;
+      width: 176px;
+      color: #5b5134;
+      opacity: calc(var(--psy) * .6);
+      transform: rotate(-17deg);
+      pointer-events: none;
+    }
+
+    .traits {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 17px;
+      margin: -3px 0 23px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--line);
+      font-style: italic;
+      font-size: 16px;
+    }
+
+    .traits span + span::before {
+      content: "·";
+      margin-right: 17px;
+      color: var(--muted);
+    }
+
+    .correction {
+      margin: 24px 0;
+      padding: 17px 20px;
+      border-left: 2px solid var(--red);
+      background: rgba(98, 39, 22, .035);
+    }
+
+    .correction del {
+      color: #756252;
+      text-decoration-color: var(--red);
+      text-decoration-thickness: 1px;
+    }
+
+    .correction ins {
+      display: block;
+      margin-top: 7px;
+      color: #722c24;
+      font-size: 20px;
+      text-decoration: none;
+    }
+
+    .breach {
+      position: relative;
+      z-index: 3;
+      width: calc(100% + 55px);
+      margin: 33px -28px -15px;
+      padding: 9px 10px;
+      border-top: 2px solid #201f13;
+      border-bottom: 2px solid #201f13;
+      color: #202015;
+      background: var(--green);
+      font-family: var(--display);
+      font-size: clamp(21px, 3.2vw, 37px);
+      font-weight: 700;
+      line-height: 1.1;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: -.035em;
+      opacity: var(--psy);
+      transform: rotate(calc(var(--psy) * -3deg));
+      pointer-events: none;
+    }
+
+    /* Театр */
+
+    .stage {
+      position: relative;
+      isolation: isolate;
+      background: var(--scene);
+      scroll-margin-top: 94px;
+    }
+
+    .stage-set {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      opacity: var(--psy);
+      pointer-events: none;
+    }
+
+    .stage-set::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0 5px,
+          rgba(0, 0, 0, .055) 5px 6px
+        );
+      mix-blend-mode: multiply;
+    }
+
+    .curtain {
+      position: absolute;
+      top: -10px;
+      left: -7%;
+      width: 114%;
+      height: 345px;
+      background:
+        linear-gradient(180deg, #1b1110, transparent 35%, rgba(12, 9, 8, .8)),
+        repeating-linear-gradient(
+          90deg,
+          #2c100f 0,
+          #6e211c 24px,
+          #a63d2b 42px,
+          #461613 62px,
+          #190f0d 80px
+        );
+      border-top: 18px solid #2e2518;
+      filter: drop-shadow(0 15px 8px rgba(0, 0, 0, .45));
+      clip-path: polygon(
+        0 0, 100% 0, 100% 83%,
+        96% 91%, 92% 96%, 88% 91%, 84% 83%,
+        80% 91%, 76% 96%, 72% 91%, 68% 83%,
+        64% 91%, 60% 96%, 56% 91%, 52% 83%,
+        48% 91%, 44% 96%, 40% 91%, 36% 83%,
+        32% 91%, 28% 96%, 24% 91%, 20% 83%,
+        16% 91%, 12% 96%, 8% 91%, 4% 83%, 0 88%
+      );
+    }
+
+    .curtain::after {
+      content: "";
+      position: absolute;
+      inset: 18px 0 auto;
+      height: 9px;
+      border-top: 2px solid #b9a05a;
+      border-bottom: 3px double #b9a05a;
+    }
+
+    .curtain-side {
+      position: absolute;
+      top: 220px;
+      bottom: 0;
+      width: 91px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          #1d1410 0,
+          #6a281c 19px,
+          #351811 35px,
+          #a0472b 44px,
+          #221511 62px
+        );
+      opacity: .72;
+    }
+
+    .curtain-side.left {
+      left: -46px;
+      transform: rotate(-1.5deg);
+    }
+
+    .curtain-side.right {
+      right: -46px;
+      transform: rotate(1.5deg);
+    }
+
+    .theatre-bill {
+      position: absolute;
+      top: 330px;
+      left: -2%;
+      width: 104%;
+      padding: 16px 7px 22px;
+      border-top: 10px double #b3a056;
+      border-bottom: 10px double #b3a056;
+      color: #c5b464;
+      background: #20231a;
+      font-family: var(--display);
+      text-align: center;
+      text-transform: uppercase;
+      transform: rotate(-7deg);
+    }
+
+    .theatre-bill small {
+      display: block;
+      font-size: 13px;
+      letter-spacing: .25em;
+    }
+
+    .theatre-bill strong {
+      display: block;
+      margin: 8px 0;
+      font-size: clamp(87px, 15vw, 179px);
+      line-height: .77;
+      letter-spacing: -.075em;
+    }
+
+    .ocular-window {
+      position: absolute;
+      top: 670px;
+      left: 50%;
+      width: 1080px;
+      height: 1080px;
+      border: 18px double #b2a55d;
+      border-radius: 50%;
+      background:
+        repeating-conic-gradient(
+          from 2deg,
+          rgba(173, 180, 75, .65) 0deg 1deg,
+          transparent 1deg 8deg
+        ),
+        repeating-radial-gradient(
+          ellipse,
+          #26291a 0 41px,
+          #837d39 42px 45px,
+          #141b14 46px 79px,
+          #aa9f52 80px 82px
+        );
+      box-shadow:
+        0 0 0 10px #171b13,
+        0 0 0 13px #928443,
+        inset 0 0 80px #000;
+      transform:
+        translateX(-50%)
+        translateY(calc(var(--drift) * -.55))
+        rotate(-12deg);
+    }
+
+    .ocular-window svg {
+      position: absolute;
+      top: 25%;
+      left: 16%;
+      width: 68%;
+      color: #d6c98a;
+      transform: rotate(12deg);
+      filter: drop-shadow(0 12px 2px #121510);
+    }
+
+    .ribbon {
+      position: absolute;
+      z-index: 1;
+      width: 140%;
+      left: -20%;
+      padding: 12px 0 15px;
+      border-block: 5px double currentColor;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(38px, 6.7vw, 81px);
+      line-height: .95;
+      letter-spacing: -.035em;
+      text-align: center;
+      white-space: nowrap;
+      box-shadow: 0 12px 0 rgba(0, 0, 0, .23);
+    }
+
+    .ribbon.one {
+      top: 28%;
+      color: #202016;
+      background: #a7b744;
+      transform: rotate(14deg);
+    }
+
+    .ribbon.two {
+      top: 53%;
+      color: #e4d6ad;
+      background: #8f2923;
+      transform: rotate(-17deg);
+    }
+
+    .ribbon.three {
+      bottom: 16%;
+      color: #221b14;
+      background: #c5ab68;
+      transform: rotate(10deg);
+    }
+
+    .prop {
+      position: absolute;
+      z-index: 2;
+      width: var(--size, 200px);
+      color: var(--color, #c6b677);
+      transform:
+        translateY(calc(var(--drift) * var(--move, 1)))
+        rotate(var(--angle, 0deg));
+      filter: drop-shadow(10px 16px 0 rgba(0, 0, 0, .42));
+    }
+
+    .shears-a {
+      --size: 310px;
+      --angle: -23deg;
+      --color: #c7bc91;
+      --move: -.8;
+      top: 1100px;
+      right: -119px;
+    }
+
+    .lily-a {
+      --size: 250px;
+      --angle: 22deg;
+      --color: #c6c290;
+      top: 900px;
+      left: -79px;
+    }
+
+    .hand-a {
+      --size: 360px;
+      --angle: 28deg;
+      --color: #cfc199;
+      --move: -.45;
+      top: 45%;
+      left: -168px;
+    }
+
+    .eye-a {
+      --size: 290px;
+      --angle: -19deg;
+      --color: #b8a968;
+      top: 58%;
+      right: -95px;
+    }
+
+    .thorns-a {
+      --size: 510px;
+      --angle: 67deg;
+      --color: #ae923f;
+      --move: -.6;
+      top: 67%;
+      left: -261px;
+    }
+
+    .lily-b {
+      --size: 340px;
+      --angle: -22deg;
+      --color: #b2b65b;
+      bottom: 6%;
+      right: -135px;
+    }
+
+    .altar-stairs {
+      position: absolute;
+      bottom: 1%;
+      left: -17%;
+      z-index: 1;
+      width: 75%;
+      color: #a69668;
+      transform: rotate(-11deg);
+      opacity: .85;
+    }
+
+    .checker-floor {
+      position: absolute;
+      bottom: -7%;
+      left: -40%;
+      width: 180%;
+      height: 24%;
+      background:
+        repeating-conic-gradient(
+          #ab9b6d 0% 25%,
+          #1b1b15 0% 50%
+        ) 0 0 / 90px 90px;
+      transform: perspective(650px) rotateX(48deg) rotateZ(12deg);
+      transform-origin: bottom;
+      opacity: .7;
+    }
+
+    .stage-content {
+      position: relative;
+      z-index: 3;
+      padding: 170px 43px 95px;
+    }
+
+    .history-header {
+      position: relative;
+      margin: 0 0 150px;
+      color: var(--scene-ink);
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.6;
+      text-transform: uppercase;
+      letter-spacing: .11em;
+    }
+
+    .history-header .eyebrow {
+      display: inline-block;
+      padding: 5px 8px;
+      color: var(--ink);
+      background: var(--sheet);
+      transform: rotate(calc(var(--psy) * -2deg));
+    }
+
+    .history-header h2 {
+      position: relative;
+      z-index: 1;
+      margin: 28px 0 22px;
+      font-family: var(--display);
+      font-size: clamp(69px, 9vw, 110px);
+      line-height: .84;
+      letter-spacing: -.065em;
+    }
+
+    .history-number {
+      display: block;
+      margin: 0 0 15px 5px;
+      font-family: var(--serif);
+      font-size: 20px;
+      letter-spacing: .03em;
+    }
+
+    .history-word {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+    }
+
+    .history-word span:nth-child(1) {
+      transform: rotate(calc(var(--psy) * -4deg));
+    }
+
+    .history-word span:nth-child(2) {
+      display: inline-block;
+      margin-inline: .025em;
+      padding: 0 .04em .07em;
+      color: var(--ink);
+      background: var(--sheet);
+      transform:
+        translateY(calc(var(--psy) * 12px))
+        rotate(calc(var(--psy) * 5deg));
+      box-shadow: calc(var(--psy) * 5px) calc(var(--psy) * 7px) 0 #872923;
+    }
+
+    .history-word span:nth-child(3) {
+      transform:
+        translateY(calc(var(--psy) * -7px))
+        rotate(calc(var(--psy) * -3deg));
+    }
+
+    .history-intro {
+      max-width: 24ch;
+      margin: 31px 0 0 6px;
+      font-size: 25px;
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    .voice-key {
+      max-width: 330px;
+      margin: 27px 0 0 7px;
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    /* Бумаги не становятся нечитаемыми:
+       декорации располагаются за ними. */
+
+    .fragment {
+      position: relative;
+      width: 83%;
+      max-width: 620px;
+      margin: 105px 0;
+      padding: 34px 37px 46px;
+      color: #33291d;
+      background:
+        linear-gradient(100deg, rgba(97, 62, 24, .04), transparent 40%),
+        #eee3c6;
+      border-top: 1px solid #fff6dc;
+      filter: drop-shadow(8px 15px 0 rgba(0, 0, 0, .32));
+      clip-path: polygon(
+        0 0, 100% 0, 100% 97.8%,
+        96% 99.4%, 92% 98.2%, 88% 100%,
+        82% 98.6%, 76% 99.4%, 70% 98.5%,
+        65% 100%, 59% 98.3%, 53% 99.5%,
+        48% 98.6%, 42% 100%, 36% 98.8%,
+        31% 99.5%, 24% 98.2%, 18% 99.7%,
+        11% 98.9%, 5% 100%, 0 98%
+      );
+    }
+
+    .fragment::after {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border: 1px solid rgba(85, 61, 27, .16);
+      pointer-events: none;
+    }
+
+    .fragment.a {
+      transform: rotate(calc(var(--psy) * -3deg));
+    }
+
+    .fragment.b {
+      margin-left: auto;
+      background-color: #ded3ad;
+      transform: rotate(calc(var(--psy) * 3deg));
+    }
+
+    .fragment.c {
+      width: 88%;
+      transform:
+        translateX(calc(var(--psy) * 8px))
+        rotate(calc(var(--psy) * -2deg));
+    }
+
+    .fragment.d {
+      margin-left: auto;
+      background-color: #f0e7d0;
+      transform: rotate(calc(var(--psy) * 1.7deg));
+    }
+
+    .fragment-label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 11px;
+      margin-bottom: 21px;
+      border-bottom: 1px solid #b7a47a;
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.5;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .fragment h3 {
+      margin: 0 0 23px;
+      font-family: var(--display);
+      font-size: 34px;
+      letter-spacing: -.025em;
+    }
+
+    .fragment p {
+      position: relative;
+      z-index: 1;
+    }
+
+    .fragment .scripture {
+      position: relative;
+      z-index: 1;
+    }
+
+    .foreign-voice {
+      display: block;
+      margin: 21px 0;
+      padding: 13px 17px;
+      color: #752b22;
+      border-block: 1px solid rgba(126, 50, 33, .35);
+      font-size: 21px;
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    .foreign-voice small {
+      display: block;
+      margin-top: 8px;
+      color: #725646;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-style: normal;
+    }
+
+    .tape {
+      position: absolute;
+      top: -2px;
+      right: 25px;
+      width: 104px;
+      height: 27px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(87, 61, 24, .1) 0 1px,
+          transparent 1px 4px
+        ),
+        rgba(177, 153, 94, .45);
+      opacity: var(--psy);
+      transform: rotate(-9deg);
+      pointer-events: none;
+    }
+
+    .fingerprint {
+      position: absolute;
+      right: 25px;
+      bottom: 32px;
+      width: 76px;
+      height: 102px;
+      border-radius: 45%;
+      background:
+        repeating-radial-gradient(
+          ellipse at 48% 61%,
+          transparent 0 3px,
+          #614e2c 3px 4px,
+          transparent 4px 7px
+        );
+      opacity: calc(var(--psy) * .13);
+      transform: rotate(30deg);
+      pointer-events: none;
+    }
+
+    .certificate {
+      position: relative;
+      width: 87%;
+      max-width: 625px;
+      margin: 40px auto 100px;
+      padding: 15px;
+      background: #b6b45d;
+      box-shadow: 11px 13px 0 rgba(0, 0, 0, .3);
+      transform: rotate(calc(var(--psy) * -5deg));
+    }
+
+    .certificate-inner {
+      padding: 23px 25px 28px;
+      color: #2a2b1d;
+      border: 5px double #45452c;
+      text-align: center;
+    }
+
+    .certificate .eyebrow {
+      margin-bottom: 15px;
+    }
+
+    .certificate del {
+      display: block;
+      margin: 15px 0 7px;
+      font-size: 22px;
+      text-decoration-color: #923027;
+      text-decoration-thickness: 2px;
+    }
+
+    .certificate ins {
+      display: block;
+      font-family: var(--display);
+      font-size: clamp(37px, 5.5vw, 58px);
+      line-height: 1.05;
+      letter-spacing: -.04em;
+      text-decoration: none;
+    }
+
+    .certificate .amendment {
+      margin-top: 14px;
+      font-family: var(--mono);
+      font-size: 9px;
+      line-height: 1.6;
+    }
+
+    .choir {
+      position: relative;
+      margin: 145px -20px 155px;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .choir-noise {
+      position: absolute;
+      left: -10%;
+      width: 120%;
+      color: #ad9e59;
+      font-family: var(--display);
+      font-size: clamp(51px, 9vw, 103px);
+      font-weight: 700;
+      line-height: .82;
+      letter-spacing: -.06em;
+      text-transform: uppercase;
+      opacity: var(--psy);
+      pointer-events: none;
+    }
+
+    .choir-noise.top {
+      top: -86px;
+      transform: rotate(5deg);
+    }
+
+    .choir-noise.bottom {
+      bottom: -85px;
+      color: #b5422c;
+      transform: rotate(-7deg);
+    }
+
+    .choir-noise small {
+      display: block;
+      margin-top: 10px;
+      font-size: .36em;
+      letter-spacing: .08em;
+    }
+
+    .choir .scripture {
+      position: relative;
+      z-index: 2;
+      width: 79%;
+      margin: 0 auto;
+      padding: 28px 22px;
+      color: #f1e5c6;
+      background: #201e17;
+      border: 5px double #baaa68;
+      box-shadow: 9px 12px 0 rgba(0, 0, 0, .3);
+      transform: rotate(calc(var(--psy) * -2deg));
+    }
+
+    .choir blockquote {
+      font-family: var(--display);
+      font-size: clamp(33px, 5.3vw, 58px);
+      font-style: normal;
+      line-height: 1;
+    }
+
+    .choir figcaption {
+      color: #c7b994;
+    }
+
+    /* Центральный лист — не детская тетрадь */
+
+    .petition {
+      position: relative;
+      width: 94%;
+      max-width: 680px;
+      margin: 145px auto;
+      padding: 33px 39px 46px;
+      color: #31261c;
+      background:
+        linear-gradient(90deg, transparent 49.7%, rgba(113, 84, 45, .12) 50%, transparent 50.5%),
+        linear-gradient(0deg, transparent 49.5%, rgba(113, 84, 45, .09) 50%, transparent 50.6%),
+        #eaddba;
+      border: 1px solid #c7b07c;
+      box-shadow:
+        1px 2px 0 #c8b58b,
+        9px 15px 0 rgba(0, 0, 0, .38);
+      transform: rotate(calc(var(--psy) * 3deg));
+    }
+
+    .petition::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(89, 66, 32, .2);
+      pointer-events: none;
+    }
+
+    .petition .eyebrow {
+      max-width: 35ch;
+      padding-bottom: 17px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(89, 66, 32, .3);
+      font-size: 9px;
+    }
+
+    .plea {
+      position: relative;
+      z-index: 1;
+      font-family: var(--display);
+      font-size: clamp(63px, 9vw, 105px);
+      font-style: italic;
+      line-height: .99;
+      letter-spacing: -.055em;
+    }
+
+    .plea span {
+      display: block;
+    }
+
+    .plea span:nth-child(2) {
+      margin: 10px 0 5px 9%;
+      transform: rotate(calc(var(--psy) * -3deg));
+    }
+
+    .plea span:nth-child(3) {
+      position: relative;
+      margin-left: 2%;
+    }
+
+    .plea span:nth-child(3)::after {
+      content: "";
+      position: absolute;
+      left: 1%;
+      right: 2%;
+      bottom: -6px;
+      height: 5px;
+      border-top: 2px solid #762e24;
+      border-bottom: 1px solid #762e24;
+      transform: rotate(-2deg);
+    }
+
+    .petition-question {
+      position: relative;
+      z-index: 1;
+      margin: 42px 5% 0 auto;
+      max-width: 19ch;
+      font-family: var(--hand);
+      font-size: 25px;
+      font-style: italic;
+      line-height: 1.5;
+      text-align: right;
+    }
+
+    .petition-note {
+      max-width: 34ch;
+      margin-top: 46px;
+      font-family: var(--mono);
+      font-size: 9px;
+      line-height: 1.8;
+      color: #6d5940;
+    }
+
+    .wax {
+      position: absolute;
+      right: 19px;
+      bottom: -25px;
+      width: 71px;
+      height: 68px;
+      border: 6px double #4c1813;
+      border-radius: 46% 51% 42% 48%;
+      color: #e0a07c;
+      background:
+        radial-gradient(circle at 35% 30%, #ac4b31, #6e241b 60%, #381713);
+      box-shadow: 4px 6px 0 rgba(0, 0, 0, .3);
+      font-family: var(--display);
+      font-size: 42px;
+      line-height: 52px;
+      text-align: center;
+      opacity: var(--psy);
+      transform: rotate(14deg);
+      pointer-events: none;
+    }
+
+    .confession {
+      position: relative;
+      max-width: 670px;
+      margin: 120px auto 0;
+      padding: 35px 29px;
+      border-top: 1px solid #9d8b56;
+      border-bottom: 1px solid #9d8b56;
+      color: #eadfbe;
+      background: #1c1d17;
+      box-shadow: 12px 12px 0 rgba(0, 0, 0, .2);
+      text-align: center;
+    }
+
+    .confession::before,
+    .confession::after {
+      content: "✝";
+      display: block;
+      color: #a99659;
+      font-size: 21px;
+    }
+
+    .confession::before {
+      margin-bottom: 18px;
+    }
+
+    .confession::after {
+      margin-top: 19px;
+    }
+
+    .confession blockquote {
+      font-family: var(--display);
+      font-size: clamp(29px, 4.5vw, 45px);
+      line-height: 1.15;
+      letter-spacing: -.025em;
+    }
+
+    .confession figcaption {
+      margin-top: 21px;
+      color: #c5b68e;
+      font-family: var(--mono);
+      font-size: 9px;
+      line-height: 1.7;
+    }
+
+    /* То, что осталось после представления */
+
+    .afterworld {
+      position: relative;
+      isolation: isolate;
+      padding: 55px 43px 60px;
+      color: var(--scene-ink);
+      background: var(--scene);
+    }
+
+    .afterworld::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(115deg, transparent 0 42%, rgba(137, 46, 31, .24) 42% 48%, transparent 48%),
+        repeating-linear-gradient(
+          -35deg,
+          transparent 0 115px,
+          rgba(165, 160, 76, .1) 116px 118px,
+          transparent 119px 164px
+        );
+      opacity: var(--psy);
+      pointer-events: none;
+    }
+
+    .bottom-props {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      opacity: var(--psy);
+      pointer-events: none;
+    }
+
+    .bottom-eye {
+      position: absolute;
+      top: 32%;
+      right: -80px;
+      width: 300px;
+      color: #a99658;
+      transform: rotate(-17deg);
+    }
+
+    .bottom-thorns {
+      position: absolute;
+      bottom: 12%;
+      left: -160px;
+      width: 440px;
+      color: #9b8546;
+      transform: rotate(55deg);
+    }
+
+    .remains {
+      position: relative;
+      scroll-margin-top: 100px;
+    }
+
+    .remains h2 {
+      margin-bottom: 35px;
+      font-size: 35px;
+    }
+
+    .remains .roman {
+      color: inherit;
+      opacity: .7;
+    }
+
+    .notes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px 22px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: note;
+    }
+
+    .note {
+      position: relative;
+      padding: 24px 24px 25px;
+      color: #352c20;
+      background: #e7ddc1;
+      border-left: 4px solid #887647;
+      box-shadow: 6px 9px 0 rgba(0, 0, 0, .2);
+      counter-increment: note;
+      transform: rotate(calc(var(--psy) * var(--tilt, -1deg)));
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .note::before {
+      content: "№ " counter(note, decimal-leading-zero);
+      display: block;
+      margin-bottom: 12px;
+      padding-bottom: 9px;
+      border-bottom: 1px solid rgba(87, 65, 31, .25);
+      color: #7b6241;
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.3;
+    }
+
+    .note:nth-child(2) {
+      --tilt: 2deg;
+      background: #c8c59a;
+    }
+
+    .note:nth-child(3) {
+      --tilt: -2deg;
+      background: #e1d6b9;
+      border-left-color: #8d3329;
+    }
+
+    .note:nth-child(4) {
+      --tilt: 1.7deg;
+      background: #d8cfb9;
+    }
+
+    .note:nth-child(5) {
+      --tilt: 1deg;
+      background: #d9cc9e;
+    }
+
+    .note:nth-child(6) {
+      --tilt: -2.2deg;
+      background: #e9dfc8;
+      border-left-color: #8d3329;
+    }
+
+    .after-quote {
+      max-width: 580px;
+      margin: 52px auto 0;
+      color: var(--scene-ink);
+    }
+
+    .after-quote figcaption {
+      color: inherit;
+      opacity: .75;
+    }
+
+    .contact-sheet {
+      position: relative;
+      margin: 90px 14px 0;
+      padding: 31px 35px 35px;
+      color: #34291e;
+      background: #ece2c9;
+      border: 1px solid #ae986d;
+      outline: 1px solid rgba(174, 152, 109, .6);
+      outline-offset: -9px;
+      box-shadow: 8px 10px 0 rgba(0, 0, 0, .25);
+      transform: rotate(calc(var(--psy) * -1.4deg));
+      scroll-margin-top: 110px;
+    }
+
+    .contact-sheet .eyebrow {
+      margin-bottom: 18px;
+      font-size: 9px;
+      color: #746148;
+    }
+
+    .contact-sheet h2 {
+      margin-bottom: 15px;
+    }
+
+    .username {
+      margin-bottom: 17px;
+      font-family: var(--mono);
+      font-size: clamp(20px, 3.5vw, 31px);
+      overflow-wrap: anywhere;
+    }
+
+    .contact-copy {
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .ending {
+      position: relative;
+      margin: 75px auto 0;
+      padding: 28px 0 5px;
+      text-align: center;
+    }
+
+    .ending::before {
+      content: "";
+      display: block;
+      width: 42px;
+      height: 1px;
+      margin: 0 auto 29px;
+      background: currentColor;
+      opacity: .5;
+    }
+
+    .ending p:first-child {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .ending p:last-child {
+      margin-top: 15px;
+      font-family: var(--display);
+      font-size: clamp(36px, 6vw, 61px);
+      font-style: italic;
+      line-height: 1.05;
+      letter-spacing: -.035em;
+    }
+
+    .outside-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 25px;
+      padding: 22px 2px 0;
+      color: var(--ui);
+      font-family: var(--sans);
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    .outside-footer p {
+      max-width: 65ch;
+    }
+
+    .outside-footer a {
+      flex-shrink: 0;
+      font-family: var(--mono);
+    }
+
+    /* Спокойный режим */
+
+    body.calm .stage-set,
+    body.calm .counterprint,
+    body.calm .hero-counterprint,
+    body.calm .margin-order,
+    body.calm .first-eye,
+    body.calm .breach,
+    body.calm .choir-noise,
+    body.calm .bottom-props,
+    body.calm .wax,
+    body.calm .fingerprint,
+    body.calm .tape {
+      display: none;
+    }
+
+    body.calm .stage-content,
+    .no-js .stage-content {
+      padding-top: 58px;
+    }
+
+    body.calm .history-header,
+    .no-js .history-header {
+      margin-bottom: 55px;
+    }
+
+    body.calm .fragment,
+    .no-js .fragment {
+      margin-top: 52px;
+      margin-bottom: 52px;
+    }
+
+    body.calm .choir,
+    .no-js .choir {
+      margin-top: 60px;
+      margin-bottom: 60px;
+    }
+
+    body.calm .petition,
+    .no-js .petition {
+      margin-top: 70px;
+      margin-bottom: 70px;
+    }
+
+    body.calm .afterworld::before {
+      display: none;
+    }
+
+    body.calm .fragment,
+    body.calm .petition,
+    body.calm .certificate,
+    body.calm .note,
+    body.calm .contact-sheet,
+    body.calm .entry-inner,
+    body.calm .annotation,
+    body.calm .history-word span,
+    body.calm .plea span {
+      transform: none !important;
+    }
+
+    /* Планшеты */
+
+    @media (max-width: 1050px) {
+      .layout {
+        grid-template-columns: 115px minmax(0, 1fr);
+        gap: 27px;
+        width: calc(100% - 36px);
+      }
+
+      .hero {
+        padding-inline: 39px;
+      }
+
+      .entry {
+        padding-inline: 38px;
+      }
+
+      .facts .entry:first-child {
+        padding-left: 38px;
+      }
+
+      .facts .entry:last-child {
+        padding-right: 38px;
+      }
+
+      .counterprint {
+        left: 40px;
+      }
+
+      .stage-content,
+      .afterworld {
+        padding-left: 30px;
+        padding-right: 30px;
+      }
+
+      .fragment {
+        width: 89%;
+        padding-inline: 30px;
+      }
+
+      .fragment.c {
+        width: 93%;
+      }
+
+      .history-header h2 {
+        font-size: clamp(65px, 9.2vw, 91px);
+      }
+
+      .petition {
+        padding-inline: 30px;
+      }
+
+      .plea {
+        font-size: clamp(62px, 8.8vw, 92px);
+      }
+    }
+
+    /* Мобильная навигация */
+
+    @media (max-width: 740px) {
+      html {
+        scroll-padding-top: 121px;
+      }
+
+      .layout {
+        display: block;
+        width: calc(100% - 24px);
+        padding-top: 122px;
+      }
+
+      .topbar-inner {
+        width: calc(100% - 24px);
+      }
+
+      .brand {
+        font-size: 10px;
+      }
+
+      .index {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        z-index: 45;
+        padding: 7px 12px;
+        color: var(--ui);
+        background: var(--bg);
+        border-bottom: 1px solid var(--ui-line);
+      }
+
+      .index nav {
+        display: grid;
+        grid-template-columns: repeat(9, minmax(0, 1fr));
+        gap: 0;
+        max-width: 620px;
+        margin: auto;
+      }
+
+      .index nav a {
+        display: block;
+        padding: 6px 1px;
+        border-left: 0;
+        border-bottom: 1px solid transparent;
+        text-align: center;
+      }
+
+      .index nav a[aria-current="location"] {
+        border-bottom-color: currentColor;
+      }
+
+      .index nav b {
+        font-size: 10px;
+      }
+
+      .index nav .nav-name,
+      .index-caption,
+      .preservation,
+      .index-motto {
+        display: none;
+      }
+
+      .entry,
+      .stage,
+      .remains,
+      .contact-sheet {
+        scroll-margin-top: 122px;
+      }
+
+      .hero {
+        padding-top: 25px;
+      }
+
+      .hero h1 {
+        font-size: clamp(70px, 13vw, 96px);
+      }
+
+      .hero-subtitle {
+        font-size: 18px;
+      }
+
+      .entry h2 {
+        font-size: 24px;
+      }
+
+      .history-header h2 {
+        font-size: clamp(65px, 12.4vw, 94px);
+      }
+
+      .stage-content {
+        padding-top: 145px;
+      }
+
+      .fragment {
+        max-width: none;
+      }
+
+      .theatre-bill strong {
+        font-size: 130px;
+      }
+
+      .ribbon {
+        font-size: 65px;
+      }
+
+      .ocular-window {
+        width: 900px;
+        height: 900px;
+      }
+
+      .plea {
+        font-size: clamp(62px, 12.6vw, 91px);
+      }
+
+      .choir blockquote {
+        font-size: 44px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        font-size: 16px;
+      }
+
+      .layout {
+        width: calc(100% - 16px);
+      }
+
+      .topbar-inner {
+        width: calc(100% - 18px);
+        gap: 8px;
+      }
+
+      .brand .brand-long {
+        display: none;
+      }
+
+      .controls {
+        gap: 5px;
+      }
+
+      .control {
+        padding: 7px 8px;
+        font-size: 10px;
+      }
+
+      .hero {
+        padding: 23px 24px 38px;
+      }
+
+      .archive-line {
+        gap: 10px;
+        font-size: 8px;
+      }
+
+      .archive-line span:last-child {
+        text-align: right;
+      }
+
+      .hero-kicker {
+        margin-top: 27px;
+        font-size: 10px;
+        letter-spacing: .15em;
+      }
+
+      .emblem {
+        width: 147px;
+      }
+
+      .hero h1 {
+        font-size: clamp(57px, 16.3vw, 77px);
+      }
+
+      .hero-subtitle {
+        font-size: 17px;
+      }
+
+      .place {
+        gap: 12px;
+        font-size: 10px;
+      }
+
+      .place::before,
+      .place::after {
+        width: 26px;
+      }
+
+      .entry {
+        padding: 29px 25px;
+      }
+
+      .entry h2 {
+        margin-bottom: 20px;
+        font-size: 23px;
+      }
+
+      .full-name {
+        font-size: 24px;
+      }
+
+      .facts {
+        display: block;
+      }
+
+      .facts .entry,
+      .facts .entry:first-child,
+      .facts .entry:last-child {
+        padding: 27px 25px;
+        border-right: 0;
+      }
+
+      .large-fact {
+        font-size: 43px;
+      }
+
+      .unstable .entry-inner {
+        padding-right: 0;
+      }
+
+      .margin-order {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: fit-content;
+        max-width: 100%;
+        margin: 20px 0 0 auto;
+        font-size: 19px;
+        text-align: right;
+        transform: rotate(3deg);
+      }
+
+      .margin-order br {
+        display: none;
+      }
+
+      .margin-order small {
+        margin-top: 7px;
+      }
+
+      .counterprint {
+        top: 30px;
+        left: 25px;
+        font-size: 32px;
+      }
+
+      .annotation {
+        margin-left: 4px;
+        font-size: 19px;
+      }
+
+      .traits {
+        gap: 6px 12px;
+        font-size: 15px;
+      }
+
+      .traits span + span::before {
+        margin-right: 12px;
+      }
+
+      .correction {
+        padding-inline: 14px;
+      }
+
+      .correction ins {
+        font-size: 19px;
+      }
+
+      .breach {
+        width: calc(100% + 32px);
+        margin-inline: -16px;
+        font-size: 24px;
+      }
+
+      .stage-content {
+        padding: 132px 21px 65px;
+      }
+
+      .history-header {
+        margin-bottom: 112px;
+      }
+
+      .history-header h2 {
+        font-size: clamp(52px, 13.3vw, 67px);
+      }
+
+      .history-number {
+        font-size: 18px;
+      }
+
+      .history-intro {
+        font-size: 22px;
+      }
+
+      .voice-key {
+        max-width: 27ch;
+        font-size: 9px;
+      }
+
+      .curtain {
+        height: 290px;
+      }
+
+      .theatre-bill {
+        top: 345px;
+      }
+
+      .theatre-bill strong {
+        font-size: 103px;
+      }
+
+      .theatre-bill small {
+        font-size: 9px;
+      }
+
+      .ocular-window {
+        top: 830px;
+        width: 740px;
+        height: 850px;
+      }
+
+      .ribbon {
+        font-size: 51px;
+      }
+
+      .fragment,
+      .fragment.c {
+        width: 96%;
+        margin-top: 90px;
+        margin-bottom: 90px;
+        padding: 27px 23px 39px;
+      }
+
+      .fragment.a,
+      .fragment.c {
+        margin-right: auto;
+      }
+
+      .fragment h3 {
+        font-size: 29px;
+      }
+
+      .fragment-label {
+        gap: 10px;
+        font-size: 8px;
+      }
+
+      .foreign-voice {
+        font-size: 20px;
+        padding-inline: 10px;
+      }
+
+      .fragment .scripture {
+        padding-left: 13px;
+      }
+
+      .scripture blockquote {
+        font-size: 16px;
+      }
+
+      .scripture figcaption {
+        font-size: 9px;
+      }
+
+      .certificate {
+        width: 96%;
+        padding: 10px;
+      }
+
+      .certificate-inner {
+        padding: 19px 14px 24px;
+      }
+
+      .certificate del {
+        font-size: 18px;
+      }
+
+      .certificate ins {
+        font-size: 39px;
+      }
+
+      .choir {
+        margin: 132px -10px 137px;
+      }
+
+      .choir .scripture {
+        width: 94%;
+        padding-inline: 15px;
+      }
+
+      .choir blockquote {
+        font-size: 36px;
+      }
+
+      .choir-noise {
+        font-size: 61px;
+      }
+
+      .choir-noise.top {
+        top: -65px;
+      }
+
+      .choir-noise.bottom {
+        bottom: -73px;
+      }
+
+      .petition {
+        width: 98%;
+        margin-block: 110px;
+        padding: 27px 22px 35px;
+      }
+
+      .petition .eyebrow {
+        font-size: 8px;
+      }
+
+      .plea {
+        font-size: clamp(46px, 12.9vw, 63px);
+      }
+
+      .petition-question {
+        margin-top: 35px;
+        font-size: 21px;
+      }
+
+      .petition-note {
+        max-width: 24ch;
+        font-size: 8px;
+      }
+
+      .wax {
+        right: 8px;
+        width: 59px;
+        height: 57px;
+        font-size: 34px;
+        line-height: 42px;
+      }
+
+      .confession {
+        margin-top: 90px;
+        padding-inline: 19px;
+      }
+
+      .confession blockquote {
+        font-size: 29px;
+      }
+
+      .shears-a {
+        --size: 245px;
+        right: -119px;
+        top: 1450px;
+      }
+
+      .lily-a {
+        left: -124px;
+      }
+
+      .hand-a {
+        --size: 300px;
+        left: -170px;
+      }
+
+      .afterworld {
+        padding: 43px 23px 48px;
+      }
+
+      .remains h2 {
+        font-size: 29px;
+      }
+
+      .notes {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .note {
+        padding: 21px 23px;
+      }
+
+      .contact-sheet {
+        margin: 70px 0 0;
+        padding: 28px 23px;
+      }
+
+      .contact-sheet h2 {
+        font-size: 24px;
+      }
+
+      .ending {
+        margin-top: 61px;
+      }
+
+      .ending p:last-child {
+        font-size: 39px;
+      }
+
+      .outside-footer {
+        display: block;
+        padding-inline: 7px;
+      }
+
+      .outside-footer a {
+        display: inline-block;
+        margin-top: 15px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .entry-inner,
+      .fragment,
+      .petition,
+      .certificate,
+      .note,
+      .contact-sheet,
+      .annotation,
+      .history-word span,
+      .plea span,
+      .choir .scripture {
+        transform: none !important;
+      }
+    }
+
+    @media print {
+      :root {
+        --bg: #fff !important;
+        --sheet: #fff !important;
+        --scene: #fff !important;
+        --scene-ink: #111 !important;
+        --ui: #111 !important;
+        --damage: 0 !important;
+        --psy: 0 !important;
+        --drift: 0px !important;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      body {
+        background: #fff !important;
+        color: #111 !important;
+        font-size: 11pt;
+      }
+
+      .topbar,
+      .index,
+      .grain,
+      .skip,
+      .stage-set,
+      .counterprint,
+      .hero-counterprint,
+      .margin-order,
+      .first-eye,
+      .breach,
+      .choir-noise,
+      .bottom-props,
+      .wax,
+      .fingerprint,
+      .tape,
+      .outside-footer a {
+        display: none !important;
+      }
+
+      .layout {
+        display: block;
+        width: 100%;
+        padding: 0;
+      }
+
+      .paper {
+        overflow: visible;
+      }
+
+      .paper,
+      .document,
+      .fragment,
+      .certificate,
+      .petition,
+      .note,
+      .contact-sheet,
+      .confession,
+      .choir .scripture {
+        box-shadow: none !important;
+        filter: none !important;
+      }
+
+      .entry-inner,
+      .fragment,
+      .certificate,
+      .petition,
+      .note,
+      .contact-sheet,
+      .history-word span,
+      .plea span,
+      .choir .scripture {
+        transform: none !important;
+      }
+
+      .document {
+        border: 0;
+      }
+
+      .document::before,
+      .afterworld::before {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 10px;
+      }
+
+      .hero h1 {
+        font-size: 66pt;
+      }
+
+      .entry {
+        padding: 23px 20px;
+      }
+
+      .facts .entry:first-child {
+        padding-left: 20px;
+      }
+
+      .facts .entry:last-child {
+        padding-right: 20px;
+      }
+
+      .stage-content,
+      .afterworld {
+        padding: 30px 20px;
+      }
+
+      .history-header {
+        margin-bottom: 40px;
+      }
+
+      .history-header h2 {
+        font-size: 56pt;
+      }
+
+      .fragment,
+      .fragment.c {
+        width: 100%;
+        max-width: none;
+        margin: 30px 0;
+        padding: 25px;
+        clip-path: none;
+        background: #fff;
+        border: 1px solid #aaa;
+        break-inside: avoid;
+      }
+
+      .certificate,
+      .petition,
+      .confession,
+      .choir,
+      .contact-sheet {
+        margin-top: 35px;
+        margin-bottom: 35px;
+        break-inside: avoid;
+      }
+
+      .certificate,
+      .petition,
+      .note,
+      .contact-sheet,
+      .confession,
+      .choir .scripture {
+        color: #111;
+        background: #fff;
+        border: 1px solid #aaa;
+      }
+
+      .certificate-inner {
+        border-color: #888;
+      }
+
+      .confession figcaption,
+      .choir figcaption {
+        color: #555;
+      }
+
+      .plea {
+        font-size: 61pt;
+      }
+
+      .notes {
+        gap: 15px;
+      }
+
+      .note {
+        break-inside: avoid;
+      }
+
+      .ending {
+        margin-top: 30px;
+      }
+
+      .outside-footer {
+        padding-inline: 20px;
+      }
+    }
+  </style>
 </head>
 
 <body id="top">
-<a class="skip" href="#name">Перейти к анкете</a>
-<div class="grain" aria-hidden="true"></div>
+  <a class="skip" href="#name">Перейти к анкете</a>
 
-<!--
-  ВСТРОЕННАЯ ГРАФИКА.
-  Все элементы ниже переиспользуются через <use>.
-  Никаких внешних изображений или библиотек.
--->
-<svg class="symbol-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <defs>
-    <!-- Цветок: невинный орнамент, который становится частью декораций. -->
-    <symbol id="flower" viewBox="0 0 120 120">
-      <g fill="#eee6c9" stroke="#443421" stroke-width="1.2">
-        <ellipse cx="60" cy="24" rx="9" ry="22"/>
-        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(30 60 60)"/>
-        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(60 60 60)"/>
-        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(90 60 60)"/>
-        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(120 60 60)"/>
-        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(150 60 60)"/>
-        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(180 60 60)"/>
-        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(210 60 60)"/>
-        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(240 60 60)"/>
-        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(270 60 60)"/>
-        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(300 60 60)"/>
-        <ellipse cx="60" cy="24" rx="9" ry="22" transform="rotate(330 60 60)"/>
-      </g>
-      <circle cx="60" cy="60" r="24" fill="currentColor" stroke="#443421" stroke-width="2"/>
-      <circle cx="60" cy="60" r="18" fill="none" stroke="#443421"/>
-      <path d="M60 44V76M44 60H76M49 49L71 71M71 49L49 71"
-        stroke="#443421" stroke-width="1.5"/>
-    </symbol>
+  <div class="grain" aria-hidden="true"></div>
 
-    <symbol id="eye" viewBox="0 0 200 120">
-      <path
-        d="M7 60Q100-16 193 60Q100 135 7 60Z"
-        fill="#eee8cd" stroke="#251c29" stroke-width="5"/>
-      <path
-        d="M13 60Q100 1 187 60M13 60Q100 119 187 60"
-        fill="none" stroke="#756f55" stroke-width="2"/>
-      <circle cx="100" cy="60" r="37" fill="currentColor" stroke="#251c29" stroke-width="4"/>
-      <circle cx="100" cy="60" r="24" fill="none" stroke="#251c29" stroke-width="2"/>
-      <ellipse cx="100" cy="60" rx="10" ry="27" fill="#171320"/>
-      <circle cx="91" cy="46" r="6" fill="#f7efd7"/>
-      <path d="M29 39L21 24M54 23L49 7M82 15L81 1M117 15L120 1M147 24L155 8M171 40L181 25"
-        stroke="#251c29" stroke-width="4"/>
-    </symbol>
-
-    <symbol id="scissors" viewBox="0 0 160 270">
-      <path
-        d="M74 122L23 259L82 155L137 255L90 121Z"
-        fill="#b8c2b6" stroke="#28362a" stroke-width="4"/>
-      <path d="M75 124L45 78M88 124L119 76"
-        stroke="currentColor" stroke-width="15"/>
-      <ellipse cx="38" cy="49" rx="27" ry="36"
-        fill="none" stroke="#223828" stroke-width="16"
-        transform="rotate(-18 38 49)"/>
-      <ellipse cx="38" cy="49" rx="27" ry="36"
-        fill="none" stroke="currentColor" stroke-width="10"
-        transform="rotate(-18 38 49)"/>
-      <ellipse cx="123" cy="48" rx="27" ry="36"
-        fill="none" stroke="#223828" stroke-width="16"
-        transform="rotate(18 123 48)"/>
-      <ellipse cx="123" cy="48" rx="27" ry="36"
-        fill="none" stroke="currentColor" stroke-width="10"
-        transform="rotate(18 123 48)"/>
-      <circle cx="82" cy="129" r="10" fill="#ddd8b6" stroke="#28362a" stroke-width="3"/>
-      <path d="M77 129H87" stroke="#28362a" stroke-width="2"/>
-    </symbol>
-
-    <symbol id="berry" viewBox="0 0 130 155">
-      <path
-        d="M65 24C20-6-5 49 16 88Q38 139 65 149Q96 134 116 86C139 28 105-4 65 24Z"
-        fill="#f02473" stroke="#55293c" stroke-width="3"/>
-      <path d="M65 28L26 14L49 37L32 49L65 39L96 49L81 33L105 14Z"
-        fill="#a9d443" stroke="#364324" stroke-width="2"/>
-      <path d="M65 29Q55 8 72 3" fill="none" stroke="#526d2c" stroke-width="5"/>
-      <g fill="#f6e9af" stroke="#763043" stroke-width="1">
-        <ellipse cx="35" cy="58" rx="3.5" ry="7" transform="rotate(-17 35 58)"/>
-        <ellipse cx="64" cy="59" rx="3.5" ry="7"/>
-        <ellipse cx="94" cy="59" rx="3.5" ry="7" transform="rotate(17 94 59)"/>
-        <ellipse cx="26" cy="83" rx="3" ry="6" transform="rotate(-22 26 83)"/>
-        <ellipse cx="51" cy="85" rx="3.5" ry="7"/>
-        <ellipse cx="79" cy="85" rx="3.5" ry="7"/>
-        <ellipse cx="102" cy="83" rx="3" ry="6" transform="rotate(22 102 83)"/>
-        <ellipse cx="43" cy="109" rx="3" ry="6" transform="rotate(-15 43 109)"/>
-        <ellipse cx="67" cy="112" rx="3" ry="6"/>
-        <ellipse cx="86" cy="109" rx="3" ry="6" transform="rotate(15 86 109)"/>
-        <ellipse cx="64" cy="132" rx="2.5" ry="5"/>
-      </g>
-    </symbol>
-
-    <symbol id="bow" viewBox="0 0 230 200">
-      <g fill="currentColor" stroke="#59203d" stroke-width="3">
-        <path d="M111 66Q38-5 11 26Q-7 58 18 95Q47 111 112 79Z"/>
-        <path d="M118 66Q192-5 219 26Q238 58 212 95Q182 111 117 79Z"/>
-        <path d="M105 78Q96 125 40 169L68 172L76 195Q116 145 119 87Z"/>
-        <path d="M125 79Q133 126 189 171L164 175L157 195Q117 146 112 87Z"/>
-        <ellipse cx="114" cy="72" rx="18" ry="22"/>
-      </g>
-      <path
-        d="M23 37L96 64M20 88L96 77M207 38L134 64M209 88L135 77M106 98L76 163M125 102L157 162"
-        fill="none" stroke="#ff9cb8" stroke-width="3" opacity=".65"/>
-    </symbol>
-
-    <symbol id="stairs" viewBox="0 0 360 500">
-      <g fill="#eee7cc" stroke="#292334" stroke-width="3">
-        <path d="M145 0H210V32H145Z"/>
-        <path d="M133 32H220V65H133Z"/>
-        <path d="M119 65H230V99H119Z"/>
-        <path d="M106 99H243V135H106Z"/>
-        <path d="M93 135H255V173H93Z"/>
-        <path d="M79 173H269V214H79Z"/>
-        <path d="M65 214H284V258H65Z"/>
-        <path d="M51 258H299V305H51Z"/>
-        <path d="M35 305H316V357H35Z"/>
-        <path d="M18 357H334V415H18Z"/>
-        <path d="M0 415H355V483H0Z"/>
-      </g>
-      <g fill="#38303f">
-        <path d="M145 20H210V32H145ZM133 51H220V65H133Z"/>
-        <path d="M119 84H230V99H119ZM106 118H243V135H106Z"/>
-        <path d="M93 155H255V173H93ZM79 194H269V214H79Z"/>
-        <path d="M65 235H284V258H65ZM51 279H299V305H51Z"/>
-        <path d="M35 328H316V357H35ZM18 383H334V415H18Z"/>
-        <path d="M0 447H355V483H0Z"/>
-      </g>
-      <path d="M163 2L73 481M193 2L282 481"
-        stroke="#8a7b62" fill="none" stroke-width="2"/>
-    </symbol>
-
-    <!-- Условная гравюра агнца. -->
-    <symbol id="lamb" viewBox="0 0 280 275">
-      <g fill="none" stroke="currentColor">
-        <path d="M22 250V113Q22 41 140 10Q258 41 258 113V250Z"/>
-        <path d="M32 240V115Q32 52 140 22Q248 52 248 115V240Z" opacity=".5"/>
-        <circle cx="140" cy="133" r="91"/>
-        <circle cx="140" cy="133" r="84" opacity=".45"/>
-        <path d="M140 30V49M140 216V235M37 133H55M225 133H243"/>
-        <path d="M65 57L79 74M201 192L215 210M66 209L80 191M201 75L215 58"/>
-      </g>
-
-      <path d="M175 68V214" stroke="currentColor" stroke-width="3"/>
-      <path d="M162 84H188" stroke="currentColor" stroke-width="3"/>
-      <path d="M178 91Q200 81 229 96V128Q205 114 178 125Z"
-        fill="currentColor" opacity=".16"/>
-      <path d="M178 91Q200 81 229 96V128Q205 114 178 125Z"
-        fill="none" stroke="currentColor"/>
-      <path d="M201 91V120M187 105H216" stroke="currentColor" stroke-width="2"/>
-
-      <circle cx="78" cy="117" r="34" fill="none" stroke="currentColor"/>
-      <circle cx="78" cy="117" r="29" fill="none" stroke="currentColor" opacity=".45"/>
-
-      <g fill="#f1e6ca" stroke="currentColor" stroke-width="2">
-        <path d="M109 168L102 213H119L127 174"/>
-        <path d="M168 172L176 214H190L186 162"/>
-        <path d="M127 173L132 207H144L143 175"/>
-        <path d="M178 143Q209 130 214 143Q215 155 199 159"/>
+  <!--
+    Все иллюстрации встроены в документ.
+    Они декоративные: содержание анкеты доступно без них.
+  -->
+  <svg
+    class="symbol-library"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <defs>
+      <pattern
+        id="engraving-hatch"
+        width="7"
+        height="7"
+        patternUnits="userSpaceOnUse"
+        patternTransform="rotate(24)"
+      >
         <path
-          d="M94 138Q106 112 145 113Q188 110 202 134
-             Q214 158 196 174Q174 190 132 181Q109 181 95 164Z"/>
-        <path
-          d="M91 139Q101 114 89 98Q75 86 61 99
-             L55 125Q58 145 75 152Q88 151 91 139Z"/>
-        <path d="M63 104Q43 94 42 107Q46 118 60 118"/>
-        <path d="M87 103Q105 93 110 105Q105 118 93 116"/>
-      </g>
+          d="M0 0V7"
+          fill="none"
+          stroke="#3e3424"
+          stroke-width="1"
+          opacity=".35"
+        />
+      </pattern>
 
-      <g fill="none" stroke="currentColor" opacity=".7">
-        <path d="M112 130q7-10 15 0q8-10 15 0q8-10 15 0q8-10 15 0q8-10 15 0"/>
-        <path d="M105 145q8-10 16 0q8-10 16 0q8-10 16 0q8-10 16 0q8-10 16 0"/>
-        <path d="M111 161q8-10 16 0q8-10 16 0q8-10 16 0q8-10 16 0"/>
-        <path d="M126 175q8-9 16 0q8-9 16 0q8-9 16 0"/>
-        <path d="M65 102q7-9 13 0q7-9 12 0"/>
-      </g>
+      <symbol id="engraved-lamb" viewBox="0 0 280 285">
+        <g fill="none" stroke="currentColor">
+          <path d="M24 259H256M36 265H244" stroke-width="1.5"/>
+          <path d="M50 238H230V259H50ZM42 226H238V238H42Z" stroke-width="2"/>
+          <path d="M54 230H226M62 243V255M72 243V255M82 243V255M92 243V255M102 243V255M112 243V255M122 243V255M132 243V255M142 243V255M152 243V255M162 243V255M172 243V255M182 243V255M192 243V255M202 243V255M212 243V255" stroke-width=".8"/>
 
-      <circle cx="66" cy="122" r="2.5" fill="currentColor"/>
-      <path d="M60 137L69 138M102 213H119M176 214H190M132 207H144"
-        stroke="currentColor" stroke-width="3"/>
-      <path d="M56 224Q140 205 221 225M61 229Q143 216 215 230"
-        fill="none" stroke="currentColor" opacity=".6"/>
-      <path d="M15 257H265M60 265H220" stroke="currentColor"/>
-    </symbol>
-  </defs>
-</svg>
+          <ellipse cx="197" cy="107" rx="43" ry="48" stroke-width="1"/>
+          <ellipse cx="197" cy="107" rx="37" ry="42" stroke-width=".7"/>
+          <path d="M197 52V29M197 161V150M146 106H131M262 106H246M161 67L151 55M233 67L245 54M158 144L145 156M235 144L247 157" stroke-width="1"/>
+          <path d="M197 66V147M163 105H232" stroke-width=".7"/>
 
-<header class="topbar">
-  <a class="brand" href="#top" aria-label="В начало анкеты">
-    <span class="brand-cross" aria-hidden="true">✝</span>
-    <span class="micro">
-      Личное свидетельство <span class="brand-extra">/ № 017</span>
-    </span>
-  </a>
+          <path d="M183 86V27M171 44H210" stroke-width="3"/>
+          <path d="M185 30C217 25 224 49 255 39L248 71C219 81 212 52 185 62Z" fill="#e8dec0" stroke-width="1.6"/>
+          <path d="M211 37V60M201 47H224" stroke-width="2"/>
+          <path d="M187 35C211 29 223 54 251 45M187 57C210 47 224 72 249 64" stroke-width=".7"/>
 
-  <div class="controls" id="controls" hidden>
-    <button
-      class="control"
-      id="effect-toggle"
-      type="button"
-      aria-label="Визуальные искажения"
-      aria-pressed="true"
-    ><span id="effect-label">Искажения: вкл.</span></button>
+          <path
+            d="M60 180C48 171 48 151 60 142
+               C58 130 71 120 83 123
+               C91 112 106 112 117 118
+               C130 108 147 115 152 122
+               C165 117 177 124 180 137
+               C191 142 195 157 187 169
+               C194 183 183 195 168 197
+               L89 199C73 199 63 193 60 180Z"
+            fill="#e8dec0"
+            stroke-width="2"
+          />
 
-    <button
-      class="control"
-      id="restore"
-      type="button"
-      title="Вернуться в начало и убрать накопленные повреждения"
-    >Собрать ↺</button>
-  </div>
+          <path d="M75 187L69 218H95L104 190M137 192L149 219H172L164 189" fill="#e8dec0" stroke-width="2"/>
+          <path d="M74 213L92 214M151 213L169 214M84 198L82 210M151 195L160 209" stroke-width="1"/>
 
-  <div class="top-progress" aria-hidden="true"></div>
-</header>
+          <path
+            d="M161 145C163 129 171 112 184 101
+               C193 94 210 96 218 108
+               L226 123L215 132
+               C209 143 197 149 185 146
+               L179 167"
+            fill="#e8dec0"
+            stroke-width="2"
+          />
 
-<div class="layout">
-  <aside class="index" aria-label="Оглавление анкеты">
-    <p class="index-title micro">Опись содержимого</p>
+          <path d="M177 108C166 95 155 98 160 109L176 120M209 105C217 92 231 92 226 104L218 113" fill="#e8dec0" stroke-width="1.6"/>
+          <path d="M214 118L225 123L217 126M208 126C209 132 206 135 202 135" stroke-width="1.2"/>
+          <path d="M190 118Q197 115 202 120" stroke-width="1.5"/>
+          <circle cx="198" cy="120" r="2" fill="currentColor" stroke="none"/>
 
-    <nav>
-      <a href="#name" aria-label="I. Имя, фамилия"><b>I</b><span>Имя</span></a>
-      <a href="#age" aria-label="II. Возраст"><b>II</b><span>Возраст</span></a>
-      <a href="#nature" aria-label="III. Сущность"><b>III</b><span>Сущность</span></a>
-      <a href="#status" aria-label="IV. Статус"><b>IV</b><span>Статус</span></a>
-      <a href="#appearance" aria-label="V. Внешность"><b>V</b><span>Внешность</span></a>
-      <a href="#personality" aria-label="VI. Характер"><b>VI</b><span>Характер</span></a>
-      <a href="#history" aria-label="VII. Предыстория"><b>VII</b><span>Предыстория</span></a>
-      <a href="#headcanons" aria-label="VIII. Хэдканоны"><b>VIII</b><span>Хэдканоны</span></a>
-      <a href="#user" aria-label="IX. Ваш юз"><b>IX</b><span>Связь</span></a>
-    </nav>
+          <path d="M63 148Q75 135 84 148T105 146T127 147T150 145M63 162Q74 150 86 162T109 162T133 161T158 158M70 178Q82 167 92 178T114 177T138 177T160 175M82 128Q91 122 100 132M112 126Q123 120 132 132M140 132Q150 124 159 137M90 189Q100 181 110 190M129 188Q140 181 151 188" stroke-width="1.2"/>
 
-    <div class="preservation">
-      <span class="micro">Сохранность формы</span>
-      <div class="preservation-meter" aria-hidden="true"><i></i></div>
-      <div id="condition">порядок соблюдён</div>
+          <path d="M68 149L75 144M73 153L80 147M89 151L95 145M108 152L115 146M128 151L135 145M147 151L154 145M74 168L80 162M92 169L99 163M116 169L123 163M139 169L146 163M90 184L97 179M111 185L118 179M135 184L142 179M177 131L181 124M181 136L185 128M186 139L190 132M190 143L195 135" stroke-width=".7"/>
+
+          <path d="M65 178C45 178 42 187 51 195M48 188L42 196" stroke-width="2"/>
+
+          <path d="M58 207C100 225 151 219 196 201L220 211L205 218C158 231 109 234 65 219Z" fill="#e8dec0" stroke-width="1.4"/>
+          <path d="M78 214C111 226 158 220 194 208" stroke-width=".8"/>
+        </g>
+      </symbol>
+
+      <symbol id="engraved-eye" viewBox="0 0 300 190">
+        <g fill="none" stroke="currentColor">
+          <path d="M150 8L290 174H10Z" stroke-width="2.5"/>
+          <path d="M150 21L277 168H23Z" stroke-width=".8"/>
+          <path d="M150 38L252 156H48Z" stroke-width=".8" opacity=".65"/>
+
+          <path
+            d="M57 112C82 81 118 68 150 69C183 68 218 84 244 112
+               C219 138 183 151 150 151C115 151 83 139 57 112Z"
+            fill="#ded3a6"
+            stroke-width="3"
+          />
+
+          <path d="M61 109C91 94 119 88 150 88C181 88 214 96 240 111" stroke-width="1"/>
+          <path d="M69 125C96 143 122 152 150 153C179 154 207 143 233 127" stroke-width="1.4"/>
+
+          <ellipse cx="150" cy="111" rx="31" ry="39" fill="currentColor" stroke-width="2"/>
+          <ellipse cx="150" cy="111" rx="23" ry="32" fill="#dad09f" stroke-width="1"/>
+          <ellipse cx="150" cy="111" rx="10" ry="29" fill="#171912" stroke-width="1.2"/>
+
+          <path d="M150 77V87M138 80L141 91M128 86L134 96M122 97L132 101M121 111H131M124 126L134 121M132 138L139 129M150 145V135M165 137L160 128M175 123L166 119M179 109H168M173 93L164 99M163 81L159 92" stroke-width="1"/>
+
+          <path d="M64 97L54 86M79 84L73 72M97 74L93 61M117 68L115 54M137 65L137 51M159 65L161 51M181 70L185 57M202 79L209 67M221 91L231 81" stroke-width="1.3"/>
+
+          <path d="M31 30L65 64M12 71L49 86M4 121L46 119M35 164L62 143M269 30L235 64M288 71L251 86M296 121L254 119M265 164L238 143M150 0V26" stroke-width="1"/>
+
+          <path d="M97 108Q106 104 115 107M186 108Q198 103 211 110M94 121L115 119M186 121L208 123" stroke-width=".8"/>
+        </g>
+      </symbol>
+
+      <symbol id="engraved-shears" viewBox="0 0 190 380">
+        <g stroke="currentColor" stroke-linejoin="round">
+          <path d="M84 217L38 6L105 198L111 237Z" fill="#d7ccaa" stroke-width="3"/>
+          <path d="M106 215L159 2L98 194L79 235Z" fill="#b5aa87" stroke-width="3"/>
+          <path d="M44 23L93 207M151 26L103 204" fill="none" stroke-width="1"/>
+          <path d="M48 40L72 83M52 57L79 105M58 81L84 129M64 109L90 154M128 93L142 64M120 125L137 89M113 158L129 125" fill="none" stroke-width=".8"/>
+
+          <path
+            d="M80 226C67 240 48 249 32 266
+               C6 293 9 344 36 357
+               C65 374 94 349 92 319
+               C90 292 74 283 80 269
+               L108 235Z"
+            fill="#3a3020"
+            stroke-width="4"
+          />
+
+          <path
+            d="M110 226C126 241 145 249 159 269
+               C183 298 179 345 151 358
+               C124 371 98 350 99 321
+               C100 294 117 283 111 269
+               L83 235Z"
+            fill="#3a3020"
+            stroke-width="4"
+          />
+
+          <ellipse cx="52" cy="315" rx="23" ry="34" fill="#c2b38b" stroke-width="3" transform="rotate(12 52 315)"/>
+          <ellipse cx="139" cy="315" rx="23" ry="34" fill="#c2b38b" stroke-width="3" transform="rotate(-12 139 315)"/>
+
+          <path d="M34 270Q53 255 73 249M119 250Q142 260 154 276M26 300Q20 328 40 344M165 300Q170 329 150 345" fill="none" stroke-width="1"/>
+
+          <circle cx="96" cy="222" r="14" fill="#b5a476" stroke-width="3"/>
+          <circle cx="96" cy="222" r="7" fill="#5a4b31" stroke-width="1"/>
+          <path d="M91 217L101 227" stroke="#d7ccaa" stroke-width="2"/>
+        </g>
+      </symbol>
+
+      <symbol id="engraved-lily" viewBox="0 0 220 430">
+        <g fill="none" stroke="currentColor">
+          <path d="M100 422C113 337 94 249 111 149" stroke-width="5"/>
+          <path d="M107 345C72 319 33 298 19 253C66 264 96 293 107 345Z" fill="#596039" stroke-width="2"/>
+          <path d="M106 295C129 243 163 224 202 211C193 254 152 279 106 295Z" fill="#596039" stroke-width="2"/>
+          <path d="M102 376C133 333 163 319 192 315C177 351 140 370 102 376Z" fill="#737846" stroke-width="2"/>
+
+          <path
+            d="M110 163C63 138 55 92 70 42C99 66 115 102 110 163Z"
+            fill="#ddd6af"
+            stroke-width="2"
+          />
+          <path
+            d="M111 161C107 108 132 62 175 30C178 89 151 135 111 161Z"
+            fill="#cfc79c"
+            stroke-width="2"
+          />
+          <path
+            d="M108 162C59 169 27 150 7 108C58 108 90 125 108 162Z"
+            fill="#ddd6af"
+            stroke-width="2"
+          />
+          <path
+            d="M111 163C152 127 190 123 216 145C184 176 146 181 111 163Z"
+            fill="#c4bf91"
+            stroke-width="2"
+          />
+          <path
+            d="M111 163C87 187 67 206 32 209C52 170 74 153 111 163Z"
+            fill="#d9d1a7"
+            stroke-width="2"
+          />
+          <path
+            d="M111 163C124 188 146 213 178 220C171 181 149 161 111 163Z"
+            fill="#cfc69c"
+            stroke-width="2"
+          />
+
+          <path d="M108 160L75 57M112 158L165 49M105 160L24 116M117 163L199 146M103 169L49 200M117 171L166 205" stroke-width="1.2"/>
+          <path d="M100 133L83 106M101 116L84 81M126 130L152 90M136 97L161 66M77 148L47 131M154 154L183 149M72 183L57 192M140 187L151 202" stroke-width=".8"/>
+
+          <path d="M111 161L111 105M109 160L91 111M113 161L135 114" stroke-width="2"/>
+          <ellipse cx="111" cy="103" rx="4" ry="9" fill="currentColor"/>
+          <ellipse cx="88" cy="109" rx="4" ry="9" fill="currentColor" transform="rotate(-20 88 109)"/>
+          <ellipse cx="137" cy="111" rx="4" ry="9" fill="currentColor" transform="rotate(23 137 111)"/>
+
+          <path d="M106 342L30 267M111 290L190 222M109 371L180 324" stroke-width="1.1"/>
+          <path d="M44 280L50 302M59 294L65 315M74 307L81 328M126 277L151 266M142 259L168 250M158 242L184 233M128 356L153 348M143 342L165 336" stroke-width=".7"/>
+        </g>
+      </symbol>
+
+      <symbol id="engraved-hand" viewBox="0 0 390 190">
+        <g stroke="currentColor" stroke-linejoin="round">
+          <path d="M4 31L82 44L71 161L2 176Z" fill="#392f22" stroke-width="3"/>
+          <path d="M55 39L93 44L91 165L57 166Z" fill="#d8cba6" stroke-width="2"/>
+          <path d="M65 47L69 157M77 46L79 158" fill="none" stroke-width="1"/>
+
+          <path
+            d="M92 57C121 55 143 34 171 32
+               L338 41C369 43 380 50 376 61
+               C373 70 357 72 339 70L212 67
+               C231 79 243 88 241 101
+               C258 108 259 123 247 133
+               C256 144 249 158 231 162
+               C209 175 181 173 166 166
+               C146 172 114 166 91 151Z"
+            fill="#d7c99f"
+            stroke-width="3"
+          />
+
+          <path d="M174 81C189 68 207 68 224 77M157 99C178 82 218 86 241 101M156 118C180 107 219 109 247 133M167 140C184 132 215 135 239 145M183 157C204 152 221 154 231 162" fill="none" stroke-width="1.6"/>
+          <path d="M336 45C335 53 335 61 339 67M345 46L368 50M351 56L369 58" fill="none" stroke-width="1"/>
+          <path d="M100 69L121 61M100 77L130 64M101 85L139 66M102 95L137 77M103 108L133 91M105 123L132 110M108 138L137 126M118 151L142 138M154 47L172 42M177 43L196 45M210 46L231 48M245 48L267 50M281 50L305 52M187 91L195 103M202 94L210 106M220 98L229 109M182 116L190 129M199 117L207 131M219 122L226 134M183 142L188 153M200 144L205 154" fill="none" stroke-width=".8"/>
+        </g>
+      </symbol>
+
+      <symbol id="engraved-thorns" viewBox="0 0 500 220">
+        <g fill="none" stroke="currentColor" stroke-linejoin="round">
+          <path d="M8 129C75 31 165 47 238 99C326 162 388 156 490 72" stroke-width="8"/>
+          <path d="M7 158C80 75 154 93 230 139C323 194 416 162 486 107" stroke-width="5"/>
+          <path d="M27 110L20 48L60 77M74 66L81 16L107 63M128 66L165 29L159 79M180 80L213 48L204 99M228 104L269 80L253 125M278 137L319 114L309 151M331 151L360 112L361 153M381 142L400 92L411 128M432 113L444 63L456 97M74 102L84 153L109 107M133 106L156 164L166 117M195 124L210 186L231 145M265 157L275 211L300 170M330 172L356 213L363 168M389 158L428 192L421 143" fill="#5f5932" stroke-width="2"/>
+          <path d="M15 132C90 47 161 58 236 108C321 164 392 149 482 80M21 157C83 87 148 99 229 145C310 190 411 165 474 115" stroke-width="1"/>
+        </g>
+      </symbol>
+
+      <symbol id="engraved-stairs" viewBox="0 0 380 530">
+        <g stroke="currentColor" stroke-width="2">
+          <path d="M134 18H246V72H134Z" fill="#d1c194"/>
+          <path d="M116 72H264V128H116Z" fill="#28261c"/>
+          <path d="M116 72L134 48H246L264 72Z" fill="#dfd0a6"/>
+          <path d="M96 128H284V190H96Z" fill="#28261c"/>
+          <path d="M96 128L116 101H264L284 128Z" fill="#cbbd91"/>
+          <path d="M73 190H307V260H73Z" fill="#28261c"/>
+          <path d="M73 190L96 160H284L307 190Z" fill="#dfd0a6"/>
+          <path d="M49 260H331V340H49Z" fill="#28261c"/>
+          <path d="M49 260L73 224H307L331 260Z" fill="#cbbd91"/>
+          <path d="M24 340H356V428H24Z" fill="#28261c"/>
+          <path d="M24 340L49 298H331L356 340Z" fill="#dfd0a6"/>
+          <path d="M2 428H378V526H2Z" fill="#28261c"/>
+          <path d="M2 428L24 385H356L378 428Z" fill="#cbbd91"/>
+          <path d="M16 445H364M17 452H363M42 356H340M43 363H339M68 276H314M69 283H313M93 205H291M94 212H290M114 144H270M115 151H269M133 86H250M134 93H249" fill="none" stroke-width=".8"/>
+          <path d="M187 18V50M164 35H213" fill="none" stroke-width="3"/>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top" aria-label="К обложке">
+        <span class="brand-long">Личное свидетельство / </span>№ 017
+        <span class="brand-long"> · Лондон, 1852</span>
+      </a>
+
+      <div class="controls" id="controls" hidden>
+        <button
+          class="control"
+          id="effect-toggle"
+          type="button"
+          aria-pressed="true"
+        >
+          <span id="effect-label">Искажения: вкл.</span>
+        </button>
+
+        <button
+          class="control"
+          id="restore"
+          type="button"
+          title="Вернуться к началу и восстановить первоначальный вид"
+        >
+          Собрать ↺
+        </button>
+      </div>
     </div>
 
-    <blockquote class="aside-quote">
-      «Сердце чистое сотвори во мне, Боже».
-      <cite>Псалом 50:12</cite>
-    </blockquote>
-  </aside>
+    <div class="top-progress" aria-hidden="true"></div>
+  </header>
 
-  <main>
-    <article class="paper" aria-label="Анкета Марии Вельской">
+  <div class="layout">
+    <aside class="index" aria-label="Оглавление анкеты">
+      <p class="index-caption">Порядок свидетельства</p>
 
-      <div class="document">
-        <!-- ОБЛОЖКА -->
-        <header class="hero">
-          <div class="archive-line micro">
-            <span>Приходской архив / личное</span>
-            <span>Один экземпляр</span>
-          </div>
+      <nav aria-label="Разделы">
+        <a href="#name" aria-label="I. Имя, фамилия">
+          <b>I</b><span class="nav-name">Имя</span>
+        </a>
+        <a href="#age" aria-label="II. Возраст">
+          <b>II</b><span class="nav-name">Возраст</span>
+        </a>
+        <a href="#nature" aria-label="III. Сущность">
+          <b>III</b><span class="nav-name">Сущность</span>
+        </a>
+        <a href="#status" aria-label="IV. Статус">
+          <b>IV</b><span class="nav-name">Статус</span>
+        </a>
+        <a href="#appearance" aria-label="V. Внешность">
+          <b>V</b><span class="nav-name">Внешность</span>
+        </a>
+        <a href="#personality" aria-label="VI. Характер">
+          <b>VI</b><span class="nav-name">Характер</span>
+        </a>
+        <a href="#history" aria-label="VII. Предыстория">
+          <b>VII</b><span class="nav-name">Предыстория</span>
+        </a>
+        <a href="#headcanons" aria-label="VIII. Хэдканоны">
+          <b>VIII</b><span class="nav-name">Хэдканоны</span>
+        </a>
+        <a href="#user" aria-label="IX. Ваш юз">
+          <b>IX</b><span class="nav-name">Вне истории</span>
+        </a>
+      </nav>
 
-          <div class="emblem" aria-hidden="true">
-            <svg viewBox="0 0 280 275"><use href="#lamb"/></svg>
-            <svg class="emblem-flower a" viewBox="0 0 120 120">
-              <use href="#flower"/>
-            </svg>
-            <svg class="emblem-flower b" viewBox="0 0 120 120">
-              <use href="#flower"/>
-            </svg>
-          </div>
-
-          <div class="hero-counterprint" aria-hidden="true">
-            хорошая девочка / хорошая девочка
-          </div>
-
-          <p class="eyebrow micro">Во имя любви и страха</p>
-          <h1>Мария Вельская</h1>
-
-          <p class="hero-subtitle">
-            Она научилась складывать руки для молитвы<br>
-            раньше, чем защищать ими себя.
-          </p>
-
-          <blockquote class="hero-quote">
-            <p>«Блаженны чистые сердцем, ибо они Бога узрят».</p>
-            <cite>Евангелие от Матфея 5:8</cite>
-          </blockquote>
-
-          <p class="content-note">
-            Религиозная травма · семейный контроль · тревожные состояния.<br>
-            При чтении оформление становится насыщенным и хаотичным.
-            Искажения можно отключить.
-          </p>
-
-          <noscript>
-            <p class="content-note">
-              JavaScript отключён: анкета доступна без нарастания эффектов.
-            </p>
-          </noscript>
-        </header>
-
-        <!-- I -->
-        <section class="entry" id="name">
-          <div class="entry-head">
-            <span class="roman">I.</span>
-            <h2>Имя, фамилия</h2>
-          </div>
-
-          <p class="lead">Мария Анна Вельская.</p>
-          <p>
-            Для прихожан — Мария. Для матери — Марианна,
-            когда та недовольна. Ей нравится простое «Маша»:
-            в этом имени будто не нужно сразу выпрямлять спину.
-            Но сама она почти никогда так не представляется.
-          </p>
-
-          <blockquote class="verse">
-            <p>«Не бойся, ибо Я с тобою».</p>
-            <cite>Исаия 41:10</cite>
-          </blockquote>
-        </section>
-
-        <div class="facts">
-          <!-- II -->
-          <section class="entry" id="age">
-            <div class="entry-head">
-              <span class="roman">II.</span>
-              <h2>Возраст</h2>
-            </div>
-
-            <p class="lead">Двадцать три.</p>
-            <p class="small">
-              День рождения — 14 февраля.<br>
-              Поздравления до сих пор немного смущают:
-              за сам факт существования её хвалили редко.
-            </p>
-          </section>
-
-          <!-- III -->
-          <section class="entry" id="nature">
-            <div class="entry-head">
-              <span class="roman">III.</span>
-              <h2>Сущность</h2>
-            </div>
-
-            <p class="lead">Человек.</p>
-            <p class="small">
-              Не святая. Не знамение.<br>
-              Не наказание за чужой грех.<br>
-              Просто человек.
-            </p>
-          </section>
+      <div class="preservation">
+        <span class="preservation-label">Сохранность формы</span>
+        <div class="preservation-track" aria-hidden="true">
+          <div class="preservation-meter"></div>
         </div>
-
-        <!-- IV -->
-        <section class="entry" id="status">
-          <div class="entry-head">
-            <span class="roman">IV.</span>
-            <h2>Статус</h2>
-          </div>
-
-          <p class="lead">Хранительница приходского архива.</p>
-          <p>
-            Бывшая певчая. Переписывает старые записи,
-            реставрирует переплёты, вклеивает выпавшие страницы.
-            Живёт в комнате над закрытой воскресной школой.
-            Хорошо знает, как обращаться с вещами,
-            которые могут рассыпаться от неосторожного прикосновения.
-          </p>
-
-          <span class="stamp">Допущена к хранению. Не к толкованию.</span>
-
-          <blockquote class="verse">
-            <p>
-              «Придите ко Мне все труждающиеся и обремененные,
-              и Я успокою вас».
-            </p>
-            <cite>Евангелие от Матфея 11:28</cite>
-          </blockquote>
-        </section>
-
-        <!-- V -->
-        <section class="entry unstable" id="appearance">
-          <div class="margin-order intrusion" aria-hidden="true">
-            ворот выше / голос тише / не привлекай внимания
-          </div>
-
-          <div class="entry-inner">
-            <div class="entry-head">
-              <span class="roman">V.</span>
-              <h2 class="echo-title" data-echo="Внешность">Внешность</h2>
-            </div>
-
-            <p>
-              Рост — 167 сантиметров. Светло-русые волосы,
-              собранные в тугую косу. Серо-зелёные глаза.
-              Тонкие запястья, чуть сутулые плечи, сухие губы.
-              На пальцах — следы бумаги и переплётного клея.
-            </p>
-            <p>
-              Молочные блузы, коричневые юбки ниже колен,
-              выцветший кардиган. Маленький серебряный крест
-              спрятан под тканью. Цепочка рвалась несколько раз;
-              Мария всякий раз чинила её сама.
-            </p>
-            <p>
-              Кажется <span class="correction">умиротворённой</span>.
-              Улыбается быстро, почти предупредительно.
-              Даже сидя одна, занимает только край стула.
-            </p>
-
-            <div class="hand-note hand intrusion" aria-hidden="true">
-              не спокойная.<br>
-              просто очень старается не мешать.
-            </div>
-
-            <blockquote class="verse">
-              <p>
-                «Человек смотрит на лице, а Господь смотрит на сердце».
-              </p>
-              <cite>Первая книга Царств 16:7</cite>
-            </blockquote>
-          </div>
-        </section>
-
-        <!-- VI -->
-        <section class="entry unravel" id="personality">
-          <svg class="first-eye" viewBox="0 0 200 120" aria-hidden="true">
-            <use href="#eye"/>
-          </svg>
-
-          <div class="entry-inner">
-            <div class="entry-head">
-              <span class="roman">VI.</span>
-              <h2 class="echo-title" data-echo="Характер">Характер</h2>
-            </div>
-
-            <div class="traits">
-              <span>внимательная</span>
-              <span>бережная</span>
-              <span>настороженная</span>
-            </div>
-
-            <p>
-              Она замечает, кто замёрз, кто давно не ел,
-              кто улыбается из вежливости. Умеет быть рядом
-              без лишних вопросов. Любит сухой юмор,
-              ботанические атласы и людей, с которыми можно
-              молчать, не заслуживая это молчание.
-            </p>
-            <p>
-              Но чужое недовольство для неё почти физически громкое.
-              Пауза в разговоре становится обвинением.
-              Непрочитанное сообщение — предвестием беды.
-              Собственную злость она так быстро превращает в стыд,
-              что часто не успевает понять, на кого злилась.
-            </p>
-
-            <div class="proof">
-              <span class="micro">Прежняя формулировка</span>
-              <del>Послушная. Не склонна к конфликтам.</del>
-              <ins>Не верит, что после отказа её продолжат любить.</ins>
-            </div>
-
-            <p>
-              Иногда повторяет молитву до ощущения, что всё
-              произнесено правильно. Потом винит себя за то,
-              что думала о правильности, а не о Боге.
-              Начинает сначала. Если устала — значит,
-              недостаточно старалась.
-            </p>
-
-            <blockquote class="verse">
-              <p>
-                «В любви нет страха,
-                но совершенная любовь изгоняет страх».
-              </p>
-              <cite>Первое послание Иоанна 4:18</cite>
-            </blockquote>
-
-            <div class="hand-note hand intrusion" aria-hidden="true">
-              тогда что это со мной?
-            </div>
-
-            <div class="foreign-strip" aria-hidden="true">
-              ЕЩЁ РАЗ · ТЫ ОТВЛЕКЛАСЬ · ЕЩЁ РАЗ
-            </div>
-          </div>
-        </section>
+        <span id="condition" role="status" aria-live="polite">
+          порядок соблюдён
+        </span>
       </div>
 
-      <!-- VII: НАЧИНАЕТСЯ КОЛЛАЖ -->
-      <section class="stage" id="history">
+      <p class="index-motto">
+        Всё должно<br>
+        быть на своём<br>
+        месте.
+      </p>
+    </aside>
 
-        <!-- Декорации не попадают в озвучивание экранным диктором. -->
-        <div class="stage-set" aria-hidden="true">
-          <div class="curtain"></div>
+    <main>
+      <article class="paper" aria-label="Анкета Марии Анны Вельской">
+        <div class="document">
+          <header class="hero">
+            <div class="archive-line">
+              <span>Приходские бумаги / личное</span>
+              <span>Один экземпляр<br>Не для оглашения</span>
+            </div>
 
-          <div class="portal">
-            <svg viewBox="0 0 200 120"><use href="#eye"/></svg>
-          </div>
+            <p class="hero-kicker">Во имя любви и страха</p>
 
-          <svg class="stairs" viewBox="0 0 360 500">
-            <use href="#stairs"/>
-          </svg>
+            <div class="emblem" aria-hidden="true">
+              <svg viewBox="0 0 280 285" focusable="false">
+                <use href="#engraved-lamb"></use>
+              </svg>
+            </div>
 
-          <div class="ribbon one">
-            БУДЬ ХОРОШЕЙ · БУДЬ ХОРОШЕЙ · БУДЬ ХОРОШЕЙ
-          </div>
-          <div class="ribbon two">
-            ЭТО ДЛЯ ТВОЕГО БЛАГА · ЭТО ДЛЯ ТВОЕГО БЛАГА
-          </div>
-          <div class="ribbon three">
-            НЕ ПЛАЧЬ · НЕ СПОРЬ · НЕ ЗЛИСЬ · НЕ ПЛАЧЬ
-          </div>
+            <div class="hero-counterprint" aria-hidden="true">
+              Безупречна<br>безупречна
+            </div>
 
-          <div class="checker-floor"></div>
+            <h1><span>Мария</span>Вельская</h1>
 
-          <svg class="prop scissors-a" viewBox="0 0 160 270">
-            <use href="#scissors"/>
-          </svg>
-          <svg class="prop berry-a" viewBox="0 0 130 155">
-            <use href="#berry"/>
-          </svg>
-          <svg class="prop flower-a" viewBox="0 0 120 120">
-            <use href="#flower"/>
-          </svg>
-          <svg class="prop bow-a" viewBox="0 0 230 200">
-            <use href="#bow"/>
-          </svg>
-          <svg class="prop eye-a" viewBox="0 0 200 120">
-            <use href="#eye"/>
-          </svg>
-          <svg class="prop berry-b" viewBox="0 0 130 155">
-            <use href="#berry"/>
-          </svg>
-        </div>
+            <p class="hero-subtitle">
+              Она научилась складывать руки для молитвы раньше,
+              чем защищать ими себя.
+            </p>
 
-        <div class="stage-content">
-          <header class="history-header">
-            <span class="history-label">VII / порядок изложения утрачен</span>
+            <p class="place">Лондон · 1852</p>
 
-            <h2 aria-label="Предыстория">
-              <span aria-hidden="true">Пред</span>
-              <span aria-hidden="true">ыст</span>
-              <span aria-hidden="true">ория</span>
-            </h2>
+            <figure class="scripture hero-quote">
+              <blockquote>
+                <p>«Сердце чистое сотвори во мне, Боже».</p>
+              </blockquote>
+              <figcaption>Псалом 50:12</figcaption>
+            </figure>
 
-            <p class="history-subtitle">
-              Всё было очень красиво.<br>
-              Это почему-то важно добавить.
+            <p class="content-note">
+              Примечание читателю: религиозное принуждение,
+              семейный контроль, тревожные состояния.
             </p>
           </header>
 
-          <div class="fragment a">
-            <span class="tape" aria-hidden="true"></span>
-            <h3>01. Восемь лет / золото на потолке</h3>
+          <section class="entry" id="name" aria-labelledby="name-title">
+            <div class="entry-inner">
+              <h2 id="name-title">
+                <span class="roman">I.</span> Имя, фамилия
+              </h2>
 
-            <p>
-              В детстве Мария любила церковь.
-              Пахло воском и мокрыми пальто.
-              Высоко под куполом пели невидимые люди,
-              и ей казалось, что у света есть голос.
-            </p>
-            <p>
-              Она любила агнца на старом витраже.
-              Цветы вокруг него. Маленькое знамя.
-              Спрашивала, почему ягнёнок такой грустный,
-              если он хороший.
-            </p>
-            <p>
-              Однажды мать объяснила, что Бог видит всё.
-              Не только поступки. Каждую мысль.
-              Даже ту, которую Мария не хотела думать.
-            </p>
-
-            <div class="foreign-voice">
-              <span class="micro">Запомнившиеся слова матери</span>
-              <p>«От меня скроешь. От Него — нет».</p>
-            </div>
-
-            <p>
-              После этого у девочки не осталось комнаты,
-              где можно было закрыть дверь.
-            </p>
-
-            <blockquote class="verse">
-              <p>«Господи! Ты испытал меня и знаешь».</p>
-              <cite>Псалом 138:1</cite>
-            </blockquote>
-          </div>
-
-          <div class="fragment b">
-            <h3>02. Тринадцать лет / праздничное платье</h3>
-
-            <p>
-              На фотографиях она нарядная. Белый воротничок,
-              лента в волосах, ладони одна поверх другой.
-              Перед снимком ей сказали перестать портить всем день.
-              На снимке это не видно.
-            </p>
-            <p>
-              Слёзы называли жалостью к себе.
-              Несогласие — неблагодарностью.
-              Злость — гордыней.
-              У каждого чувства находилось имя,
-              после которого Мария должна была извиниться.
-            </p>
-            <p>
-              Иногда мать переставала с ней разговаривать.
-              Мария ходила следом и перечисляла,
-              в чём могла быть виновата.
-              Если угадать правильно, тишина закончится.
-            </p>
-
-            <div class="certificate">
-              <del>Я была трудным ребёнком.</del>
-              <strong>Я была ребёнком.</strong>
-            </div>
-          </div>
-
-          <div class="choir">
-            <div class="choir-noise" aria-hidden="true">
-              <span>ещё раз</span>
-              <span>не отвлекайся</span>
-              <span>ты же хорошая</span>
-              <span>ещё раз</span>
-            </div>
-
-            <blockquote class="choir-quote">
-              <p>«Бог есть любовь».</p>
-              <cite>Первое послание Иоанна 4:8</cite>
-            </blockquote>
-          </div>
-
-          <div class="fragment c">
-            <span class="tape" aria-hidden="true"></span>
-            <h3>03. Девятнадцать лет / хор не остановился</h3>
-
-            <p>
-              Она помнит не всю службу.
-              Помнит ворот, который вдруг стал слишком тесным.
-              Воздух, который никак не доходил до лёгких.
-              Чужое пение, продолжавшееся так спокойно,
-              будто ничего не происходило.
-            </p>
-            <p>
-              Витраж расплылся в цветные пятна.
-              Лица на иконах казались бесконечно далёкими.
-              Мария пыталась прочитать знакомую молитву,
-              но слышала только: не мешай, не мешай, не мешай.
-            </p>
-            <p>
-              Позже это можно было назвать панической атакой.
-              Дома назвали недостатком веры.
-            </p>
-            <p>
-              Она перестала петь. Начала спать при свете,
-              проверять замок, вздрагивать от звонка телефона.
-              Потом просила прощения за то,
-              что замок успокаивает её лучше молитвы.
-            </p>
-
-            <blockquote class="verse">
-              <p>
-                «Боже мой! Боже мой! для чего Ты оставил меня?»
+              <p class="full-name">
+                Мария Анна Вельская
+                <span class="latin-name" lang="en">Maria Anna Welska</span>
               </p>
-              <cite>Псалом 21:2</cite>
-            </blockquote>
+
+              <p class="small-copy">
+                Дочь польского переплётчика и англичанки.
+                Родилась в Лондоне; выросла в вере матери — англиканской.
+                В приходе её чаще называют мисс Вельской.
+              </p>
+
+              <p class="small-copy">
+                Для матери она Мэри-Энн, особенно когда та недовольна.
+                Имя Мария, оставшееся от отца, кажется ей одной
+                из немногих вещей, которые ещё не успели исправить.
+              </p>
+
+              <figure class="scripture">
+                <blockquote>
+                  <p>«Блаженны чистые сердцем, ибо они Бога узрят».</p>
+                </blockquote>
+                <figcaption>Евангелие от Матфея 5:8</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <div class="facts">
+            <section class="entry" id="age" aria-labelledby="age-title">
+              <div class="entry-inner">
+                <h2 id="age-title">
+                  <span class="roman">II.</span> Возраст
+                </h2>
+
+                <p class="large-fact">23 <small>года</small></p>
+
+                <p class="small-copy">
+                  Родилась 14 февраля 1829 года.
+                </p>
+
+                <p class="small-copy">
+                  О собственном дне рождения обычно вспоминает,
+                  когда приходится вписывать дату в чужую книгу.
+                </p>
+              </div>
+            </section>
+
+            <section class="entry" id="nature" aria-labelledby="nature-title">
+              <div class="entry-inner">
+                <h2 id="nature-title">
+                  <span class="roman">III.</span> Сущность
+                </h2>
+
+                <p>Человек.</p>
+
+                <p class="small-copy">
+                  Не святая. Не дурное предзнаменование.
+                  Не наказание, посланное кому-либо за грех.
+                </p>
+
+                <figure class="scripture">
+                  <blockquote>
+                    <p>«Не бойся, ибо Я с тобою».</p>
+                  </blockquote>
+                  <figcaption>Исаия 41:10</figcaption>
+                </figure>
+              </div>
+            </section>
           </div>
 
-          <aside class="child-letter" aria-label="Лист из детской тетради">
-            <svg class="letter-flower" viewBox="0 0 120 120" aria-hidden="true">
-              <use href="#flower"/>
-            </svg>
+          <section class="entry" id="status" aria-labelledby="status-title">
+            <div class="entry-inner">
+              <h2 id="status-title">
+                <span class="roman">IV.</span> Статус
+              </h2>
 
-            <span class="micro">Лист из детской тетради / без даты</span>
+              <p class="full-name">Хранительница приходских бумаг</p>
 
-            <p class="hand">
-              <span>Господи,</span>
-              <span>я правда</span>
-              <span>стараюсь.</span>
-            </p>
+              <p>
+                Не официальная должность — скорее, дело,
+                которое постепенно осталось за ней.
+                Мария чинит переплёты проповедей и приходских книг,
+                подшивает разрозненные листы,
+                переписывает ведомости пожертвований.
+              </p>
 
-            <p class="letter-sign hand">Ты ведь видишь?</p>
-          </aside>
+              <p>
+                Прежде пела в церковном хоре.
+                Теперь работает в небольшой переплётной мастерской
+                неподалёку от Уайтчепел-роуд
+                и снимает комнату над ней.
+              </p>
 
-          <div class="fragment d">
-            <h3>04. Двадцать три года / ключ с внутренней стороны</h3>
+              <p>
+                Не замужем. Старается зарабатывать достаточно,
+                чтобы это оставалось её собственным решением.
+              </p>
 
-            <p>
-              Комнату при архиве ей нашла пожилая певчая.
-              Та самая, которая в детстве приносила ей варежки
-              и ни разу не спросила, заслужила ли она их.
-            </p>
-            <p>
-              «Ключ останется у тебя», — сказала она.
-              Мария переспросила.
-            </p>
-            <p>
-              Теперь у Марии есть работа, чайник,
-              два цветка на подоконнике.
-              Она иногда ходит к психологу.
-              Иногда не отвечает матери.
-              Иногда после этого весь вечер ждёт,
-              что случится что-нибудь непоправимое.
-            </p>
-            <p>
-              Снаружи её жизнь стала тише.
-              Внутри всё ещё шумно:
-              материнские фразы, недочитанные молитвы,
-              попытки угадать, как стать достаточно хорошей.
-              Даже отдых порой превращается в проверку,
-              которую можно провалить.
-            </p>
-            <p>
-              Она всё ещё молится.
-              Но теперь пытается понять,
-              кому принадлежит голос,
-              который отвечает ей страхом.
-            </p>
+              <div class="stamp">
+                Допущена к хранению.<br>
+                Не к толкованию.
+              </div>
 
-            <blockquote class="verse">
-              <p>«Из глубины взываю к Тебе, Господи».</p>
-              <cite>Псалом 129:1</cite>
-            </blockquote>
-          </div>
+              <figure class="scripture">
+                <blockquote>
+                  <p>
+                    «Придите ко Мне все труждающиеся и обремененные,
+                    и Я успокою вас».
+                  </p>
+                </blockquote>
+                <figcaption>Евангелие от Матфея 11:28</figcaption>
+              </figure>
+            </div>
+          </section>
 
-          <p class="confession">
-            Если Ты — любовь,<br>
-            почему со мной говорили<br>
-            Твоим именем так жестоко?
-            <small>Приписано от руки. Не библейская цитата.</small>
-          </p>
+          <section
+            class="entry unstable"
+            id="appearance"
+            aria-labelledby="appearance-title"
+          >
+            <div class="counterprint" aria-hidden="true">V. Внешность</div>
+
+            <div class="entry-inner">
+              <h2 id="appearance-title">
+                <span class="roman">V.</span> Внешность
+              </h2>
+
+              <p>
+                Невысокая — приблизительно пять футов и шесть дюймов.
+                Светло-каштановые волосы разделены прямым пробором,
+                заплетены и убраны на затылке.
+                Серо-зелёные глаза, тонкие запястья,
+                чуть сведённые вперёд плечи.
+              </p>
+
+              <p>
+                Носит неброские платья из коричневой или серой шерсти,
+                светлые съёмные воротнички, тёмную шаль.
+                Перед выходом долго проверяет булавки у горла.
+                Зимой прячет подбородок в лентах поношенного капора.
+              </p>
+
+              <p>
+                Пальцы сухие, с мелкими следами иглы,
+                мучного клейстера и переплётного клея.
+                Манжеты выстираны так тщательно,
+                словно их белизна может что-нибудь доказать.
+              </p>
+
+              <p>
+                Небольшой серебряный крест носит под платьем.
+                Починенная цепочка уже дважды рвалась.
+                Она не выбросила ни одного звена.
+              </p>
+
+              <p>
+                С первого взгляда кажется
+                <span class="proof">умиротворённой</span>.
+                Даже в собственной комнате садится на край стула.
+              </p>
+
+              <p class="annotation">
+                Не спокойная.<br>
+                Просто очень старается не мешать.
+              </p>
+
+              <figure class="scripture">
+                <blockquote>
+                  <p>
+                    «Человек смотрит на лице,
+                    а Господь смотрит на сердце».
+                  </p>
+                </blockquote>
+                <figcaption>Первая книга Царств 16:7</figcaption>
+              </figure>
+            </div>
+
+            <div class="margin-order" aria-hidden="true">
+              ворот выше<br>
+              голос тише<br>
+              глаза вниз
+              <small>поправки материнской рукой</small>
+            </div>
+
+            <div class="first-eye" aria-hidden="true">
+              <svg viewBox="0 0 300 190" focusable="false">
+                <use href="#engraved-eye"></use>
+              </svg>
+            </div>
+          </section>
+
+          <section
+            class="entry unravel"
+            id="personality"
+            aria-labelledby="personality-title"
+          >
+            <div class="counterprint" aria-hidden="true">VI. Характер</div>
+
+            <div class="entry-inner">
+              <h2 id="personality-title">
+                <span class="roman">VI.</span> Характер
+              </h2>
+
+              <div class="traits" aria-label="Основные черты">
+                <span>внимательная</span>
+                <span>бережная</span>
+                <span>настороженная</span>
+              </div>
+
+              <p>
+                Мария замечает, когда собеседник замёрз,
+                когда у него дрожат руки и когда ему стыдно попросить
+                ещё кусок хлеба. Никогда не делает из этого зрелища.
+                Просто придвигает тарелку ближе.
+              </p>
+
+              <p>
+                Любит ботанические гравюры, суховатые шутки
+                и людей, рядом с которыми молчание
+                не считается проступком.
+                В книгах особенно ценит поля:
+                место, где позволено ничего не объяснять.
+              </p>
+
+              <p>
+                Но чужая пауза заставляет её торопливо вспоминать
+                каждое сказанное слово. Нераспечатанное письмо
+                от матери может пролежать перед ней до вечера.
+                По шагам на лестнице она пытается угадать,
+                имеет ли право оставаться в хорошем настроении.
+              </p>
+
+              <div class="correction">
+                <del>Послушная. Не склонна к конфликтам.</del>
+                <ins>Не верит, что после отказа её продолжат любить.</ins>
+              </div>
+
+              <p>
+                Она умеет сердиться, но почти никогда
+                не узнаёт это чувство вовремя.
+                Обычно оно успевает переодеться в стыд.
+              </p>
+
+              <p>
+                Иногда повторяет молитву с самого начала:
+                отвлеклась на скрип половиц, неверно расставила
+                ударения, подумала о завтрашних расходах.
+                Потом просит прощения за то, что заботилась
+                о правильности молитвы больше, чем о Боге.
+              </p>
+
+              <figure class="scripture">
+                <blockquote>
+                  <p>
+                    «В любви нет страха,
+                    но совершенная любовь изгоняет страх».
+                  </p>
+                </blockquote>
+                <figcaption>Первое послание Иоанна 4:18</figcaption>
+              </figure>
+
+              <p class="annotation">Тогда что это со мной?</p>
+
+              <div class="breach" aria-hidden="true">
+                Ещё раз · ты отвлеклась · ещё раз
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
 
-      <div class="afterworld">
-        <div class="bottom-props" aria-hidden="true">
-          <svg class="bottom-eye" viewBox="0 0 200 120">
-            <use href="#eye"/>
-          </svg>
-          <svg class="bottom-bow" viewBox="0 0 230 200">
-            <use href="#bow"/>
-          </svg>
-        </div>
+        <section class="stage" id="history" aria-labelledby="history-title">
+          <div class="stage-set" aria-hidden="true">
+            <div class="curtain"></div>
+            <div class="curtain-side left"></div>
+            <div class="curtain-side right"></div>
 
-        <!-- VIII -->
-        <section class="remains" id="headcanons">
-          <div class="entry-head">
-            <span class="roman">VIII.</span>
-            <h2>Хэдканоны</h2>
+            <div class="theatre-bill">
+              <small>Ежедневное представление / без права покинуть зал</small>
+              <strong>Благонравие</strong>
+              <small>В главной роли — хорошая дочь</small>
+            </div>
+
+            <div class="ocular-window">
+              <svg viewBox="0 0 300 190" focusable="false">
+                <use href="#engraved-eye"></use>
+              </svg>
+            </div>
+
+            <div class="ribbon one">
+              БУДЬ ДОСТОЙНА · БУДЬ ДОСТОЙНА
+            </div>
+
+            <div class="ribbon two">
+              ЭТО ДЛЯ ТВОЕГО БЛАГА
+            </div>
+
+            <div class="ribbon three">
+              НЕ ПЛАЧЬ · НЕ СПОРЬ · НЕ ЗЛИСЬ
+            </div>
+
+            <div class="prop shears-a">
+              <svg viewBox="0 0 190 380" focusable="false">
+                <use href="#engraved-shears"></use>
+              </svg>
+            </div>
+
+            <div class="prop lily-a">
+              <svg viewBox="0 0 220 430" focusable="false">
+                <use href="#engraved-lily"></use>
+              </svg>
+            </div>
+
+            <div class="prop hand-a">
+              <svg viewBox="0 0 390 190" focusable="false">
+                <use href="#engraved-hand"></use>
+              </svg>
+            </div>
+
+            <div class="prop eye-a">
+              <svg viewBox="0 0 300 190" focusable="false">
+                <use href="#engraved-eye"></use>
+              </svg>
+            </div>
+
+            <div class="prop thorns-a">
+              <svg viewBox="0 0 500 220" focusable="false">
+                <use href="#engraved-thorns"></use>
+              </svg>
+            </div>
+
+            <div class="prop lily-b">
+              <svg viewBox="0 0 220 430" focusable="false">
+                <use href="#engraved-lily"></use>
+              </svg>
+            </div>
+
+            <div class="altar-stairs">
+              <svg viewBox="0 0 380 530" focusable="false">
+                <use href="#engraved-stairs"></use>
+              </svg>
+            </div>
+
+            <div class="checker-floor"></div>
           </div>
 
-          <ol class="notes">
-            <li class="note">
-              Любит груши, но чаще покупает яблоки:
-              дешевле. За удовольствие ей всё ещё хочется
-              предъявить какую-нибудь уважительную причину.
-            </li>
-            <li class="note">
-              Когда чинит книгу, становится неожиданно уверенной.
-              Может коротко сказать: «Не трогайте, клей ещё не высох».
-              Потом сама удивляется.
-            </li>
-            <li class="note">
-              В детстве вырезала цветы из упаковок и вклеивала
-              в молитвослов. Несколько кривых ромашек
-              до сих пор лежат между страницами.
-            </li>
-            <li class="note">
-              Кормит дворовую кошку по имени Ева.
-              Когда та роняет что-нибудь со стола,
-              Мария говорит: «Да, я тоже так думаю».
-            </li>
-            <li class="note">
-              Во время грозы считает секунды между молнией и громом.
-              Конкретное расстояние успокаивает:
-              не всё невидимое находится прямо за спиной.
-            </li>
-            <li class="note">
-              Носит в книге открытку:
-              «Тебе не нужно заслуживать отдых».
-              Слова уже выучила. Поверить пока труднее.
-            </li>
-          </ol>
+          <div class="stage-content">
+            <header class="history-header">
+              <p class="eyebrow">VII / порядок изложения утрачен</p>
+
+              <h2 id="history-title">
+                <span class="sr-only">VII. Предыстория</span>
+                <span aria-hidden="true">
+                  <span class="history-number">VII.</span>
+                  <span class="history-word"><span>Пред</span><span>ыст</span><span>ория</span></span>
+                </span>
+              </h2>
+
+              <p class="history-intro">
+                Всё было очень красиво.<br>
+                Это почему-то важно добавить.
+              </p>
+
+              <p class="voice-key">
+                Приказы на лентах — усвоенные человеческие голоса.
+                Не слова Писания.
+              </p>
+            </header>
+
+            <section class="fragment a" aria-labelledby="history-a">
+              <span class="tape" aria-hidden="true"></span>
+
+              <div class="fragment-label">
+                <span>01 / 1837 год</span>
+                <span>Восемь лет</span>
+              </div>
+
+              <h3 id="history-a">Золото над головой</h3>
+
+              <p>
+                Сначала церковь была местом, где Марии нравилось.
+                Там пахло влажной шерстью, деревом и воском.
+                Свет собирался на краях букв в молитвеннике.
+                Взрослые пели вместе, и от этого казалось,
+                что мир хотя бы на час знает, что делает.
+              </p>
+
+              <p>
+                В книге матери был агнец с маленьким знаменем.
+                Мария подолгу рассматривала гравюру:
+                животное выглядело тихим и почему-то печальным.
+                Ей хотелось дорисовать ему траву.
+              </p>
+
+              <p>
+                Отца уже не было. Мать говорила,
+                что теперь особенно важно не причинять ей забот.
+                Бог, объясняла она, видит не только поступки,
+                но и мысли — даже те, которые пришли нечаянно.
+              </p>
+
+              <blockquote class="foreign-voice">
+                «От меня скроешь. От Него — нет».
+                <small>Слова матери, которые Мария запомнила дословно.</small>
+              </blockquote>
+
+              <p>
+                В тот вечер девочка впервые попыталась
+                совсем ни о чём не думать.
+              </p>
+
+              <figure class="scripture">
+                <blockquote>
+                  <p>«Господи! Ты испытал меня и знаешь».</p>
+                </blockquote>
+                <figcaption>Псалом 138:1</figcaption>
+              </figure>
+
+              <div class="fingerprint" aria-hidden="true"></div>
+            </section>
+
+            <section class="fragment b" aria-labelledby="history-b">
+              <span class="tape" aria-hidden="true"></span>
+
+              <div class="fragment-label">
+                <span>02 / 1842 год</span>
+                <span>Тринадцать лет</span>
+              </div>
+
+              <h3 id="history-b">Платье для воскресенья</h3>
+
+              <p>
+                Мать умела приводить вещи в безупречный вид.
+                Кружево лежало ровно. Перчатки не имели пятен.
+                У Марии было чистое платье,
+                выученный псалом и наградная карточка
+                воскресной школы за прилежание.
+              </p>
+
+              <p>
+                При других её называли утешением матери.
+                Дома плач оказывался жалостью к себе,
+                несогласие — неблагодарностью,
+                злость — гордыней.
+                Обычная усталость тоже требовала
+                нравственного объяснения.
+              </p>
+
+              <p>
+                Иногда мать переставала с ней разговаривать.
+                Могла подать хлеб, поправить воротник,
+                спросить о выученном отрывке —
+                и ни разу не обратиться к ней так,
+                словно перед ней живой человек.
+              </p>
+
+              <p>
+                Мария извинялась, не зная, за что.
+                Перебирала возможные проступки.
+                Самым мучительным было не наказание,
+                а необходимость угадать правильное признание.
+              </p>
+
+              <p>
+                Когда мать наконец смягчалась,
+                облегчение было таким сильным,
+                что Мария принимала его за любовь.
+              </p>
+            </section>
+
+            <aside class="certificate" aria-label="Исправление в свидетельстве">
+              <div class="certificate-inner">
+                <p class="eyebrow">Свидетельство о благонравии</p>
+                <del>Я была трудным ребёнком.</del>
+                <ins>Я была ребёнком.</ins>
+                <p class="amendment">
+                  Исправлено её рукой.<br>
+                  Подписи свидетелей не требуется.
+                </p>
+              </div>
+            </aside>
+
+            <div class="choir">
+              <div class="choir-noise top" aria-hidden="true">
+                ЕЩЁ РАЗ
+                <small>с должным чувством</small>
+              </div>
+
+              <figure class="scripture">
+                <blockquote>
+                  <p>«Бог есть любовь».</p>
+                </blockquote>
+                <figcaption>Первое послание Иоанна 4:8</figcaption>
+              </figure>
+
+              <div class="choir-noise bottom" aria-hidden="true">
+                НЕДОСТАТОЧНО
+                <small>ты ведь можешь лучше</small>
+              </div>
+            </div>
+
+            <section class="fragment c" aria-labelledby="history-c">
+              <span class="tape" aria-hidden="true"></span>
+
+              <div class="fragment-label">
+                <span>03 / 1848 год</span>
+                <span>Девятнадцать лет</span>
+              </div>
+
+              <h3 id="history-c">Хор не остановился</h3>
+
+              <p>
+                Во время службы ей внезапно перестало хватать воздуха.
+                Не было ни видения, ни дурной вести.
+                Только воротник, который раньше не казался тесным,
+                чужое плечо слишком близко
+                и невозможность закончить один обыкновенный вдох.
+              </p>
+
+              <p>
+                Хор продолжал петь.
+                Мария видела раскрытые рты, знакомые лица,
+                строчки перед глазами — и не могла
+                соединить их в происходящее.
+              </p>
+
+              <p>
+                Она попыталась молиться.
+                Слова переставлялись местами.
+                Единственная фраза, которая оставалась целой,
+                звучала совсем не как молитва:
+                <em>не мешай, не мешай, не мешай</em>.
+              </p>
+
+              <p>
+                Дома это назвали недостатком веры.
+                Её спросили, не скрывает ли она чего-нибудь.
+                Помощь снова оказалась экзаменом,
+                к которому она не знала ответа.
+              </p>
+
+              <p>
+                После этого Мария перестала петь.
+                Начала тратить слишком много свечей,
+                не решаясь засыпать в темноте.
+                Проверяла щеколду, прислушивалась
+                к дверному колокольчику и стыдилась того,
+                что железо успокаивает её надёжнее молитвы.
+              </p>
+
+              <figure class="scripture">
+                <blockquote>
+                  <p>«Боже мой! Боже мой! для чего Ты оставил меня?»</p>
+                </blockquote>
+                <figcaption>Псалом 21:2</figcaption>
+              </figure>
+
+              <div class="fingerprint" aria-hidden="true"></div>
+            </section>
+
+            <aside class="petition" aria-label="Неотправленная молитва Марии">
+              <p class="eyebrow">
+                Оборот счёта из переплётной мастерской<br>
+                Черновик / без даты / не отправлено
+              </p>
+
+              <p class="plea">
+                <span>Господи,</span>
+                <span>я правда</span>
+                <span>стараюсь.</span>
+              </p>
+
+              <p class="petition-question">Ты ведь видишь?</p>
+
+              <p class="petition-note">
+                Ниже несколько раз начата следующая строка.<br>
+                Ни одна не закончена.
+              </p>
+
+              <div class="wax" aria-hidden="true">✝</div>
+            </aside>
+
+            <section class="fragment d" aria-labelledby="history-d">
+              <span class="tape" aria-hidden="true"></span>
+
+              <div class="fragment-label">
+                <span>04 / 1852 год</span>
+                <span>Двадцать три года</span>
+              </div>
+
+              <h3 id="history-d">Ключ с внутренней стороны</h3>
+
+              <p>
+                Миссис Белл, вдова переплётчика,
+                когда-то певшая рядом с ней,
+                предложила работу и комнату над мастерской.
+                Не произносила речей о мужестве.
+                Показала, где протекает крыша,
+                сколько стоит уголь и как заедает замок.
+              </p>
+
+              <p>
+                Потом положила ключ Марии на ладонь:
+                <em>«Этот останется у вас».</em>
+              </p>
+
+              <p>
+                Теперь у Марии есть работа,
+                маленький чайник, плющ в горшке
+                и возможность не открывать дверь немедленно.
+                По вечерам снизу слышно,
+                как миссис Белл передвигает стул.
+                Этот звук ничего от неё не требует.
+              </p>
+
+              <p>
+                Иногда они пьют чай.
+                Миссис Белл тоже верит в Бога,
+                но почему-то не считает нужным
+                говорить за Него всякий раз, когда Мария устала.
+                К этому Мария ещё не привыкла.
+              </p>
+
+              <p>
+                На письма матери она отвечает не сразу.
+                Каждый такой день кажется и проступком,
+                и крошечным участком собственной жизни.
+              </p>
+
+              <p>
+                Снаружи стало тише.
+                Внутри всё ещё идёт представление:
+                мать поправляет воротник,
+                кто-то требует повторить,
+                кто-то заносит ошибку в бесконечную книгу.
+              </p>
+
+              <p>
+                Мария по-прежнему молится.
+                Только теперь иногда останавливается,
+                когда слышит в ответ страх,
+                и пробует спросить:
+                <em>чей это голос на самом деле?</em>
+              </p>
+
+              <figure class="scripture">
+                <blockquote>
+                  <p>«Из глубины взываю к Тебе, Господи».</p>
+                </blockquote>
+                <figcaption>Псалом 129:1</figcaption>
+              </figure>
+            </section>
+
+            <figure class="confession">
+              <blockquote>
+                <p>
+                  Если Ты — любовь,<br>
+                  почему со мной говорили<br>
+                  Твоим именем так жестоко?
+                </p>
+              </blockquote>
+
+              <figcaption>
+                Приписано от руки.<br>
+                Слова Марии. Не библейская цитата.
+              </figcaption>
+            </figure>
+          </div>
         </section>
 
-        <!-- IX -->
-        <section class="contact-sheet" id="user">
-          <div class="entry-head">
-            <span class="roman">IX.</span>
-            <h2>Ваш юз</h2>
+        <div class="afterworld">
+          <div class="bottom-props" aria-hidden="true">
+            <div class="bottom-eye">
+              <svg viewBox="0 0 300 190" focusable="false">
+                <use href="#engraved-eye"></use>
+              </svg>
+            </div>
+
+            <div class="bottom-thorns">
+              <svg viewBox="0 0 500 220" focusable="false">
+                <use href="#engraved-thorns"></use>
+              </svg>
+            </div>
           </div>
 
-          <!-- Замените на свой контакт -->
-          <p class="username">@your_username</p>
-          <p class="small">
-            Для связи и обсуждения сюжета.<br>
-            Здесь можно говорить не шёпотом.
-          </p>
-        </section>
+          <section
+            class="remains"
+            id="headcanons"
+            aria-labelledby="headcanons-title"
+          >
+            <h2 id="headcanons-title">
+              <span class="roman">VIII.</span> Хэдканоны
+            </h2>
 
-        <footer class="ending">
-          <span class="ending-cross" aria-hidden="true">✝</span>
+            <ol class="notes">
+              <li class="note">
+                Любит груши, но у торговца выбирает более дешёвые яблоки.
+                Для покупки чего-то приятного ей до сих пор
+                хочется предъявить уважительную причину.
+              </li>
 
-          <blockquote>
-            <p>
-              «Трости надломленной не переломит,<br>
-              и льна курящегося не угасит».
+              <li class="note">
+                За работой становится неожиданно твёрдой.
+                Может перехватить чужую руку над раскрытой книгой:
+                «Не трогайте. Клей ещё не высох».
+                Потом удивляется, что никто её за это не разлюбил.
+              </li>
+
+              <li class="note">
+                Собирает обрезки с ботаническими гравюрами.
+                Особенно любит изображения корней —
+                ту часть растения, которую обычно не видно,
+                хотя без неё ничего не держится.
+              </li>
+
+              <li class="note">
+                Подкармливает дворовую кошку по имени Ева.
+                Когда та сбрасывает что-нибудь с подоконника,
+                Мария тихо замечает:
+                «Да. Я тоже так думаю».
+              </li>
+
+              <li class="note">
+                Во время грозы считает промежутки
+                между молнией и громом.
+                Когда у пугающего есть расстояние,
+                оно перестаёт быть вездесущим.
+              </li>
+
+              <li class="note">
+                Хранит записку миссис Белл:
+                «Дитя, посидите. Работа до завтра не уйдёт».
+                Бумага залоснится раньше,
+                чем Мария перестанет воспринимать эти слова
+                как разрешение, которое могут отозвать.
+              </li>
+            </ol>
+
+            <figure class="scripture after-quote">
+              <blockquote>
+                <p>
+                  «Трости надломленной не переломит,
+                  и льна курящегося не угасит».
+                </p>
+              </blockquote>
+              <figcaption>Исаия 42:3</figcaption>
+            </figure>
+          </section>
+
+          <section
+            class="contact-sheet"
+            id="user"
+            aria-labelledby="user-title"
+          >
+            <p class="eyebrow">Вне истории / связь с автором персонажа</p>
+
+            <h2 id="user-title">
+              <span class="roman">IX.</span> Ваш юз
+            </h2>
+
+            <p class="username">@your_username</p>
+
+            <p class="contact-copy">
+              Для связи и обсуждения сюжета.<br>
+              Здесь можно говорить не шёпотом.
             </p>
-            <cite>Исаия 42:3</cite>
-          </blockquote>
+          </section>
 
-          <p class="last-line">
-            Это конец анкеты.<br>
-            Она всё ещё здесь.
-          </p>
-        </footer>
-      </div>
-    </article>
+          <footer class="ending">
+            <p>Это конец анкеты.</p>
+            <p>Она всё ещё здесь.</p>
+          </footer>
+        </div>
+      </article>
 
-    <footer class="outside-footer">
-      <span>Библейские цитаты — Синодальный перевод, фрагменты.</span>
-      <a href="#top">К началу ↑</a>
-    </footer>
-  </main>
-</div>
+      <footer class="outside-footer">
+        <p>
+          Вымышленный персонаж. Лондон, 1852 год.<br>
+          Библейские цитаты даны для читателя по Синодальному переводу,
+          фрагментами. В мире персонажа используется английская
+          Библия короля Якова.
+        </p>
 
-<script>
-(() => {
-  const root = document.documentElement;
-  const body = document.body;
+        <a href="#top">К началу ↑</a>
+      </footer>
+    </main>
+  </div>
 
-  const controls = document.getElementById("controls");
-  const toggle = document.getElementById("effect-toggle");
-  const toggleLabel = document.getElementById("effect-label");
-  const restore = document.getElementById("restore");
-  const condition = document.getElementById("condition");
-  const theme = document.querySelector('meta[name="theme-color"]');
+  <script>
+    (() => {
+      "use strict";
 
-  const links = [...document.querySelectorAll(".index nav a")];
-  const sections = links.map(link =>
-    document.querySelector(link.getAttribute("href"))
-  );
+      const root = document.documentElement;
+      const body = document.body;
 
-  // Где начинается вторжение и где раскрывается коллаж.
-  const startSection = document.getElementById("appearance");
-  const peakSection = document.getElementById("history");
+      const controls = document.getElementById("controls");
+      const toggle = document.getElementById("effect-toggle");
+      const toggleLabel = document.getElementById("effect-label");
+      const restore = document.getElementById("restore");
+      const condition = document.getElementById("condition");
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
 
-  const motionPreference = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  );
+      const paper = document.querySelector(".paper");
+      const startSection = document.getElementById("appearance");
+      const peakSection = document.getElementById("history");
 
-  const STORAGE_KEY = "maria-collage-effects";
-
-  let effectsEnabled = !motionPreference.matches;
-  let explicitPreference = false;
-
-  let accumulatedDamage = 0;
-  let lastDamage = -1;
-  let lastCondition = "";
-  let lastActive = "";
-
-  let framePending = false;
-  let needsMeasure = true;
-
-  let breakStart = 0;
-  let breakEnd = 1;
-  let historyTop = 0;
-  let historyHeight = 1;
-  let sectionPositions = [];
-
-  // Три состояния:
-  // 1. Тёплая бумага.
-  // 2. Табачный, потемневший документ.
-  // 3. Тёмная театральная сцена.
-  // Яркие вырезки появляются отдельно через --psy.
-  const palettes = {
-    "--bg": [
-      [232, 223, 204],
-      [105, 84, 56],
-      [20, 15, 29]
-    ],
-    "--sheet": [
-      [247, 240, 222],
-      [225, 207, 170],
-      [219, 204, 172]
-    ],
-    "--ui": [
-      [101, 81, 57],
-      [239, 222, 186],
-      [222, 223, 185]
-    ],
-    "--ui-line": [
-      [199, 182, 153],
-      [157, 134, 91],
-      [81, 78, 92]
-    ],
-    "--scene": [
-      [247, 240, 222],
-      [133, 104, 67],
-      [21, 15, 31]
-    ],
-    "--scene-ink": [
-      [57, 43, 28],
-      [248, 237, 207],
-      [242, 232, 203]
-    ]
-  };
-
-  function clamp(value, min = 0, max = 1) {
-    return Math.min(max, Math.max(min, value));
-  }
-
-  function smoothstep(value) {
-    return value * value * (3 - 2 * value);
-  }
-
-  function mixColor(from, to, amount) {
-    return `rgb(${from.map((value, index) =>
-      Math.round(value + (to[index] - value) * amount)
-    ).join(", ")})`;
-  }
-
-  function paletteColor(colors, amount) {
-    const midpoint = .43;
-
-    if (amount <= midpoint) {
-      return mixColor(
-        colors[0],
-        colors[1],
-        smoothstep(amount / midpoint)
+      const navLinks = Array.from(
+        document.querySelectorAll(".index nav a")
       );
-    }
 
-    return mixColor(
-      colors[1],
-      colors[2],
-      smoothstep((amount - midpoint) / (1 - midpoint))
-    );
-  }
+      const sections = navLinks.map(link => ({
+        link,
+        element: document.getElementById(
+          link.getAttribute("href").slice(1)
+        )
+      }));
 
-  function documentTop(element) {
-    return element.getBoundingClientRect().top + window.scrollY;
-  }
-
-  function measure() {
-    const height = window.innerHeight;
-
-    historyTop = documentTop(peakSection);
-    historyHeight = peakSection.offsetHeight;
-
-    breakStart = documentTop(startSection) - height * .82;
-
-    // Максимум — в начале предыстории, не только в самом низу.
-    breakEnd = historyTop + 180 - height * .36;
-    breakEnd = Math.max(breakStart + 1, breakEnd);
-
-    sectionPositions = sections.map(section => ({
-      id: section.id,
-      top: documentTop(section)
-    }));
-
-    needsMeasure = false;
-  }
-
-  function paintDamage(damage) {
-    if (Math.abs(damage - lastDamage) < .0005) return;
-    lastDamage = damage;
-
-    // Цветной коллаж вторгается позже, чем темнеет бумага.
-    const psychedelic = smoothstep(
-      clamp((damage - .26) / .74)
-    );
-
-    root.style.setProperty("--damage", damage.toFixed(4));
-    root.style.setProperty("--psy", psychedelic.toFixed(4));
-
-    for (const [property, colors] of Object.entries(palettes)) {
-      root.style.setProperty(
-        property,
-        paletteColor(colors, damage)
+      const motionPreference = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
       );
-    }
 
-    theme.setAttribute(
-      "content",
-      paletteColor(palettes["--bg"], damage)
-    );
-  }
+      const STORAGE_KEY = "maria-collage-effects";
 
-  function update() {
-    framePending = false;
-    if (needsMeasure) measure();
+      let effectsEnabled = !motionPreference.matches;
+      let explicitPreference = false;
 
-    const scroll = window.scrollY;
-    const maximum = Math.max(
-      1,
-      root.scrollHeight - window.innerHeight
-    );
+      let accumulatedDamage = 0;
+      let lastDamage = -1;
+      let lastCondition = "";
+      let lastActive = "";
 
-    const reading = clamp(scroll / maximum);
-    root.style.setProperty("--reading", reading.toFixed(4));
+      let framePending = false;
+      let needsMeasure = true;
 
-    const rawDamage = clamp(
-      (scroll - breakStart) / (breakEnd - breakStart)
-    );
+      let breakStart = 0;
+      let breakEnd = 1;
+      let historyTop = 0;
+      let historyHeight = 1;
+      let sectionPositions = [];
 
-    if (effectsEnabled) {
-      accumulatedDamage = Math.max(
-        accumulatedDamage,
-        smoothstep(rawDamage)
-      );
-    }
+      const palettes = {
+        "--bg": [
+          [230, 221, 198],
+          [110, 91, 55],
+          [20, 23, 17]
+        ],
+        "--sheet": [
+          [244, 236, 215],
+          [221, 204, 164],
+          [210, 194, 153]
+        ],
+        "--ui": [
+          [93, 77, 56],
+          [239, 222, 179],
+          [214, 203, 153]
+        ],
+        "--ui-line": [
+          [187, 170, 139],
+          [151, 130, 81],
+          [91, 91, 58]
+        ],
+        "--scene": [
+          [244, 236, 215],
+          [111, 91, 48],
+          [24, 27, 18]
+        ],
+        "--scene-ink": [
+          [52, 41, 30],
+          [247, 231, 189],
+          [233, 219, 175]
+        ]
+      };
 
-    const damage = effectsEnabled ? accumulatedDamage : 0;
-    paintDamage(damage);
+      function clamp(value, min = 0, max = 1) {
+        return Math.min(max, Math.max(min, value));
+      }
 
-    // Только небольшое движение декораций при прокрутке.
-    // Никакой постоянной тряски или вспышек.
-    const sceneProgress = clamp(
-      (scroll - historyTop + window.innerHeight * .5) /
-      Math.max(1, historyHeight)
-    );
+      function smoothstep(value) {
+        return value * value * (3 - 2 * value);
+      }
 
-    const float = effectsEnabled && !motionPreference.matches
-      ? sceneProgress * 42
-      : 0;
+      function mixColor(from, to, amount) {
+        const values = from.map((value, index) => {
+          return Math.round(
+            value + (to[index] - value) * amount
+          );
+        });
 
-    root.style.setProperty("--float", `${float.toFixed(2)}px`);
+        return `rgb(${values.join(", ")})`;
+      }
 
-    let state = "порядок соблюдён";
+      function paletteColor(colors, amount) {
+        const middle = .43;
 
-    if (!effectsEnabled) {
-      state = "режим без искажений";
-    } else if (damage > .92) {
-      state = "форма больше не удерживает";
-    } else if (damage > .66) {
-      state = "слишком много голосов";
-    } else if (damage > .35) {
-      state = "появились чужие строки";
-    } else if (damage > .04) {
-      state = "следы чужого нажима";
-    }
-
-    if (state !== lastCondition) {
-      condition.textContent = state;
-      lastCondition = state;
-    }
-
-    const readingLine = scroll + window.innerHeight * .34;
-    let active = sectionPositions[0]?.id || "";
-
-    for (const section of sectionPositions) {
-      if (section.top <= readingLine) active = section.id;
-    }
-
-    if (reading > .985) {
-      active = sectionPositions[sectionPositions.length - 1]?.id || active;
-    }
-
-    if (active !== lastActive) {
-      lastActive = active;
-
-      links.forEach(link => {
-        if (link.getAttribute("href") === `#${active}`) {
-          link.setAttribute("aria-current", "location");
-        } else {
-          link.removeAttribute("aria-current");
+        if (amount <= middle) {
+          return mixColor(
+            colors[0],
+            colors[1],
+            smoothstep(clamp(amount / middle))
+          );
         }
+
+        return mixColor(
+          colors[1],
+          colors[2],
+          smoothstep(
+            clamp((amount - middle) / (1 - middle))
+          )
+        );
+      }
+
+      function documentTop(element) {
+        return element.getBoundingClientRect().top + window.scrollY;
+      }
+
+      function measure() {
+        const height = window.innerHeight;
+
+        historyTop = documentTop(peakSection);
+        historyHeight = Math.max(1, peakSection.offsetHeight);
+
+        breakStart = documentTop(startSection) - height * .82;
+        breakEnd = historyTop + 180 - height * .36;
+        breakEnd = Math.max(breakStart + 1, breakEnd);
+
+        sectionPositions = sections.map(({ link, element }) => ({
+          id: element.id,
+          top: documentTop(element),
+          link
+        }));
+
+        needsMeasure = false;
+      }
+
+      function paintDamage(damage) {
+        if (Math.abs(damage - lastDamage) < .0005) {
+          return;
+        }
+
+        lastDamage = damage;
+
+        const theatreIntensity = smoothstep(
+          clamp((damage - .22) / .78)
+        );
+
+        root.style.setProperty("--damage", damage.toFixed(4));
+        root.style.setProperty("--psy", theatreIntensity.toFixed(4));
+
+        Object.entries(palettes).forEach(([property, colors]) => {
+          root.style.setProperty(
+            property,
+            paletteColor(colors, damage)
+          );
+        });
+
+        if (themeMeta) {
+          themeMeta.setAttribute(
+            "content",
+            paletteColor(palettes["--bg"], damage)
+          );
+        }
+      }
+
+      function update() {
+        framePending = false;
+
+        if (needsMeasure) {
+          measure();
+        }
+
+        const scroll = Math.max(0, window.scrollY);
+
+        const availableScroll = Math.max(
+          1,
+          root.scrollHeight - window.innerHeight
+        );
+
+        const reading = clamp(scroll / availableScroll);
+
+        root.style.setProperty("--reading", reading.toFixed(4));
+
+        const rawDamage = clamp(
+          (scroll - breakStart) / (breakEnd - breakStart)
+        );
+
+        if (effectsEnabled) {
+          accumulatedDamage = Math.max(
+            accumulatedDamage,
+            smoothstep(rawDamage)
+          );
+        }
+
+        const damage = effectsEnabled ? accumulatedDamage : 0;
+
+        paintDamage(damage);
+
+        const sceneProgress = clamp(
+          (
+            scroll -
+            historyTop +
+            window.innerHeight * .5
+          ) / historyHeight
+        );
+
+        const drift = (
+          effectsEnabled &&
+          !motionPreference.matches
+        )
+          ? sceneProgress * 54
+          : 0;
+
+        root.style.setProperty("--drift", `${drift.toFixed(2)}px`);
+
+        let conditionText = "порядок соблюдён";
+
+        if (!effectsEnabled) {
+          conditionText = "режим без искажений";
+        } else if (damage > .93) {
+          conditionText = "форма больше не удерживает";
+        } else if (damage > .67) {
+          conditionText = "слишком много свидетелей";
+        } else if (damage > .36) {
+          conditionText = "появились чужие строки";
+        } else if (damage > .04) {
+          conditionText = "следы чужого нажима";
+        }
+
+        if (conditionText !== lastCondition) {
+          condition.textContent = conditionText;
+          lastCondition = conditionText;
+        }
+
+        const readingLine = scroll + window.innerHeight * .34;
+        let active = sectionPositions[0];
+
+        for (const section of sectionPositions) {
+          if (section.top <= readingLine) {
+            active = section;
+          }
+        }
+
+        if (reading > .985) {
+          active = sectionPositions[sectionPositions.length - 1];
+        }
+
+        if (active && active.id !== lastActive) {
+          navLinks.forEach(link => {
+            link.removeAttribute("aria-current");
+          });
+
+          active.link.setAttribute("aria-current", "location");
+          lastActive = active.id;
+        }
+      }
+
+      function requestUpdate(remeasure = false) {
+        if (remeasure) {
+          needsMeasure = true;
+        }
+
+        if (framePending) {
+          return;
+        }
+
+        framePending = true;
+        window.requestAnimationFrame(update);
+      }
+
+      function syncToggle() {
+        body.classList.toggle("calm", !effectsEnabled);
+
+        toggle.setAttribute(
+          "aria-pressed",
+          String(effectsEnabled)
+        );
+
+        toggleLabel.textContent = effectsEnabled
+          ? "Искажения: вкл."
+          : "Искажения: выкл.";
+      }
+
+      function savePreference() {
+        try {
+          localStorage.setItem(
+            STORAGE_KEY,
+            effectsEnabled ? "on" : "off"
+          );
+        } catch (_) {
+          // Страница работает и при недоступном хранилище.
+        }
+      }
+
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+
+        if (stored === "on" || stored === "off") {
+          effectsEnabled = stored === "on";
+          explicitPreference = true;
+        }
+      } catch (_) {
+        // Используется системное предпочтение.
+      }
+
+      toggle.addEventListener("click", () => {
+        effectsEnabled = !effectsEnabled;
+        explicitPreference = true;
+
+        savePreference();
+        syncToggle();
+
+        // Выключение эффектов не стирает накопленное состояние.
+        // Повторное включение возвращает достигнутую интенсивность.
+        lastDamage = -1;
+        paintDamage(effectsEnabled ? accumulatedDamage : 0);
+        requestUpdate(true);
       });
-    }
-  }
 
-  function requestUpdate(remeasure = false) {
-    if (remeasure) needsMeasure = true;
-    if (framePending) return;
+      restore.addEventListener("click", () => {
+        accumulatedDamage = 0;
+        lastDamage = -1;
 
-    framePending = true;
-    requestAnimationFrame(update);
-  }
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "instant"
+        });
 
-  function syncToggle() {
-    body.classList.toggle("calm", !effectsEnabled);
-    toggle.setAttribute("aria-pressed", String(effectsEnabled));
+        paintDamage(0);
+        root.style.setProperty("--drift", "0px");
+        requestUpdate(true);
+      });
 
-    toggleLabel.textContent = effectsEnabled
-      ? "Искажения: вкл."
-      : "Искажения: выкл.";
+      function onMotionChange(event) {
+        if (!explicitPreference) {
+          effectsEnabled = !event.matches;
+          syncToggle();
+          lastDamage = -1;
+          paintDamage(effectsEnabled ? accumulatedDamage : 0);
+        }
 
-    requestUpdate(true);
-  }
+        requestUpdate(true);
+      }
 
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+      if (motionPreference.addEventListener) {
+        motionPreference.addEventListener(
+          "change",
+          onMotionChange
+        );
+      } else if (motionPreference.addListener) {
+        motionPreference.addListener(onMotionChange);
+      }
 
-    if (stored === "on" || stored === "off") {
-      effectsEnabled = stored === "on";
-      explicitPreference = true;
-    }
-  } catch (_) {
-    // Локальное хранилище необязательно для работы страницы.
-  }
-
-  controls.hidden = false;
-  syncToggle();
-
-  toggle.addEventListener("click", () => {
-    effectsEnabled = !effectsEnabled;
-    explicitPreference = true;
-
-    try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        effectsEnabled ? "on" : "off"
+      window.addEventListener(
+        "scroll",
+        () => requestUpdate(),
+        { passive: true }
       );
-    } catch (_) {}
 
-    syncToggle();
-  });
+      window.addEventListener(
+        "resize",
+        () => requestUpdate(true),
+        { passive: true }
+      );
 
-  restore.addEventListener("click", () => {
-    accumulatedDamage = 0;
-    lastDamage = -1;
+      window.addEventListener(
+        "load",
+        () => requestUpdate(true)
+      );
 
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "instant"
-    });
+      window.addEventListener(
+        "pageshow",
+        () => requestUpdate(true)
+      );
 
-    paintDamage(0);
-    root.style.setProperty("--float", "0px");
-    requestUpdate(true);
-  });
+      if ("ResizeObserver" in window) {
+        const resizeObserver = new ResizeObserver(() => {
+          requestUpdate(true);
+        });
 
-  function onMotionChange(event) {
-    if (!explicitPreference) {
-      effectsEnabled = !event.matches;
+        resizeObserver.observe(paper);
+      }
+
       syncToggle();
-    } else {
-      requestUpdate();
-    }
-  }
-
-  if (motionPreference.addEventListener) {
-    motionPreference.addEventListener("change", onMotionChange);
-  } else {
-    motionPreference.addListener(onMotionChange);
-  }
-
-  window.addEventListener("scroll", () => requestUpdate(), {
-    passive: true
-  });
-
-  window.addEventListener("resize", () => requestUpdate(true), {
-    passive: true
-  });
-
-  window.addEventListener("load", () => requestUpdate(true));
-  window.addEventListener("pageshow", () => requestUpdate(true));
-
-  if ("ResizeObserver" in window) {
-    const observer = new ResizeObserver(() => requestUpdate(true));
-    observer.observe(document.querySelector(".paper"));
-  }
-
-  requestUpdate(true);
-})();
-</script>
+      root.classList.remove("no-js");
+      controls.hidden = false;
+      requestUpdate(true);
+    })();
+  </script>
 </body>
 </html>
